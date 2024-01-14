@@ -1,0 +1,19 @@
+/*
+https://help.obsidian.md/Editing+and+formatting/Callouts#:~:text=To%20create%20a%20callout%2C%20add,the%20callout%20looks%20and%20feels.
+*/
+
+.callout[data-callout="exercise"] {
+    --callout-color: 140, 140, 140;
+    --callout-icon: lucide-flask-conical;
+}
+
+
+.callout[data-callout="activity"] {
+    --callout-color: 131, 131, 255;
+    --callout-icon: 'lucide-check-square';
+}
+
+.callout[data-callout="story"] {
+    --callout-color: 190, 190, 90;
+    --callout-icon: 'lucide-book-open-text';
+}
