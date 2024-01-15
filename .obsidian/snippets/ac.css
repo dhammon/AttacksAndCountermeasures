@@ -17,3 +17,48 @@ https://help.obsidian.md/Editing+and+formatting/Callouts#:~:text=To%20create%20a
     --callout-color: 190, 190, 90;
     --callout-icon: 'lucide-book-open-text';
 }
+
+/*IMAGE CAPTION8*/
+/*https://forum.obsidian.md/t/caption-image-center-image-works-with-preview-mode/60086*/
+/* reading mode */
+.image-embed[alt]:after {
+    content: attr(alt);
+    display: block;
+    margin: 0.2rem 1rem 1rem 1rem;
+    font-size: 90%;
+    line-height: 1.4;
+    color: var(--text-faint);
+    text-align: center;
+
+}
+/* source view and live preview */
+.image-embed[alt]:after {
+    content: attr(alt);
+    display: block;
+    margin: 0.2rem 1rem 1rem 1rem;
+    font-size: 90%;
+    line-height: 1.4;
+    color: var(--text-faint);
+    text-align: center;
+}
+
+/* reading mode */
+img {
+        display: block !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+}
+    
+ .markdown-source-view.mod-cm6 .cm-content > * {
+        margin: auto auto !important;
+}
+/* source view and live preview */
+img {
+        display: block !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+}
+    
+ .markdown-source-view.mod-cm6 .cm-content > * {
+        margin: auto auto !important;
+}

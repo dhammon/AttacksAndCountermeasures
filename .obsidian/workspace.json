@@ -146,10 +146,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "576d0028bbc567c0",
+  "active": "0222551eff2d37c8",
   "lastOpenFiles": [
-    "textbook/00-Introduction.md",
+    "images/mitre_att&ck.png",
+    "images/cia_triad.png",
     "textbook/01-InformationSecurity.md",
+    "README.md",
+    "textbook/00-Introduction.md",
+    "images/lock.png",
+    "images/74iliskl.png",
     "images/information_security.jpg",
     "images/information_security.jpg.crdownload",
     "images",

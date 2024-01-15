@@ -31,4 +31,5 @@ callout block
 > story block
 
 ## Acknowledgments
-Images - https://koala.sh/
+Images - [Craiyon - Your FREE AI image generator tool: Create AI art!](https://www.craiyon.com/)
+[Koala - The Best AI Writer and Chatbot](https://koala.sh/chat) `/draw prompt`
