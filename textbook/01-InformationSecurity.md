@@ -31,6 +31,7 @@ Information security is meant to protect data wherever it is located.  But what 
 - **Availability** expects the information is available when it is needed.
 
 ![[../images/cia_triad.png|The CIA Triad|250]]
+
 We use the CIA triad to explain the protection category of information.  Such generalized terms allow us to discuss types of risks and controls given a scenario.  It can be helpful to identify which arm(s) of the triad are effected when examining a scenario.
 
 > [!activity] Activity - CIA Triad
@@ -61,6 +62,7 @@ It is people that hack into computer systems.  Defining who and what their motiv
 | Hacktivist | Geographically distributed groups consisted of volunteers that target such as governments, companies, and individuals for political.  Commonly use denial of service and defacements techniques to cause impact. | Political, ethics, beliefs. |
 | Script Kiddie | AKA "skids" are individuals experimenting with attacks on opportunistic targets typically leveraging existing techniques and out-of-the-box tools. | Curiosity, learning, bragging rights. |
 | Cybercriminal | Federation of criminal groups, each specializing in phases of an attack, that extort victims using ransomware and denial of service. | Monetary |
+
 Prominent groups like Lazarus (nation-state) and Evil Corp (cybercriminal) are tracked by the MITRE in their ATT&CK knowledge base in [https://attack.mitre.org/groups/](https://attack.mitre.org/groups/).
 
 ## MITRE ATT&CK
@@ -83,15 +85,56 @@ Another reputable and commonly referenced attacker lifecycle framework is Lockhe
 ## Governance, Risk and Compliance (GRC)
 Organizations concerned by the risks imposed by their information and systems will typically establish, to some degree of formality, an information security department.  Sometimes the concern is driven by risk owners or some other interested party like a customer, partner, or regulator that insists the organization take information and systems risks seriously.  The manner in which an organization formally establishes, manages, and communicates information security is referred to as governance, risk, and compliance (GRC) within the industry.
 ## Governance
-Deciding what
+Deciding how to establish and implement security in an organization can require the coordination of many managers, departments, and teams.  This is usually accomplished by establishing roles and responsibilities which are prescribed within the organizations policies and procedures.  Security should be integrated throughout the organization and technologies using a **defense in depth** strategy.  These efforts help to create a security culture where everyone knows their security duties and impacts.
 ### Roles and Responsibilities
+There are no strict rules all organizations adhere to when determining titles and organization structure when it comes to security.  Some organizations, usually small, don't have anyone explicitly responsible while other organizations, typically larger ones, have one or more departments and hundreds of employees dedicated to specific security roles.  
+
+Security departments are divided into areas of interest and discipline.  Most businesses have dedicated sub-departments and teams for the following functions.  We will explore many of these functions throughout the book:
+
+- Governance, Risk, and Compliance (GRC)
+- Application Security
+- Security Operations
+- Security Engineering
+- Incident Response
+- Network Security
+- Identity Access Management
+- *and more!*
+
+Medium to large businesses may have a Chief Information Security Officer (CISO) who is a c-suite employee responsible for establishing the information security practices and reporting their results to the board of directors and the rest of the executive management.  Next, reporting to the CISO, may be one or more Vice President (VP) of Security dedicated to some security function of the organization, such as the security operations center or application security.  The VP(s) oversee their area of the overall security department and typically have one or more Director of Security reporting to them.  Like a VP, a Director of Security will oversee some component of the overall security department.  For instance, the Director may oversee the incident response teams of the security operations center.  Usually the Director will have one or more Security Managers reporting to them who manage security teams dedicated to a function (eg incident response).  A security team may have a mix of team members that can include Security Architects, Security Engineers, and Security Analysts.  These team members, known as *individual contributors* as they usually don't manage other employees, work together to deliver the security function they are assigned, such as responding to incidents.  A Security Architect typically contributes by providing designs of security systems, communication protocols, and documentation.  The Security Engineer works to implement such systems suggested by the Architect while the Security Analyst uses the implemented security systems.
+
+Each of the roles may be further broken into degrees of experience such as junior, senior and principle.  Entry level or 1-2 years of experience for a given role may be assigned as a junior.  For example, as a Junior Security Engineer.  Senior level usually correlates to 2-5 years experience in the given area while a Principle has many years experience.  The years of experience described here are anecdotal and will vary depending on the individual and organization's expectations.
 
 ### Policies and Procedures
+Security standards at an organization are usually communicated in the form of policies and procedures (P&Ps).  Generally policies are written by the organization's management and approved by the board of directors.  Well written policies describe the expectations of employees and how they are held accountable.  Policies may also provided directive on how the organization will operate.  Security policies may take several, sometimes dozens, of pages and explain who must do what.  Consider the following security policy statement:
+
+> *"System administrators must review user account status and permission levels each quarter to insure no user has unneeded access to the system."*
+
+This policy statement requires a role (system administrator) to perform a security activity (access reviews), on a timely basis (quarterly).  A policy usually doesn't go into detail on how the role performs the prescribed duty.  Instead, another written document called a procedure is used to detail the steps needed to complete the duty.  Using the same theme of an access review, a standard procedure might look like the following:
+
+>*"The administrator logs into the system and pulls the "accounts" report from the management page.  Each account from the report is cross referenced to an employee list provided by the human resources department.  Discrepancies between the reports are validated with the user account's manager before setting the account to inactive status."*
+
 ### Culture and Defense in Depth
+Everybody in an organization is responsible for security.  In fact, most of security is handled by non-security personnel at an organization.  Consider an employee who receives a phishing email.  They must make the right decision by not clicking on the email and reporting it to the security team.  Sure there are security administrators who could prevent the email from reaching the user's inbox though an email gateway or spam filter; however, it is ultimately up to the individual to make the right decision.  Consider another example of a system administrator.  The administrator must make the right decisions when deploying new infrastructure by ensure a system is up to date with security patches.  The cumulative effect of individuals knowing what the right decisions are and making the secure choices is the spirit of an organization's *security culture*.
+
+Having a strong security culture goes a long way in keeping the organization safe from threats.  Another component that contributes the the overall security standing of an organization is the architecture of where security is implemented.  If you had some valuable jewelry you wanted to secure you may store it in a safe with a strong combination, and store that safe in a house with a deadbolt on the front door.  Depending on how safe you wanted to make that jewelry you may install a cameral and an alarms system, perhaps your neighborhood has a gate to keep non-neighbors out.  Layer upon layer of security control can be added making the jewelry safer and safer.  With each layer added the jewelry is more safe, but it is never fully safe.  This principal of adding controls over a continuum of demarcations is referred to as *defense in depth* or *layered security*.  The idea is that no single security control is full proof and adding layers of security controls commensurate with the value of what you are protecting ensures that if any single layer fails, a following layer may protect that asset.
+
+Suppose we want to keep an organizations information or data secure using the defense in depth methodology.  We might consider how we might secure the layers depicted in the following image.
+
+![[../images/defense_depth.png|Defense in Depth|500]]
+The figure Defense in Depth provides a map of where we could consider adding security.  For example, the data layer could be protected by encrypting the data at rest (where it resides), users could be secured by using multifactor authentication, the application layer secured using signed binaries, the endpoint layer may have security updates regularly applied, the network layer could define a network segmentation strategy, and finally the perimeter layer could consist of a firewall that blocks unwanted traffic.  There are many more security controls each layer could potentially have.  Subsequent chapters will provide several controls in each of the layers listed here.
 
 ## Risk
+Security is often considered a risk management function of an organization.  There is "security risk" to be considered operationally and that risk has a high impact.  A security incident can an organization its entire existence should the loss of data or business be so severe the organization ceases to operate.  Larger organizations sometimes have risk management departments that attempt to measure the level of risk an organization is exposed to over time and then how to manage that risk to appropriate levels.  These risk measurements helps executive management allocated resources (human, financial, etc) to areas of the organization that imposes the greatest risks.  Regardless of the size of the organization, mature security departments measure security risks to best understand where department resources should be spent.  This section explores the general methodologies used by security teams to define, measure, and manage security risk.
+
+> [!info] What is security risk?
+> *"The risk to organizational operations (including mission, functions, image, reputation), organizational assets, individuals, other organizations, and the Nation due to the potential for unauthorized access, use, disclosure, disruption, modification, or destruction of information and/or a system."* - NIST SP 800-12 Rev.1
 
 ### Qualitative Risk Management
+Most security departments attempt to measure security risk using qualitative and non-ordinal ratings such as high, medium, and low.  Even if the team uses numbers instead of high-low ratings they still could be considered qualitative.  We will explore quantitative measures in the next section.  Those tasked with measuring security risk qualitatively will determine ratings using a risk matrix comprise of ratings for *likelihood* (Y axis) and *impact* (X axis) in a matrix.
+![[../images/qual_matrix.png|Risk Matrix|400]]
+The risk analyst would first determine the rating for likelihood as high, medium or low.  Next, they will assess the level of impact using the same rating scheme.  Finally, they would cross reference these two measures on the risk matrix to evaluate the risk level.  For example, a "high" impact and "low" likelihood assessment yields a "medium" risk level.
+
+The qualitative risk management methodology is easy to conceptually grasp and measures are subjective.  There is good value in it as a tool to measure and communicate security risk levels; however, there are plenty of criticism with the methodology.  Many professionals will find that the risk ratings are not granular enough, or they might find that the measurements of likelihood or impact are non-scientific.  Regardless of its shortcomings, it is a very common approach to measuring security risk.
 
 ### Basic Quantitative Risk Management
 
