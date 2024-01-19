@@ -158,27 +158,42 @@ A risk can, and probably should, have more than one control with a diverse set o
 Control types and control goals are not the only considerations when considering what controls to implement.  Security managers need to consider the strength of the control.  A weak control won't fully accomplish its goal whereas a strong control might.  The cost of a control must also be carefully considered as you wouldn't want to spend more on a control than the cost of the realized risk!  Another factor for consideration is the time to implement as it is not uncommon for a security department to purchase a security solution and underestimate the amount of effort it takes to adequately implement it.  In fact, the term *shelfware* has stemmed from company's buying security controls and never getting around to implementing them.  Finally, a decision can be made by the management for the adoption or rejection of a control.
 
 ## Compliance
+Organizations are often under obligations to ensure security by regulators, customers, and stakeholders.  Jurisdiction plays are large part when determining the legal requirements an organization is under to provide security of information.  Customers expect their data is secure and establish contracts requiring confidentiality and security practices.  Other parties, such as board of directors, owners, and third parties expect security and may require adherence to industry security standards.  The collection of security requirements from all these entities, and proving adherence to them, is known as *compliance*.  There are varying degrees of obligations illustrated in the following graphic.
+![[Pasted image 20240118195441.png|Compliance Pyramid of Obligation|300]]
+Compliance requirements at the top of the pyramid have a higher degree of obligation as violation of the rules could result in an organization, or individual, being prosecuted by law enforcement or be assessed civil monetary penalties.  Guidance may place somewhere in the middle as it is often included as legal requirements in contracts between entities.  Violation of these agreements may result in the termination of a relationship which could cost an organization financially.  Finally, organization policies have the lowest obligation as can be changed by the organization at will and violation of policies usually result in employees being terminated.
 ### Laws and Regulations
-- USC vs CFR
-- FERPA
-- GLBA
-- FISMA
-- HIPAA
-- GDPR
-- SOX
-- CCPA
-- NYDFS
-### Frameworks and Guidelines
-- CIS
-- NIST 800-53 RMF
-- FedRAMP
-- PCI/DSS
-- FFIEC
-- CSA
+There are several laws and regulations in the United States, and elsewhere in the world, and it is important to understand the difference.  In the US, the United States Code (USC) is a formal document created by legislative bodies and signed into law by executive powers.  Violating the law while being found guilty results in penalties such as fines and incarceration.  Laws can be enacted at the state and federal levels and applying the laws depends on jurisdiction.  Most organization apply the most strict laws to their operations for consistency sake.  Among other things, laws govern the way business may be conducted in the United States and have explicit requirements for security and data privacy.  The following list outlines some popular federal laws in the United States that have some security requirement expected on organizations:
+- **Family Educational Rights and Privacy Act (FERPA)** - establishes the secure protection of student records;
+- **Gramm-Leach-Bliley Act (GLBA)** - establishes privacy rights and requires financial institutions secure their customer's information;
+- **Federal Information Security Management Act (FISMA)** - mandates security standards to protect government information systems;
+- **Health Insurance Portability and Accounting Act (HIPAA)** - requires the protection of patient health information by the health care industry; and
+- **Sarbanes-Oxley Act (SOX)** - outlines information security standards to protect financial data by publicly traded companies.
 
+Other countries also have laws that govern information security practices of organizations.  A popular law, **General Data Protection Regulation (GDPR)** in the European Union, establishes that organizations must adhere to privacy standard for EU citizens data while ensure that data's security.  A US company conducting business in the EU, that meets the size threshold and collects EU citizen data, must follow this law and otherwise be fined significant amounts of money.  The current record for the largest fine by the GDPR is held by Meta in 2022 for $1.3 billion.
+
+States also pass laws that affect security requirements of entities doing business within their borders.  The **California Consumer Privacy Act (CCPA**) and the **New York Cybersecurity Regulation (NYCRR)** are commonly referred to state laws that set privacy standards and cybersecurity standards depending on jurisdiction and eligibility criteria.
+
+The USC establishes high level security requirements and outline who and how they are enforced.  The subject law will declare what regulatory body of the executive branch enforces the law and grants the regulator additional powers such as defining further regulations on applying the law.  The formal regulations are written as the Code of Federal Regulations (CFR) and are manifested outside the legislature.  Therefore, each of the laws described has a regulator that outlines more rules for compliance.
+
+A GRC professional will read these laws and regulations and seek to ensure the are applied at their organization.  They will work with lawyers, regulators, and operational business managers to ensure compliance to the various legal requirements.  One approach to organizing this effort is by mapping each requirement of every law and regulation to a security control.  Once mapped, collect evidence of the adherence of that control which conveniently demonstrates legal compliance.
+### Frameworks and Guidelines
+Next in the compliance stack are frameworks and guidelines which are produced by industry organizations, non-regulatory government agencies, and even regulators.  The following list outlines common frameworks and guidelines security professional encounter.
+- **Center for Internet Security (CIS)** - a non-profit that publishes internet security standards;
+- **National Institute of Standards and Technology (NIST) 800-53** - a non-regulatory government agency special publication describing security and privacy controls to achieve compliance with the Federal Information Security Management Act (FISMA).  Any organization doing business with a government agency must demonstrate compliance with FISMA;
+- **Federal Risk and Authorization Management Program (FedRAMP)** - federal program prescribing the security standards of cloud based information systems;
+- **Payment Card Industry Data Security Standards (PCI/DSS)** - created by Visa and Mastercard that establishes security requirements for credit card merchant.  Companies that violate this will have the credit card companies revoke there ability to accept credit cards;
+- **Federal Financial Institutions Examination Council (FFIEC)** - maintained by a consortium of financial regulators and outlines security controls expected of financial institutions; and
+- **Cloud Security Alliance (CSA)** - another non-profit which has standardized cloud security.
+
+As guidelines are not legally binding, violations do not cause legal or regulatory enforcement actions even if the guideline was written by a regulator.  The process of publishing a law or regulation is time consuming and often fails; therefore, regulators use the guideline process to instruct regulated entities how to act.  Never tell a regulator this, but they are kind of optional!
 ### Audit
-- SOC2
-- ISO 27001
+Customers often don't trust an organization's security measures when handling or storing their sensitive data.  These customers will demand the organization to prove reasonable security controls are implemented and effective.  This process is called *vendor management due diligence* and is a critical component of business to business transactions.  As an organization grows its customer base it may find it increasingly more difficult to prove security compliance at scale.  Therefore an organization may seek to obtain a third party certification that is an attestation to the existence and functioning of security controls.  Having such a certification streamlines the operational burden of fielding potential customer inquiries and would otherwise require the organization to be audited directly by every one of their concerned existing and potential customers.  **Service Organization Control Type 2 (SOC2)** and the **International Organization for Standardization (ISO) 27001** are the two most common certifications organizations obtain.
+
+The SOC2 is conducted by an accredited certified public accountant (CPA) and is widely used in the United States.  There also exists a SOC1 which is used to demonstration financial controls (not security) and a SOC3 which is a summarized version of the SOC2.  The SOC2 is a written report usually 50-100 pages that describes the organization's structure, customer security responsibilities, and the security controls being assessed.  The controls themselves are chosen by the organization and verified by the auditor.  The auditor then renders an opinion on the effectiveness of the controls.  The SOC2 is further subdivided by two types and referred to as *type 1* or *type 2*.  A type 1 report is a moment in time evaluation of the existence of a control while a type 2 is an assessment of that control over a 6 months to 1 year time period.  
+
+Non-US and international companies usually achieve an ISO 27001 certification as it is recognized globally.  An organization will hire an accredited body to conduct the audit of the *information security management system (ISMS)*.  The auditor follows a strict listing of controls and tests them for effectiveness.  The auditor provides a report to the management of the company and a certificate to share with external parties proving compliance.
+
+In both types of audits referenced here the review are reconducted every 6 months to 1 year depending on the engagement.  Auditors perform tests by selecting a random sampling of a population related to a control and verifying system records that prove compliance to a control.  For example, a common security control is to revoke a terminated employee's system access within 24 hours.  An auditor will request a list of all the terminated employees over a time period and then request records of there termination date and access removal.  System reports and screenshots are the preferred type of evidence collected.
 
 ## Business Continuity Planning and Disaster Recovery
 BCP/DR

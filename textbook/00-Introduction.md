@@ -6,6 +6,8 @@
 
 ## How to Use this book
 
+**Key words are bolded**
+*Important words are italicized* 
 
 ```js
 Code blocks
