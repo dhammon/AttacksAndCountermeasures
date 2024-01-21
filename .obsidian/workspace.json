@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/01-InformationSecurity.md",
+                "file": "textbook/02-Cryptology.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "textbook/01-InformationSecurity.md",
+                "file": "textbook/02-Cryptology.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "textbook/01-InformationSecurity.md",
+                "file": "textbook/02-Cryptology.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "textbook/01-InformationSecurity.md"
+                "file": "textbook/02-Cryptology.md"
               }
             }
           }
@@ -146,8 +146,13 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0222551eff2d37c8",
+  "active": "576d0028bbc567c0",
   "lastOpenFiles": [
+    "textbook/00-Introduction.md",
+    "textbook/02-Cryptology.md",
+    "textbook/01-InformationSecurity.md",
+    "images/02",
+    "images/02/cryptology.jpg",
     "images/01/lab_14_win_install.png",
     "images/01/lab_13_win_summary.png",
     "images/01/lab_12_win_iso.png",
@@ -157,10 +162,6 @@
     "images/01/lab_09_ubuntu_download.png",
     "images/01/lab_08_kali_drag_drop.png",
     "images/01/lab_07_kali_update.png",
-    "images/01/lab_06_kali_login.png",
-    "images/01/lab_05_kali_started.png",
-    "textbook/01-InformationSecurity.md",
-    "textbook/00-Introduction.md",
     "images/01",
     "README.md",
     "images/information_security.jpg.crdownload",

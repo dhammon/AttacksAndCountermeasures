@@ -11,7 +11,7 @@ Most organizations have information they seek to protect which has spawned the f
 4. Understand attack lifecycles;
 5. Describe how organizations use governance, risk, and compliance within information security;
 6. Identify business continuity and disaster recovery processes;
-7. Understand identity access management processes and control models;
+7. Understand identity access management processes and control models; and
 8. Prepare a virtual environment to be used in future labs.
 
 ## Introduction
