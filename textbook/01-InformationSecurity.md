@@ -117,7 +117,7 @@ The figure Defense in Depth provides a map of where we could consider adding sec
 ## Risk
 Security is often considered a risk management function of an organization.  There is "security risk" to be considered operationally and that risk has a high impact.  A security incident can an organization its entire existence should the loss of data or business be so severe the organization ceases to operate.  Larger organizations sometimes have risk management departments that attempt to measure the level of risk an organization is exposed to over time and then how to manage that risk to appropriate levels.  These risk measurements helps executive management allocated resources (human, financial, etc) to areas of the organization that imposes the greatest risks.  Regardless of the size of the organization, mature security departments measure security risks to best understand where department resources should be spent.  This section explores the general methodologies used by security teams to define, measure, and manage security risk.
 
-> [!info] What is security risk?
+> [!info] Info - What is security risk?
 > *"The risk to organizational operations (including mission, functions, image, reputation), organizational assets, individuals, other organizations, and the Nation due to the potential for unauthorized access, use, disclosure, disruption, modification, or destruction of information and/or a system."* - NIST SP 800-12 Rev.1
 ### Qualitative Risk Management
 Most security departments attempt to measure security risk using qualitative and non-ordinal ratings such as high, medium, and low.  Even if the team uses numbers instead of high-low ratings they still could be considered qualitative.  We will explore quantitative measures in the next section.  Those tasked with measuring security risk qualitatively will determine ratings using a risk matrix comprise of ratings for *likelihood* (Y axis) and *impact* (X axis) in a matrix.
@@ -159,7 +159,7 @@ Control types and control goals are not the only considerations when considering
 
 ## Compliance
 Organizations are often under obligations to ensure security by regulators, customers, and stakeholders.  Jurisdiction plays are large part when determining the legal requirements an organization is under to provide security of information.  Customers expect their data is secure and establish contracts requiring confidentiality and security practices.  Other parties, such as board of directors, owners, and third parties expect security and may require adherence to industry security standards.  The collection of security requirements from all these entities, and proving adherence to them, is known as *compliance*.  There are varying degrees of obligations illustrated in the following graphic.
-![[Pasted image 20240118195441.png|Compliance Pyramid of Obligation|300]]
+![[../images/01/compliance_pyramid.png|Compliance Pyramid of Obligation|300]]
 Compliance requirements at the top of the pyramid have a higher degree of obligation as violation of the rules could result in an organization, or individual, being prosecuted by law enforcement or be assessed civil monetary penalties.  Guidance may place somewhere in the middle as it is often included as legal requirements in contracts between entities.  Violation of these agreements may result in the termination of a relationship which could cost an organization financially.  Finally, organization policies have the lowest obligation as can be changed by the organization at will and violation of policies usually result in employees being terminated.
 ### Laws and Regulations
 There are several laws and regulations in the United States, and elsewhere in the world, and it is important to understand the difference.  In the US, the United States Code (USC) is a formal document created by legislative bodies and signed into law by executive powers.  Violating the law while being found guilty results in penalties such as fines and incarceration.  Laws can be enacted at the state and federal levels and applying the laws depends on jurisdiction.  Most organization apply the most strict laws to their operations for consistency sake.  Among other things, laws govern the way business may be conducted in the United States and have explicit requirements for security and data privacy.  The following list outlines some popular federal laws in the United States that have some security requirement expected on organizations:
@@ -191,62 +191,191 @@ Customers often don't trust an organization's security measures when handling or
 
 The SOC2 is conducted by an accredited certified public accountant (CPA) and is widely used in the United States.  There also exists a SOC1 which is used to demonstration financial controls (not security) and a SOC3 which is a summarized version of the SOC2.  The SOC2 is a written report usually 50-100 pages that describes the organization's structure, customer security responsibilities, and the security controls being assessed.  The controls themselves are chosen by the organization and verified by the auditor.  The auditor then renders an opinion on the effectiveness of the controls.  The SOC2 is further subdivided by two types and referred to as *type 1* or *type 2*.  A type 1 report is a moment in time evaluation of the existence of a control while a type 2 is an assessment of that control over a 6 months to 1 year time period.  
 
+![[../images/01/SOC2.png|SOC 2 Badge|150]]
+
 Non-US and international companies usually achieve an ISO 27001 certification as it is recognized globally.  An organization will hire an accredited body to conduct the audit of the *information security management system (ISMS)*.  The auditor follows a strict listing of controls and tests them for effectiveness.  The auditor provides a report to the management of the company and a certificate to share with external parties proving compliance.
+
+![[../images/01/iso_27001.png|ISO 27001 Badge|150]]
 
 In both types of audits referenced here the review are reconducted every 6 months to 1 year depending on the engagement.  Auditors perform tests by selecting a random sampling of a population related to a control and verifying system records that prove compliance to a control.  For example, a common security control is to revoke a terminated employee's system access within 24 hours.  An auditor will request a list of all the terminated employees over a time period and then request records of there termination date and access removal.  System reports and screenshots are the preferred type of evidence collected.
 
 ## Business Continuity Planning and Disaster Recovery
-BCP/DR
+Information systems maintaining their availability is a component of the CIA triad covered earlier in the chapter.  This level of assurance requires careful planning, design, and testing of systems.  No system is impervious from unplanned downtime so measures must be taken that address what to do if there is an outage.  Such efforts are referred to as **Business Continuity Planning (BCP)** and **Disaster Recovery (DR)** where managers conduct **risk assessments** and **business impact assessments** to determine how a system could fail.  Estimates of how long systems can be tolerated to be down are made during these assessments.  Then disaster recovery plans can the be drawn up on the effort to get systems back online.  
 ### Risk Assessment
-- Natural
-- Technical
-- People
+There are a few generalized threats to the availability of information systems.  They include *natural*, *technical*, and *people*.  Natural threats often take form of the natural disasters such as earthquakes, floods, and tornadoes to name a few.  Location needs to be considered when determining the applicability of these threats as some places have more natural threats than others.  For example, there is a higher chance of an earthquake in the California Bay Area while there is no chance of a tornado.  Another threat to the availability of systems technical such as when the content delivery network (CDN) provider Cloudflare suffered a material internet outage for customers due to a border gateway protocol (BGP) misconfiguration[^1].  Cybersecurity incidents can also cause technical outages.  For example, a ransomware attack could cause information systems to go offline.  The last availability risk to consider during a risk assessment is from people.  This risk can arise from purposeful or accidental actions made by individuals.  One time I was decommissioning a network rack and clipped all the ethernet wires in the patch panel but one of them provided internet to an office suite which caused a disruption in business.
+
+The BCP/DR risk assessment is often prepared by operations and technical managers jointly.  It is a written document, such as a spreadsheet, that is updated frequently or at least annually.  Its objective is to define the availability risks faced to information systems and business operations by identifying what could go wrong.  The risk assessment usually consists of a list of risks that fall under the risk categories natural, technical, and people.  The next step in the BCP/DR process is to identify the impacts risks may have to the business.
 ### Business Impact Assessment
-BIA
+With a risk assessment completed, the business needs to identify the level of impact and inter-dependencies business units have.  The **business impact assessment (BIA)** is a written document, typically another spreadsheet, that lists each business unit and information systems it depends on.  The risk analyst will interview department leads to determine how they would be affected should an information system be unavailable.  The analyst collects this information and rates each department and information system with a priority.  For example in the restaurant industry if the credit card network or equipment becomes unavailable the business would be adversely affected because they couldn't process payments.  Although less than ideal, they restaurant could still conduct business using cash or by collecting card information and running charges latter.  The restaurant would be adversely affected but not out of commission so an appropriate BIA rating for the front of house operation and the credit card network may only be a *medium*. 
+
+During the BIA process the analyst would attempt to measure various thresholds of tolerance and expectations which could also inform the level of priority needed.  This is helpful in the event of an outage of several systems and having a firm understanding which systems to prioritize first - especially if one system depends on another system.  Back to the restaurant credit card system example, the system depends on the availability of electricity to the building.  The back of house depends on electricity to run the lights needed for the cooks to see what they are doing.  Without electricity the restaurant would have to close therefor a disaster recovery team should focus on restoring the electricity before attempting to restore the credit card system.
 
 ### Measures
-- Recovery Point Objective (RPO)
-- Recovery Time Objective (RTO)
-- Max Tolerable Downtime (MTD)
+There are common time measurements needed to establish an informed BIA.  These metrics are written in hours, days, or months for each business unit and information system.  The **Recovery Point Objective (RPO)** instructs how much data needs to be restored.  Imagine a database that holds customer sales leads information.  Losing this data would be harmful to the business but it might only cause the loss of potential future sales.  Perhaps an appropriate RPO in this case is a daily backup meaning the business could tolerate the loss of one day's worth of data.  Compare this to a bank's database that stores high volume of customer transactions.  A loss of even one minute of this data could cost the bank millions of dollars.  A real-time backup, or database replication, may be required and an RPO of 1 second is all the bank could tolerate.
+
+A business must also determine how long a system could be down for before the business is severely impacted, or will go out of business permanently.  **Maximum Tolerable Downtime (MTD)** attempts to quantify this threshold.  For example, an accounts payable accounting system used for paying vendors and employees may be determined to have an MTD of one month.  After which vendors will begin terminating contracts and employees will quit due to not receiving payment which would be catastrophic to the business.  
+
+Armed with the knowledge of the RPO and MTD, the analyst can work with business and system administrators on how long it will take to get a system back up and running with a metric called **Recovery Time Objective (RTO)**.  Ideally the RTO is less than the MTD otherwise the business will need to identify alternative methods to close the gap least risk the longevity of the business should an outage occur.  A complete BIA with RPO, MTD, and RTO might look something like the following example:
+
+![[../images/01/bia.png|Business Impact Analysis]]
 
 ### BCP/DR Plan
+After the risk assessment and BIA process the business can develop a plan on how to address the risk of an outage of a given business unit or information system.  The BCP/DR plan is a written document that describes the roles and responsibilities of all parties.  It will describe who is responsible for communication with the employees of an organization and how to handle customer inquiries.  It will include instructions on how to handle anticipated events such as offsite meeting locations and alternative procedures.  The document usually includes an out-of-band call tree should phone systems become unavailable.  Key personal are typically required to print a physical copy of the BCP/DR plan at their homes in case of an office fire or computer outage making digital copies unavailable.  Some BCP/DR plans go as far as forbidding the chief executive officer (CEO) and the chief financial officer (CFO) from sharing a flight due to the risk of a plane crash and needs of succession planning!  The plan would also establish how the plan is communicated and taught to participating members of the organization so that everyone knows what to do in the event of an outage.  The plan will prescribe how events should be documented and may include template reports to ensure all relevant information is consistently and comprehensively collected.
+
+Once created, the plan should be regularly tested using *table top exercises* where key members work together in a conference room under the pretense of an outage and describe how they would handle a given scenario.  Another form of testing is to perform components of an event and assess the performance of the plan, such as a practice fire drill.  A well planned test will have defined objectives whose performance will be measured against to determine the successfulness of the response actions.  Being well prepared goes a long way when events come to fruition and these efforts could be the difference of if a company survives or not.
 
 ## Data Classification
-- Private
-	- Confidential
-	- Internal
-	- Public
-- Public
-	- Top Secret
-	- Secret
-	- Unclassified
+Not all information is worth protecting while some information may require more protective controls than others.  The process of identifying, labeling, and assigning required controls to information is known as **data classification**.  Information, and the systems that process and store them, are assigned a label that indicates who can access the them and what degree of protection is required.  This labeling, or classification, varies between organization and the public sector.  The following graphic illustrates two overly simplified data classification schemes.
+
+![[../images/01/data_classification.png|Data Classification Schemes]]
+Usually there are at least three levels of classification with the most open level available for anyone's permitted use.  An example of this *public* or *unclassified* information could be the splash page of a website available on the internet.  Any information on such a site is accessible by everyone.  The next tier is information that is important and should not be made public but may otherwise be available to an audience the a need to know.  Sometimes referred to as *internal* or *secret*, this information requires security controls that ensure access is only made to authorized persons.  The most sensitive data classification is the *confidential* or *top secret* tier.  This data is highly restricted and must have the highest levels of security controls.  A system's *hardware security module (HSM)*, where encrypted secrets are stored, could be an example of an information system and data that reaches this level of classification.
 
 ## Identity Access Management
-IAM
-AAA
-- Authentication
-- Authorization
-- Accounting
+System administrators of information systems are required by security professional to maintain control over the access to networks and systems.  This is accomplished through **identity and access management (IAM)** which has developed into a defined subfield of information security over the last several years.  It isn't uncommon to see companies hiring explicitly for security professionals with IAM experience and some larger organization may hire individuals to only manage IAM.  But the responsibility for ensuring IAM controls falls on both system administrators (or admins) and security professionals.  In a general sense, admins grant and revoke access to systems while security professionals ensure access is securely maintained through access reviews.
+
+A system that ensures IAM practices will establish **authentication, authorization, and accounting (AAA)** capabilities.  The authentication process validates the identity of the entity requesting access to a system where as authorization verifies an authenticated entity is permitted to perform actions on that system.  When accounts of a system interact with the system a record or log of the event should take place which is known as accounting.  The accounting arm of AAA should log authentication and authorization events at a minimum.  Additional log entries in robust systems will include the actions made by each account especially over sensitive features of the system like creating and modifying accounts.
+
+> [!tip] Tip - IAM Lingo
+> The shorthand for authentication is **authn** and for authorization is **authz**.
 
 ### Identity and Factors
+The authentication phase of IAM's AAA requires an **identity** element and a **factor** to validate the identity of an entity.  Identity elements, also referred to as *entities* or *service principals*, are usually not treated as secrets and can often be found publicly.  Examples of an identity include usernames or a physical badge worn on a lanyard around the neck.  A factor is *something you know*, *something you have*, or *something you are*.  The most common example of the factors a password (know), hardware token (have), and biometric scan (are).  The process of presenting identity and a factor and a system making the determination if these elements validate the entity is authentication.
+
+Passwords are wrought with deficiencies which can make the less secure as anyone that knows the password could masquerade as that entity.  Passwords can be leaked or guessed in various ways that we will explore later in this book.  Because of their weakness many secure systems require *multi-factor authentication* that includes at least two different factor types (know, have, are).  For example, during the authentication process an entity must provide their username (identity), password (factor 1 - know) AND a hardware token value (factor 2 - have).
+
+> [!warning] Warning - Common MFA Mistake
+> A common mistake when determining the use of MFA is confusing the use of two of the same factors as MFA.  For instance, presenting a password and a pin is not MFA because both factors are something you know.  True MFA systems require the use of different factor types!
 
 ### Permissions
-- Need to know
-- Least Privilege
+After an entity is authenticated they will perform actions against a subject system.  The process of authorization determines if the authenticated entity is allowed to perform these actions which are referred to as **permissions**.  There are many actions that can be conducted by the entity but most conform to *reading*, *writing*, and *executing* and abbreviated as (RWX).  We will explore some common methods on how systems determine permissions in the next section.
 
-### Access Control 
-- Access Control List
-- Mandatory Access Control
-- Discretionary Access Control
-- Role Based Access Control 
+There are two principles that should be followed when assigning or assessing entity permissions.  The **need to know principle** evaluates if the entity has a reasonable and confirmed use case for the system or its data.  An individual should not have access to a system if the don't have a need to know its information regardless of that individual's standing in the organization.  This often arises when granting access to an executive at a company.  Just because an executive is responsible to the organization does not mean they should have root access on a server.  If they are granted access when they don't need it, undue exposure to system breach is manifested should that executive's account every be compromised.  After determining if an entity should have access to the system, the administrator must determine how much access the entity should have.  Maintaining just enough access for what is needed for the entity is known as the **least privileged principle**.  Continuing with our executive example, perhaps that executive needs access to the server to access a specific report.  Providing root access to that server provides too many permissions which will violate the least privileged principle.  Perhaps the executive only needs *read* access to specific files on the server in which case granting that access only achieve the least privileged goal.
+
+### Access Control
+There are a number of architectures to map entities with sets of permissions to control access in an information systems.  Engineers that design systems must consider the logic of how systems determine access control.  A common architecture to administer who can access what in a system is the **access control list (ACL)**.  The ACL list each entity and the permission they have on an object in that system.  The image below is a screenshot taken from Microsoft Azure demonstrating an ACL for the "/myDirectory" object.  The object lists each entities', or service principal, permissions on that object.
+
+![[../images/01/acl.png|Azure ACL|500]]
+This Azure ACL object is administered by the object's owner who can decide and configure which service principals have what level of access to the object.  This type of ACL where the owner of the object decides is known as a **discretionary access control list (DACL)**.  There are other variants of access control to consider, such as **mandatory access control (MAC)** in which another system maintains what users can access data and systems under different data classifications.  Each entity is assigned a *clearance level* and information systems are labeled a *data classification*.  When an entity requests data from the system their clearance level and the classification label is checked against a control list to allow or block the request.
+
+![[../images/01/mac.png|Mandatory Access Control]]
+
+An information system with thousands of service principals and millions of objects would become unmanageable.  Easing the burden of administering access promotes a more secure environment as they can streamline access decisions making a system less complicated.  One strategy to organize access is through **role based access control (RBAC)** in which administrators of an information system can creates a role sharing the same group of permissions.  Once the role is created and permissions configured, the administrator can assign users to the role where they will inherit its permissions.  You could imagine this makes reviews of permissions much easier.
 
 ### Managing IAM
-- Provision
-- Review
-- Revoke
+Organizations must establish processes to ensure effective access management on their information systems.  The system administrator and security professional have important roles in and IAM system's management.  System administrators are responsible for *provisioning*,  *altering*, *reviewing* and *revoking* access to systems.  Human resource departments typically supply administrators with events, such as employee onboarding or termination, and information, such as user details like name and job type.  The administrator will be alerted on this event and use the information provided to configure access to systems.  The administrator is responsible for ensuring the principles of least privileged and need to know are applied and they must challenge any requests for access that don't seem appropriate or lack detail to make an informed decision.
 
-## Lab Environment
+It is not uncommon for a service principal's use case on a system to change overtime.  This usually results in a user have more access than what is needed and is often referred to as *access drift*.  Identifying and correcting these issues requires frequent reviews and use case validations.  It can be sometimes contentious when removing permissions of a long standing user as they have grown accustom to the higher level of access.  This resistance sometimes deters change and it is important for a security professional to insist on the change when appropriate.  Another common issue is when the deprovisioning process fails to notify a system administrator to remove access.  If an employee is terminated someone must notify the admin to remove that terminated employee's access otherwise it will persist past employment.  Failing to revoke access timely exposes the organization to unauthorized access by a potentially disgruntled former employee.  In 2021, a New York Credit Union lost high volumes of financial data several days after terminating an employee.  The disgruntled ex-employee discovered they still had access to sensitive information systems and as an act of revenge deleted important data [^2].
+## Lab Environment Setup
+Each chapter of this book will include lab exercises on the topics covered.  Readers are encouraged to complete the labs to gain practical experience and to demonstrate a deeper understanding of the material covered.  Many individuals in the security community contribute to the body of security knowledge through blog posts, how-to videos, and capture the flag challenges.  Becoming proficient in security requires the ability to setup scenarios in a lab environment and experiment with systems.  The labs in this book will use the infrastructure established in the following exercise.
 
-> [!exercise] Exercise - Lab Environment
-> Virtual Box and VMs
+> [!exercise] Exercise - Install VirtualBox
+> In this lab, you will install VirtualBox on your host machine to support  three virtual machines (VMs) as test environments that support future lab coursework.
+>#### Download and Install VirtualBox
+>1. Ensure your processor supports virtualization that is enabled in the BIOS/UEFI.  In Windows, this can be done using the Task Manager.  You must enable virtualization.  You will not be able to proceed with the course if your CPU does not support virtualization!
+>
+>![[../images/01/lab_01_task_manager.png|Task Manager|500]]
+>2. Navigate to [https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html](https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html) 
+>3. Select Installer (Windows, Mac OS X, Linux):
+> ![[../images/01/lab_02_vbox_download.png|VirtualBox Download page|400]]
+> 4. Run the installer, follow the prompts, default settings should be fine.  Launch VirtualBox:
+> ![[../images/01/lab_03_vbox_installed.png|VirtualBox Startup Window|300]]
 
+
+> [!exercise] Exercise - Install Kali Virtual Machine
+> After VirtualBox is installed on your host machine, you will install a Kali Linux VM.  Kali is a Debian distribution maintained by Offensive Security.  It comes preinstalled with many security tools, lists, and apt repositories that we will be using throughout the course.  You will download the ISO image from the Kali website and manually install the operating system as a VM.  Once installation is complete, you will install the VirtualBox guest additions and configure the VM to share resources with your host computer.
+> 
+> #### Download and Setup Kali VM
+> 1. Navigate to [https://www.kali.org/get-kali/#kali-installer-images](https://www.kali.org/get-kali/#kali-installer-images)
+> 2. Select the download button for the 64-bit Installer image:
+> ![[../images/01/lab_04_kali_dowload.png|Kali Linux Download Page|400]]
+> 3. With the ISO for Kali fully downloaded (~10-20 minutes depending on internet speeds), navigate to the running VirtualBox application and select the “New” button:
+> 
+> ![[../images/01/lab_03_vbox_installed.png|VirtualBox Startup Windows|300]]
+> 4. The VirtualBox "Create Virtual Machine" wizard should appear.  Within the wizard, name the VM “kali” and select the Kali ISO location downloaded in the previous steps.  Then press the Next button.
+> 5. Within the "Hardware" wizard page, supply the VM with 4GBs memory and 2 processors (note, these settings can be increased or decreased later if needed) then press Next.
+> 6. On the "Virtual Hard disk" page, create select "Create a Virtual Hard Disk Now", change the "Disk Size" to 30GB and press the Next button.
+> 7. Within the "Summary" wizard page, review the settings and press Finish.
+> 8. With the “kali” VM selected, press the “Start” button to launch the VM in a new window:
+> ![[../images/01/lab_05_kali_started.png|Kali Started|400]]
+> 9. Select “Graphical Install” within the VM window and hit enter to launch the operating system installation wizard.
+> 10. With the VM's installation wizard starts with the "Select a language page.  Select the language "English" and press Continue.
+> 11. While on the "Select your location" page, choose your location.  For example, "United States" and then press Continue.
+> 12. On the "Configure the keyboard page, select keyboard layout American English and press Continue.
+> 13. Allow the Kali installer to run and the wizard will eventually launch the "Configure the network" page.  Enter the hostname “kali” and press Continue.
+> 14. On the second "Configure the network page", leave "Domain name" field empty and Continue.
+> 15. Next, on the "Set up users and passwords" page, enter your name in the "Full name for the new user" field and press Continue.
+> 16. From the second "Set up users and passwords" page, enter any username in the "Username for your account" field and press Continue.
+> 17. In the third "Set up users and passwords" page, enter a password in the "Choose a password for the new user" and the "Re-enter password to verify" fields.  Make sure you remember this password!  Press the Continue button to advance the installation.
+> 18. In the next wizard page "Configure the clock", select your timezone and press Continue.
+> 19. On the "Partition disks" page, allow a moment for the disks to be detected, then select the “Guided - use entire disk” option and press Continue.
+> 20. From the second "Partition disks" page, select default partition and press Continue.
+> 21. Within the thrid "Partition disks" page, select the “All files in one partition” option and press Continue.
+> 22. In the forth "Partition disks" page, select the “Finish partitioning and write changes to disk” to commit the partition changes and then press Continue.
+> 23. On the fifth and last "Partition disks" page, select “Yes” to the "Write the changes to disks" question (note default option is no) and press Continue.
+> 24. While in the "Software selection" window, wait for the system to install.  Then use the default software selections and press continue.
+> 25. Once the software installs after waiting for ~25 minutes, the "Install the GRUB boot loader" window appears.  Select Yes and then press Continue.
+> 26. Still on the "Install the GRUB boot loader" page, select the available device (not "Enter device manually") and press Continue to install the boot loader.
+> 27. Wait some time for the installation to finish and the "Finish the installation" page will appear.  Press Continue to complete the installation.
+> 28. The system will reboot and launch the login menu.  Enter the username and password used during installation.  If the VM boots to a black screen, you may need to increase the "Video Memory" of the VM.  Navigate to VirtualBox, select your VM, press Settings, choose Display from the navigation menu on the left, and then increase the Video Memory.
+> ![[../images/01/lab_06_kali_login.png|Kali Login Screen]]
+> 29. The system will log in and present the Kali desktop.  Right click in the desktop and select “Open Terminal Here” from the context dropdown menu.
+> 30. With the terminal open, run the apt update command and then enter your password to update the system.
+> `sudo apt update -y`
+> 31. After updates have installed, install the VirtualBox guest software using the following command. 
+> `sudo apt install -y --reinstall virtualbox-guest-x11` 
+> ![[../images/01/lab_07_kali_update.png|Kali Terminal Update and Install]]
+> 32. After the guest software is installed, select the Devices menu, Drag and Drop, and then the Bidirectional option.
+> ![[../images/01/lab_08_kali_drag_drop.png|VM Drag and Drop Setting]]
+> 33. Similarly, select the Devices menu, Shared Clipboard, and select the  Bidirectional setting to enable copying clipboard values between the host and VM.
+> 34. Return to the Kali terminal and reboot the VM using the following command.
+> `reboot`
+> Congratulations, you’ve successfully setup Kali in VirtualBox!  If you have adequate disk space (2x the recommended minimum) then you may consider taking a snapshot of the fresh install in case you ever want/need to start from a clean install.
+
+
+
+>[!exercise] Exercise - Install Ubuntu Virtual Machine
+> 
+> We will use an Ubuntu VM throughout the course as a victim, server, or to illustrate secure configurations.  Ubuntu is another Debian distribution maintained by Conical and is one of the most popular operating systems.  You will download an ISO image and install the system using the unattended installation feature.  Once completed, we will configure the VM to share resources with the host.
+> #### Download and Setup Ubuntu VM
+> 1. Navigate to [https://ubuntu.com/download/desktop](https://ubuntu.com/download/desktop and download the Ubuntu 22+ LTS image.
+> ![[../images/01/lab_09_ubuntu_download.png|Ubuntu Download Page]]
+> 2. With the ISO for Ubuntu fully downloaded (~10-20 minutes depending on internet speeds), navigate to the running VirtualBox application and select the “New” button.
+> 3. The VirtualBox "Create Virtual Machine" wizard will launch.  On the "Virtual machine Name and Operating System" page, enter "ubuntu" in the name field and select the Ubuntu ISO image you downloaded in the previous step.  Leave the "Skip Unattended Installation" checkbox UNCHECKED and press Next.
+> 4. Within the "Unattended Guest OS Install Setup" page, change the username and password, change the domain name to "lan".  Ensure the "Guest Additions" option is checked and press Next.
+> 5. In the "Hardware" page, select a "Base Memory" of 4096MB and set "Processors" to 2 CPUs (these settings can be adjusted later if more/less resources are needed).
+> 6. On the "Virtual Hard disk" page, choose the option "Disk Size" and set it to 30 GBs then press Next.
+> 7. Review your settings on the "Summary" page and press "Finish" to complete the setup.
+> 8. Observe the ubuntu VM has been configured and is running in the VirtualBox application.  Select the ubuntu entry and then the Show button to watch the installation progress.  The installation should take 20-30 minutes.
+> ![[../images/01/lab_10_ubuntu_install.png|Ubuntu OS Auto Installation]]
+> 9. Once installation is complete the VM will reboot to the login screen.  Login with the user account you setup in step 4.
+> 10. Similar to Kali, setup the shared clipboard and drag and drop VM settings.  Select Devices, Shared Clipboard, and choose Bidirectional.  Then select Devices, Drag and Drop, and choose Bidirectional.
+> Congratulations, you have successfully installed the Ubuntu VM on VirtualBox! If you have adequate disk space (2x the recommended minimum) then you may consider taking a snapshot of the fresh install in case you ever want/need to start from a clean install.
+
+
+
+> [!exercise] Exercise - Install Windows Virtual Machine
+> The last VM we will be using in our lab environment is a Windows 10 machine.  Similar to Ubuntu, it will act as a victim, server, or be used to demonstrate secure configurations.  You will install an evaluation version so there is no need to purchase a license.  To obtain the ISO, you will download the Windows installation media tool to your host machine, configure the desired ISO, and download it.  You will then create a VM using this ISO and use the unattended installation feature.  After installation we will setup the ability to share resources between the host and the VM.
+> #### Download and Setup Windows VM
+> 1. Navigate to https://www.microsoft.com/en-us/software-download/windows10 and press the "Download Now" button under the "Create Windows 10 installation media" section.
+> ![[../images/01/lab_11_win_download.png|Download Media Creation Tool|500]]
+> 2. Open the Downloads folder and run the Media Creation Tool executable which will launch the "Windows 10 Setup" wizard in a new window.
+> 3. Within the "Windows 10 Setup" window, accept the licensing and choose “Create installation media (USB flash drive, DVD, or ISO file) for another PC” option.
+> 4. On the "Choose which media to use" page of the wizard, use the recommended options and select ISO file.
+> ![[../images/01/lab_12_win_iso.png|Media Creation Tool ISO Selection|600]]
+> 5. Select the location to save the ISO and the download will begin.  Select Finish once complete (no need to burn to DVD) and the download process should begin.  The download may take 10 to 20 minutes depending on your internet connection.
+> 6. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
+> 7. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
+> 8. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with username and password of your choosing, set the "Doman Name" to lan, and check the "Guest Additions" options.  We won’t be licensing Windows so don’t worry about the Product Key and press the Next button.
+> 9. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
+> 10. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 40 GB and press Next.
+> 11. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
+> ![[../images/01/lab_13_win_summary.png|Windows VM Summary|500]]
+> 12. Windows should take 20-30 minutes to install and can be monitored by selecting Show in VirtualBox on the running windows VM.
+> ![[../images/01/lab_14_win_install.png|Windows VM Installation]]
+> 13. After the installation completes you will be automatically logged into the VM to the Windows desktop.  You may have to adjust the VirtualBox View settings and/or the Windows display settings for the best experience.  If your window does not show the file menu, try using VirtualBox shortcut keys to display (in Windows right CTRL + Home button).
+> 14. Similar to Kali and Ubuntu VMs, setup the shared clipboard and drag and drop VM settings. Select Devices, Shared Clipboard, and choose Bidirectional. Then select Devices, Drag and Drop, and choose Bidirectional.
+> Congratulations, you’ve successfully installed Windows in VirtualBox!  If you have adequate disk space (2x the recommended minimum) then you may consider taking a snapshot of the fresh install in case you ever want/need to start from a clean install.
+
+
+[^1]: BGP Router Leak Causes Cloudflare and Amazon AWS Problems; By Lawrence Abrams; 2019; https://www.bleepingcomputer.com/news/technology/bgp-route-leak-causes-cloudflare-and-amazon-aws-problems/
+[^2]: Fired NY credit union employee nukes 21GB of data in revenge; By Sergiu Gatlan; 2021; https://www.bleepingcomputer.com/news/security/fired-ny-credit-union-employee-nukes-21gb-of-data-in-revenge/
