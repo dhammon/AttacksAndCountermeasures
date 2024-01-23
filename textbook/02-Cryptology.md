@@ -60,33 +60,101 @@ Each encoding type has recognizable pattern that you should develop the ability 
 | Hexadecimal | numbers and letters a-f | 48 65 6c 6c 6f 20 57 6f 72 6c 64 21 |
 | Base64 | numbers, upper and lowercase letters, and special characters +, /, and = | SGVsbG8gV29ybGQh |
 
-> [!activity] Activity - Cyberchef
-> Cyberchef is the swiss army knife of encoding and encryption.  It enables users to quickly and dynamically enter values and decode/decrypt.
+> [!activity] Activity - CyberChef
+> CyberChef, https://gchq.github.io/CyberChef/, is the Swiss army knife of encoding and encryption available as an online webapp or a command line interface (CLI) tool.  It enables users to quickly and dynamically decode and decrypt values and supports several dozen encoding schemes with multiple configurations.  The left most pane, *Operations*, has a list of formats that can be dragged into the middle pane, *Recipe*.  The input value is entered into the upper right pane, *Input* and the output value is displayed on the bottom pane *Output*.  You can use multiple layers of formats to produce the final output.  The left pane options are written in the context as "to" or "from".  The logic used starts with the input value is converted "to" or "from".  The following screenshot shows CyberChef in action by encoding "Hello World!" to hexadecimal format.
+> ![[../images/02/cyberchef_activity.png|CyberChef Hello World Example]]
+> 
+
+One researcher recently discovered how to find the AWS account number from and AWS Key ID by removing metadata, decoding the ID using base 32, then decoding the hex values to ASCII while performing a bitwise operation[^2].
 
 >[!exercise] Exercise - Encoding and Decoding
-
-AWS account number from ID decoding multiple layers example
+>Encoding and decoding values is a very common when analyzing data and having the skillset benefits many security roles.  
+>#### Step 1
+>Try identifying each string and determine the type of encoding being used:
+>- `WW91IGhhY2tlciB5b3UhIQ==`
+>- `69 110 99 111 100 105 110 103 32 105 115 32 110 111 116 32 101 110 99 114 121 112 116 105 111 110 32 58 41`
+>- `77 30 30 74 20 77 30 30 74`
+>- `48 65 78 20 69 73 20 63 6f 6d 6d 6f 6e 6c 79 20 75 73 65 64 20 77 69 74 68 20 61 73 73 65 6d 62 6c 79`
+>- `01101111 01101110 01100101 00100111 01110011 00100000 01100001 01101110 01100100 00100000 01111010 01100101 01110010 01101111 00100111 01110011`
+>#### Step 2
+>Now decode each string from step 1 using CyberChef https://gchq.github.io/CyberChef/.
+>#### Step 3
+>Again using CyberChef, encode the following string into a base 32 format.
+>`Cyber Chef is an awesome tool!`
+>
 ## Ciphers
-- Block Ciphers
-- Stream Ciphers
+Let's put some of the terms learned so far in this chapter to use.  There are two categorizes of encryption algorithms whose primary difference is how they handle the plaintext data being encrypted.  **Block ciphers** encrypt the plaintext in chunks of fixed characters while **stream ciphers** encrypt one bit at a time.  Each cipher types have various *modes* that have various attributes that determine the size of blocks, how keys are used, and other features.  We'll explore modes later in this chapter.
+
+A block cipher starts with an *initialization vector (IV)* which is a random value that is attached to each block of data.  An encryption *key* and the initial block with the IV are passed to the cipher which outputs the ciphertext.  Each encrypted block is used as the IV of the next block until all blocks are encrypted.  The block size varies depending on the cipher mode being used but is usually between 64 and 128 bits.  The following diagram demonstrates the mechanics of a basic block cipher starting on the left and working towards the right.
+![[../images/02/block_cipher.png|Block Cipher Diagram|500]]
+
+The stream cipher uses a key and *use only once (nonce)* value to create a key stream and is XORed with the plaintext input to produce the ciphertext.  This process is performed continuously bit by bit until the entire data stream has been processed.  The diagram below attempts to illustrate the process of a general stream cipher.
+![[../images/02/stream_cipher.png|Stream Cipher Diagram|400]]
+
+Both cipher types support the decryption of ciphertext by using the same algorithm and key.  The ciphertext is used as the input and the output value is the plaintext message.
 ## Key Space
+A cryptographic system relies on the encryption key remaining a secret as the other components used, such as the cipher, are assumed known.  To keep encrypted data secure it is important to use a good key value.  An encryption key is ideally long and random, also known as *entropy*, to prevent certain types of attacks that could guess the key value.  Having a random key is vital because if the generated key followed a predetermined pattern it could be narrow the possible number of keys and make it easier to crack.  Another heuristic of a strong key is its length.  The longer the key value to exponentially longer it would take to guess.  Secure keys are long and random!   Most people accept a minimum key length of 128 bits (16 bytes) and very strong at 512 bits (64 bytes).
 
 > [!exercise] Exercise - Key Space
+> OpenSSL is a command line tool available in Linux systems that can perform almost any cryptographic activity you can imagine.  It comes preinstalled on Ubuntu and can be used to generate random encryption keys of a desired length.  Start your Ubuntu VM and open a terminal.  Create a random 32, 128, and 256 key using the following commands.
+> `openssl rand -base64 32`
+> `openssl rand -base64 128`
+> `openssl rand -base64 256`
 
+Most encryption technologies have the ability to produce a secure key using a seed value, such as the time the key is being generated at.  A short key could be quickly guessed by checking every variation of bits in the length of the key.  Raw key values are stored as bits, which are mostly unrenderable in UTF as we learned in the encoding section of this chapter.  Because keys need to be be used as inputs, most encryption technologies expect the value of the key to follow a specific format.  This format starts with a header, then a base 64 encoded blob of the raw key value, and followed by a footer.
 ## Key Algorithms
-Symmetric Encryption
-Asymmetric Encryption
+The process of encrypting data and accessing it with a key that you have is an easy enough use case to grasp.  The key, referred to as a *private key* because it must be kept a secret, is used to encrypt the data and is the same key that can decrypt the data, known as **symmetric encryption** and popularized by the deprecated *data encryption standard (DES)* and the modern *advanced encryption standard (AES)*.  However, things get more complicated if you want to share encrypted data between two entities.  The party encrypting the data with a key can send the data securely to a receiving party, but how does that party decrypt the message without the key?  They of course would need to also have the key that was generated by the sending party, but how do they get that key in a secure manner?  It would be unwise to send the key in a separate message that was unencrypted and if the sending party were to encrypt the key before sending it what key do the use to encrypt the key?  Sometimes this effort is easy enough to overcome if within a trusted network or where the sender and receiver are working out of the same system.  The following graphic demonstrates the transfer of encrypted data over the internet using the same private key (black keys) held by two parties (universally known as Bob and Alice).
+![[../images/02/symmetric_keys.png|Symmetric Key Encryption|300]]
+
+> [!exercise] Exercise - Symmetric Encryption
+> We'll continue the use of OpenSSL on your Ubuntu VM to complete this exercise where you will encrypt and decrypt a message using symmetric encryption.
+> #### Step 1
+> Open a terminal and create a plaintext file with a secret message.  
+> 
+> `echo "some secret message" > plain.txt`
+> #### Step 2
+> With the plaintext file created, encrypt the message using AES 256 encryption code block cipher mode.  You should be prompted to enter a password (key).  Note that the "-p" option displays the IV and key.
+> 
+> `openssl enc -aes-256-cbc -p -in plain.txt -out plain.txt.enc`
+> 
+> Review the contents encrypted message using the cat command and observe it is unrecognizable from the original message.
+> 
+> `cat plain.txt.enc`
+> 
+> #### Step 3
+> Next, decrypt the encrypted message using the key you set in step 1.  Note that the "-d" option sets decrypt mode and the "-A" option performs a base64 buffer.
+> 
+> `openssl enc -aes-256-cbc -d -A -in plain.txt.enc`
+> 
+> If successful you should have your original message displayed!
+> ![[../images/02/symmetric_exercise.png|Symmetric Exercise Result]]
+> 
+
+A major issue arises when you want to share encrypted party with anonymous users at scale.  A common example of this problem is best illustrated by a website.  The website does not know who is requesting files from the webserver but there is a need to have the requests and response payloads encrypted while traversing the internet.  Another conceptual problem arises when we realize we wouldn't want to use the same encryption key for each anonymous user; otherwise, any anonymous user would be able to decrypt requests and responses for any user defeating the purpose of using encryption to begin with.  So we need a solution that allows for the secure transfer of unique encryption keys between parties.  **Asymmetric encryption** solves this through the use of two encryption keys derived from the same mathematical function using the product of very large prime numbers popularized by *Ron Rivest, Adi Shamir, and Leonard Adleman (RSA)*.  One of the keys generated is long and is meant to keep as a secret being referred to as a *private key*.  The second key is shared with everyone and know as a *public key*.  The public key is not a secret and is offered in plaintext.  A requestor of a website requests the webserver's public key and then the requestor creates a private key.  Using the webserver's public key, the requestor encrypts their private key before sending it to the receiving webserver.  The webserver receives the private key of the requestor that was encrypted with the webserver's public key and then decrypts that key using the webserver's private key.  All future communications between the client and server use this private symmetric key to encrypt and decrypt messages.  The following graphic shows two parties using asymmetric encryption where a public key (white key) is provided to the requestor and is used to encrypt keys used in messages between the parties.
+![[../images/02/aysmmetric_keys.png|Asymmetric Key Encryption|350]]
+
+To recap, symmetric encryption uses one private key while asymmetric encryption uses a public and private key pair to encrypt a symmetric key.  Both key algorithms have their advantages over the other.  Symmetric is very fast while asymmetric is significantly slower because there is several more steps and network latencies.  However, asymmetric encryption solves the key sharing and scaling problems that symmetric has.
+
+>[!activity] Activity - Asymmetric Encryption
+>We can use OpenSSL on Ubuntu to encrypt messages using asymmetric encryption too!  After creating a public and private key pair using OpenSSL,  a message can be encrypted using the public key and then decrypted using the private key.
+>
+>I'll create a 1024 bit private key into a file named private.pem and display the result.  Notice the key's header and footer and that the content is in base64 encoded format.
+>![[../images/02/asymmetric_activity_private_key.png|Private Key Generation]]
+>Next, I create a public key into a public.pem file that pairs with the private key.  This public key will be used to encrypt messages.
+>![[../images/02/asymmetric_activity_public_key.png|Public Key Generation]]
+>With the key pair created I create a message in the plain.txt file and encrypt it using the public key while outputting the ciphertext into the plain.txt.enc file.  The contents of plain.txt.enc are not legible!
+>![[../images/02/asymmetric_activity_encrypt.png|Asymmetric Message Encryption]]
+>Finally, we can use the private.pem key to decrypt the message and display its content "hello world"!
+>![[../images/02/asymmetric_activity_decrypt.png|Asymmetric Message Decryption]]
 
 ## Cipher Modes
+move this to after Ciphers or make a child of ciphers
 - ECB
 - CBC
 - GCM
 
 > [!warning] Warning - ECB Insecurity
 
-> [!exercise] Exercise - Symmetric Encryption
-
->[!activity] Activity - Asymmetric Encryption
 ## Hash Algorithms
 Process
 Types
@@ -119,3 +187,4 @@ Types
 > [!exercise] Exercise - Known Plaintext Attack
 
 [^1]: Usage statistics of Default protocol https for websites; January 2024; https://w3techs.com/technologies/details/ce-httpsdefault#:~:text=These%20diagrams%20show%20the%20usage,85.1%25%20of%20all%20the%20websites.
+[^2]: A short note on AWS KEY ID; by Tal Be'ery; October 24, 2023; https://medium.com/@TalBeerySec/a-short-note-on-aws-key-id-f88cc4317489
