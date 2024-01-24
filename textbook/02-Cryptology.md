@@ -83,15 +83,26 @@ One researcher recently discovered how to find the AWS account number from and A
 >`Cyber Chef is an awesome tool!`
 >
 ## Ciphers
-Let's put some of the terms learned so far in this chapter to use.  There are two categorizes of encryption algorithms whose primary difference is how they handle the plaintext data being encrypted.  **Block ciphers** encrypt the plaintext in chunks of fixed characters while **stream ciphers** encrypt one bit at a time.  Each cipher types have various *modes* that have various attributes that determine the size of blocks, how keys are used, and other features.  We'll explore modes later in this chapter.
+Let's put some of the terms learned so far in this chapter to use.  There are two categorizes of encryption algorithms whose primary difference is how they handle the plaintext data being encrypted.  **Block ciphers** encrypt the plaintext in chunks of fixed characters while **stream ciphers** encrypt one bit at a time.  
 
-A block cipher starts with an *initialization vector (IV)* which is a random value that is attached to each block of data.  An encryption *key* and the initial block with the IV are passed to the cipher which outputs the ciphertext.  Each encrypted block is used as the IV of the next block until all blocks are encrypted.  The block size varies depending on the cipher mode being used but is usually between 64 and 128 bits.  The following diagram demonstrates the mechanics of a basic block cipher starting on the left and working towards the right.
+A block cipher starts with an *initialization vector (IV)* which is a random value that is attached to each block of data.  An encryption *key* and the initial block with the IV are passed to the cipher which outputs the ciphertext.  Each encrypted block is used as the IV of the next block until all blocks are encrypted.  The block size varies depending on the cipher mode being used but is usually between 64 and 128 bits.  The following diagram demonstrates the mechanics of a basic block cipher, *cipher block chaining (CBC)*, starting on the left and working towards the right.
 ![[../images/02/block_cipher.png|Block Cipher Diagram|500]]
 
 The stream cipher uses a key and *use only once (nonce)* value to create a key stream and is XORed with the plaintext input to produce the ciphertext.  This process is performed continuously bit by bit until the entire data stream has been processed.  The diagram below attempts to illustrate the process of a general stream cipher.
 ![[../images/02/stream_cipher.png|Stream Cipher Diagram|400]]
 
 Both cipher types support the decryption of ciphertext by using the same algorithm and key.  The ciphertext is used as the input and the output value is the plaintext message.
+## Cipher Modes
+Block ciphers have various *modes* that have various attributes that determine the size of blocks, how keys are used, and other features.  These modes of operation are algorithms that the cipher uses to encrypt data.  They detail how the cipher encrypts or decrypts each block of data through the use of the initialization vector (IV) described earlier in the chapter.  Cipher modes vary in block size, how they pad blocks that don't meet the size, and how they encrypt each block of data.  The following modes are very common but there are several modes that exist not covered in this text.  Some modes are more secure than others but may have tradeoffs in features and resources.
+
+The **Electronic Code Book (ECB)** mode is an older mode that was widely used and recommended until certain flaws became apparent by the cryptology community.  One of the simpler modes, it takes each block and encrypts them separately using a key and works very fast consuming less resources than other cipher modes.  It is not recommended to use any longer.
+
+> [!warning] Warning - ECB Insecurity
+> Because each block is encrypted individually using the same key it lacks diffusion and patterns emerge in the ciphertext that could enable cryptanalysis to decipher parts or all of an encrypted file.  The most famous visual example of this is the encryption of the Linux Penguin using ECB. [^3]  The image on the left is the unencrypted version of the file.  The middle image is encrypted using ECB while the last image is encrypted using a modern encryption mode.  Can you spot the issue with using ECB?
+> ![[../images/02/ecb_encryption.png|Linux Penguin Encrypted using ECB]]
+> Remember this image the next time you are tempted to use ECB to encrypt data so you avoid using an insecure cipher mode!
+
+Another older cipher mode, **Cipher Block Chaining (CBC)**, is very popular and commonly found in use of information systems.  It is secure enough and encrypts blocks of data using an initialization vector and XOR'ing (inversing) the encrypted blocks to be used to encrypt the next block.  The block cipher diagram referenced in the Cipher section of this this chapter is an example of how this algorithm operates.  Modern information systems using block ciphers should choose the **Galois/Counter Mode (GCM)** operation as it provides the most security, currently.  It encrypts each block with a counter, or IV, then XORs the plaintext.  GCM offers all the features of modern cryptography including authentication.  
 ## Key Space
 A cryptographic system relies on the encryption key remaining a secret as the other components used, such as the cipher, are assumed known.  To keep encrypted data secure it is important to use a good key value.  An encryption key is ideally long and random, also known as *entropy*, to prevent certain types of attacks that could guess the key value.  Having a random key is vital because if the generated key followed a predetermined pattern it could be narrow the possible number of keys and make it easier to crack.  Another heuristic of a strong key is its length.  The longer the key value to exponentially longer it would take to guess.  Secure keys are long and random!   Most people accept a minimum key length of 128 bits (16 bytes) and very strong at 512 bits (64 bytes).
 
@@ -147,13 +158,6 @@ To recap, symmetric encryption uses one private key while asymmetric encryption 
 >Finally, we can use the private.pem key to decrypt the message and display its content "hello world"!
 >![[../images/02/asymmetric_activity_decrypt.png|Asymmetric Message Decryption]]
 
-## Cipher Modes
-move this to after Ciphers or make a child of ciphers
-- ECB
-- CBC
-- GCM
-
-> [!warning] Warning - ECB Insecurity
 
 ## Hash Algorithms
 Process
@@ -188,3 +192,4 @@ Types
 
 [^1]: Usage statistics of Default protocol https for websites; January 2024; https://w3techs.com/technologies/details/ce-httpsdefault#:~:text=These%20diagrams%20show%20the%20usage,85.1%25%20of%20all%20the%20websites.
 [^2]: A short note on AWS KEY ID; by Tal Be'ery; October 24, 2023; https://medium.com/@TalBeerySec/a-short-note-on-aws-key-id-f88cc4317489
+[^3]: Block cipher mode of operation; Wikipedia; January 2024; https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation

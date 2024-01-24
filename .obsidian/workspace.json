@@ -146,8 +146,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0222551eff2d37c8",
+  "active": "576d0028bbc567c0",
   "lastOpenFiles": [
+    "images/02/ecb_encryption.png",
     "images/02/asymmetric_activity_decrypt.png",
     "images/02/asymmetric_activity_encrypt.png",
     "images/02/asymmetric_activity_public_key.png",
@@ -161,7 +162,6 @@
     "images/02/stream_cipher.png",
     "images/02/block_cipher.png",
     "images/02/cyberchef_activity.png",
-    "images/02/ascii.png",
     "images/02",
     "images/01",
     "README.md",
