@@ -157,23 +157,73 @@ To recap, symmetric encryption uses one private key while asymmetric encryption 
 >![[../images/02/asymmetric_activity_encrypt.png|Asymmetric Message Encryption]]
 >Finally, we can use the private.pem key to decrypt the message and display its content "hello world"!
 >![[../images/02/asymmetric_activity_decrypt.png|Asymmetric Message Decryption]]
-
-
 ## Hash Algorithms
-Process
-Types
-- MD5
-- SHA
-- NTLM
+So called *one way functions*, a **hash algorithm** takes an input and generates a cryptographic output value.  This fixed character length value will produce the same value given the same input.  Good hash algorithms will create a very different hash output, or *digest*, with even the smallest change to the given input.  Speed is also an indication of a good hash algorithm as it makes it more practical to use.  Unlike typical encryption, hash algorithms should not have a mathematical way to turn the hash value back into plaintext value - there is no way to "unscramble the egg".  The diagram below depicts the general process of inputting a message into an hash function and yielding a hash value as an output.
+![[../images/02/hash_function.png|Hash Use Process|500]]
+
+The properties of a the hash process have a proven security value to them.  Hash values provide a method to ensure integrity of a file or message.  If the user knows the original hash value of a file or message, they can generate another hash on a received message to verify it matches the original version.  Hash algorithms are also useful to authentication login systems as it provides a means to avoid having to store a password in plaintext or encrypted.  If a password is stored encrypted or in a raw value it runs the risk of one day being compromised.  Modern authentication systems don't store passwords but rather store a hash value of the password.  When a user logs into that system their entered password is first passed through the hash algorithm and the hash value is then compared to the hash value stored in the database.  If the two match, then the user can be authenticated.
+
+Not all hash algorithms have equal security value.  Some hash algorithms have been proven to allow *collisions*, where more than one input can create the same hash value.  Such algorithms should be avoided if concerned about security.  While hash values, or hashes, can't be returned to their original values, there are tactics where the original input can be determined.  This is accomplished by passing values through the hash algorithm and comparing the output hash value to the subject hash value attempting to be decoded.  If they match then the guessed value is the implied original value.  As you can imagine, it takes many guesses to *crack* a hashed value.  We will explore tools and experiment with hash cracking later in this textbook.
+
+There are many cryptographic hash algorithms available for use.  While we won't cover all of them, we will review a few of the more popular or common ones.  The **MD5 message-digest algorithm** produces a 32 character, 128-bit, hash value.  It is very fast and has been used since the early 90's.   However, in 2010 it was proven to be vulnerable to collisions and therefore should not be used for critical security operations.  Another very popular group of hash algorithms are the **secure hashing algorithm (SHA)** family.  It is derived from MD5 and has various length options.  The commonly used SHA-1 has 40 characters, 160 bit, and was discovered to be susceptible to collisions in 2017 by Google researchers.  It is not uncommon to still find SHA-1 being used within information systems but its use should be avoided in favor of the SHA-2 version.  This version supports multiple bit length options 224, 256, 384, or 512.  The larger the bit length the more secure, but at a sacrifice of time it takes to compute the value.  The current recommendation is to use SHA-256 or SHA-512 for secure operations.
+
+>[!activity] Activity - Digest Verification
+>Let's demonstrate the use of MD5 hash in Linux to prove the integrity of a message.  Using an Ubuntu VM, I'll open the terminal and create a message in a file called message.txt.
+>![[../images/02/activity_01_message.png|Create Message]]
+>We can use the md5sum utility to determine the MD5 hash digest of the message.  The command outputs a 32 character value.  We could re-run this message on any computer and get the exact same result.
+>![[../images/02/activity_01_hash.png|MD5 Hash of Message.txt]]
+>Now, replace the message.txt file with a slightly different message and calculate the digest.  Notice the value is greatly different from the original!
+>![[../images/02/activity_01_rehash.png|Change Message and Rehash]]
+
+Microsoft uses hashes to convert and authenticate Windows operating system passwords.  In the 1980's they developed the LAN Manager authentication scheme and its very insecure hash algorithm of the same name, **LM**.  It was based on now deprecated **Data Encryption Standard (DES)** algorithm which produces only 48 bit digests.  LM curtails the passwords to a maximum 14 characters, converts them to uppercase, encodes and pads the value, then splits the output into two 7-byte strings.  These strings are used to create DES values encrypted with a key that was published by Microsoft.  This algorithm erodes most of the security of having a long and high entropy (random) password and is usually easily cracked.  I would instruct the reader to ensure any of the systems they are responsible for maintaining the security of to avoid LM use; however, Microsoft has done a good job of making this algorithm backwards compatible and to this day its use is technically feasible.
+
+Learning from the lessons of LM, Microsoft developed **New Technology LAN Manager (NTLM)** and later improved it and published a second version, *NTLMv2*.  The NTLM value is based on MD4 and used in the deprecated, yet backwards compatible, NTLM authentication process.  It has since been replaced with the Kerberos system originally developed by MIT.  We will explore these authentication processes later in this book.  For now, be aware of the evolution of hash algorithms and their practical use within authentication systems.
 
 > [!exercise] Exercise - Hash Generation
-
+> In this task you will create hash digests using Ubuntu's native md5sum and sha256sum tools.
+> #### Step 1
+> Create a message in a new file that we will take the hash value of.  Open your terminal on your Ubuntu machine and enter the following command.
+> `echo "Tamperproof Message: crypto is the coolest!" > message.txt`
+> #### Step 2
+> For this step you will take the MD5 and SHA-256 values of the created file from the previous step.  Enter the following commands in the directory where message.txt resides
+> `md5sum message.txt`
+> `sha256sum message.txt`
+> Notice the difference in the digest length between MD5 and SHA-256.
 ## Encryption Authentication
+Encryption can be used to authenticate a sender or receiver of data, even data that is in plaintext!  The methods of accomplishing this also have the added benefit of ensuring the integrity of the data.  In the following section we will explore how a receiver of a message can authenticate the sender of the data through *message authentication code (MAC)* symmetric keys.  Similarly, this same task can be accomplished using asymmetric keys via a *digital signature*.  Both of these methods leave the message in plaintext, so it does not provide any confidentiality or privacy.
 ### Message Authentication Code
+A bi-directional conversation between two parties can use **Message Authentication Code (MAC)**, sometimes referred to as *authentication tag* or *keyed hash*, to ensure the integrity and authenticity of each other.  MAC provides assurance that the sender and receiver were the creators of the messages being sent as they both share a private key used to encrypt and decrypt a hash of the message.  If the message is altered in any way, even by one bit, the decrypted hash digest won't match and the respective party will know that the message had been altered.  The MAC is a short piece of information that is constructed from a hash function *hash-based message authentication code* or block ciphers like *Galois/Counter Mode (GCM)* and sent along with the plaintext message, usually as a file or text.  To demonstrate this, the following diagram shows a message sender creating a MAC with a private key and sending it to a receiver who also has the private key which can be used to inspect the attached MAC to confirm the integrity of the message and authenticate the sender.
+![[../images/02/mac_diagram.png|MAC Sending and Receiving|600]]
+
 ### Digital Signatures
+If the authentication of a message sender, the integrity of the message, and the repudiation assurance that the sender sent the message is needed, while avoiding the use of transferring private encryption keys, a **Digital Signature (DS)** can be used.  The DS has the advantage of sending the message along with a public key so that any receiver of the message can use the public key to verify the message and sender.  This use case allows for the single direction of communication from the sender to the receiver, limiting the receiver's ability to respond in kind.    DS can be attached or detached, meaning they can be embedded as part of the message (attached) or the signature can be its own separate file (detached).  In this diagram the sender (on the right), creates a digital signature and sends it with the public key of the key-pair to the receiver (on the left).  The receiver uses the public key that was attached to the message to verify the signature that was included with the message.
+![[../images/02/ds_diagram.png|Digital Signature Sending and Receiving|600]]
 
 > [!exercise] Exercise - Detached Digital Signature
-
+> Debian based Linux systems usually come pre-installed with GNU Privacy Guard (GPG) that offers the ability to create digital signatures.  You will use your Ubuntu VM in this exercise to create a detached DS and verify it.
+> #### Step 1
+> Acting as the sender of the message, we will create a key-pair using gpg via the following command.  Once the command is ran, you are prompted to enter a name and email address.  You will also be asked to enter and verify a password for your key ring that is created.  Upon successful execution a public key is created along with an entry in the system's key ring.
+> `gpg --gen-key`
+> ![[../images/02/lab_ds_gen_key.png|GPG Key Generation]]
+> #### Step 2
+> We will create our message we wish to sign using the following command.
+> `echo "Message integrity and authentication are very cool" > message.txt`
+> ![[../images/02/lab_ds_message.png|Create Message to Sign]]
+> #### Step 3
+> With the key-pair and message created we are ready to digitally sign it using GPG.  The following command will output a message.txt.sig as a detached separate file from the original message.txt.  Upon enter the first command you will be prompted to enter your password in order to access the key ring.  The second command displays the contents of the signature, note it is a public key!
+> `gpg --output message.txt.sig --armor --detache-sig message.txt`
+> `cat message.txt.sig`
+> ![[../images/02/lab_ds_signature.png|Detached DS Creation]]
+> #### Step 4
+> The message and the signature are now ready to be sent.  You can pretend to send both files to another party.  When the receiver gets your message and detached signature, they will need to verify that the message has not been altered and that it was really you that sent it.  The receiver will use GPG with the verify option to confirm the message in the following command.  GPG will output a "Good signature" message upon successful validation.
+> `gpg --verify message.txt.sig message.txt`
+> ![[../images/02/lab_ds_verify.png|GPG Verify DS and Message]]
+> #### Step 5
+> Try altering the message.txt content slightly and then re-run the GPG verify command and then answer the following questions:
+> - What is the output of the validation?  
+> - Are you notified that the signature is bad?  
+> - Explain what this means to the receiver of a message with a unverified or bad signature.  
+> - What are the implications?
 ## Steganography
 
 > [!exercise] Exercise - Steghide

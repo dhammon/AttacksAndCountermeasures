@@ -236,7 +236,7 @@ System administrators of information systems are required by security profession
 A system that ensures IAM practices will establish **authentication, authorization, and accounting (AAA)** capabilities.  The authentication process validates the identity of the entity requesting access to a system where as authorization verifies an authenticated entity is permitted to perform actions on that system.  When accounts of a system interact with the system a record or log of the event should take place which is known as accounting.  The accounting arm of AAA should log authentication and authorization events at a minimum.  Additional log entries in robust systems will include the actions made by each account especially over sensitive features of the system like creating and modifying accounts.
 
 > [!tip] Tip - IAM Lingo
-> The shorthand for authentication is **authn** and for authorization is **authz**.
+> The shorthand for authentication is *authn* and for authorization is *authz*.
 
 ### Identity and Factors
 The authentication phase of IAM's AAA requires an **identity** element and a **factor** to validate the identity of an entity.  Identity elements, also referred to as *entities* or *service principals*, are usually not treated as secrets and can often be found publicly.  Examples of an identity include usernames or a physical badge worn on a lanyard around the neck.  A factor is *something you know*, *something you have*, or *something you are*.  The most common example of the factors a password (know), hardware token (have), and biometric scan (are).  The process of presenting identity and a factor and a system making the determination if these elements validate the entity is authentication.
@@ -317,7 +317,7 @@ Each chapter of this book will include lab exercises on the topics covered.  Rea
 > 26. Still on the "Install the GRUB boot loader" page, select the available device (not "Enter device manually") and press Continue to install the boot loader.
 > 27. Wait some time for the installation to finish and the "Finish the installation" page will appear.  Press Continue to complete the installation.
 > 28. The system will reboot and launch the login menu.  Enter the username and password used during installation.  If the VM boots to a black screen, you may need to increase the "Video Memory" of the VM.  Navigate to VirtualBox, select your VM, press Settings, choose Display from the navigation menu on the left, and then increase the Video Memory.
-> ![[../images/01/lab_06_kali_login.png|Kali Login Screen]]
+> ![[../images/01/lab_06_kali_login.png|Kali Login Screen|500]]
 > 29. The system will log in and present the Kali desktop.  Right click in the desktop and select “Open Terminal Here” from the context dropdown menu.
 > 30. With the terminal open, run the apt update command and then enter your password to update the system.
 > `sudo apt update -y`
@@ -361,7 +361,7 @@ Each chapter of this book will include lab exercises on the topics covered.  Rea
 > 2. Open the Downloads folder and run the Media Creation Tool executable which will launch the "Windows 10 Setup" wizard in a new window.
 > 3. Within the "Windows 10 Setup" window, accept the licensing and choose “Create installation media (USB flash drive, DVD, or ISO file) for another PC” option.
 > 4. On the "Choose which media to use" page of the wizard, use the recommended options and select ISO file.
-> ![[../images/01/lab_12_win_iso.png|Media Creation Tool ISO Selection|600]]
+> ![[../images/01/lab_12_win_iso.png|Media Creation Tool ISO Selection|400]]
 > 5. Select the location to save the ISO and the download will begin.  Select Finish once complete (no need to burn to DVD) and the download process should begin.  The download may take 10 to 20 minutes depending on your internet connection.
 > 6. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
 > 7. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
