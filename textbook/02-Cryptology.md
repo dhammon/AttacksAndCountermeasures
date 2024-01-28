@@ -225,21 +225,66 @@ If the authentication of a message sender, the integrity of the message, and the
 > - Explain what this means to the receiver of a message with a unverified or bad signature.  
 > - What are the implications?
 ## Steganography
+Many centuries ago, a Greek historian wrote about a technique previously used to inconspicuously send a secret message.  A message was tattooed onto the messenger's shaved head and then their hair was allowed to grow back.  When the messenger arrived to their destination, their head was shaved so the message could be read.  The technique of hiding in plain sight to avoid detection is known as **steganography**.  A message can be concealed in various media including audio and image files.  There are also a few methods of how it works with the most common called *least significant bit (LSB)*.  The LSB method on an image file takes bytes of data and modifies the last bit of the byte (8 bits).  For example, the byte 01101010 would have its last bit changed to accommodate the hidden message.  Then each LSB is collected to form the secret message.  For a steganographic image, there is no perceived difference to the image leaving the altered image visually identical to the original - thus hiding the message in plain sight.
 
 > [!exercise] Exercise - Steghide
-
+> Let's use steganography to hide a secret message within a JPEG file using a tool called Steghide.  You will install the software, create a message and conceal it within an image file.  Afterwards, you will extract the secret from the image.  Start and login to your Kali VM to complete this exercise.
+> #### Step 1
+> From your Kali VM, open a terminal and update your system using the following command.
+> `sudo apt update -y`
+> Your user may not have sudo privileges and the update command might therefore fail.  If needed, switch to the root user and modify your normal user by adding it to the sudo group using the following commands.  Make sure to replace `<USERNAME>` with your account's name.  After running the commands, you will need to log out and log back in for the user modification change to take affect - I typically just reboot to accomplish this.
+> `su -`
+> `usermod -aG sudo <USERNAME>`
+> With your system updated, install Steghide using the following command.
+> `sudo apt install steghide -y`
+> #### Step 2
+> With Steghide installed on your system, you will need a secret message and a JPEG image.  First create a message using the following command.
+> `echo "Launch Code: 31337" > secret.txt`
+> Next, open your VM's browser and navigate to https://www.google.com/imghp?hl=en and search for an image.  Right click the image and save it as a JPEG.  If the image can't be saved as a JPEG, then you'll need to select another image or try to convert it.  You might consider moving the downloaded image to the same folder where the secret.txt file was created.
+> #### Step 3
+> Now that the software is installed, a message is created, and you've downloaded a JPEG, you are ready to hide the message into the image.  With Steghide, you will use the embed command and options `-ef` (embed file) and `-cf` (cover file) to insert the secret message into the image.  The original image will be modified but otherwise look the exact same.  Make sure to replace the `<IMAGE.JPG>` with the image name and path of what you downloaded.  You will be prompted to supply a password after running the command, make sure your remember it!
+> `steghide embed -ef secret.txt -cf <IMAGE.JPG>`
+> Go ahead and check the image and compare it to the original.
+> `eog <IMAGE.JPG>`
+> Consider moving the steg file (image) to another folder or removing the original message as we'll next demonstrate extracting the message.
+> #### Step 4
+> Pretend this stego-image was sent to another party that knew of the hidden message and the password used.  They can use Steghide to extract the message and reveal its contents.  Run the following command that uses the `extract` command and `-sf` (steg file) option to extract the message.  Unless you've moved the steg file image or deleted the original message, when you extract the message you will overwrite the original message that is in the folder.  Make sure to replace `<STEG_IMAGE.JPG>` with the name and path if not in the same folder as the current working directory.
+> `steghide extract -sf <STEG_IMAGE.JPG>`
+> Now check that the message was extracted and observe its contents.
+> `ls -la`
+> `cat secret.txt`
 ## Cryptanalysis
-- Known-plaintext Analysis (KPA)
-- Chosen-Plaintext Analysis (CPA)
-- Ciphertext-Only Analysis (COA)
-- Man in the middle (MITM)
-- Adaptive Chosen-Plaintext Analysis (ACPA)
-- Birthday Attack
-- Side-channel Attack
-- Brute-force Attacks
-- Differential Cryptanalysis
+Cryptography is the practice of designing solutions to secure data while **cryptanalysis** is the practice of defeating cryptographic systems.  While it is tempting to associate cryptanalysis with negative connotations, as though trying to break an encryption system is immoral or illegal, it is in fact very beneficial to security.  A common theme throughout information security is to test the capability of security systems in an effort to continuously improve them; otherwise, malicious actors may identify vulnerabilities and attacks that are unknown to defenders.  Cryptanalysts have developed many attack methodologies that include attacking the data, the cryptography, and the systems that implement them.  Let's briefly explore some of the more popular attack vectors.
+
+In a **known-plaintext attack** the actor has a copy of both the plaintext and the ciphertext.  There goal is to derive the encryption key and the cipher is assumed known as it is not kept secret.  If the attacker is able to determine the key used, then they could use that same key to decrypt ciphertext they may not have the plaintext for.  The following diagram illustrates this attack.  From this example you can observe the plaintext has two consecutive "l"s in the third and forth position while the ciphertext has two consecutive "m"s in the same relative position.  This pattern enables the attacker to determine that a shift cipher was used with a key of 1.  A basic shift cipher moves the letters of the alphabet by the key value, in this case an "a" becomes a "b".  To decrypt the ciphertext we simply shift the letters in the opposite direction by the key value 1.  So the first letter of the ciphertext "i" becomes an "h".  Repeating the process for every character reveals the original plaintext!
+![[../images/02/attack_known_plaintext.png|Known-Plaintext Attack|400]]
+
 > [!exercise] Exercise - Known Plaintext Attack
+> Here is a puzzle for you to solve.  Applying what you've learned about known plaintext attacks, you will attempt to break the custom encryption with having only the plaintext and ciphertext.  Your goal is to break the encryption and describe the custom algorithm used and its key using the following information:
+> Plaintext: `Break my simple encryption`
+> Ciphertext: `rOe nx zlzfvrcya rlpevcgba`
+> 
+
+The **chosen-plaintext attack** requires the actor to apply a chosen plaintext to encrypt and observe the ciphertext output of the cryptographic system that uses a target key.  They can repeat this as many times as needed in an attempt to understand how the cipher works and derive the key that is being used.  Once they have identified the key used, the can decrypt any ciphertext they have access to.  As illustrated in the following diagram, the actor chooses the plaintext entering into the cipher and can observe the output.
+![[../images/02/attack_chosen_plaintext.png|Chosen-Plaintext Attack|350]]
+
+A much more difficult attack that also attacks the data is the **ciphertext-only attack** where the actor only has the ciphertext to go off of and does not have the availability of any plaintext to compare or test through the cryptographic system.  The following diagram illustrates what the actor has available to them in this attack type to derive the encryption key, which is not much!
+![[../images/02/attack_ciphertext_only.png|Ciphertext-Only Attack|150]]
+
+An example of a ciphertext-only attack technique that is particularly effect against shifting cryptographic systems is **differential**, or **frequency cryptanalysis**.  In this attack the actor needs a lot of ciphertext and analyzes the frequency of each character.  For example, how many times does the letter "a" appear in the ciphertext.  They then compare these frequencies to a similar analysis of the standard language like English.  Consider that the letter "z" is less commonly used in English then the letter "a".  You would expect to find many more "a"s than "z"s.  While the frequency of letters in a shift cipher won't perfectly align with normal English language, it will greatly reduce the number of permutations to determine which ciphertext letter corresponds with which plaintext letter.  Consider the following diagram of two bar charts having already performed this analysis.  The most common ciphertext letter frequency on the right is the letter "s" while plaintext analysis shows the most frequent letter is "e".  Perhaps every ciphertext letter "s" in this example is the plaintext "e"!
+![[../images/02/attack_frequency.png|Frequency Analysis Charts]]
+Systems implementing cryptographic solutions can also be attacked.  For example, an encryption key exchange over a network can be stolen by an actor by a **person in the middle (PiTM)** also known as a *man in the middle (MiTM)* attack.  In this scenario the actor has positioned themselves between the sender and receiver of a cryptographic key being sent over a network.  Having access to this traffic the actor is able to observe the encryption key in plaintext and can use it to decrypt any ciphertext generated with the key.
+![[../images/02/attack_mitm.png|Person in the Middle Attack|400]]
+Another attack on cryptographic systems can be conducted adjacent to the technology being used in what is referred to as a **side channel attack**.  This can take many forms but one recently discovered method by researches discovered the ability to derive cryptographic keys by measuring the effects voltage draw on the CPU while performing cryptographic operations through the level of light emission of an LED displayed on the front of a computer![^4]
+
+Cryptographic hash algorithms can also be attacked, which if successful can enable actors to compromise the integrity or authentication of a system.  The classic **brute-force attack** consists of applying individually every combination of characters through a hashing algorithm and then comparing the results to a known hash.  The original value used to create the target hash digest can be identified through a brute-forced value whose hash digest matches that of the original.  Consider the following diagram that illustrates this attack.  The list on the left represents every possible lowercase combination of four characters.  Each set is passed through the hash algorithm to produce a hash value.  These combination digest pairs are then used to cross reference a target hash value.  If the target hash matches a hash value on the list, the value used to produced that hash can be identified.
+![[../images/02/attack_brute.png|Brute-Force Attack|550]]
+
+Another hash algorithm attack takes advantage of hash collisions, previously discussed in this chapter, and is called a **birthday attack**.  It gets this interesting name from a statistical phenominom known as the *birthday paradox*.  Unintuitively, a room with 50 people in it has a nearly 95% chance of two people sharing the same birthday.  Attackers can take advantage of collisions by producing a trusted digest that has been manipulated.  Take the given scenario of an executable download from the internet.  Normally a user can verify the executable's validity by calculating the hash value and comparing it to a known good result.  But, as shown in the following diagram, a malicious actor that has access to the source of that file, before a user download it, can alter that executable with malicious code which produces the identical hash value as the original.  The victim of this attack would expect the malicious version was authentic because the hash value matches.
+![[../images/02/attack_birthday.png|Birthday Attack|450]]
+
 
 [^1]: Usage statistics of Default protocol https for websites; January 2024; https://w3techs.com/technologies/details/ce-httpsdefault#:~:text=These%20diagrams%20show%20the%20usage,85.1%25%20of%20all%20the%20websites.
 [^2]: A short note on AWS KEY ID; by Tal Be'ery; October 24, 2023; https://medium.com/@TalBeerySec/a-short-note-on-aws-key-id-f88cc4317489
 [^3]: Block cipher mode of operation; Wikipedia; January 2024; https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation
+[^4]: Hackers can steal cryptographic keys by video-recording power LEDs 60 feet away; Dan Goodin; June 13, 2023; [Hackers can steal cryptographic keys by video-recording power LEDs 60 feet away | Ars Technica](https://arstechnica.com/information-technology/2023/06/hackers-can-steal-cryptographic-keys-by-video-recording-connected-power-leds-60-feet-away/)

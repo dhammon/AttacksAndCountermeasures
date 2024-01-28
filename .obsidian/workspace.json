@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/02-Cryptology.md",
+                "file": "textbook/03-NetworkSecurity.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "textbook/02-Cryptology.md",
+                "file": "textbook/03-NetworkSecurity.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "textbook/02-Cryptology.md",
+                "file": "textbook/03-NetworkSecurity.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "textbook/02-Cryptology.md"
+                "file": "textbook/03-NetworkSecurity.md"
               }
             }
           }
@@ -148,19 +148,22 @@
   },
   "active": "576d0028bbc567c0",
   "lastOpenFiles": [
-    "textbook/01-InformationSecurity.md",
+    "images/03/wan_lan.png",
+    "images/03/network_equipment.png",
+    "images/03/network_equipment.png",
+    "images/03/client_server.png",
     "textbook/02-Cryptology.md",
-    "images/02/lab_ds_verify.png",
-    "images/02/lab_ds_signature.png",
-    "images/02/lab_ds_message.png",
-    "images/02/lab_ds_gen_key.png",
-    "images/02/ds_diagram.png",
-    "images/02/mac_diagram.png",
-    "images/02/activity_01_rehash.png",
-    "images/02/activity_01_hash.png",
-    "images/02/activity_digest_message.png",
-    "images/02/activity_01_message.png",
+    "textbook/03-NetworkSecurity.md",
+    "textbook/01-InformationSecurity.md",
+    "images/03/globe_internet_connections.jpg",
+    "images/03",
     "textbook/00-Introduction.md",
+    "images/02/attack_birthday.png",
+    "images/02/attack_brute.png",
+    "images/02/attack_mitm.png",
+    "images/02/attack_frequency.png",
+    "images/02/attack_ciphertext_only.png",
+    "images/02/attack_chosen_plaintext.png",
     "images/02",
     "images/01",
     "README.md",
