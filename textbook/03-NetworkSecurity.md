@@ -208,13 +208,16 @@ Troubleshooting network issues is a common task for many technology professional
 >`netstat -aon`
 >System administrators may want to know if the device is running any services to ensure they are protected.  Also, an attacker may want to know what potential vulnerable services are listening on a device in an attempt to exploit it.
 ## Network Security
-Definition - Cisco quote
+The term security is often used by those who defend and by those who attack.  Depending on who you ask, you might get different answers when questioning what is network security.  Let's consider Cisco's definition of network security; after all, they currently hold the largest market share of network equipment.
+
+> [!quote] Network Security
+*Network security is the protection of the underlying networking infrastructure form unauthorized access, misuse, or theft.*  -**Cisco Systems Inc**
+
+Network security certainly encompasses good design or architecture of a network, use of security tools and hardware, as well as understanding the various attacks that can be waged on a network.  This section covers some of the basics to network security while the next chapter focuses on the security of network services.
 ### Risks
-- CIA triad
-	- unauthorized access
-	- denial of service
-	- data modification
+The security risks related to networks fits well with the CIA Triad introduced in chapter 1.  Networks are at risk of unauthorized access (confidentiality), modification of data (integrity), and denial of service (availability).  Consider how an attacker may gain access to a network.  For example, many offices have WiFi for ease of portability.  If a signal is strong enough, an attacker may be able to gain access without having step foot into the building.  Alternatively, an attacker could compromise an existing device within the network gaining a foothold.  Another brazen method of a network intrusion is through the use of a *drop box*, such as a Raspberry Pi, that is physically installed within the network and phones home to the attacker for remote control.  Once inside a network the attacker could intercept and inspect traffic potentially revealing confidential data.  Another option is to modify that traffic to achieve some impact or gain further access to sensitive data.  A very common risk is *denial of service (DOS)* where the attacker attempts to block a service from being accessible to legitimate users. 
 ### Network Segmentation
+
 - blast radius
 - VLANS - trunks and subnets
 - DMZ
