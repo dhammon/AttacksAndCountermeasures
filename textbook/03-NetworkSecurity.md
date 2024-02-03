@@ -230,23 +230,39 @@ Routers can provide basic rules that allow or block traffic based on IP addresse
 ### Firewall Stateful Inspection
 Second generation network firewalls enhanced routing rules through more resources (CPU, RAM) being dedicated to the inspection effort.  These **stateful inspection** firewalls track all packets in context of the other packets it relates to in a table.  This way they can make decisions based on rules that consider established connections, sessions, and the service or protocol.  Stateful firewalls inspect not just the headers of packets but the payloads and other fields of the packets.  They provide a continuous review with dynamic rules based on the state of the connection.
 ### Firewall Next Gen
-- TLS inspection/deep packet inspection
-- antivirus
-- application and identity based control
-- vpn concentrators
-- IDS/IPS
-- DoS protection
+The most modern firewalls are called **next generation or next gen** and include the same network security features as previous generations but also include several more.  Next gen firewalls terminate TLS encryption, also called *deep packet inspection*, so they can examine the contents of encrypted packets.  Network or security administrators configure all devices to accept the firewall's TLS certificate, then the firewall intercepts all ingress (incoming) and egress (outgoing) TLS packets but decrypts and inspects them for malicious content or other security violations.  Another security feature enjoyed by next gen firewalls is anti-malware, or antivirus, solutions, such as Palo Alto's *WildFire*.  More on antivirus later in this book.
+
+Some firewalls integrate with application and authentication, or *identity based control*, solutions so that they can apply rules on traffic by software or by principal.  These firewall rules can allow or block traffic by users and groups or by specific applications. 
+
+Next gen firewalls provide additional security protections such as *intrusion detection and prevention systems (IDS/IPS)* integrating rules of traffic and packet patterns known to have been associated with malicious activity.  IDS/IPS systems can also be integrated with streams or feeds of known malicious IPs and domains and block traffic accordingly.  We will have a chance to explore IDS/IPS systems with better detail in a future chapter.
 ### VPNs
-- Generic routing encapsulation (GRE) tunneling
-	- Split tunnel - part of traffic
-	- full tunnel - all traffic
-- IPsec (encryption)
-	- site to site
-- TLS
-- Virtual Interfaces
-	- TUN - IP packets (layer 3)
-	- TAP - ethernet frames (layer 2)
-### Port Scanning
+Next gen firewalls also support *virtual private network (VPN)* services as they act as a VPN provider allowing clients to connect to a network from the internet.  Over the last several years there has been a huge rise in the consumer VPN space where customers can sign up for a low cost, or "free", VPN service to use with home devices.  The value of such services is not of importance here while we consider the common VPN use case of organizations - which certainly would use the consumer grade and often questionable services.
+
+Organizations often need to connect multiple geographically dispersed locations into a unified network providing seamless IT services to the userbase.  Empowering members of the organization to share network resources like file shares, domain controllers, and even printers.  VPNs fulfil this need through *site-to-site* VPN where two or more networks can be joined together using tunneling, *generic routing encapsulation (GRE)* and encryption technology, *IPsec*.  GRE tunnels can be *split tunnel*, which carves only some traffic through the tunnel, or *full tunnel* which forces all traffic through the tunnel.  Together GRE and IPsec provide the ability to connect the two, or more, networks into one while providing the network security needed over the hostile internet.  
+
+Another use case for VPNs by organizations are for the userbase who may need remote access to the network so they can enjoy the same network services as those in a physical office.  The remote access connections usually leverage VPN clients installed on the user's device and establish encrypted tunnels to the network using TLS.  The client running on the user's device creates a virtual interface *TUN*, for IP layer 3 packets, or *TAP* for layer 2 ethernet frames.  
+### Host and Service Discovery
+Networks are usually very noisy with many devices sending *broadcast* messages to all devices on the subnet frequently.  Other devices can be identified across a network using the ping utility we used earlier in this chapter.  Network administrators need to verify devices are reachable from across the network and by nature a network device must be able to send and receive packets.  **Host discovery** is the process of identifying devices within a network using these and other methods.  Once a host is identified it can be further scanned to identify the types of services it offers.
+
+Recall that TCP has a three way handshake to establish connections on ports of hosts with IP addresses.  Assuming a device is reachable over a network, that the routers and switches will route the traffic, means any device on that network can establish a network, layer 3, handshake connection.  Therefore, any device can test other devices on the network for any ports that might be opened.  Earlier in the chapter we used the command line network utility, netstat, to identify open connections and listening ports.  These same ports can be identified by other devices on the network in a process call **port scanning**.
+
+Once a port is discovered as listening or *open* it may respond with some protocol or content.  This response could be used to identify the service that is listening to the port on the device across the network.  Sometimes this is as simple as the service advertising what is is, and even the version of software it is running.  Other times the service can be derived by matching its behavior against a list of known patterns for common services.
+
 > [!activity] Activity - NMAP
+> There are several free and reputable tools that empower host and service discovery on the network.  The long popular Netcat and NMAP tools work very well and are feature rich.  Many newer network tools, such as Masscan, can have additional features and properties, such as being much faster!  Let's explore some of NMAP's host and service discovery capabilities.
 
 > [!exercise] Exercise - Host and Service Discovery
+> Using your Kali VM you will use NMAP to identify the Windows VM on the network and scan it for open ports while identifying services.  Make sure each VM's network settings are set to `Host-only Adpater` to ensure they can reach each other on your virtual network.
+> #### Step 1 - Disable Windows Firewall
+> Within the Windows VM, open the “Windows Defender Firewall with Advanced Security” application, select “Windows Defender Firewall Properties” within the “Overview” section of the main pane.  For each ‘profile’ tab, set the firewall state to “Off”.
+> #### Step 2 - Observe IP Addresses
+> Check the IP addresses of the Kali and Windows VM for reference and ensure each has a unique IP address in each subnet. On the Windows VM, open a command prompt and run the following command.
+> `ipconfig`
+> Within the Kali terminal, run the following command.
+> `ip a`
+> #### Step 3 - Ping Sweep
+> Discover the Windows VM from the Kali VM using NMAP’s ping sweep.  From the Kali terminal, run the following command. Make sure to replace `<IP/CIDR>` with the subnet CIDR notated IP range of your VirtualBox network (eg 192.168.40.0/24).
+> `nmap -sn <IP/CIDR>`
+> #### Step 4 - Port and Service Scan
+> Scan the open ports and services of the IP address (Windows) discovered during the Ping Sweep. From the Kali terminal, run the following command. Make sure to replace `<IP>` with the IP address of the Windows VM. 
+> `nmap -sT -sV -p- <IP>`
