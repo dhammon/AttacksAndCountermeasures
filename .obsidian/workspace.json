@@ -20,12 +20,12 @@
             }
           },
           {
-            "id": "576d0028bbc567c0",
+            "id": "04917f4a3bbc995b",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/03-NetworkSecurity.md",
+                "file": "textbook/04-NetworkServices.md",
                 "mode": "source",
                 "source": false
               }
@@ -98,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "textbook/03-NetworkSecurity.md",
+                "file": "textbook/04-NetworkServices.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "textbook/03-NetworkSecurity.md",
+                "file": "textbook/04-NetworkServices.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "textbook/03-NetworkSecurity.md"
+                "file": "textbook/04-NetworkServices.md"
               }
             }
           }
@@ -159,28 +159,31 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "576d0028bbc567c0",
+  "active": "04917f4a3bbc995b",
   "lastOpenFiles": [
-    "images/03/segmentation.png",
-    "textbook/00-Introduction.md",
-    "textbook/03-NetworkSecurity.md",
-    "images/03/wireshark_endpoints.png",
-    "images/03/wireshark_stream.png",
-    "images/03/wireshark_follow.png",
-    "images/03/wireshark_resolve.png",
-    "images/03/wireshark_filter.png",
-    "images/03/wireshark_add_col.png",
-    "images/03/wireshark_add_col.png",
-    "images/03/wireshark_add_col.png",
-    "images/03/wireshark_col_prefs.png",
-    "images/03/wireshark_packets.png",
+    "images/04/dns_spoof_http_logs.png",
+    "images/04/dns_spoof_kali_spoof_logs.png",
+    "images/04/dns_spoof_trigger.png",
+    "images/04/dns_spoof_kali_dnsspoof.png",
+    "images/04/dns_spoof_arp_spoof_2.png",
+    "README.md",
     "textbook/04-NetworkServices.md",
+    "images/04/dns_spoof_arp_spoof_1.png",
+    "images/04/dns_spoof_arp_spoof_1.png",
+    "images/04/dns_spoof_kali_http.png",
+    "images/04/dns_spoof_kali_dsniff_install.png",
+    "images/04/dns_spoof_ubuntu_valid_logs.png",
+    "images/04/dns_spoof_win_google_nslookup.png",
+    "textbook/00-Introduction.md",
+    "files/kansascityWEP.pcap",
+    "files",
+    "images/04",
+    "textbook/03-NetworkSecurity.md",
     "textbook/02-Cryptology.md",
     "textbook/01-InformationSecurity.md",
     "images/03",
     "images/02",
     "images/01",
-    "README.md",
     "images/information_security.jpg.crdownload",
     "images",
     "New folder",

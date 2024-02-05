@@ -250,6 +250,41 @@ Once a port is discovered as listening or *open* it may respond with some protoc
 
 > [!activity] Activity - NMAP
 > There are several free and reputable tools that empower host and service discovery on the network.  The long popular Netcat and NMAP tools work very well and are feature rich.  Many newer network tools, such as Masscan, can have additional features and properties, such as being much faster!  Let's explore some of NMAP's host and service discovery capabilities.
+> 
+> Configuring both Kali and Windows VMs with the `Host-only Adapter` network setting before starting them will ensure they are on the same network.  Then the Windows VM's host firewall will be disabled which will expose all of its open ports to the network - this will mimic a server on the network.  Once the machines and network are prepared a ping sweep from the Kali machine will be performed to discover the IP address of the Windows VM.  With this IP address in hand, various host specific scans will be ran that identify more information about the Windows target.
+> 
+> First, we start the Windows VM with the `Host-only Adpater` network setting.  Once started and logged in, I'll launch `Windows Defender Firewall` from the search bar.
+> ![[../images/03/nmap_win_firewall_open.png|Launching Windows Defender Firewall|600]]
+> With the Windows Defender Firewall with Advanced Security app launched, I press the "Windows Defender Firewall Properties" that is at the bottom of the Overview section in the main pane which launches the properties of the firewall.
+> ![[../images/03/nmap_win_firewall_properties.png|Windows Defender Firewall Status|600]]The Windows host firewall has three sets of configurations, or *profiles*, depending on the type of network the machine is on.  The Domain profile is for Windows networks managed by a Domain Controller, the Private profile for trusted networks, and the Public profile for untrusted networks.  Each of the firewall profile configurations can be viewed using the respective tabs in the properties window.  As we want to demonstrate open network ports in this activity, I'll disable the firewall for each profile by selecting the "Firewall state" drop down and choosing "Off" as shown in the following screenshot.  Then I'll press Ok to apply the settings.
+> ![[../images/03/nmap_profile_off.png|Firewall Profile Setting Off|400]]
+> With the firewall disabled, I'll launch a command prompt by entering `cmd` in the search bar.  Within the command prompt I use the following command to identify the Windows VM IP address which is found to be 192.168.56.253.  We can derive that the CIDR range for the subnet is 192.168.56.0/24 from the Subnet Mask result of this command's output.
+> `ipconfig`
+> ![[../images/03/nmap_win_ip.png|Windows IP Address|600]]
+> Now that the Windows VM, or the victim, is setup, I'll start the Kali VM using the `Host-only Adpater` network setting.  This will ensure both VMs are on the same network.  Once launched and logged in, I open a terminal by right-clicking the desktop and selecting "Open Terminal Here" from the context menu.  I then type the "ip" command to observe the IP address which is "192.168.56.252" and on the same "56" subnet as the victim machine.  
+> `ip a`
+> ![[../images/03/nmap_kali_ip.png|Kali IP Address|600]]
+> NMAP come pre-installed on Kali Linux.  Running the following command with the help option lists all the available options and settings.
+> `nmap --help`
+> ![[../images/03/nmap_help.png|NMAP Help Options|600]]
+> We will use the `-sn` option listed under the HOST DISCOVERY section in the help menu.  This option instructs NMAP to ping all IP addresses, whether there is a machine there or not, in a given range and will inform us if any IP addresses respond.  I'll also instruct NMAP to use the subnet observed in the earlier step.  After a few moments the results of the scan are returned that list the Kali and Windows VM IP addresses!  This is one way an attacker, or a network administrator, can identify hosts on a network.
+> `namp -sn 192.168.56.0/24`
+> ![[../images/03/nmap_host_discovery.png|NMAP Host Discovery|600]]
+> With the target IP address discovered, we can use NMAP to identify open TCP ports using the `-sT` option.  The following command specifies the target host instead of the CIDR range of the subnet.  NMAP will test 1000 common ports by sending TCP packets to each port and evaluate the response.  After running the command, we can observe a few open ports.
+> `nmap -sT 192.168.56.253`
+> ![[../images/03/nmap_tcp_scan.png|NMAP TCP Scan|600]]
+> Sending TCP packets to every port can generate a lot of unnecessary network traffic and increase the chances of an attacker being discovered.  Alternatively, we could use the Netcat tool to evaluate specific ports we may be interested in.  The Netcat tool's `-vz` options set a verbose output and zero input output mode which will identify if the port is open non-interactively.  I also specify the target IP address and port number in the command.  Observe that port 445 yields and open result whereas port 123 shows the connection is refused (closed).
+> `nc -vz 192.168.56.253 445`
+> `nc -vz 192.168.56.253 123`
+> ![[../images/03/nmap_nc.png|Netcat Port Check|600]]
+> I can use NMAP to target a specific port using the `-p` option.  This option accepts single, ranges, and lists of port numbers.  The results of the following command show our 445 port open and 123 port closed.
+> `nmap -p 445,123 192.168.56.253`
+> ![[../images/03/nmap_port_specific.png|NMAP Port Specific Scan|600]]
+> The NMAP tool can attempt to identify target operating systems and port services including versions by setting the `-sV` and `-O` options.  These settings require that NMAP run with elevated privileges so I'll use the `sudu` command to run the scan.  Here the output of the scan identify our Windows 10 machine, that's pretty good because it is not always that accurate!
+> `sudo nmap -sV -O -p 445 192.168.56.253`
+> ![[../images/03/nmap_version_discovery.png|NMAP Version Discovery|600]]
+> NMAP is a powerful tool and I only demonstrated some of its basic uses. It can scan UDP ports and even run basic vulnerability scans.  It is extensible and you could write your own scanning scripts to discover even more!
+
 
 > [!exercise] Exercise - Host and Service Discovery
 > Using your Kali VM you will use NMAP to identify the Windows VM on the network and scan it for open ports while identifying services.  Make sure each VM's network settings are set to `Host-only Adpater` to ensure they can reach each other on your virtual network.
