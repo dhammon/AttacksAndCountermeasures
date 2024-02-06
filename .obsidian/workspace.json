@@ -13,26 +13,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/00-Introduction.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "04917f4a3bbc995b",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
                 "file": "textbook/04-NetworkServices.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -159,22 +146,22 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "04917f4a3bbc995b",
+  "active": "2ec839b962581d99",
   "lastOpenFiles": [
+    "images/04/dhcp_spoofing.png",
+    "images/04/dhcp_starvation.png",
+    "images/04/dhcp_dora.png",
+    "images/04/dhcp_basic.png",
+    "textbook/00-Introduction.md",
+    "textbook/04-NetworkServices.md",
     "images/04/dns_spoof_http_logs.png",
     "images/04/dns_spoof_kali_spoof_logs.png",
     "images/04/dns_spoof_trigger.png",
     "images/04/dns_spoof_kali_dnsspoof.png",
     "images/04/dns_spoof_arp_spoof_2.png",
     "README.md",
-    "textbook/04-NetworkServices.md",
     "images/04/dns_spoof_arp_spoof_1.png",
     "images/04/dns_spoof_arp_spoof_1.png",
-    "images/04/dns_spoof_kali_http.png",
-    "images/04/dns_spoof_kali_dsniff_install.png",
-    "images/04/dns_spoof_ubuntu_valid_logs.png",
-    "images/04/dns_spoof_win_google_nslookup.png",
-    "textbook/00-Introduction.md",
     "files/kansascityWEP.pcap",
     "files",
     "images/04",
