@@ -437,6 +437,39 @@ An attacker could launch a **DHCP spoofing** attack with the goal of assigning i
 ![[../images/04/dhcp_spoofing.png|DHCP Spoofing Attack|300]]
 
 >[!activity] Activity - DHCP Spoofing Attack
+>I'll demonstrate a DHCP spoofing attack using Ettercap which provides a nice GUI to perform and manage several networking attacks.  The Windows VM will act as my victim and I'll launch the attack from the Kali VM, both using the `Bridge Adapater` network modes.
+>
+> For sake of the demonstration, I need to know the Windows VM's IP address and the gateway of the network.  This could be determined using NMAP or another host discovery tool.  I launch a command prompt and run ipconfig to view the needed network details of the victim.  It is on the 192.168.4.0/24 network, has the IP address 192.168.4.168, and shows the default gateway as 192.168.4.1.
+> ```
+> ipconfig
+> ```
+> ![[../images/04/dhcp_activity_win_net.png|Windows VM Network Settings|600]]
+> Switching to the Kali machine I run similar commands and confirm it is on the same network as the Windows VM (192.168.4.0/24).
+> ```
+> ip a
+> ```
+> ![[../images/04/dhcp_activity_kali_net.png|Kali VM Network Settings|600]]While still on the Kali machine, I launch Ettercap as root using sudo and with the `-G` option to use the GUI.
+> ```
+> sudo ettercap -G
+> ```
+> ![[../images/04/dhcp_activity_ettercap.png|Ettercap GUI Homescreen]]
+> The first step is to start Ettercap's sniffing utility on the interface from the network our victim is on which is eth0.  Sniffing is started by pressing the checkmark button in the upper right corner of the application next to the ellipsis button.
+> ![[../images/04/dhcp_activity_sniffing.png|Ettercap Sniffing Mode]]
+> Once sniffing is initiated the log pane appears at the bottom of the screen detailing the configuration and confirmation that Ettercap has started sniffing traffic.  Soon we will start seeing logs of packets being captured!  A few new buttons appear at the top of the Ettercap application including a menu represented by a globe next to where the sniffing/checkmark button was.  I can stop the network sniffing by pressing the stop button in the upper left corner.  However, I'll leave sniffing enabled during this attack.  To configure the attack, I press the globe icon and then DHCP Spoofing.
+> ![[../images/04/dhcp_activity_globe.png|Ettercap Attack Menu Options|350]]
+> After pressing the DHCP spoofing option of the menu a dialog box pops up needing information for the attack.  I enter the victim Windows IP address in the "IP range", the network's subnet mask, and I put the IP address of Kali in the DNS server field.  These settings will instruct Ettercap to target the Windows machine and poison it's network settings to think the Kali machine is the DNS server.
+> ![[../images/04/dhcp_activity_config.png|DHCP Spoof Configuration|300]]
+> Once the settings are entered in to the fields I press Ok which starts the attack.  Eventually the Windows VM will change its network gateway to the Kali machine.  To speed this along I'll renew the Windows IP address forcefully to imitate an IP lease that expires.
+> ```
+> ipconfig /release
+> ipconfig /renew
+> ```
+> ![[../images/04/dhcp_activity_renew.png|Windows IP Release and Renewal|600]]
+> The default gateway now shows as 192.168.4.167 which is the Kali VM!  Going back to Kali's Ettercap application I can see DORA packets showing in the log pane.
+> ![[../images/04/dhcp_activity_logs.png|DORA Packets in Ettercap Logs]]
+> At this point any Windows traffic will be routed through the Kali machine!
+> 
+
 
 > [!exercise] Exercise - DHCP Spoofing
 > This task will use the Windows and Kali VMs in network Bridge Adapter mode. The Kali VM will spoof DHCP using Ettercap and if successful, the Windows VM’s gateway IP will show the Kali VM IP address. 
@@ -461,12 +494,19 @@ An attacker could launch a **DHCP spoofing** attack with the goal of assigning i
 > #### Step 3 Confirm Spoof
 > If the DHCP spoof attack was successful, the Windows VM will resolve Kali as the network gateway. From the Windows VM terminal, renew IP settings with the following command. 
 > ```
+> ipconfig /release
 > ipconfig /renew
 > ```
 > Observe that the new gateway settings show the Kali VM IP address! 
 ### DHCP Security
-- DHCP Snooping
-- Dynamic ARP Inspection (DAI)
+Switches can mitigate the DHCP starvation and snooping attacks through built in security features.  With DHCP starvation attacks the actor sends multiple requests to the DHCP server with different MAC addresses requesting issuance of IP addresses.  These requests traverse the network switch sending the packets to the DHCP server.  Many managed network switches have a security setting call **port security** which is applied to each interface, or port, of the switch.  Port security can be set to allow a certain number of MAC addresses per interface.  If the number of MAC addresses associated with the interface exceeds the port security limit, then the switch will disable the interface blocking any further traffic.  Port security thresholds can be set to one or more MAC addresses allowed, usually the first address of the port.  A network administrator would then need to purposefully reopen the interface to allow traffic to flow again.  This security setting mitigates several network attacks including the DHCP starvation attack as it will shut the misbehaving interface down early in the attack as demonstrated in the figure below.
+
+![[../images/04/dhcp_port_security.png|Port Security|400]]
+
+
+The other type of attack we covered is the DHCP spoofing attack and the rouge DHCP server attacks.  In these attacks the actor seeks to convince device on the network that it is the gateway to the network which empowers the attacker to inspect and manipulate traffic on the network.  These attacks can be mitigated through the use of another managed network switch security setting called **DCHP snooping**.  This setting defines the interface on the switch which the DHCP server resides on.  Any DHCP response packets not generating from this interface will be dropped by the switch.  If an attacker claims to be the DHCP server from an interface that is not statically assigned, its packets will be dropped thus preventing the attacker from achieving their objective.
+
+![[../images/04/dhcp_snooping.png|DHCP Snooping|450]]
 
 ## TCP
 basics
