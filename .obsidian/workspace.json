@@ -18,6 +18,18 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "11abef33bc0ad06a",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "textbook/03-NetworkSecurity.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
         ]
       }
@@ -146,28 +158,28 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0222551eff2d37c8",
+  "active": "2ec839b962581d99",
   "lastOpenFiles": [
-    "images/04/dhcp_activity_logs.png",
-    "images/04/dhcp_activity_renew.png",
-    "images/04/dhcp_activity_config.png",
-    "images/04/dhcp_activity_globe.png",
-    "images/04/dhcp_activity_sniffing.png",
-    "images/04/dhcp_activity_ettercap.png",
-    "images/04/dhcp_activity_kali_net.png",
-    "images/04/dhcp_activity_win_net.png",
-    "images/04/dhcp_port_security.png",
-    "images/04/dhcp_port_security.png",
+    "images/04/activity_wep_decrypted.png",
+    "images/04/activity_wep_key.png",
+    "images/04/activity_wep_enable.png",
+    "images/04/activity_wep_pref.png",
+    "images/04/activity_wep_toolbar.png",
+    "images/04/activity_wep_packets_enc.png",
+    "images/04/activity_wep_cracked.png",
+    "images/04/activity_wep_aircrack.png",
     "textbook/04-NetworkServices.md",
-    "images/04/dhcp_snooping.png",
+    "images/04/tcp_flood_attack.png",
+    "images/04/tcp_reset_attack.png",
+    "images/04/activity_rst_closed.png",
     "textbook/00-Introduction.md",
+    "textbook/03-NetworkSecurity.md",
+    "textbook/01-InformationSecurity.md",
     "README.md",
     "files/kansascityWEP.pcap",
     "files",
     "images/04",
-    "textbook/03-NetworkSecurity.md",
     "textbook/02-Cryptology.md",
-    "textbook/01-InformationSecurity.md",
     "images/03",
     "images/02",
     "images/01",

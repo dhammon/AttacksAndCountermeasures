@@ -509,24 +509,178 @@ The other type of attack we covered is the DHCP spoofing attack and the rouge DH
 ![[../images/04/dhcp_snooping.png|DHCP Snooping|450]]
 
 ## TCP
-basics
+We have already covered the basics of TCP in the last chapter.  You may recall the introduction of the three-way hand shake where a client sends a SYN packet to the server, the server responds with a SYN+ACK, and the client finally sends an ACK packet before starting the transmission of data.  TCP is heavily used in networking with most popular protocols relying on it as the resilient means to communicate.
+
+Another packet sent by the client to the server is the **reset (RST)** packet which terminates a connection stream.  You can see this packet ending a transmission in the figure below.
+![[../images/04/tcp_rst.png|TCP Reset Packet|250]]
+The RST packet is used to notify the server that the client no longer intends to send data and the server can end the connection in its network stack.  If a client needs to transmit data thereafter, it is required to reestablish a connection by engaging in the three-way handshake once again.
+
 ### TCP Threats
-### TCP Security
+TCP, which resides in layer 4 of the OSI model, is subject to attacks with effects similar to other networking protocols.  Its placement in the middle of the network stack encapsulating so many other protocols makes it a prime target.  Disrupting TCP can causes  higher order protocols, such as HTTP, to also fail.  Therefore, maintaining a server's ability to maintain TCP connections is crucial for the security, or availability, of the service.  This makes TCP a candidate for *denial of service (DoS)* attacks in which the attacker hopes to disrupt the flow of TCP wrapped packets.  
+
+Every TCP connection starts with a client SYN packet and then a server SYN+ACK response.  A misbehaving client can send repeated SYN packets causing the server to open a connection for each one.  These open connections eventually expire but if a client, or group of misbehaving client, sends many requests at once it can quickly fill the TCP connection capacity of the server and block legitimate clients from establishing connections in a **TCP SYN flood** attack as illustrated below.
+![[../images/04/tcp_flood_attack.png|TCP Flood Attack|500]]
+
+> [!activity] Activity - TCP SYN Flood Attack
+> I'll demonstrate such an attack from the Kali VM against the Ubuntu VM acting as the server.  Using the `Bridge Adpater` settings on each VM, I'll configure the Ubuntu machine to serve HTTP traffic, a TCP protocol, and launch a **TCP SYN flood** attack on it.
+> 
+> After launching Ubuntu and opening a terminal, I start a simple HTTP server over port 80 using a Python built-in module.  Once the server is started, it sits idle waiting for incoming connections.
+> ```
+> sudo python3 -m http.server 80
+> ```
+> ![[../images/04/activity_flood_http_server.png|Ubuntu Python HTTP Server|600]]
+> The next steps will require knowning the IP address and network interface.  Using a terminal I run the ip command to identify this information.  I see the interface is enp0s3 and the IP address of the Ubuntu machine is 192.168.4.169.
+> ```
+> ip a
+> ```
+> ![[../images/04/activity_flood_ubuntu_net.png|Ubuntu Network Settings|600]]
+> I want to be able to observe the TCP connections made on the server so I'll use Tcpdump on the primary network interface and filter requests for incoming port 80 requests.  The `-n` ensures only IP addresses are displayed and not host names while `-vvv` gives us a very verbose output.  Upon entering the command the Tcpdump application runs awaiting incoming connections to be captured.
+> ```
+> sudo tcpdump -i enp0s3 port 80 -n -vvv
+> ```
+> ![[../images/04/activity_flood_tcpdump_start.png|Tcpdump Started on Ubuntu|600]]On the Kali machine I can test access to the HTTP server using the Curl utility in a terminal.  After running this command I observe that the HTTP server responds with a directory listing page.
+> ```
+> curl 192.168.4.169
+> ```
+> ![[../images/04/activity_flood_kali_curl.png|Kali Curling Ubuntu Web Server|600]]
+> With the successful Curl request from Kali I observe that both the HTTP Python and the Tcpdump windows log the requests!
+> ![[../images/04/activity_flood_logs.png|Ubuntu Success Logs]]
+> The server, or victim, and client, or attacker, are configured correctly so I'm ready to launch the attack.  I will use the Hping3 tool to start a TCP flood attack on the server.  The `-c` command is the number of packets to be sent, the `-d` command is the byte size of each packet, the `-S` option specifies the SYN flag, and finally the `-w` options specifies the window size.  Once the command is ran it will repeatedly and quickly send SYN packet after SYN packet opening connections on the Ubuntu server.
+> ```
+> sudo hping3 -c 15000 -d 120 -S -w 64 -p 80 --flood --rand-source 192.168.4.169
+> ```
+> ![[../images/04/activity_flood_attack.png|Hping Flood Attack from Kali|600]]
+> The output of hping suggests it won't show any replies.  Jumping over to the Ubuntu server and watching the Tcpdump output I can see many new log entries coming in fast succession!
+> ![[../images/04/activity_flood_attack_logs.png|TCP Flood Attack Streaming Logs|600]]
+
+TCP does not utilize encryption which leaves all of its wrapper information exposed in cleartext.  However, TCP's data payload include higher order data that may be encrypted.  TCP connections can also be hijacked by attackers enabling them to take control of the connection such as the previously demonstrated *man in the middle (MitM)* attacks.  Without sufficient mitigating controls, an attacker can launch a **TCP reset attack** that will cause the client-server connection to terminate.  This attack requires the attacker to know the sequence number and sockets of the victim's connection, which can be obtained through brute force or packet sniffing. 
+![[../images/04/tcp_reset_attack.png|TCP Reset Attack|300]]
+
 >[!activity] Activity - TCP Reset Attack
+>To demonstrate a TCP reset attack, I'll use just the Kali VM on `Bridge Adapter` network mode.  The Kali machine will serve as both the client and the server using Netcat.  With Wireshark capturing packets, I'll establish a connection between the client and server and obtain details about the connection.  This information will enable the attack using Netwox to send a RST packet and break the client-server connection.
+>
+>First I'll start Wireshark through the applications menu and select the Loopback interface.  Double clicking this interface starts a packet capture.
+>![[../images/04/activity_rst_wireshark_start.png|Kali Starting Wireshark on Loopback Interface]]
+>With the packet capture running, I next need to setup the client and the server.  Starting with the server, I launch a terminal and use Netcat to listen on port 8000 for incoming connections with verbose output and keeping the connection alive.
+>```
+>nc -nvlp 8000
+>```
+>![[../images/04/activity_rst_server.png|Netcat Server Port 8000|600]]
+>Launching another terminal (2nd), I use Netcat to establish a connection to the server listening on port 8000.  I use the home address 127.0.0.1 to make this local connection and then send a message `hello!` by typing into the connection.  The connection remains open ready to take additional data, and does not return us to the bash terminal.
+>```
+>nc 127.0.0.1 8000
+>```
+>![[../images/04/activity_rst_hello.png|Client Connection to Netcat Server 8000|600]]
+>Immediately I can observe that the server accepts the connection and displays the client's incoming message.  The output also shows the client port 34502 that the connection came from.
+>![[../images/04/activity_rst_connection.png|Incomming Connection from Client|600]]
+>The client and server terminals and connection examples a normal TCP communication channel.  This connection will be the target of my attack.  As the attacker, I had a Wireshark packet capture running on the loopback interface which should have collected the client server connection.  Within Wireshark, I select the last TCP ACK packet and expand the TCP header to identify the `Sequence Number (raw)` value 2032347291 which I'll use to send a RST and disrupt the client - server connection.
+>![[../images/04/activity_rst_sequence_number.png|Sequence Number (raw) Identified in Wireshark]]
+>I'll use the tool Netwox to run this attack in a new terminal.  Netwox isn't preinstalled in Kali so I install it using the following command.
+>```
+>sudo apt install netwox -y
+>```
+>![[../images/04/activity_rst_netwox_install.png|Installing Netwox|600]]
+>With Netwox installed, the sequence number captured, and the client and server sockets known, I am ready to break the connection.  Using Netwox configure it to point to the sockets and target the sequence number of the last ACK packet.  Upon running the command I get an output of the TCP/IP packet that was sent.
+>```
+>sudo netwox 40 -l 127.0.0.1 -m 127.0.0.1 -o 8000 -p 34502 -B -q 2032347291
+>```
+>![[../images/04/activity_rst_netwox_attack.png|Netwox Attack on Connection|600]]
+>Wireshark captures the RST packet sent by Netwox.
+>![[../images/04/activity_rst_attack_capture.png|Wireshark RST Packet Captured]]
+>Pulling up the client window shows that the connection terminated since the client is returned to the bash prompt!
+>![[../images/04/activity_rst_closed.png|Client Connection Terminated|600]]
+>
+>
+
+### TCP Security
+There are several security measures that can be used to mitigate the threats to TCP.  A server's network setting TCP backlog threshold can be increased from its default setting.  The backlog limits the number of outstanding three-way handshakes that are incomplete.  Because the protocol requires back and for communication and the client initiates the connection, it could take some time for the client to send the ACK packet, if ever.  The server's configurations will determine how many pending TCP connections are allowed at once, and once full won't make any additional connections.  Therefore, increasing the number of these backlog connections gives the server more capacity to handle an attack.  The backlog threshold does have an upper limit of what it can handle depending on the system's resources to this mitigation won't completely solve a flood attack.  For internet connected services could leverage proxy or upstream internet service providers security and capability to absorb backlogs of TCP connections.  CloudFlare offers a popular proxying service that fronts an HTTP service and has a great amount of capacity to prevent TCP flood attacks. 
+
+The risk of TCP reset attacks can be mitigated through the use of cookies, sometime referred to as canaries.  In this context a cookie is used as a special indication of a client and server connection allowing the  server to authenticate the incoming TCP packet with the trusted client.  The **SYN cookie** is a server side control that encodes the client information into a string value, called a cookie.  The cookie value is stored in a table server side for each connection and should any incoming TCP packets not match the client's cookie the packet is dropped.  
+
+Another cookie method, the **RST cookie**, mitigates  attacks by validating clients beforehand.  In this strategy the server sends an invalid SYN+ACK packet to the client after receiving the initial connection and logs the transaction.  The server won't open any new TCP connections from the client until the client sends a RST packet in response to the server's invalid SYN+ACK request.  Once the client does send the RST packet, the server assumes the client is responsible and adds it to an allow list server side foregoing any additional RST cookie procedures for that client.
+
 
 > [!exercise] Exercise - TCP Reset Attack
+> You will perform a TCP reset attack against a local client and server in this task.  Use the Kali VM with the `Bridge Adapter` network setting.
+> #### Step 1 - Install Netwox
+> From a Kali terminal, install Netwox using the following command.
+> ```
+> sudo apt install netwox -y
+> ```
+> #### Step 2 - Launch Wireshark
+> From the Kali applications menu, launch an instance of Wireshark.  Select teh `Loopback:lo` interface and start a packet capture (blue fin icon in the upper left).
+> #### Step 3 - Setup the Server and Client
+> Launch a new terminal and switch the user to root.  Then start a Netcat server listening on port 8000.
+> ```
+> sudo su -
+> nc -nvlp 8000
+> ```
+> Launch another terminal and establish a connection to the server just created.  Once connected, type your name and observe the server's standard output in the server terminal.
+> ```
+> nc 127.0.0.1 8000
+> YOUR_NAME
+> ```
+> Observe the open TCP connection port in the server window.  This port number will be needed in the next steps.
+> #### Step 4 - Observe the Sequence Number
+> Return to Wireshark and select the last ACK packet.  Find the packet’s raw Sequence Number (should be about 10 digits).  Find your sequence number as it will be needed in the following steps.
+> #### Step 5 - Launch the Reset Attack
+> Open a 3rd terminal and run the following command.  Make sure to change the `CLIENT_PORT` and `RAW_SEQ_NUM` to the values you found in the previous steps.
+> ```
+> sudo netwox 40 -l 127.0.0.1 -m 127.0.0.1 -o 8000 -p CLIENT_PORT -B -q RAW_SEQ_NUM
+> ```
+> Return to the terminal that has the client running and confirm the connection was disconnected.  You should see a return to the shell and that you can no longer enter text that the server receives.
 ## Wireless
 WiFi Basics
-### WiFi Architectures
-### WiFi Generations
-### WiFi Threats
+WiFi Architectures
+WiFi Generations
 ### WiFi Security
-### WiFi Encryption Standards
+authn, MAC filtering
+Encryption Standards
 ### WiFi Attacks
+Threats
 - Deauth
 - Rouge AP
 - Evil Twin
 - Encryption Cracking
 >[!activity] Activity - WiFi WEP Cracking
+>The wired equivalent privacy (WEP) standard is insecure as it repeats a short, 24-bit, initialization vector (IV), or key, that repeats itself after 5k packets which is used to encrypt the traffic.  An attacker that captures several thousand packets has a high likelihood of cracking the encryption key used in WEP.  Once cracked, the key can be used to decrypt other packets that are captured allowing for the inspection and manipulation of WiFi traffic between the victim and the access point.  I'll demonstrate the security weakness WEP WiFi encryption is by using Aircrack to brute-force the IV from the captured traffic and WiFi packets in a subject capture.
+>
+>Capturing WiFi packets only requires a wireless NIC and for this demonstration I'll start by uploading the "kansascityWEP.pcap" file to my Kali VM to supplement the packet capturing process.  Kali already has the Aircrack tool installed and can be passed the PCAP file to being the key bruteforcing process.  After copying the PCAP to the VM's desktop, I open a terminal and begin the cracking process.
+>```
+>aircrack-ng ./Desktop/kansascityWEP.pcap
+>```
+>![[../images/04/activity_wep_aircrack.png|Cracking PCAP with Aircrack|600]]
+>After the command runs, Aircrack analyzes the file idenfitying the WiFi networks within it along with statistic information.  After just a moment, the tool returns the hexadecimal key 1F:1F:1F:1F:1F that it was able to crack.
+>![[../images/04/activity_wep_cracked.png|Cracked WEP Key|600]]
+>With the key in hand we can open the PCAP within Wireshark by launching it through the Kali application menu.  Once launched, I navigate to File, select the Open option, and choose the kansascityWEP.pcap file that was uploaded to the desktop.  Exploring the packets without decrypting displays only wireless packets that when examined are found to have scrambled encrypted data.  We can't even tell the types of protocols being used.
+>![[../images/04/activity_wep_packets_enc.png|Encrypted WEP Packets]]
+>To view the packets in an decrypted form, I must add the encryption key that was recovered using Aircrack.  To do this I first enable the Wireless Toolbar that is under the View menu of Wireshark.
+>![[../images/04/activity_wep_toolbar.png|Enable Wireless Toolbar in Wireshark|500]]
+>Enabling the toolbar adds an additional row to our tool menu just above the packet listing pane in Wireshark.  To the right of the bar is a new button labeled 802.11 Preferences.
+>![[../images/04/activity_wep_pref.png|802.11 Preferences Button on Toolbar|600]]
+>Pressing the button opens the Preferences menu and auto-navigating to the IEEE 802.11 settings.  I select the `Enable decryption` checkbox and then press the Edit button next to the Decryption keys label so I can enter the key.
+>![[../images/04/activity_wep_enable.png|802.11 Settings|600]]
+>After pressing the Edit button the WEP and WPA Decryption Keys window pops up.  I press the `+` button to add a new key using the WEP for key type and entering 1F:1F:1F:1F:1F for the Key value.
+>![[../images/04/activity_wep_key.png|Entering WEP Key Settings in Wireshark|500]]
+>Once the key settings are in place, I press OK to close the WEP and WPA Decryption Keys window and then OK again to close the Preference window.  As soon as the Preference window is closed, Wireshark updates and decrypts all the packets.  I can now see each packet in plaintext observing several ARP packets!
+>![[../images/04/activity_wep_decrypted.png|Decrypted WEP Packets|600]]
+>
 
 > [!exercise] Exercise - WiFi WEP Cracking
+> Using the Kali VM with any network setting, you will download the accompanying file kansascityWEP.pcap, crack its WEP key, and decrypt the traffic.
+> #### Step 1 - Crack the PCAP
+> Download the kansascityWEP.pcap to the desktop of the Kali VM.  Note that you should be able to drag and drop files from your host machine to the VM.  If not, consider revisiting the Lab 1 Workstation Setup instructions or seek alternative file transfer methods. 
+> 
+> Launch a terminal and crack the WEP encryption using aircrack-ng and observe the cracked encryption key.  Make sure the terminal is in the directory of the pcap file or provide a full path in the following command. 
+> ```
+> aircrack-ng kansascityWEP.pcap
+> ```
+> #### Step 2 - Decrypt Traffic
+> After cracking the encryption key, launch Wireshark from the applications menu.  Do not start a capture.
+> 
+> Open the kansascityWEP.pcap file in Wireshark.  Select File -> Open and then navigate to the file.  Once opened, you should see encrypted 802.11 packets loaded.  Enable the Wireless Toolbar under the View menu. 
+> 
+> Press the “802.11 Preferences” on the right side of the Wireless toolbar. This will launch the Preferences window.  Ensure that “Enable Decryption” is selected and then press the “Edit” button next to the Decryption keys label.  Press the “+” button and add the decryption key value in the Key field.  Press Ok and return to the main Wireshark window.
+> 
+> You should now see all traffic decrypted (ARP packets).
+

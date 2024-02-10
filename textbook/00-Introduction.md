@@ -9,6 +9,9 @@ Not compressive.  Any chapter/topic could be expanded into its own book.  Not a 
 
 ## Ethics
 
+## Lab/Demo Support Files
+on github files folder
+
 ## Digital Copies
 github copy of this book and its resources
 
@@ -34,7 +37,7 @@ callout block
 > warning block
 
 > [!activity]
-> lol
+> consider following along the examples in your lab
 
 > [!exercise]
 > exercise block
