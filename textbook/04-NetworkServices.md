@@ -630,18 +630,50 @@ Another cookie method, the **RST cookie**, mitigates  attacks by validating clie
 > ```
 > Return to the terminal that has the client running and confirm the connection was disconnected.  You should see a return to the shell and that you can no longer enter text that the server receives.
 ## Wireless
-WiFi Basics
-WiFi Architectures
-WiFi Generations
-### WiFi Security
-authn, MAC filtering
-Encryption Standards
-### WiFi Attacks
-Threats
-- Deauth
-- Rouge AP
-- Evil Twin
-- Encryption Cracking
+The development of **wireless fidelity (Wi-Fi)** expanded networks beyond the confines of physical connection enabling networks to be formed over radio signals.  The convience gained for devices to be connected to an internal network and the internet without the direct connection of Ethernet cables increases user experience and promotes flexability in device use.  For instance, companies use this technology to enable operations introducing mobile technologies like laptops, tables, and smart phones.  
+![[../images/04/wifi_network.png|Basic Wireless LAN Network|400]]
+The IEEE 802.11 standards are the basis for **wireless LAN (WLAN)** which connect devices wirelessly to a *wireless router* or *access point*.  The access point is does have a wired connection to the network's switch and router making it another router on the network.  These WLANs can be part of the existing LAN or extend as a new LAN depending on the configuration.  The figure above illustrates a simple network of wireless devices connected to a physical LAN.  At the time of this writing, wireless network standards have been around several decades starting in the early 90s and a have evolved over many versions known as *generations*.  Each generation has some improvement over previous generations allowing for increased speeds or bandwidth over 2.4, 5, or 6 GHz frequencies.  The higher the frequency the more bandwidth as the peaks and troughs of the signal are tighter together packing in more data; however, the cost of higher frequencies is its range as they have less distance an object penetration ability, such as through walls.  Each generation is usually referred to by its IEEE standard with the latest iteration of 802.11 on *"be"*.  The table below from Wikipedia outlines all generations, their speeds, and radio frequencies. [^1]
+![[../images/04/wifi_gens.png|Wikipedia WiFi Generations|400]]
+
+The name of wireless networks are known as **service set identifiers (SSID)** and are what you may be familiar with while connecting to a wireless network.  The SSID is the name that appears when a device scans the area for available networks to connect to.  A **basic service set identifier (BSSID)** is the MAC address of the wireless router or access point.  Some wireless networks can include multiple access points while being on the same network.  Each access point has to be distinguishable from one another using the BSSID. 
+
+Wireless networks can be established under two service classes **basic service set (BSS)** and **extended service set (ESS)**.  At its simplest, a peer to peer network could be formed by connecting two devices without a wireless router in an **independent BSS (IBSS)**.  Here network is formed by direct connections without a wireless router or access point while still forming an SSID.
+![[../images/04/wifi_ibss.png|Independent Basic Service Set (IBSS)|200]]
+Your home wireless network is likely an **infrastructure basic service set** where devices connect to a single wireless router that is connected to the physical network router.  In this service, the entire network creates a basic service set and the wireless router adversities its SSID and has a unique BSSID.  
+![[../images/04/wifi_infra_bss.png|Infrastructure Basic Service Set|250]]
+Mentioned earlier, ESS networks have multiple wireless access points with unique BSSIDs and connected back to a single physical network router.  Collectively this network forms an ESS under a single SSID where any device can connect to any BSS router and be on the same network.
+![[../images/04/wifi_ess.png|Extended Service Set (ESS)|250]]
+ESS networks can usually be found in larger complexes where a single access point does not provide adequate coverage of the entire area needing wireless access to the network.  
+### Wi-Fi Security
+The most obvious concern with wireless networks is unauthorized access.  Traditional physical networks mitigate rouge devices access the network with physical security.  Network administrators could rely, at least in part, on the fact that a device could only connect to the network requiring entering the premises traversing walls, doors, receptions, and go unnoticed by employees.  It is conceivable that an individual could smuggle a device and connect it onto the physical network at demarcation points or within the office, but the physical security measures provide some control.  Most of these physical security controls go out the window, literally, with wireless networks as the radio frequencies leak outside the protected physical space.  Anyone can detect and capture wireless signals emitting from a building even from a distance using high powered directional antennas.  Once an attacker is able to access the network wirelessly, all the traditional network attacks we have learned about, and more, apply.
+
+This was fact was realized early in the development in the technology and several versions of security were implemented overtime.  Early security standards were found to have critical weaknesses making the deprecated in favor of more modern and secure versions.  But they each share common characteristics of authentication and encryption to control access to a network.  A user must first authenticate to the network and all radio transmissions carrying network packets are wrapped in a layer of encryption.  Strong passwords, secure encryption algorithms, and proper key handling become essential for the security of the network.  The following table summarizes the wireless encryption standards with WPA3 being the current and recommended standards.
+
+| Standard | Description | Security |
+| ---- | ---- | ---- |
+| Wired Equivalent Privacy (WEP) | Original standard encrypting all data with a single short key. | Obsolete |
+| Wi-Fi Protected Access (WPA) | Replacement for WEP using temporal key integrity protocol (TKIP) which is now deprecated in favor of AES. | Poor |
+| Wi-Fi Protected Access 2 (WPA2) | Supersedes WPA offering pre-shared keys and advanced counter mode cipher block (CMMP) chaining AES encryption. | Good |
+| Wi-Fi Protected Access 3 (WPA3) | Modern standard using enhanced cipher modes, secure handshakes, and brute force protections. | Great |
+
+Other types of protections wireless network administrators can deploy include MAC filtering, only allowing known devices to connect, tuning radio frequency power to limit the signal from leaking beyond the property, and advanced networks can be tied into intrusion detection systems (IDS) to detect and alert upon threats.
+
+### Wi-Fi Attacks
+The threat of a man in the middle (MitM) attack is prominent in a wireless network and is mostly mitigated through good encryption.  However, if the encryption is broken or implemented poorly it opens the network to the attacker.  There are however other techniques and attacker can use to intercept victim's traffic.  A classic example of this is the **evil twin** attack were the attacker setups up a wireless access point with a similarly named SSID in an attempt to trick victims to connect to them.
+![[../images/04/wifi_evil_twin.png|Evil Twin Attack|300]]
+In the evil twin attack depicted above, the attacker sets up a wireless router they control with a name similarly sounding to the exiting network.  Notice the slight name change using the number zero in place of the letter "o".  Perhaps the attacker could name the SSID something just as enticing like "FreeWi-Fi" and likely get connections in a crowded coffee shop.  If the attacker controls the router they will decrypt any transmissions from victims.  Like other MitM attacks we've explored, they can forward traffic to its intended destination and manipulate packets without the victim knowing.
+
+Organizations must also concerns themselves with **rouge access points** where an attacker, or an unwitting employee, connects a wireless router to the physical network.  Once connected to the physical network, the wireless router is given an IP address and devices can connect to the network wirelessly.
+![[../images/04/wifi_rouge.png|Rouge Access Points|300]]
+Not only can rouge access points cause network routing issues for network administrators but they extend the network beyond the confines of the physical network.  It can enable an attacker to reach the otherwise unreachable network providing remote access to wage additional attacks.  Good network security, like MAC filtering or port security, could prevent this attack.
+
+Access to the wireless network can be jammed using radio emitting devices designed to cancel the radio wave lengths preventing any user for connecting or maintaining connections.  Such jamming devices are available on Amazon for as little as $100.  Another wireless denial of service (DoS) attack is to simply boot a victim off the wireless network using the native *deauthentication* request.  This **deauth** attack leverages the 802.11 standard to notify the access point that the device is disconnecting.  An attacker only need be connected to the same wireless network and know the MAC address of the victim to send, and repeatedly send, deauth requests booting the victim and keeping them off the network.
+![[../images/04/wifi_deauth.png|Deauth Attack on Wireless Network|400]]
+
+Deauth attacks can be a component of a additional attacks where the attacker attempts to record a victim's key exchange with a wireless router.  The attacker will boot the victim off the network while having a wireless packet capture running.  When the victim attempts to reconnect to the wireless router they must perform a key exchange to set up a secure connection.  The attacker collects the key exchange packets that can then be used to perform cryptanalysis and break the encryption.  The type of attack is what makes WPA insecure as the TKIP protocol is vulnerable to cracking.
+
+![[../images/04/wifi_key_exchange.png|Wi-Fi Key Exchange Packet Capture|250]]
+
 >[!activity] Activity - WiFi WEP Cracking
 >The wired equivalent privacy (WEP) standard is insecure as it repeats a short, 24-bit, initialization vector (IV), or key, that repeats itself after 5k packets which is used to encrypt the traffic.  An attacker that captures several thousand packets has a high likelihood of cracking the encryption key used in WEP.  Once cracked, the key can be used to decrypt other packets that are captured allowing for the inspection and manipulation of WiFi traffic between the victim and the access point.  I'll demonstrate the security weakness WEP WiFi encryption is by using Aircrack to brute-force the IV from the captured traffic and WiFi packets in a subject capture.
 >
@@ -684,3 +716,4 @@ Threats
 > 
 > You should now see all traffic decrypted (ARP packets).
 
+[^1]:Wi-Fi Generations Table; Wikipedia 2024; https://en.wikipedia.org/wiki/IEEE_802.11

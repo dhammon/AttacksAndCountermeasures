@@ -13,19 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/04-NetworkServices.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "11abef33bc0ad06a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "textbook/03-NetworkSecurity.md",
+                "file": "textbook/05-OperatingSystemSecurity.md",
                 "mode": "source",
                 "source": false
               }
@@ -97,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "textbook/04-NetworkServices.md",
+                "file": "textbook/05-OperatingSystemSecurity.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -114,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "textbook/04-NetworkServices.md",
+                "file": "textbook/05-OperatingSystemSecurity.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -137,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "textbook/04-NetworkServices.md"
+                "file": "textbook/05-OperatingSystemSecurity.md"
               }
             }
           }
@@ -158,34 +146,36 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2ec839b962581d99",
+  "active": "0222551eff2d37c8",
   "lastOpenFiles": [
-    "images/04/activity_wep_decrypted.png",
-    "images/04/activity_wep_key.png",
-    "images/04/activity_wep_enable.png",
-    "images/04/activity_wep_pref.png",
-    "images/04/activity_wep_toolbar.png",
-    "images/04/activity_wep_packets_enc.png",
-    "images/04/activity_wep_cracked.png",
-    "images/04/activity_wep_aircrack.png",
-    "textbook/04-NetworkServices.md",
-    "images/04/tcp_flood_attack.png",
-    "images/04/tcp_reset_attack.png",
-    "images/04/activity_rst_closed.png",
+    "images/05/linux_folders.png",
     "textbook/00-Introduction.md",
+    "README.md",
+    "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "textbook/05-OperatingSystemSecurity.md",
+    "textbook/04-NetworkServices.md",
     "textbook/03-NetworkSecurity.md",
     "textbook/01-InformationSecurity.md",
-    "README.md",
+    "textbook/02-Cryptology.md",
+    "images/05",
+    "images/05/windows_linux.jpg",
+    "images/04/wifi_key_exchange.png",
+    "images/04/wifi_deauth.png",
+    "images/04/wifi_rouge.png",
+    "images/04/wifi_evil_twin.png",
+    "images/04/wifi_gens.png",
+    "images/04/wifi_ess.png",
+    "images/04/wifi_infra_bss.png",
+    "images/04/wifi_ibss.png",
+    "images/04/wifi_network.png",
     "files/kansascityWEP.pcap",
     "files",
     "images/04",
-    "textbook/02-Cryptology.md",
     "images/03",
     "images/02",
     "images/01",
     "images/information_security.jpg.crdownload",
     "images",
-    "New folder",
-    "textbook"
+    "New folder"
   ]
 }
