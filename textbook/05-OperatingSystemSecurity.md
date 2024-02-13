@@ -19,18 +19,87 @@ Starting on the left and working our way to the right, we have the */bin* direct
 
 In a following section we will discuss users and groups, but for now you should understand that everything in Linux is a file, and every file is owned by an user, or *owner*, and group.  Usually the user that creates the file is the owner and has full discretion on how it is used.  The owner, or any account within a group, can make any changes to the file.  File ownership can be altered using the built-in utility `chown`.  For example, a file `example.txt` can have its ownership changed to the `daniel` user and the `dev` group with the following command: `chown daniel:dev example.txt`.
 ### Authorization System
-Permission Sets
-Read, Write, Execute
-Change Mode
-Special Permissions
+In the previous section we explored the ext4 file structure and suggested every file has an owner and group.  In addition every file can have *read (r)*, *write (w)*, and *execute (x)* permissions expressed for the owner, group, and *others*.  Owners are the creator or the assigned account of the file.  Any account on the Linux device can be assigned to one or more groups and a group can be assigned permissions to a file.  The last set is the others group, which apply to any other account on the system.
+
+>[!note] Note - Self Group
+>Each time an account or user is created, a corresponding default group using the account name is also created.  If an account `daniel` is created, a group named `daniel` is also created and user is automatically assigned to their like-named group.
+
+The **permission set** for any file is displayed using the `ls -l` command.  The first 10 characters are dedicated to identifying permissions for each entity.  The first is used to label a directory with the letter `d` or `-` for file.  The next three characters identify permissions for the user.  The second set of three are for the assigned group.  And the last set of three characters define the permissions for others.  The 3rd and 4th column of the list command displays the owner and the group of the file.  The figure below illustrates the owner (daniel) and the group (dev) for the example.txt file.  It shows that daniel has read/write, dev has read, and everyone else (others) have read permission.
+![[../images/05/linux_permission_set.png|Linux Permission Set|400]]
+Read, write, and execute (rwx) can be set using the `chmod` command with *symbolic* or *octal* notation.  We have already covered the permission set using symbolic where the permissions are referenced using `r`, `w`, and `x`.  These same permissions can also be represented using octal, or numeric, notation.  Each permission is represented by a number as listed in the following table.
+
+| Permission | Symbolic | Octal |
+| ---- | ---- | ---- |
+| Read | r | 4 |
+| Write | w | 2 |
+| Execute | x | 1 |
+A permission set can then be referred to using the total of the octal permissions.  For example, if the user account www-data has read, write, and execute permissions on a file, the octal value is 4 + 2 + 1 = 7.  Under this notation, you can identify a symbolic set given just the octal value.  For another example, given the octal 5 you can infer that the permission set is read and execute because 4 and 1 is the only combination that gets to 5.  Symbolic notation references the permission set with the letters `u` for user, `g` for group, and `o` for others.  Octal references the user, group, and others permission sets in order of placement.  Therefore an octal permission set 754 means the user has `rwx`, the group has `rx`, and the other has `r` only.  Consider the following code block.
+
+```bash
+chmod ug+rwx example.txt
+chmod o+r example.txt
+chmod 777 example.txt
+```
+
+The first chmod command sets the user and group of example.txt to read, write, and execute permissions.  The second command sets the other permission set to read only while the last command uses octal notation setting read, write, and execute permissions for the user, group, and other.
+
+> [!warning] Warning - Octal 777 Permission Set
+> Setting read, write, and execute for all users and groups on a system is considered an insecure practice.  Many Linux systems will highlight the file and change the name color to red to warn of the setting.
+
+There is also a special permission, called the *sticky bit*, that can allow an executable file to be ran as the file's owner or group.  In the case of the file the file is modified using chmod and the **set user ID (SUID)** is set and the symbolic notation execute bit `x` is replaced with an `s` for the user permission set.  I might look like `rws` instead of `rwx`.  Similarly, **set group ID (SGID)** is set in a similar fashion.  In either relative case, this allows the executable file to be ran by anyone as the owner or group.  SUIDs and SGIDs files can be helpful to Linux administrators when elevated access is needed only for a specific executable.  We will explore how SUID/SGIDs can be abused to achieve privilege escalation in the next chapter.
 ### User System
-Users
-Groups
+Linux users are created and modified by a system administrator using the `useradd` and `usermod` commands.  Users are usually assigned a folder of the same name under the `/home` directory where they are the default owners.  As mentioned earlier, they are also assigned into a group of the same username but they can be added to any other group.  In previous activities we demonstrated adding a user to the sudo group using the usermod command.  Users can be assigned an interactive logon shell, but they don't have to be.  A user account that doesn't have an interactive shell or home folder is referred to as a *system account*.  These user accounts are used for applications and can still have permissions granted to them for files on the system.  The following command creates a new user named `daniel` on the system.
+
+```bash
+useradd -m daniel
+```
+
+Any user can be added to any number of groups.  The power of groups comes to light when having to manage many users on a system.  The assignment of users to groups and groups to files allows administrators to organize and streamline the management of file access.  The following command creates a new group `dev` for which users can be assigned to.
+
+```
+groupadd dev
+```
+
+Managing users and groups by file promotes the separation of access supporting the security of the system.  For example, a web application running as the system user www-data may not need the permissions to read to files outside the www folder.  Should the web application running as the www-data user ever be compromised, its impact will be minimized to the files it can read.
 ### Password System
-/etc/passwd
-/etc/shadow
+All interactive user accounts should have a strong password to logon the system and begin using files.  This means that passwords must be set and stored within the Linux system to ensure security through authentication.  Linux does not store user passwords in plaintext.  Instead, passwords are hashed and then stored on the system.  When a user logs in, or re-authenticates, their plaintext password is hashed.  The system takes the user supplied password hash and compares it against the stored password hash set for the user.  If the hash values match, the user is authenticated; otherwise, their access is denied.
+
+The hashed passwords used to be stored, along side user information, within the `/etc/passwd` file.  This file contains information such as usernames, shell settings, home folders.  Hashed passwords were removed from this file because the other permission set had read permissions allowing anyone to see the hash passwords.  The danger of exposing a hashed password is that an attacker could attempt to crack it offline taking as much time as they need to do so.
+
+Nowadays, the hashed password is stored in a file `/etc/shadow` that is only readable, and writable, by the root user.  Doing so limits the opportunity for a hash password to be leaked and cracked by an attacker.  The shadow file lists each account's username and hashed password separated by a colon.  Depending on the hash algorithm used, the hash password is delimited by dollar signs into three segments.  The first segment defines the algorithm type, the second segment is a salt, and the last segment is the hashed password.  A salt is a random unique string that is added to the user password when hashed.  This method ensures any two users with the same password will have different hashes.  It also slows down an attacker's computation capacity when attempting to crack many user's hashed passwords at once.  It also eliminates the risk of *rainbow password* attacks where attackers use pre-computed hash lists to crack a target hash password.
 
 > [!activity] Activity - Shadow Cracking
+> Hashed passwords can never be *unhashed*.  However, an attacker that has the hash can attempt to recreate it using bruteforce or dictionary methods.  Bruteforcing password hashes usually means computing the hash of foreach character combination and comparing them against a target hash until a match is found.  This becomes prohibitively expensive in time and energy the longer and higher entropy (random) a password is.  Alternatively, in a *dictionary attack*, a list of common passwords are hashed one at a time and their output is compared to the target hash.  A password is cracked when there is a match as the attacker knows the guessed password that was hashed.  
+> 
+> Using the Kali VM, I will create a test user and assign them a password.  Then I will prepare a hash file that can be used with the cracking tool John to crack the password using the rockyou password list.
+> 
+> First I launch a terminal and create a user tester using the following command.
+> ```
+> sudo useradd -m tester
+> ```
+> ![[../images/05/linux_activity_crack_useradd.png|Creating the User Tester|600]]
+> With the user created, I set their password to the weak and all too common "Password123" using the passwd command.
+> ```
+> sudo passwd tester
+> ```
+> ![[../images/05/linux_activity_crack_pass_set.png|Setting Tester User Password|600]]
+> Now that the vulnerable user is created I create a hash file using John's unshadow command.  This utility combines the passwd and shadow files into a new file that is compatible with John.  I pipe the result to grep to pull the line that has our tester victim then redirect that line into a file in the tmp folder called hash.txt.
+> ```
+> sudo unshadow /etc/passwd /etc/shadow | grep tester > /tmp/hash.txt
+> ```
+> ![[../images/05/linux_activity_crack_unshadow.png|Creating Unshadowed Hash File|600]]
+> I'll launch a dictionary attack which requires a list of passwords.  Kali has many password lists already installed that I can use.  My favorite is the rockyou.txt list which consists of around 14 million passwords leaked from a LinkedIn breach many years ago.  The file is compressed so I use the gunzip utility to extract the list.
+> ```
+> sudo gunzip /usr/share/wordlists/rockyou.txt.gz
+> ```
+> ![[../images/05/linux_activity_crack_rockyou.png|Extracting Rockyou Password List|600]]
+> The last step is to launch John against the hash file stored in the tmp directory.  I'll set the format to crypt as this is the format or algorithm used by Kali to hash passwords.  It takes about 5 minutes to complete on my virtual machine but could be much faster on a host computer with a GPU.
+> ```
+> john --format=crypt --wordlist=/usr/share/wordlists/rockyou.txt /tmp/hash.txt
+> ```
+> ![[../images/05/linux_activity_crack_result.png|Cracked User Password Using John|600]]
+> After the password is crack, John displays it alongside the user name!
+
 
 >[!exercise] Exercise - Shadow Cracking
 >Crack Linux passwords using John in your Kali VM with Bridge Adapter network mode.  You will create a user and set their password.  Then you will prepare the hash file and use John to crack the hash with the Rockyou wordlist.
