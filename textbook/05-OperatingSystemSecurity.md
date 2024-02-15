@@ -128,6 +128,36 @@ Nowadays, the hashed password is stored in a file `/etc/shadow` that is only rea
 >```
 
 ### Processes
+Any time an executable or command is ran on a Linux system, at least one new process will be created.  Processes are applications that have been loaded into memory by the system and are processed by the CPU.  The CPU will interact with the process' memory space to execute its machine code as designed.  When the process is created, it is given a *process id (PID)* which is a 5 digit number unique to any other running process on the operating system.  A process can invoke any number of additional applications which in turn create new processes.  These process invoked processes are attributed to the calling process known as the *parent PID (PPID)*.  The subordinate process to the parent is referred to as the *child process*.  Because commands or applications are ran under the context of a user, each process inherits the permissions of that particular user.  Each process user context is identifiable when enumerating processes running on a system.
+
+> [!note] Note - Process Permissions
+> The principle of least privilege should apply with processes because they can be abused to escalate privileges accessing system resources it should be allowed to.
+
+> [!activity] Activity - Navigating Processes
+> Processes can be created, observed, and stopped using pre-installed Linux commands.
+> 
+> Using the Ubuntu VM, I'll run the watch command to monitor changes to the `home` folder using the ls command.
+> ```
+> watch ls /home
+> ```
+> ![[../images/05/linux_activity_proc_watch.png|Running Watch and List Processes|600]]
+> Because the command is continuously running, it is safe to assume there is a process that is running.  I can view the process details using the `ps` or process command with the options `auxwf`.  These options will show every option running and display in a tree mode for parent to child reference.
+> ```
+> ps auxwf
+> ```
+> ![[../images/05/linux_activity_proc_ps.png|Running Process Tree]]
+> The process command displays my running `watch` command with a PID 4610.  The command shows that the process is a child process of a bash command, since it is running in a terminal.  I could stop the command in the window that it is running with `CTRL+C` but I could stop the process using the `ps` command.
+> ```
+> kill -9 4610
+> ```
+> ![[../images/05/linux_activity_proc_kill.png|Kill Running Process|600]]
+> Once the kill command completes, the terminal where the watch command was running returns to bash with a "Killed" message.
+> ![[../images/05/linux_activity_proc_killed.png|Killed Process Result|600]]
+> Another useful tool is the `top` command which will display all running processes.  You can sort by resource dynamically and the tool output refreshes every second.
+> ```
+> top
+> ```
+> ![[../images/05/linux_activity_proc_top.png|Running Top Command|600]]
 ### Services
 ### Cron
 ### Logging
