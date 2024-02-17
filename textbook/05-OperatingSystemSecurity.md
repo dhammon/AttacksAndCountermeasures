@@ -56,7 +56,7 @@ useradd -m daniel
 
 Any user can be added to any number of groups.  The power of groups comes to light when having to manage many users on a system.  The assignment of users to groups and groups to files allows administrators to organize and streamline the management of file access.  The following command creates a new group `dev` for which users can be assigned to.
 
-```
+```bash
 groupadd dev
 ```
 
@@ -74,27 +74,27 @@ Nowadays, the hashed password is stored in a file `/etc/shadow` that is only rea
 > Using the Kali VM, I will create a test user and assign them a password.  Then I will prepare a hash file that can be used with the cracking tool John to crack the password using the rockyou password list.
 > 
 > First I launch a terminal and create a user tester using the following command.
-> ```
+> ```bash
 > sudo useradd -m tester
 > ```
 > ![[../images/05/linux_activity_crack_useradd.png|Creating the User Tester|600]]
 > With the user created, I set their password to the weak and all too common "Password123" using the passwd command.
-> ```
+> ```bash
 > sudo passwd tester
 > ```
 > ![[../images/05/linux_activity_crack_pass_set.png|Setting Tester User Password|600]]
 > Now that the vulnerable user is created I create a hash file using John's unshadow command.  This utility combines the passwd and shadow files into a new file that is compatible with John.  I pipe the result to grep to pull the line that has our tester victim then redirect that line into a file in the tmp folder called hash.txt.
-> ```
+> ```bash
 > sudo unshadow /etc/passwd /etc/shadow | grep tester > /tmp/hash.txt
 > ```
 > ![[../images/05/linux_activity_crack_unshadow.png|Creating Unshadowed Hash File|600]]
 > I'll launch a dictionary attack which requires a list of passwords.  Kali has many password lists already installed that I can use.  My favorite is the rockyou.txt list which consists of around 14 million passwords leaked from a LinkedIn breach many years ago.  The file is compressed so I use the gunzip utility to extract the list.
-> ```
+> ```bash
 > sudo gunzip /usr/share/wordlists/rockyou.txt.gz
 > ```
 > ![[../images/05/linux_activity_crack_rockyou.png|Extracting Rockyou Password List|600]]
 > The last step is to launch John against the hash file stored in the tmp directory.  I'll set the format to crypt as this is the format or algorithm used by Kali to hash passwords.  It takes about 5 minutes to complete on my virtual machine but could be much faster on a host computer with a GPU.
-> ```
+> ```bash
 > john --format=crypt --wordlist=/usr/share/wordlists/rockyou.txt /tmp/hash.txt
 > ```
 > ![[../images/05/linux_activity_crack_result.png|Cracked User Password Using John|600]]
@@ -105,30 +105,30 @@ Nowadays, the hashed password is stored in a file `/etc/shadow` that is only rea
 >Crack Linux passwords using John in your Kali VM with Bridge Adapter network mode.  You will create a user and set their password.  Then you will prepare the hash file and use John to crack the hash with the Rockyou wordlist.
 >#### Step 1 - Create User
 >Create a user “tester” using the following command.
->```
+>```bash
 >sudo useradd -m tester
 >```
 >Set the tester user password to “Password123” with the following command.
->```
+>```bash
 >sudo passwd tester
 >```
 >#### Step 2 - Prepare Password List
 >Unzip rockyou.txt.gz with the following command.
->```
+>```bash
 >gunzip /usr/share/wordlist/rockyou.txt.gz
 >```
 >#### Step 3 - Crack the Password
 >With the tester user created and the rockyou.txt file unzipped, crack the password using John.  Collect the tester user’s password into a hash file.
->```
+>```bash
 >sudo unshadow /etc/passwd /etc/shadow | grep tester > /tmp/hash.txt
 >```
 >Crack the user password, might take up to 5 minutes depending on your VM resources
->```
+>```bash
 >john --format=crypt --wordlist=/usr/share/wordlists/rockyou.txt /tmp/hash.txt
 >```
 
 ### Processes
-Any time an executable or command is ran on a Linux system, at least one new process will be created.  Processes are applications that have been loaded into memory by the system and are processed by the CPU.  The CPU will interact with the process' memory space to execute its machine code as designed.  When the process is created, it is given a *process id (PID)* which is a 5 digit number unique to any other running process on the operating system.  A process can invoke any number of additional applications which in turn create new processes.  These process invoked processes are attributed to the calling process known as the *parent PID (PPID)*.  The subordinate process to the parent is referred to as the *child process*.  Because commands or applications are ran under the context of a user, each process inherits the permissions of that particular user.  Each process user context is identifiable when enumerating processes running on a system.
+Any time an executable or command is ran on a Linux system, at least one new process will be created.  **Processes** are applications that have been loaded into memory by the system and are processed by the CPU.  The CPU will interact with the process' memory space to execute its machine code as designed.  When the process is created, it is given a *process id (PID)* which is a 5 digit number unique to any other running process on the operating system.  A process can invoke any number of additional applications which in turn create new processes.  These process invoked processes are attributed to the calling process known as the *parent PID (PPID)*.  The subordinate process to the parent is referred to as the *child process*.  Because commands or applications are ran under the context of a user, each process inherits the permissions of that particular user.  Each process user context is identifiable when enumerating processes running on a system.
 
 > [!note] Note - Process Permissions
 > The principle of least privilege should apply with processes because they can be abused to escalate privileges accessing system resources it should be allowed to.
@@ -137,29 +137,85 @@ Any time an executable or command is ran on a Linux system, at least one new pro
 > Processes can be created, observed, and stopped using pre-installed Linux commands.
 > 
 > Using the Ubuntu VM, I'll run the watch command to monitor changes to the `home` folder using the ls command.
-> ```
+> ```bash
 > watch ls /home
 > ```
 > ![[../images/05/linux_activity_proc_watch.png|Running Watch and List Processes|600]]
 > Because the command is continuously running, it is safe to assume there is a process that is running.  I can view the process details using the `ps` or process command with the options `auxwf`.  These options will show every option running and display in a tree mode for parent to child reference.
-> ```
+> ```bash
 > ps auxwf
 > ```
 > ![[../images/05/linux_activity_proc_ps.png|Running Process Tree]]
 > The process command displays my running `watch` command with a PID 4610.  The command shows that the process is a child process of a bash command, since it is running in a terminal.  I could stop the command in the window that it is running with `CTRL+C` but I could stop the process using the `ps` command.
-> ```
+> ```bash
 > kill -9 4610
 > ```
 > ![[../images/05/linux_activity_proc_kill.png|Kill Running Process|600]]
 > Once the kill command completes, the terminal where the watch command was running returns to bash with a "Killed" message.
 > ![[../images/05/linux_activity_proc_killed.png|Killed Process Result|600]]
 > Another useful tool is the `top` command which will display all running processes.  You can sort by resource dynamically and the tool output refreshes every second.
-> ```
+> ```bash
 > top
 > ```
 > ![[../images/05/linux_activity_proc_top.png|Running Top Command|600]]
 ### Services
+Processes, or applications, that continuously run in the background waiting for an event or doing a task are known as **services**.  A *daemon* is a long running process that is running in the background and is often used to describe a service.  But a service is much more than a long running process in the background as the system is specifically configured with a service system that defines a how the service will behave and its other attributes.  Therefore services are daemons but not all daemons are services - a service contains at least one daemon.
+
+>[!activity] Activity - Exploring Systemd
+>Linux manages services using the `systemd`, or system daemon, to manage the services on the device.  The service files are located in the `/etc/systemd/system/` directory as demonstrated in the following command.  Many of these files use symbolic links to reference other areas of the file system where the service file resides.
+>```bash
+>ls -la /etc/systemd/system/
+>```
+>![[../images/05/linux_activity_system_cat.png|Systemd Files|600]]
+>One of the service files I observed in that etc folder was the Avahi service.  Service logs are stored in a journal maintained by systemd and can be queried using the `journalctl` service.  The following command shows the logs of the Avahi service.
+>```bash
+>sudo journalctl -u avahi-daemon
+>```
+>![[../images/05/linux_activity_journal.png|Service Logs from Journalct|600]]
+>Another method for listing services is to use the built-in `systemctl` tool.  The following command lists all the services available on the Ubuntu VM.
+>```bash
+>systemctl --type=service
+>```
+>![[../images/05/linux_activity_systemctl.png|Systemctl List of Services]]
+>I see that our Avahi is one of the services listed here.  It shows a status of loaded, active, and running.  We can explore the service status and logs using the systemctl command as well.
+>```bash
+>systemctl status avahi-daemon
+>```
+>![[../images/05/linux_activity_avahi_service_status.png|Systemctl Status of Avahi Service|600]]
+>Of note is the loaded path of the service.  This path references the file of the Avahi service which can be examined further using the concatenate command.  I pipe the output of the cat command to grep and filter out any comments in the file for sake of brevity.
+>```bash
+>cat /lib/systemd/system/avahi-daemon.service | grep -v '#'
+>```
+>![[../images/05/linux_activity_avahi_service_file.png|Avahi Service File|600]]
+>This file represents the configuration of the service.  All that is needed to create, or modify, a service is a file like this one in the systemd directory.  Of particular interest is the `ExecStart` value which shows the path to a system binary called avahi-daemon.  This binary is what is actually running in the background for the service.
+>
+
+Should an attacker gain direct or indirect control of the service referenced executable in its executable path, they will hijack the service.  Some services require elevated permissions to run effectively and if vulnerable to hijacking could allow an attacker to escalate their privileges.  Another abuse is to use the native system to establish persistence which will be covered in later sections.  Such attacks can be caused if the executable is modifiable by the attacker's account.  It can also be accomplished indirectly should the service executable use other executables that are in the attacker's control.  One last common misconfiguration is to grant access to modify service files allowing a malicious actor to change the executable that would be ran.
 ### Cron
+The **cron** Linux system is used to schedule jobs, or *cron job*, ran by users and the system.  It is used to run binaries or scripts on a regular reoccurrence as defined by the cron folder the executable resides in or through the cron table, or *crontab*, file which allows custom jobs.  The crontab file is a configuration file available for every user on the system, including the root user.
+
+> [!activity] Activity - Preparing Cronjobs
+> I can create a cron job by editing the cron table file.  Cron comes with the built-in crontab command and specifying the `-e` option for editing.
+> ```
+> crontab -e
+> ```
+> This launches the cron table file into the editor of my choosing which can be modified with a special pattern to identify the frequency the job will run and the path to the executable.  My favorite website to create schedules is https://crontab.guru.  I'll add the following entry into my crontab file.  `5 4 * * sun` will run the `cat /etc/passwd` command at 4:05 every Sunday.
+> ```
+> 5 4 * * sun cat /etc/passwd
+> ```
+> Using the crontab command with the `-l` option to list the file I can see all the cronjobs scheduled for my user.  Again I use grep to filter out any comments within the file.
+> ```
+> crontab -l | grep -v '#'
+> ```
+> ![[../images/05/linux_activity_cron.png|Crontab List User Cronjobs|600]]
+> The system, or root user, cronjobs can be listed as well from the `/etc/cron*` directories.  Binaries and scripts placed in these folders will be ran by root in the respective timeframe the folder describes. 
+> ```
+> ls -la /etc/cron*
+> ```
+> ![[../images/05/linux_activity_cron_list.png|Cron Folder List|600]]
+> The logs for cron activity is found within the `/var/spool/cron/crontabs` file but it is only accessible by root.  It is most helpful when diagnosing or troubleshooting cron activity on a system.
+
+Similar to services, cron job executables can be hijacked by attackers using the same methods.  It is important to ensure the executable that is used in a cron job is secured from modification by unauthorized parties.
 ### Logging
 ### Hardening
 
