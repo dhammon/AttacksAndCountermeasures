@@ -217,11 +217,62 @@ The **cron** Linux system is used to schedule jobs, or *cron job*, ran by users 
 
 Similar to services, cron job executables can be hijacked by attackers using the same methods.  It is important to ensure the executable that is used in a cron job is secured from modification by unauthorized parties.
 ### Logging
+The results, output, and errors generated through applications, services, and daemons are aggregated within log files.  Log files can be very useful to administrators and security professionals when troubleshooting, monitoring, or auditing systems.  Administrators can review log files which can often include the results or error messages on a system applications.  This data can be used to inform the administrator on issues the application might be having that can often lead to a resolution.  Security professionals can use system logs for monitoring and auditing purposes.  Log entries can inform security members when an application has an anomalous security event that could indicate a compromise.  The logs are also useful during investigations to identify when certain activity occurred; enabling the security team to create a timeline of events among other insights.
+
+Logs can be categorized into system and application types.  System logs usually include entries that are related to the operating system and its core components.  *Syslog* standardizes the logs from a system into a structure form that can be centralized and sent over a network for many systems.  Daemon message, or *dmesg*, logs is another standardization for applications that run in the background.  Both syslog and dmesg logs are typically kept in dedicated files that several applications feed into.  Application logs, however, are dedicated for a specific application.  For instance, an Apache web server includes access and error log files in a dedicated application log folder separate from other application logs.
+
+> [!activity] Activity - Linux Log Files
+> Log files are commonly stored withing the `/var/log` folder.  There we can see syslog, dmesg, and application logs.  The following command lists the files within the log folder.
+> ```
+> ls /var/log
+> ```
+> ![[../images/05/linux_activity_log_list.png|Linux Log List|600]]
+> I can use cat or head commands to view the log entries.  In the first line of the `syslog` file we can see a timestamp, application name, and event description.
+> ```
+> sudo head -n 1 /var/log/syslog.log
+> ```
+> ![[../images/05/linux_acitvity_log_head.png|First Line of Syslog|600]]
+
+
+The format and contents of logs can vary but they usually include common useful information such as, but not limited to, timestamps, user information, and description.  Each entry is referred to as an *event* and logs are rotated on the system by size.  Once a log file exceeds a pre-set capacity limit it is zipped and moved into a new numbered file by the logging system `logrotate`.  After a threshold of log files has been met the logging system will delete the oldest file and start a new log file - rotating the log data.   Logrotate will ensure any file ending in `.log` within the `/var/log` folder will follow these rules.
 ### Hardening
+Linux systems can be exposed to security risks not only by insecure software but also through misconfigurations of the system.  Beyond the vulnerabilities a system might have, it can also be ill-equipped to handle security threats.  **Hardening** a system is the act of ensuring the prevention and detection of security threats.  The act of hardening a system reduces the likelihood and impact of security threats and is a standard practice for individuals serious about keeping systems secure. 
 
-> [!activity] Activity - Benchmarking
+The following list in no particular order details common hardening activities:
+- **Patch Management** - Code maintainers of operating systems and applications make periodic updates to their technologies to improve features, performance, and security vulnerabilities.  The availability of software and its current versions can be maintained centrally within repositories such as the *advanced package tool (apt)*.  Updating software can eliminate known vulnerabilities; however, implementing a system to automate the installation of security updates improves the security posture of a system.
+- **Logging** - As discussed in this chapter's section covering logging, enabling logs is a good security practice as it benefits the monitoring and auditing of security events.  Ensuring that logs are enabled, and ideally centralized into another system, strengthens the overall security of a system. 
+- **Disabling Services** - We've already covered how services can be a vector for persistence and privilege escalation but they can also provide initial access to a system.  A network service is a service that listens on an open socket on the device accepting network connections which can provide an opportunity for remote access.  Ensuring system services, both internal and network services, decreases the overall attack surface of a system and reduces security risks.
+- **Removing Applications** - Popularized with the term *bloatware*, removing unneeded or unnecessary software also can reduce security vulnerabilities.  We should resign the fact that all software has vulnerabilities whether they are known or not, so removing unneeded software will reduce the total amount of vulnerabilities giving system administrators less to have to maintain.
+- **Access Management** - System administrators are usually responsible for the creation, maintenance, and removal of accounts on a system.  The user system and authorization systems discussed in this chapter cover the importance and the security benefits of these systems.  Removing unneeded accounts and reducing permissions to least privilege are great security practices to reduce opportunities for abuse.  Administrators should conduct regular audits of these systems to ensure tight security is maintained.
+- **Secure Configurations** - Reputable software running as services usually provide guidance on the responsibilities for administrators to ensure its secure configuration.  Ideally only the services with well tested configurations are deployed and it is up to administrators to ensure the standards are maintained over time.  Administrators should ensure other security systems on the device are also enabled and configured correctly, such as host firewalls and application control software like app armor. 
 
-> [!exercise] Exercise - Benchmarking
+> [!activity] Activity - Linux Baseline Hardening
+> There are several tools and standards that can be used to regularly test or audit the security posture of a systems.  These standards are usually referred to as *baselines* and are collections of rules for a particular technology.  Chef, a popular automation tool and framework, created the tool *inspec* which comes with a set of baselines that can be used to audit the security settings of a system.  In the following activity I'll demonstrate the use of inspec against the Ubuntu system to identify configurations that can be altered to improve the security of the system.
+>  
+>  I start the Ubuntu VM in bridge adaptor network mode and open a terminal to install inspec.  The tool's is available in Debian software package file (.deb) and can be downloaded using the built in wget utility.
+>  ```
+>  wget https://packages.chef.io/files/stable/inspec/4.18.114/ubuntu/20.04/inspec_4.18.114-1_amd64.deb
+>  ```
+>  ![[../images/05/linux_activity_inspec_download.png|Download Inspec DEB File|600]]
+>  Once downloaded I initiate the installation using the dpkg command.
+>  ```
+>  sudo dpkg -i inspec_4.18.114-1_amd64.deb
+>  ```
+>  ![[../images/05/linux_activity_inspec_install.png|Installing Inspec|600]]
+>  After a few seconds the software is installed and is ready to be used.  Inspec must be fed a compliance ruleset to be ran against our system.  I will use Dev-sec's linux-baseline ruleset in this demonstration.  The following command executes the linux-baseline while accepting the standard license terms from Chef.
+>  ```
+>  inspec exec https://github.com/dev-sec/linux-baseline --chef-license accept
+>  ```
+>  ![[../images/05/linux_activity_inspec_scan.png|Inspec Linux-Baseline Scan Result|600]]
+>  After about a minute of scanning, Inspec returns a list of results.  As shown in the screenshot above, green rules with a checkmark indicate a rule that has passed with a secure setting.  The rules are collected into groups, called `controls`, with the a naming syntax os-##.  The first rule in the control os-02 reads "File /etc/shadow is expected to exist" suggesting that the shadow file is expected on the system.  If the shadow file did not exist we could expect this particular rule to fail which would then display in red with an "x" instead of a checkmark.  Scrolling down the report I can observe some failed rules as shown below.
+>  ![[../images/05/linux_activity_inspec_fail.png|Inspec Failed Rules|600]]
+>  The section os-05 has some passed and failed rules.  When a rule fails, Inspec informs us why it failed and offers the setting needed to pass the rule.  The first failed rule "login.defs UMASK is expected to include "027" fails with the comment "expected "022" to include "027"".  Don't worry if you don't know what login.defs is or what the UMASK setting is used for, that is what Google is for!  System administrators would take these rule violations and research how to correct them then apply changes needed.  Once they have been applied, Inspec should be re-ran to confirm the solution applied worked.  Many times a solution does not fix the issue and additional efforts are needed, so re-testing is an important step in any vulnerability or misconfiguration management system.
+>  
+>  The very end of the report provides us with summary statistics of the number of rule ran, skipped, passed, and failed.  Such summary statistics are beneficial as they can be compared between systems to identify which systems have the most violations or security risk.  Administrators can then concentrate their efforts on those systems with the most risk making the biggest positive impact to security.
+>  ![[../images/05/linux_activity_inspec_summary.png|Inspec Summary Statistics|600]]
+
+
+> [!exercise] Exercise - Linux Baseline Hardening
 > Using inspec, run a Linux baseline scan on the Ubuntu VM in Bridge Adapter network mode.  Pick a failed rule, research how to fix it, fix it, and re-run the inspec scan to confirm the issue you selected has been resolved.
 > #### Step 1 - Install Inspec
 > Download the inspec package.
