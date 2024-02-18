@@ -175,10 +175,6 @@ There are many cryptographic hash algorithms available for use.  While we won't 
 >Now, replace the message.txt file with a slightly different message and calculate the digest.  Notice the value is greatly different from the original!
 >![[../images/02/activity_01_rehash.png|Change Message and Rehash]]
 
-Microsoft uses hashes to convert and authenticate Windows operating system passwords.  In the 1980's they developed the LAN Manager authentication scheme and its very insecure hash algorithm of the same name, **LM**.  It was based on now deprecated **Data Encryption Standard (DES)** algorithm which produces only 48 bit digests.  LM curtails the passwords to a maximum 14 characters, converts them to uppercase, encodes and pads the value, then splits the output into two 7-byte strings.  These strings are used to create DES values encrypted with a key that was published by Microsoft.  This algorithm erodes most of the security of having a long and high entropy (random) password and is usually easily cracked.  I would instruct the reader to ensure any of the systems they are responsible for maintaining the security of to avoid LM use; however, Microsoft has done a good job of making this algorithm backwards compatible and to this day its use is technically feasible.
-
-Learning from the lessons of LM, Microsoft developed **New Technology LAN Manager (NTLM)** and later improved it and published a second version, *NTLMv2*.  The NTLM value is based on MD4 and used in the deprecated, yet backwards compatible, NTLM authentication process.  It has since been replaced with the Kerberos system originally developed by MIT.  We will explore these authentication processes later in this book.  For now, be aware of the evolution of hash algorithms and their practical use within authentication systems.
-
 > [!exercise] Exercise - Hash Generation
 > In this task you will create hash digests using Ubuntu's native md5sum and sha256sum tools.
 > #### Step 1

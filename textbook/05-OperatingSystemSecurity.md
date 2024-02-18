@@ -303,20 +303,103 @@ The following list in no particular order details common hardening activities:
 > 2. Rerun inspec linux-baseline scan to confirm the issue has been resolved.
 
 ## Windows
-This section is organized similarly to the Linux section for consistency sake.  It covers file, authorization, user and password systems.  It also introduces some of the compelling features the operating system has that impact security.
+This section is organized similarly to the Linux section for consistency sake.  It covers file, authorization, user and password systems.  It also introduces some of the compelling features the operating system has that relates security.
 ### File System
-Directory Structure
+Microsoft has created several file systems over the years supported by various Windows operating system versions.  The most common and current system is the **new technology file system (NTFS)** which is being used on the Windows virtual machine being used throughout this text.  NTFS supports several features and security enhancements over previous file systems, such as the *file access table (FAT)*, by allowing increased capacity as well as discretionary access control.  The system allows for volumes of up to 16 exabytes and the file system consumes up to 400 megabytes of space in order to track the drive space and files on it.
+
+Windows operating systems using NTFS create a number of file folders to store system and user files.  During installation of Windows, a volume is created with a drive letter under which standard folders are created and files kept.  The image below outlines some of the more interesting folders from a security perspective; although there are many more folders and subfolders not being covered here.
+![[../images/05/win_folders.png|Common Windows Folders|500]]
+Starting after the root directory on the left is the `Program Files` directory which contains 32 and 64-bit programs available to the operating system and users.  Similarly, the next folder, `Program Files (x86)` keeps 32-bit programs only.  The separation of folders reflect a long standing history of Microsoft supporting backwards capabilities.  Administrators and security professionals are often interested in the applications that are installed on systems as every application could expose additional risk to the device and is yet another program to keep up to date.  The `ProgramData` folder is hidden from view by default and includes data and files used by the applications installed on the operating system.
+
+> [!story] Story - ProgramData Used for Software Licensing
+> A software I use for educational purposes only, and not commercial use, has a 30 day trial period after which the user is locked out and required to purchase a license key.  Installing the software on a virtual machine and experimenting with the trial use I found that the software trial period persists between reinstallations.  A simple uninstall and reinstall does not bypass the trial period restriction.  However, I discovered that if I revert the virtual machine to its initial state, having taken a snapshot previously after a fresh install of the OS, I can reinstall the trial version of the software and the license tracker starts over.  Tinkering further I found that if I set the Windows time/date backwards 30 days or so with the trial expired the software recalculates the days I have left on the trial!  
+> 
+> With this information in hand I could only induct that the something on the Windows device tracks the time the software was installed from which persists between reinstallations.  Extending my experimentation I used `Regshot` to capture file system and registry changes before and after installation as well as before and after uninstalling the software.  I then compared the changes between the two activities to identify what persisted on the operating system.  This resulted in a list of a couple hundred registry entries and files to cover but I eventually found a data file stored in the ProgramData folder under a subfolder of the respective software.  Removing this file and reinstalling the software proved that it contained the data used to calculate the trial period as the reinstalled software trial clock started over!
+> 
+> Interested in the contents of this file and how it worked I decided to investigate it further.  It consists of binary data that isn't rendered usefully in Notepad.  The file itself is relatively small at about 128 bytes so I opened it into a hex editor and began changing a byte at a time and seeing how the program operated.  I reverse engineered several data components of the file discovering that it would include the license key placeholder, checksums, and more importantly timestamps used to determine the trial period expiration.  Altering the timestamp I was able to extend the available trial period to 9,999 days!
+
+Similar to Linux, Windows creates a `Users` folder that contains user account home subfolders.  These folders contain files dedicated to the accounts use on the operating system but it also includes a public default folder for anyone to use.  Each user folder contains a hidden `AppData` folder that stores user software data files and can be a source of configurations and secret storage.  Also off the root folder is the `Windows` folder where the Windows operating system files are stored.  This folder contains many subfolders and files but also includes the `System`, and 32-bit folder `System32` that has 64-bit files (go figure), where *dynamic link library (DLL)* binaries are installed that applications can use to *safely* interact with the kernel of the operating system via the Windows *application program interface (API)*. 
+
+>[!tip] Tip - Forward and Back Slashes in Directory Trees
+>Windows relies on the use of backslashes in the directory tree while Linux uses forward slashes.
 ### Authorization System
-Basic NTFS Permissions
-Advanced NTFS Permissions
+Windows supports granular access controls over file objects via NTFS.  This discretionary access control consists of basic permission sets, similar to Linux's read, write, execute paradigm.  NTFS uses the following permissions:
+
+- **Full Control** - Complete capability over the object and granting of access rights to other accounts/users. 
+- **Modify** - Edit permissions over the file.
+- **Read & Execute** - View and run files
+- **Read** - View only.
+- **Write** - Replace file contents.
+
+These permissions are usually enough for most circumstances; however, NTFS offers advance permissions providing even further capability to grant granular permissions per object.  Such capability promotes the principle of least privilege and can be used by administrators to limit an account access and use of file on the system.
+
+> [!activity] Activity - Exploring Windows NTFS Permissions
+> Using the Windows VM I run File Explorer to analyze permissions on a file within they System32 folder.  This folder contains a crypt32.dll file which offers Windows API cryptographic functions that I can check its NTFS permissions.
+> 
+> Navigating to the folder with the file I right-click the file and select the Properties option from the context menu.
+> ![[../images/05/win_activity_ntfs_properties.png|Crypt32.dll File Properties|600]]
+> This launches the file's properties menu where general information about the file can be observed.  I select the Security tab which reveals the basic NTFS permissions set on the file.  Principals are listed under the "Group or user names" section.  Selecting a principal displays their basic NTFS permissions within the table at the bottom of the window.  The ALL APPLICATION PACKAGES principal has the Read & execute and the Read permissions allowed as indicated by the check mark.
+> ![[../images/05/win_activity_crypt_security_settings.png|Crypt32.dll Security Settings|350]]
+> I select the Users group and then the Advanced button to display the advanced NTFS permission associated with all users on the system.  Because the Users group doesn't own this file, any changes to it require Administrator permissions.  The file's advanced NTFS permissions can be altered by pressing the Change permissions button at the bottom of window.
+> ![[../images/05/win_activity_crypt32_adv.png|Crypt32 Advanced NTFS Permissions]]
+> Selecting the Users principal and then the View button shows the basic NTFS permissions but also offers the advanced permissions link in the upper right corner.  Selecting it reveals the advanced permission settings of the file which offer more granular control over the file.
+> ![[../images/05/win_activity_crypt32_adv_perms.png|Crypt32 Advanced Permissions for Users|600]]
 ### User System
-Principals (Users)
-Groups
+A Windows operating system supports accounts, which server as security principals, and can be used to limit permissions to files.  There are a few types of accounts worth exploring.  A *user* or *local* account is associated with a human and allows for interactive logon.  This means the user has a username and password used to access the system and its file.  Similar to Linux, there are non-human accounts meant for systems to use and are referred to as *service accounts* or *service principals*.  In either case, the account is created on the system and can only be used on that system.
+
+Microsoft supports *online accounts* which are accounts created and maintained within Microsoft's cloud solutions.  An online account can be tied to the local system and used for interactive logons between systems.  This allows users to store data, such as license keys, outside the system brining cross system functionality between systems.  The trade off is that Microsoft ultimately controls and store this data while enabling the remote accessibility to it.  This data could be reached by almost anyone with access across the world should the account become compromised.
+
+Windows also supports two local groups, versus Linux's dynamic groups, to categorize accounts.  The *user* group is the default group that all accounts belong to whereas the *local administrator* group has elevated permissions allowing it full access to the operating system.  For example, a local administrator has the ability to install software within the Program Files folder or create new users accounts while accounts in the user group cannot.
+
+Beyond the scope of this book, but of high security interest, are *domain controllers* that include *Active Directory* which is a Microsoft software product used to manage accounts and groups within enterprises.  Administrators of this system, *domain administrators*, create users and groups, known as *organization units (OU)*, and can assign them to objects such as computers.  This effectively enables administrators to control access at scale across many devices.  Another feature of domain controllers is the ability to create *group policy objects (GPO)* which can be assigned to OUs and facilitate security setting while leveraging the same scalability with Active Directory.
 ### Password System
-Password Hashes
-Security Accounts Manager (SAM)
+Microsoft uses hashes to convert and authenticate Windows operating system passwords.  In the 1980's they developed the LAN Manager authentication scheme and its very insecure hash algorithm of the same name, **LM**.  It was based on now deprecated **Data Encryption Standard (DES)** algorithm which produces only 48 bit digests.  LM curtails the passwords to a maximum 14 characters, converts them to uppercase, encodes and pads the value, then splits the output into two 7-byte strings.  These strings are used to create DES values encrypted with a key that was published by Microsoft.  This algorithm erodes most of the security of having a long and high entropy (random) password and is usually easily cracked.  I would instruct the reader to ensure any of the systems they are responsible for maintaining the security of to avoid LM use; however, Microsoft has done a good job of making this algorithm backwards compatible and to this day its use is technically feasible.
+
+Learning from the lessons of LM, Microsoft developed **New Technology LAN Manager (NTLM)** and later improved it and published a second version, *NTLMv2* which provides stronger cryptographic assurances making it more difficult to crack.  The NTLM value is based on MD4 and used in the deprecated, yet backwards compatible, NTLM authentication process.  
+
+It has since been replaced with the Kerberos system originally developed by MIT.  The system uses symmetric cryptography and a centralized server to distribute keys known as the *key distribution center (KDC)*.  The KDC offers supports three functions to authenticate users.  KDC's *ticket-granting server (TGS)* establishes connections between the principal and the networked service known as the *service server (SS)*.  Principals present their encrypted password over the network to the TGS which compares the value to the account's known encrypted value within a database on the KDC server.  Upon validation, the *authentication server (AS)* completes the authentication and a ticket is created and returned to the principal to be used, presented to, the target network resource.  The SS then also validates this ticket with the KDC.
+
+>[!note] Note - Kerberos System
+>There are several well known attacks against Kerberos which are beyond the scope of this text.  Among many other attacks, interested readers may want to look up *pass the ticket*, *silver ticket*, and *golden ticket* attacks.
+
+LM, NTLM, and Kerberos all provide the ability for networked Windows systems to share authentication systems and centralize access management.  But the passwords for these systems must still reside somewhere in the operating system.  The **security accounts manager (SAM)** is a database file that contains the username and hashed passwords for system users.  It is encrypted and access is limited to the SYSTEM user only.  The *local security authority subsystem services (LSASS)* is an executable, owned by the SYSTEM user, facilitates the security policy of the system by handling passwords and sessions.  The LSASS executable can be found in the `/Windows/System32/config/SAM` folder while the database itself is included in the Windows registry under the `HKLM\SAM` hive.
 
 > [!activity] Activity - Cracking SAM
+> The SAM database is somewhat analogous to Linux's shadow file.  It ultimately contains the NTLM hash values for all users on the system and requires elevated permissions to access it.  Dumping the values from SAM only provides the NTML hashes which require brute force or dictionary cracking to obtain the plaintext value.  For this demonstration I'll create a test user, extract the SAM database, use a tool Impacket to extract the hash values, and then crack the hashes using the very popular Hashcat tool.
+> 
+> Starting with the Windows VM, I launch a command prompt as an administrator and accept the UAC prompt.
+> ![[../images/05/win_activity_sam_cmd.png|Starting Command Prompt as Admin|500]]
+> With the command prompt started, using the `net` utility, I create a user named tester and the weak password `Password123`.  *Even though this password is 10 characters long and includes a mix of alpha-numeric characters as well as a upper and lowercase letters, it uses a common dictionary word and pattern that can be guessed*. 
+> ```cmd
+> net user /add tester Password123
+> ```
+> ![[../images/05/win_activity_sam_create_user.png|Create Local User Tester|600]]
+> I then sign out as my existing user and login as the tester user.  This action ensures the NTLM hash is registered within SAM.  While logged in as the tester user, I launch another command prompt as administrator, which requires me to enter my local administrator username and password.  Within this new admin command prompt I dump the SAM and SYSTEM entries to the root C drive from the registry using the `reg` command.
+> ```cmd
+> reg save hklm\sam c:\sam
+> reg save hklm\system c:\system
+> ```
+> ![[../images/05/win_activity_sam_dump.png|Dumping SAM and SYSTEM to C Drive|600]]
+> Because I have bi-directional drag and drop setup between my host and the Windows VM, I copy the `sam` and `system` files from the Windows VM to my host.
+> ![[../images/05/win_activity_sam_copy.png|Copy SAM/SYSTEM Files to Host|500]]
+> Next I start the Kali VM and drag and drop the `sam` and `system` files from my host to Kali's desktop.  There are many ways in which an attacker can exfiltrate data.  We could have shown the creation of a shared network file SMB or FTP service, uploaded to a cloud service, encoded the files and copy and pasted, or several other ways.
+> ![[../images/05/win_activity_sam_kali_drop.png|Copy SAM/SYSTEM Onto Kali Desktop|400]]With the `sam` and `system` files in the Kali system I can extract the NTLM hashed passwords using Impacket's secret dump utility.  I open a terminal from the Desktop where the files are stored and point the `-sam` and `-system` options of `impacket-secretsdump` to the files while specifying this is a capture on the local system, as opposed to remote.
+> ```bash
+> impacket-secretsdump -sam sam -system system LOCAL
+> ```
+> ![[../images/05/win_activity_sam_impacket.png|Impacket Secrets Dump Output]]
+> The dump is successful and outputs a list of principals, their user id, LM, and NTLM hashes (in that order).  I see our target tester user is the last entry with the user id of 1001 and the NTLM hash value `58a478135a93ac3bf058a5ea0e8fdb71`.  I copy this value and paste it into a hash.txt file that will be used as an input to the Hashcat tool.
+> ```bash
+> echo "58a478135a93ac3bf058a5ea0e8fdb71" > hash.txt
+> ```
+> ![[../images/05/win_activity_sam_hash.png|Creating Hash File|600]]
+> The last step is to attempt to crack the hashed password using Hashcat with the rockyou list.  You may recall we used rockyou in an activity earlier in this chapter.  Hashcat comes with several modes depending on the system or hash type.  Mode 1000 is dedicated for NTLM hashes specifically - the full list of available modes can be found in the manual pages or online.
+> ```bash
+> hashcat -m 1000 hash.txt /usr/share/wordlists/rockyou.txt
+> ```
+> ![[../images/05/win_activity_sam_hashcat_start.png|Starting Hashcat to Crack NTLM Hash|600]]
+> Hashcat starts but will take a few moments to crack the password.  Once completed the tool displays the cracked password!
+> ![[../images/05/win_activity_sam_cracked.png|Cracked NTLM Hash with Hashcat|600]]
 
 > [!exercise] Exercise - Cracking SAM
 >This task requires the use of the Windows VM as well as the Kali VM, both in Bridge Adapter network mode.  You will create a test user on the Windows VM, exfiltrate the SAM and SYSTEM files onto your Kali VM, and crack the NTLM hash of the user you created.
@@ -345,18 +428,85 @@ Security Accounts Manager (SAM)
 >```
 >hashcat -m 1000 /tmp/hash.txt /usr/share/wordlists/rockyou.txt
 >```
-
 ### Processes
+Like Linux, when an executable is ran in Windows a user specific process is created and given a PID.  These PIDs can be nested into the same tree like structure and are accessible via the GUI or command line.
+
+> [!activity] Activity - Windows Processes
+> In the Windows VM I can view all running processes by starting the task manager application in the search bar.
+> ![[../images/05/win_activity_processes_task_launch.png|Launching Windows Task Manager|400]]
+> Once the Task Manager is launched, I press the More Details button in the lower left corner of the window to display all the running processes.  The manager lists each process and their resource consumption, similar to the `top` command in Linux.
+> ![[../images/05/win_activity_processes_list.png|Task Manager List|550]]
+> I select the first process, `Task Manager`, right-click and select the Properties option in the context menu which opens the process's information.
+> ![[../images/05/win_activity_processes_properties.png|Taskmgr Properties Window|350]]
+> The properties menu lists the location of the executable being ran along with other general information.  Similar information about processes can be derived from the command prompt using the `tasklist` command.  Here I open a command prompt and run the utility to list the running processes.
+> ```cmd
+> tasklist
+> ```
+> ![[../images/05/win_activity_processes_tasklist.png|Process List Using Tasklist|600]]
 ### Services
+Windows maintains services much like Linux services and daemons.  These services running under a user context can be viewed, started and stopped through the built in Services application or via the command line using the `sc` command.
+
+>[!activity] Activity - Windows Services
+>Continuing the use of the Windows VM, I search for the Services application in the search bar.
+>![[../images/05/win_activity_service_app.png|Launching Windows Services App|400]]
+>The Services app lists all the services, regardless of their status, along side information like the status and how it is started.  I've selected the first running service which displays the service's description on the left pane.  I can control the service here by starting or stopping it using the provided links in the left pane. 
+>![[../images/05/win_activity_service_list.png|Windows Service List]]
+>Similar to the Task Manager app, if I right-click the service and select the Properties option in the context menu it will launch the settings the service has.  These settings include the path to the executable along with any options or flags the executable is being ran with.
+>![[../images/05/win_activity_service_properties.png|Service Properties|400]]
+>This same information along with the administrative capabilities can be engaged over the command line using the `sc` utility.  I'll start a command line window and use the query command to list all the services on the system.
+>```cmd
+>sc query
+>```
+>![[../images/05/win_activity_service_query.png|Querying Services Via Command Prompt|600]]
+>A long list of services and their states are displayed.  Just like the Services GUI app, the Appinfo service is the first running service to be displayed.  I can get more information about the service using the `sc` command with the `qc` option specifying the service name.
+>```cmd
+>sc qc Appinfo
+>```
+>![[../images/05/win_activity_service_info.png|Appinfo Detail Using SC|600]]
+>The command provides additional information that we previously found in the properties window of the Service app.  This information includes the executable path under the key `BINARY_PATH_NAME`.  The service can stopped, started, or modified using the `sc` command as we will see in later chapters.
 ### Task Scheduler
+Remember Cron in the Linux section of this chapter?  Well Windows has a similar service called **Task Scheduler** which is used to schedule executables to be ran on a given schedule or event.  Similar to services and processes the Task Scheduler can be used via the GUI and the CLI.
+
+> [!activity] Activity - Windows Task Scheduler
+> The Task Scheduler can be launched using the Windows search bar.  Once launched and the Task Scheduler Library is selected on the left navigation pane tree, a list of tasks are listed in the main pane.  The first job is automatically selected and its details appear in the bottom pane.  The Triggers tab offers a range of schedules and events that will cause the task to launch.  Creating new tasks are as easy as pressing the Create Task button on the right pane and following the wizard.
+> ![[../images/05/win_activity_task_scheduler.png|Windows Task Scheduler]]
 ### Logging
+Windows logs events for applications, system, and security contexts which are accessible using the Event Viewer built-in application.  These logs are essential when troubleshooting system issues and for monitoring the security of the system.  They include event descriptions, timestamps, and the associated accounts.  For Windows systems, event types have been cataloged and indexed using standardized numbers.  These numbers can be used as reference points when searching for specific log types.  The Event Viewer empowers administrators to create searches and filters related to the logs they are interested in.
+
+> [!activity] Activity- Windows Event Viewer
+> From the search bar I can search and launch the Event Viewer application.  It has a similar layout as the Task Scheduler with a navigation tree in the left pane, event list on the top pane, details pane on the bottom, and a management pane on the right.  Selecting the Security logs under the Windows Logs folder on the left navigation tree displays thousands of events.  I selected the second event with Event ID 4624 which is the security event for a user log on.  The details of the event are displayed in the bottom pane.  Although cut off in the image below, the General tab displays the log on user SYSTEM under the Subject section of the raw details.
+> ![[../images/05/win_activity_log_event_viewer.png|Windows Event Viewer]]
+> We can also search and display events using PowerShell, but most administrators utilize the Event Viewer application when working with Windows logs.  Security professionals may export these logs into a centralized system for indexing and searching at scale which we will explore later in this textbook.
 ### Registry
-### Patch Management
-### Anti-Malware
-Signature Based Antivirus
-Behavioral Based Antivirus
+While Linux has the `etc` folder to store system and application configurations, Windows uses the **Registry**.  This system is  a hierarchical database that stores information necessary to configure the system and applications.  Prior to Windows 98, the operating system relied on INI files to store information.  These files were centralized into the Registry for ease of administration among other reasons.  The Registry itself is stored in the following DAT files called *hives*:
+- HKEY_LOCAL_MACHINE (alias Software)
+- HKEY_CURRENT_CONFIG (alias System)
+- HKEY_USERS
+Hives contain folders and entries as key value pairs using a data types.  We exported the System hive using the `reg` utility in the previous activity where we cracked an NTLM hashed password.  However, the Registry can also be accessed using the like-named Registry Editor application.
+
+> [!activity] Activity - Windows Registry
+> I start the Registry by searching `Registry Editor` in the search bar and launching it as administrator.  The pane on the left is another directory tree and the pane on the right will display the contents of the item chosen from the tree.  I navigate to the `HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run` section which displays all the applications that are set to run when a user logs in.
+> ![[win_activity_registry.png]]
+> I can see that Edge and OneDrive are set to launch at log on.  From this application I can add, remove, or modify any application to run at startup.
+> 
+
+Malware can abuse the Registry by hiding data and within it used to obfuscate its activity.  The registry can even be used as a persistence mechanism which we will explore further in the next chapter.
+### Hardening
+Windows hardening follows the same concept as what we explored in the Linux section of this chapter.  Administrators should seek to limit the applications and services installed on a device alongside restricting access as prudent.  Previous chapters we touched upon the host firewall built into the operating system and observed the dangers of disabling it exposing services to the network.  Windows too has security configurations that can be scanned using baseline solutions and those configurations can be more restrictive such as setting password policies.
+
+The Windows operating system is so large, dynamic, and built using legacy code that new security vulnerabilities are constantly being identified.  These vulnerabilities range in severity and Microsoft works diligently to mitigate them using software patches, at least most of the time.  These patches become available the second Tuesday of every month to what has become known as *patch Tuesday*.  These patches include performance, feature, and security fixes with the security patches needing to be applied promptly.  
+
+> [!warning] Warning - Diffing Patches
+> As soon as a patch becomes available an arms race between system administrators and malware authors starts.  System administrators must patch their systems quickly to avoid becoming victim of malware that abuses the security vulnerability of an unpatched system.  Malware authors monitor these patch releases and will compare unpatched system files to patched system files to identify the change.  The changes are analyzed to derive the vulnerability and then new malware is developed to exploit the vulnerability.  The time from patch release to malware use abusing the vulnerability has been as fast as 1 or 2 days!
+
+Microsoft releases patches as *knowledge base (KB)* notices and deliver them through their Windows Update distribution channel.  These channels are automatically monitored by Windows versions inside of a support timeframe.  At the time of this writing Windows 7 is no longer supported an thus does not receive (usually) security updates.  Enterprises often use patch management solutions, such as the *Windows Server Update Services (WSUS)* servers, to administer patches in a controlled manner.
+
+Another hardening activity that is most prevalent with Windows operating systems is the use of anti-malware, or *anti-virus*, solutions.  In fact, Windows comes with a free solution called **Windows Defender** which has grown into a standalone threat monitoring solution.  In the past, Defender did not have good creditability often missing obvious malware, but recent improvements on this service have been substantial and as of now is a reasonable solution for malware mitigation.  Approaches to malware mitigation have grown over time with the first iteration using hash values of malicious binaries and scanning systems searching for these files.  However, the ability to bypass these early anti-malware solutions required only a slight alteration of the malware creating a new strain.  Solutions then evolved to detect specific patterns within the malware themselves such as the use of Windows API functions and the byte order and position within the executable.  These *signature based* solutions are used today with similar patterns being used in other security systems, like IDS, that we will experiment with in later chapters.  *Behavioral based* anti-malware solutions also exist which monitor the activities of all running processes on the system looking for suspicious activities, like writing files to the system or attempting to interact with LSASS.  All of these solutions usually support monitoring and blocking of malware.  Some go as far as to remove the malware from a device when it is detected. 
 
 > [!activity] Activity - Bypassing Defender
+> Most anti-malware and *endpoint detection and response (EDR)* solutions hook into the memory space of the every process that is started on the device.  This allows the solution to monitor the processes activity and report back to the solution for handling.  If the hook reports malicious patterns the solution kills the running process ending the malware before it has had a chance to cause impact.  However, when a user initiates an executable its code is put into the *userland* memory space where the anti-malware solution then hooks into.  The userland memory space is in complete control of the user that started the process - allowing them, or the malware, to read and write to that memory.  With this background, malware can unhook the anti-malware solution from the memory space it is running in bypassing the security control.
+> 
+> I'll demonstrate how to bypass Windows Defender.
 
 > [!exercise] Exercise - Bypassing Defender
 > Using your Windows VM in Bridge Adapter network mode, you will demonstrate an AMSI patch bypass.
