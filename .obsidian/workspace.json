@@ -18,6 +18,18 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "3f7a328d21ce5366",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "textbook/04-NetworkServices.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
         ]
       }
@@ -148,20 +160,20 @@
   },
   "active": "2ec839b962581d99",
   "lastOpenFiles": [
-    "images/05/win_activity_registry.png",
-    "images/05/win_activity_log_event_viewer.png",
-    "images/05/win_activity_task_scheduler.png",
-    "images/05/win_activity_service_info.png",
-    "images/05/win_activity_service_query.png",
-    "images/05/win_activity_service_properties.png",
-    "images/05/win_activity_service_list.png",
-    "images/05/win_activity_service_app.png",
-    "images/05/win_activity_processes_tasklist.png",
-    "images/05/win_activity_processes_properties.png",
-    "images/05/win_activity_processes_list.png",
-    "textbook/02-Cryptology.md",
+    "images/05/win_activity_bypass_tested.png",
+    "images/05/win_activity_bypass_commands.png",
+    "images/05/win_activity_bypass_functions.png",
+    "Pasted image 20240219083454.png",
+    "images/05/win_activity_bypass_test.png",
+    "images/05/win_activity_av_defender_running.png",
+    "Pasted image 20240219080319.png",
+    "images/05/win_activity_launch_defender.png",
     "textbook/05-OperatingSystemSecurity.md",
     "textbook/04-NetworkServices.md",
+    "images/05/virustotal.png",
+    "images/05/win_activity_registry.png",
+    "images/05/win_activity_log_event_viewer.png",
+    "textbook/02-Cryptology.md",
     "textbook/03-NetworkSecurity.md",
     "textbook/01-InformationSecurity.md",
     "textbook/00-Introduction.md",

