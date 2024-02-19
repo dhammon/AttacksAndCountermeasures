@@ -13,19 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/05-OperatingSystemSecurity.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "3f7a328d21ce5366",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "textbook/04-NetworkServices.md",
+                "file": "textbook/06-PersistenceAndPrivilegeEscalation.md",
                 "mode": "source",
                 "source": false
               }
@@ -97,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "textbook/05-OperatingSystemSecurity.md",
+                "file": "textbook/06-PersistenceAndPrivilegeEscalation.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -114,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "textbook/05-OperatingSystemSecurity.md",
+                "file": "textbook/06-PersistenceAndPrivilegeEscalation.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -137,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "textbook/05-OperatingSystemSecurity.md"
+                "file": "textbook/06-PersistenceAndPrivilegeEscalation.md"
               }
             }
           }
@@ -158,8 +146,13 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2ec839b962581d99",
+  "active": "0222551eff2d37c8",
   "lastOpenFiles": [
+    "images/06",
+    "images/06/endpoint_hacked.jpg",
+    "textbook/00-Introduction.md",
+    "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "textbook/05-OperatingSystemSecurity.md",
     "images/05/win_activity_bypass_tested.png",
     "images/05/win_activity_bypass_commands.png",
     "images/05/win_activity_bypass_functions.png",
@@ -168,17 +161,12 @@
     "images/05/win_activity_av_defender_running.png",
     "Pasted image 20240219080319.png",
     "images/05/win_activity_launch_defender.png",
-    "textbook/05-OperatingSystemSecurity.md",
     "textbook/04-NetworkServices.md",
     "images/05/virustotal.png",
-    "images/05/win_activity_registry.png",
-    "images/05/win_activity_log_event_viewer.png",
     "textbook/02-Cryptology.md",
     "textbook/03-NetworkSecurity.md",
     "textbook/01-InformationSecurity.md",
-    "textbook/00-Introduction.md",
     "README.md",
-    "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "images/05",
     "files/kansascityWEP.pcap",
     "files",

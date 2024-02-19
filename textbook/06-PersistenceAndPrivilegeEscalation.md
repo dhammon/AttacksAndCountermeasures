@@ -1,11 +1,13 @@
 # Persistence and Privilege Escalation
-image
+![](endpoint_hacked.jpg)
 
-intro
+The previous chapter covered several features of Windows and Linux operating systems that have a security impact.  Some of those features promote security while other features were utilities that could be abused.  In this chapter we will cover some common threat actor techniques after initial compromise.  We will explore some of the activities performed by attackers that are already in victim machines including how attackers gain further access into the compromised system as well as how they maintain their access overtime.  The last section of the chapter focuses on memory issues of applications that can be abused to increase permissions and sometimes obtain initial access to systems.
 
 **Objectives**
-1. lol
-
+1. Understand the post exploitation activities performed by actors after initial compromise.
+2. Demonstrate persistence techniques in Windows and Linux operating systems.
+3. Conduct privilege escalation methods within compromised systems.
+4. Identify buffer overflow vulnerabilities and craft exploits to hijack the application's execution flow.
 ## Post Exploitation
 ## Persistence 
 
@@ -114,15 +116,48 @@ Linux Privilege Escalation Techniques
 > ./base64 "/etc/shadow" | base64 --decode
 > ```
 ## Buffer Overflows
-initial access or privesc
-Assembly
-Registers
-Address Space
+Programs, regardless of the operating system, rely on the use of *read access memory (RAM)* to store code and data to be executed by the CPU.  When a program is ran it loads its code and data into memory where it sits until the CPU is ready to process it.  Lower level programming languages, or programming language compliers or interpreters, manage the program's planned memory utilization during development.  When the program is eventually executed all the prescribed memory space is created.  Sometimes a program will be unaware what inputs it will receive and some amount of memory space will be allocated; however, without proper protections, if the volume of input the program receives exceeds the memory space allotted the program will likely misbehave and crash.  In this section we will explore the basics of how programs interact with the hardware of the system, tools to observe this behavior, and the security implications caused by program memory mismanagement.
+### Basics
+While this textbook is not meant to teach the reader low level hardware and software interactions, nor is it meant to teach assembly development, we will cover the basics to in an effort to provide a basic working knowledge and conceptual level.  Interested readers who are not already familiar with assembly language development and how memory works inside a computer's operations should research more on the matter.
+#### Assembly Language
+All higher level programs, such as JavaScript, are eventually translated into instruction *machine code* that the CPU can execute.  **Assembly language** is the lowest level language that all higher level languages are built on top of.  Assembly's hexadecimal encoding, known as *shellcode*, is ultimately what is stored onto memory and processed by the CPU.  Assembly is not a feature rich language and excludes many abstractions higher level languages use.  For example the creation of a raw socket can be quite trivially created in Python with a single line of code whereas this same feat in assembly requires many lines of code excluding the use of functions.  For what assembly is missing in features it makes up for in simplicity.  Only one statement per line is permitted with the a simple syntax of `[label] mnemonic [operands] [;comment]`.  Actually, assembly is deceivingly simple essentially requiring the program to feed piece by piece of data through memory and CPU registers which can require a lot of cognitive load.
+
+The mnemonic section of a statement informs the operation activity to be conducted.  The following non-exhaustive list are some of the more common assembly mnemonics and descriptions:
+
+- MOV - Short for "move" which copies data from one location onto another.
+- JMP - Or "jump" instructing the internal pointer to go to another memory location.
+- CALL - Run a subroutine.
+- RET - "Return" the pointer to another memory location.
+- POP - Put data onto the memory stack.
+- PUSH - Remove data from the memory stack.
+- NOP - Meaning "no operation" where the pointer passes over the statement to the next statement
+
+> [!note] Note - Assembly Mnemonic Full List
+> Checkout Wikipedia's x86 Instruction Listings for a richer list of mnemonics. https://en.wikipedia.org/wiki/X86_instruction_listings
+
+#### Registers
+The CPU stores data, memory addresses, and instructions within its own non-RAM memory space called **registers**.  Registers are the closest and therefore fastest memory storage location relative to the CPU and all instructions processed by the CPU are managed within registers.  These memory caches are predefined and vary depending on the CPU's architecture.  Regardless of the architecture, all CPUs have registers defined for handling data, addresses, pointers, and general purpose.
+
+| 64-bit | 32-bit | 16-bit | 8-bit | Description |
+| ---- | ---- | ---- | ---- | ---- |
+| rax | eax | ax | ah & al | Data from returned functions |
+| rcx | ecx | cx | ch & cl | Scratch space |
+| rdx | edx | dx | dh & dl | Scratch space |
+| rbx | ebx | bx | bh & bl | Scratch space |
+| rsp | esp | sp | spl | Stack pointer, top of stack |
+| rbp | ebp | bp | bpl | Base pointer, bottom of stack |
+| rsi | esi | si | sil | Function arguments (2nd) |
+| rdi | edi | di | dil | Function argument (1st) |
+| r8 - r15 | r8d - r15d | r8w - r15w | r8b - r15b | Scratch space |
+| rip | eip |  |  | Instruction pointer |
+Having a firm understanding of these registers are needed in order to debug and analyze how a program interacts with memory.
+#### Address Space
 Stack and Heap
-Debuggers
+### Debuggers
 Endianness
+### Overflow Security
 Buffer Overflows
-Overflow Security
+stack vs heap
 
 > [!activity] Activity - Stack Smashing the Hidden Funciton
 
