@@ -151,15 +151,92 @@ The CPU stores data, memory addresses, and instructions within its own non-RAM m
 | r8 - r15 | r8d - r15d | r8w - r15w | r8b - r15b | Scratch space |
 | rip | eip |  |  | Instruction pointer |
 Having a firm understanding of these registers are needed in order to debug and analyze how a program interacts with memory.
-#### Address Space
-Stack and Heap
-### Debuggers
-Endianness
-### Overflow Security
-Buffer Overflows
-stack vs heap
+#### Memory Layout
+A system's CPU can only process a small amount of data, or instructions, at a time as it has a limited number of registers.  Therefore, the CPU needs to offload the storage of data onto another fast, but not as fast, cache location.  Systems leverage *random access memory (RAM)*, exactly for this task.  When an executable is initiated, its code and data are copied from disk and placed into memory where it will be used by the CPU during runtime.
 
-> [!activity] Activity - Stack Smashing the Hidden Funciton
+Programs are initialized into memory within a block space which is separated into the *stack*, *heap*, *data*, and *text* segments.  The following illustration shows the order of the segments with the lowest (first) segment used for text and the highest segment used for the stack segment.  The space between the stack and heap segments can dynamically adjusted for either segment as needed by the program.
+![[../images/06/buffer_mem_layout.png|Memory Layout Segment Order|150]]
+You can think of the block of memory as a empty cup.  Water (data) fills the cup (block) from the bottom to the top.  The stack segment holds data that will be processed by program functions.  Other data used by the program is stored within the heap segment.  Global variables are located in the data segment while all the program's code is within the text segment.  Memory address space is represented as a 4 or 8 byte hexadecimal value in 32-bit or 64-bit architecture systems respectively.  As one byte includes two hexadecimal digits, the an example address for a 32-bit system would look something like `0x012A341C`. 
+
+> [!tip] Tip - Working in Memory
+> When first learning about how computer memory is organized I often confused a memory address with the data residing at that memory location as they are both in hexadecimal.  It is important to understand that both address and the values at those addresses are typically represented as hexadecimal values.
+
+The stack segment is highly used and very dynamic.  Program functions that execute tasks usually require inputs, often called *parameters* or *variables*.  These values can be supplied from system data or even input from the user.  The variable is put onto the stack by the *POP* assembly mnemonic in a last in first out (LIFO) order.  The CPU can then reference this value from the stack using its memory address.  Once the function's execution is complete, and a new function is needed to be setup in the stack, the values are removed using the *PUSH* mnemonic.  The stack is comprised of *stack frames* for each function being executed which is illustrated in the following image.   
+![[../images/06/buffer_stack.png|Stack Frame Topology|150]]
+
+The stack's starting location has an address in memory called the *stack pointer*, at the lowest address space, and is be used to reference the stack for execution.  Above the stack pointer is the *buffer* space of the stack frame where variables are store that are used for the function during processing.  The end of the stack frame is represented as the *base pointer* which is used by the CPU to track the stack frame's ending space.  Above (higher address space) the base pointer is the *return address* which is used to notify the running program where to go next after the function's execution is complete.  
+### Analysis Tools
+A compiled executable file includes binary data that isn't particularly useful to a human in raw form.  If you opened such a file into a text editor you would be presented with mostly random characters from all over the Unicode standard.  Fixed variables may present themselves as in ASCII format and sometimes this can be very useful to a security researcher analyzing the program statically, or without running it.  Several secrets, such as passwords and keys, in many programs have been discovered by statically looking at a binary file in this manner.
+
+All programs regardless of the language they were written in require compilation for the operating system to load them into memory and the CPU to process them.  While there are higher level *interpreted* and scripting languages, such as Python, which don't require compilation, they all require the use of a compiled binary to run them.  Source code, before it is compiled, is very useful to the programmer as it is in a form that is readable and understandable by humans; however, they are not much use to the computer.  So we can think of the *compiler* as the translator of human written code to a format understood by the system.  Compiling is thought of as a one-way translation but there is also a class of tooling called **decompilers** which are used to translate compiled programs back to the source code state.  The output of these tool exclude the original naming conventions for variables and functions and require human interpretation.  Another useful tool type is the **disassembler** which takes a compiled binary and translates it into its assembly language statements statically.  While tedious, any binary can be loaded into this tool type and analyzed at the assembly level to derive the program's logic without the use of a decompiler.  A popular program for both dissembling and decompiling is the open source tool Ghidra which was original developed and released by the National Security Agency (NSA).
+
+There is another class of tool that is useful for analyzing a program during runtime called a **debugger**.  A program can be loaded into a debugger, or a debugger can be attached to an already running process, and the user can analyze the executing code in the CPU registers and memory space in real time.  Other features include the ability to set breakpoints and edit assembly instructions and data while the program runs.  Two popular Linux debuggers are *The GNU Project Debugger (GDB)* and radare2.  For Windows programs, Immunity Debugger and OllyDbg are highly versatile and commonly used.  All four tools are free to use and extensible with community support and plugins.  We will demonstrate the power of GDB in an upcoming activity.
+
+> [!tip] Tip - Endianness
+> Data sitting in memory may be written in a linear or reverse order depending on the type of architecture on the system.  The order of bytes written into memory is known as **Endianness** and requires careful consideration when manually analyzing memory.  *Big Endian* is when data is written from left to right whereas *Little Endian* is when data is written from right to left.  Endianness is a result of the designers of CPU architectures decided different ways on how to order data being streamed into memory based on a first in first out (FIFO) or a last in first out (LIFO) patterns.  The following diagram demonstrates how the decimal 1024 is written in hexadecimal in memory.  This decimal in hexadecimal encoding is `0x0400`.  Under big endian it would appear in memory as `0x0400` whereas using little endian format would be written as `0x0004`.
+> ![[../images/06/buffer_endianness.png|Endianness of Decimal 1024|300]]
+### Overflow Security
+Careful memory management is required as programs often ingest inputs of varying size.  Such as in the case of a user supplied input, the size of the value needed in the program may not be known at the time the program is compiled so the programmer must allocate sufficient space on the stack to handle the variable.  If the developer, or compiler, does not properly handle the amount of space to be allocated in memory for the variable, they could introduce memory related security vulnerabilities.  These vulnerabilities could enable an attacker to hijack the execution flow of the program causing it to execute arbitrary code.  The impact of such a vulnerability depends on the context of the running program  For instance is the program is ran as a networked service, it could enable an attacker to gain initial access to the operating system the program is running on.  In another example, if the program is running under a privileged user context, like administrator or root, then the attacker can inject code into the program or cause the program to execute remote code under the privileged user context, known as privilege escalation.
+
+Consciouses programmers will ensure that the buffer memory space is allocated and input boundary or size is validated before being placed on the stack.  Otherwise, the input could exceed the size of the stack and overwrite other memory spaces which is known as a **buffer overflow**.  Therefore a input which is not validated can be crafted that overwrites the index pointer with an address to a section of memory desired by the attacker.  That address can lead to areas in memory that executes code controlled or desired by the attacker.  This includes the attacker storing their own code into memory or leveraging commands already existing in memory chained together into what is known as *gadgets*.
+
+>[!note] Note - Memory Security Issues
+>There are many security issue related to the management of memory for a program.  While we cover a *stack based buffer overflow*, there are heap-based overflows, integer overflows, and others.  Interested readers are encouraged to research and explore the depths of this area of security!
+
+A well written program can avoid memory security issues and the vulnerabilities related to them.  However, there are also security protections the compiled program and leverage in coordination with the operating system.  The **data execution preventions (DEP)** setting can be applied at the operating system level to enforce permissions on buffer space to be read and write only, preventing execution.  This prevents overflow vulnerabilities to some degree by ensuring any malicious code written to the buffer space can't be executed.  But its protections are limited as it does not prevent the overflow and other areas of existing executable memory can be used to run malicious code.  Operating systems also include an **address space layout randomization (ASLR)** security mode that ensures the memory space used by the program is different each time the program runs.  This security setting makes it more difficult for exploit developers to create a malicious payload that targets other malicious code in memory, as they won't know where that malicious code resides because the address space is different every time the program launches.  ASLR can be bypassed using brute force techniques where the address space is found via guess and check.  The last security measure we'll cover is the **canary** method in which the operating system applies a small random value, a *canary token*, in every stack frame.  The canary token is checked before code in the frame is executed and if it does not match the program won't execute the stack.  It is possible to bypass this technique by leveraging an overflow vulnerability to collect the canary token value and include it in the final malicious payload.
+
+> [activity] Activity - Stack Smashing the Hidden Function
+> I'll demonstrate a Linux binary stack based buffer overflow vulnerability and exploit in the following activity.  First, I'll create a vulnerable program written in C that fails to validate a user input.  I'll disable all security settings for the sake of demonstration and compile the vulnerable binary using gcc.  Then I will use GDB and the Peda plugin to analyze the binary, craft an exploit, and cause the program to execute code it was not intended to.
+> 
+> Using the Kali VM in Bridge Adapter network mode, I start a terminal and install GDB with the following command.
+> ```bash
+> sudo apt update -y
+> sudo apt install gdb -y
+> ```
+> ![[../images/06/buffer_activity_gdb_install.png|Installing GDB on Kali|600]]
+> After GDB installation is complete I clone the Peda repository and the associated Python binary to the GDB configuration file.  Peda enhances GDB with features and formatting that I personally enjoy.
+> ```bash
+> git clone https://github.com/longld/peda.git ~/peda
+> echo "source ~/peda/peda.py" >> ~/.gdbinit
+> ```
+> ![[../images/06/buffer_activity_peda_install.png|Installing and Configuring Peda|600]]
+> With GDB and Peda setup, I'll create the vulnerable C program under the file `program.c`.  This very simple program includes two functions called `hidden` and `main`.  The main function creates a buffer space of 100 bytes and uses the `gets` utility to accept user input and renders the input from the printf function.  The hidden function simply displays a static message; however there is no execution path to it from main.  This hidden function won't ever be ran by in this simple application.  I place the following source code into the program.c file.  
+> ```c
+> #include <stdio.h>
+> void hidden(){
+> 	printf("Congrats, you found me!\n");
+> }
+> int main(){
+> 	char buffer[100];
+> 	gets(buffer);
+> 	printf("Buffer Content is : %s\n",buffer);
+> }
+> ```
+> ![[../images/06/buffer_activity_program_source.png|Program Source Code|600]]
+> After the C code is written, I compile it using the GCC compiler while application level security settings into an executable file `program`.  The compiler's output warns us the the gets function is dangerous - we'll ignore that concern and exploit it soon.
+> ```bash
+> gcc  -no-pie -fno-stack-protector -z execstack program.c -o program
+> ```
+> ![[../images/06/buffer_activity_compile.png|Compiling the Vulnerable Program|600]]
+> I also want to disable ASLR protections on the operating system with the following command.  This ensures that each time our program runs it will use the same address space.
+> ```bash
+> echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
+> ```
+> ![[../images/06/buffer_activity_aslr_disable.png|Disabling ASLR Protections|600]]
+> When the program is ran from the command line it waits for a user input.  When an input is entered the program takes the input and places it on the stack and then retrieves the value and prints it to the screen.  At no time is the hidden function executed as the static message "Congrats, you found me!" is displayed. I run the function using the following command and supplying it with "lol" then pressing enter.  As expected, it reflects back what I inputed.
+> ```bash
+> ./program
+> lol
+> ```
+> ![[../images/06/buffer_activity_baseline_input.png|Running Program With Non-Malicious Input|600]]
+> I'll run the program again, but this time I'll supply it with around 150 letter "A"s.  This time the program returns a segmentation fault which means it likely found a return address in memory that it could not find so the program crashes.  This demonstrates the identification of the vulnerability as a well behaving program would fail gracefully.
+> ```
+> ./program
+> AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+> ```
+> ![[../images/06/buffer_activity_segfault.png|Identifying the Buffer Overflow|600]]
+> 
+
 
 > [!exercise] Exercise - Stack Smashing the Hidden Function
 > In this task you will exploit a stack-based buffer overflow vulnerable C program using your Kali VM in Bridge Adapter network mode.  You will install the needed tools, build the vulnerable application, discover the buffer overflow, then build an exploit that will execute the hidden function.

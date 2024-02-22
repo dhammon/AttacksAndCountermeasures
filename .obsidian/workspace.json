@@ -146,23 +146,24 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0222551eff2d37c8",
+  "active": "2ec839b962581d99",
   "lastOpenFiles": [
-    "images/06",
-    "images/06/endpoint_hacked.jpg",
-    "textbook/00-Introduction.md",
-    "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "images/06/buffer_activity_segfault.png",
+    "images/06/buffer_activity_baseline_input.png",
+    "images/06/buffer_activity_aslr_disable.png",
+    "images/06/buffer_activity_compile.png",
+    "images/06/buffer_activity_program_source.png",
+    "images/06/buffer_activity_peda_install.png",
+    "images/06/buffer_activity_gdb_install.png",
+    "images/06/buffer_endianness.png",
+    "images/06/buffer_stack.png",
+    "images/06/buffer_mem_layout.png",
+    "images/06/buffer_memory_layout.png",
     "textbook/05-OperatingSystemSecurity.md",
-    "images/05/win_activity_bypass_tested.png",
-    "images/05/win_activity_bypass_commands.png",
-    "images/05/win_activity_bypass_functions.png",
-    "Pasted image 20240219083454.png",
-    "images/05/win_activity_bypass_test.png",
-    "images/05/win_activity_av_defender_running.png",
-    "Pasted image 20240219080319.png",
-    "images/05/win_activity_launch_defender.png",
+    "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "images/06",
+    "textbook/00-Introduction.md",
     "textbook/04-NetworkServices.md",
-    "images/05/virustotal.png",
     "textbook/02-Cryptology.md",
     "textbook/03-NetworkSecurity.md",
     "textbook/01-InformationSecurity.md",
@@ -175,7 +176,6 @@
     "images/02",
     "images/01",
     "images/information_security.jpg.crdownload",
-    "images",
-    "New folder"
+    "images"
   ]
 }
