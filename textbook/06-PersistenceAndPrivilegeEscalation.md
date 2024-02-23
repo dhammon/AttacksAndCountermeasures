@@ -185,7 +185,7 @@ Consciouses programmers will ensure that the buffer memory space is allocated an
 
 A well written program can avoid memory security issues and the vulnerabilities related to them.  However, there are also security protections the compiled program and leverage in coordination with the operating system.  The **data execution preventions (DEP)** setting can be applied at the operating system level to enforce permissions on buffer space to be read and write only, preventing execution.  This prevents overflow vulnerabilities to some degree by ensuring any malicious code written to the buffer space can't be executed.  But its protections are limited as it does not prevent the overflow and other areas of existing executable memory can be used to run malicious code.  Operating systems also include an **address space layout randomization (ASLR)** security mode that ensures the memory space used by the program is different each time the program runs.  This security setting makes it more difficult for exploit developers to create a malicious payload that targets other malicious code in memory, as they won't know where that malicious code resides because the address space is different every time the program launches.  ASLR can be bypassed using brute force techniques where the address space is found via guess and check.  The last security measure we'll cover is the **canary** method in which the operating system applies a small random value, a *canary token*, in every stack frame.  The canary token is checked before code in the frame is executed and if it does not match the program won't execute the stack.  It is possible to bypass this technique by leveraging an overflow vulnerability to collect the canary token value and include it in the final malicious payload.
 
-> [activity] Activity - Stack Smashing the Hidden Function
+> [!activity] Activity - Stack Smashing the Hidden Function
 > I'll demonstrate a Linux binary stack based buffer overflow vulnerability and exploit in the following activity.  First, I'll create a vulnerable program written in C that fails to validate a user input.  I'll disable all security settings for the sake of demonstration and compile the vulnerable binary using gcc.  Then I will use GDB and the Peda plugin to analyze the binary, craft an exploit, and cause the program to execute code it was not intended to.
 > 
 > Using the Kali VM in Bridge Adapter network mode, I start a terminal and install GDB with the following command.
@@ -235,7 +235,65 @@ A well written program can avoid memory security issues and the vulnerabilities 
 > AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 > ```
 > ![[../images/06/buffer_activity_segfault.png|Identifying the Buffer Overflow|600]]
-> 
+> Now that an overflow vulnerability was detected I can being to explore how to hijack the execution flow of the program using the GDB debugger.  Before I start the application in the dugger I create an input.txt file that has 200 letter "A"s using Python.
+> ```bash
+> python -c "print('A'*200)" > input.txt
+> ```
+> ![[../images/06/buffer_activity_input_test.png|Creating Input File|600]]
+> To launch the program into the debugger I run GDB with the `-q` flag to ignore the onload header and version banner while supplying GDB with the program name.  After GDB launches I am presented with the gdb-peda command line interface.
+> ```bash
+> gdb -q ./program
+> ```
+> ![[../images/06/buffer_activity_gdb_start.png|Starting Program in GDB|600]]
+> With GDB started I run the program and redirect the input text file with 200 "A"s into the program.  The program loads with the content of index.txt and immediately segmentation faults (segfaults).
+> ```bash
+> run < input.txt
+> ```
+> ![[../images/06/buffer_activity_gdb_segfault.png|Running Program in GDB with Input|600]]
+> GDB returns the register, code, and stack at the time of the segfault.  The first section of the GDB report shows me all the CPU registers and their values when the program crashed.  The 200 "A"s filled up the buffer and then wrote over the stack and base pointer (RBP/RSP) registers which cause the program to crash.
+> ![[../images/06/buffer_activity_initial_registers.png|Initial Crash Registers|600]]
+> The bottom half of the report includes the code, stack, and summary sections.  The stack if filled with the letter "A" and the end of the report suggests that the program reached an address `0x401196` referenced in the index pointer (RIP) to a location memory that return a value that was not accessible or executable by the program so it crashed.
+> ![[../images/06/buffer_activity_initial_stack.png|Initial Crash Stack|600]]
+> I want to target the index pointer register to eventually hijack the execution flow by inserting an address into the index pointer to code that I want to run - the hidden function.  I need to identify which position of the 200 "A"s write into the index pointer register.  I use the Peda pattern create utlitity which make a non-repeating string that I'll use as the input when I rerun the program.  Then I can see the value written into the index pointer and find the position in the pattern create string that matches telling me which character position of my input eventually overwrites the index pointer.
+> ```bash
+> pattern create 125 pattern.txt
+> ```
+> ![[../images/06/buffer_activity_pattern.png|GDB Pattern Create|600]]
+> I run the GDB loaded program again but redirect the input pattern.txt.  Once again this causes the program to crash except this time I can observe the RIP has a string value `jAA9A` that will match some part of the string from pattern.txt.
+> ```bash
+> run < pattern.txt
+> ```
+> ![[../images/06/buffer_activity_pattern_crash.png|Crash From Pattern Input|600]]
+> Using the Peda plugin pattern tool again, I reference the index pointer value from the crash to find the character position that overwrites the index pointer, called the *offset*.  The pattern offset command requires the hexadecimal value of the string.  The offset command identifies that the 120th character is the start of the string segment.
+> ```bash
+> pattern offset 0x413941416a
+> ``` 
+>  ![[../images/06/buffer_activity_offset.png|Pattern Offset Character Position|600]]
+>  To test the offset I'll craft a new input that places 120 letter "A"s and then 6 letter "B"s into a new text file using a fresh terminal (outside of GDB).  This file will next be used as the input to another run command that causes another crash.
+>  ```bash
+>  python -c 'print("A"*120+"BBBBBB")' > rip.txt
+>  ```
+>  ![[../images/06/buffer_activity_rip_test.png|Crafting Index Pointer Offset Test Input|600]]
+>  Running the new input should cause the program to crash, except this time the index pointer should be overwritten with just the letter "B".  Once confirmed, I can swap out that position in the input with another memory address where I want the program to execute.
+>  ```bash
+>  run < rip.txt
+>  ```
+>  ![[../images/06/buffer_activity_write_b.png|Testing Index Pointer Overwrite with B|600]]
+>  Looking at the index pointer I see it is now `0x424242424242` which is hexadecimal for the letter "B"!  Now that I have demonstrated that I can take control of the program, I need to identify what code that is loaded into memory that I want to execute.  As the objective of this demonstration was to execute the `hidden` function that is otherwise unreachable, I need to find where that function is on the stack.  To do this I use the `p` command in GDB and supply the name of the function which returns its memory address `0x401146`.
+>  ```bash
+>  p hidden
+>  ```
+>  ![[../images/06/buffer_activity_func_address.png|Finding Hidden Function's Address|600]]
+>  Now I have all the pieces needed to craft an exploit that hijacks the program's execution path and causes the hidden function to be executed.  My goal is to overwrite the index pointer with the address of the hidden function.  This will require me to convert that hidden function address into shellcode little endian 64-bit format which is `\x46\x11\x40\x00\x00\x00`.  This is the reverse order of hexadecimal values with `00` used as padding to fill the 64-bit space.  Note that each hexadecimal has `\x` preceding it.  I place 120 "A"s and then the shellcode address to the hidden function into an exploit text file from a new terminal outside of GDB.  Observe too that the hexadecimal is not render to standard output because the values are non-ascii.
+>  ```bash
+>  python -c 'print("A"*120+"\x46\x11\x40\x00\x00\x00")' > exploit.txt
+>  ```
+>  ![[../images/06/buffer_activity_exploit_dev.png|Crafting Exploit|600]]
+>  Finally, it is time to run the program with the exploit as the input and see if I get the hidden function to print the static "Congrats, you found me!" output.
+>  ```bash
+>  ./program < exploit.txt
+>  ```
+>  ![[../images/06/buffer_activity_exploited.png|Program Exploited|600]]Huzzah!
 
 
 > [!exercise] Exercise - Stack Smashing the Hidden Function
