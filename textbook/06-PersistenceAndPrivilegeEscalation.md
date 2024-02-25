@@ -199,8 +199,42 @@ Consider the running processes on the Windows VM that we previously reviewed.  S
 > ```
 
 ### Linux Privilege Escalation
+Just like Windows operating system, Linux has very similar privilege escalation paths that include the exploitation of kernel vulnerabilities, abusing cronjobs (Schedule Tasks in Windows), and abusing misconfigured services.  Linux also has many interesting privilege escalation vectors that Windows doesn't due to the differences between how the systems operate and other features.  Interested readers should visit Carol Polop's HackTricks Linux Privilege Escalation page for additional methods, it is one worth bookmarking and referencing as needed. [^3]
+
+> [!info] Info - Finding Privilege Escalation Paths
+> Even though I don't cover privilege escalation enumeration tools within activities in this textbook, they are at least worth an honorable mention.  You can conceive that it would be possible to manually check for privilege escalation vulnerabilities as either a defender or as an attacker.  However, that would be cumbersome and an inefficient use of time especially where such a task can be automated using a tool.  For example, one of the Windows privilege escalation paths covered involved a misconfigured service that allowed world writable access to the service's execution path running as SYSTEM.  A tool could be used that was developed to check all services and report back any such misconfigurations.  The idea of automated scans checking for privilege escalation vulnerabilities to all known and testable paths for Windows and Linux systems provides security professionals with an opportunity to find where systems may be vulnerable.  Once identified these vulnerabilities can be abused or fixed - depending on who finds them first!
+> 
+> A great tool for Windows, Linux, and MacOS systems is the PEASS-ng series which can be found on GitHub by carlospolop (https://github.com/carlospolop/PEASS-ng).  I have used this tool many times on many engagements, it is both reliable and efficient at finding most privilege escalation paths.
+
+Several demonstrations throughout this book use the `sudo` command to elevate permissions to root.  Sudo is configured within the sudoers file and requires administrator level access to modify it.  However, it can often be misconfigured to provide more access than what is needed for a user so administrators may strive to apply the principle of least privilege and configure a user's sudoers entry to only apply to specific executables.  Therefore a configured user would only be able to run a specific command under the privileged user context and greatly limit the opportunity for abuse.  Regardless, depending on the executable, the user or attacker could abuse the elevated command to perform elevated tasks and achieve and escalation of privileges.  
+
+In the Operating System Security chapter we examined what SUID executables are and how they work to provide users permissions to run the executable as the file's owner.  Similar to the sudo abuses to escalate privileges, SUIDs too can be abused by an attacker to potentially achieve and escalation of privilege.  One of my favorite websites that itemizes sudo and SUID privilege escalation abuses is GTFOBins.  It maintains a curated list of many native Linux binaries and known ways they can be abused.  The following image shows how the `base64` command can be used to escalate privileges for SUID and sudo if a system is misconfigured. [^4]
+
+![[../images/06/gtfobins.png|Base64 Page From GTFOBins Website]]
+
 
 > [!activity] Activity - Linux SUID Privilege Escalation
+> Let's explore how an administrator may configure base64 to be ran as root through the SUID feature of Linux.  I'll setup a vulnerable copy of the binary and then login as a low privilege user.  Then I'll abuse the SUID binary to extract privileged content from the shadow file which could then later be used to crack administrators' passwords.
+> 
+> I start by logging into the Ubuntu machine with my normal user and opening a terminal.  From that terminal I copy the base64 binary to the desktop while setting its sticky bit making it SUID capable.  Listing out the file shows that the sticky bit is set for the root owner.
+> ```bash
+> sudo install -m =xs $(which base64) .
+> ls -la base64
+> ```
+> ![[../images/06/linux_privesc_base64_copy.png|Creating Vulnerable Base64 Binary|600]]
+> The action above simulates a system administrator configuring the binary for elevated use.  Although the `daniel` user is a member of the sudo group, I won't use sudo to access the restricted shadow file.  For example, attempting to cat the shadow file or base64 encoding it results in permission denied messages.  I use the which command to find the original base64 binary and specify its use when testing the shadow file.
+> ```bash
+> cat /etc/shadow
+> which base64
+> /usr/bin/base64 /etc/shadow
+> ```
+> ![[../images/06/linux_privesc_denied.png|Permission Denied Accessing Shadow File|600]]
+> Now the user can abuse the SUID base64 binary version that is installed on the desktop by base64 encoding the shadow file and then base64 decoding the encoded output to reveal the contents of the shadow file!
+> ```bash
+> ./base64 "/etc/shadow" | base64 --decode
+> ```
+> ![[../images/06/linux_privesc_base64_abuse.png|Abusing Base64 SUID Revealing Shadow Contents|600]]
+> The output to the command above displays the root user's hashed password which can be attempted to brute force offline and then used to escalate privileges to the root user. 
 
 > [!exercise] Exercise - Linux SUID Privilege Escalation
 > In this task you will create a vulnerable SUID binary and then exploit it to escalate privileges to the root user using the Ubuntu VM in Bridge Adapter network mode.
@@ -490,3 +524,5 @@ A well written program can avoid memory security issues and the vulnerabilities 
 
 [^1]:Windows 11 22h2 - Kernel Privilege Elevation; Exploit-DB 02/24/2024; https://www.exploit-db.com/exploits/51544
 [^2]: How to View and Modify Service Permissions in Windows; Winhelponline; May 7, 2021; https://www.winhelponline.com/blog/view-edit-service-permissions-windows/
+[^3]: Linux Privilege Escalation; Hacktricks Carlos Polop; Feb 25, 2024; https://book.hacktricks.xyz/linux-hardening/privilege-escalation
+[^4]: base64; GTFOBins; Feb 25, 2024; https://gtfobins.github.io/gtfobins/base64/
