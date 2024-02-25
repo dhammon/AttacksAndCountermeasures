@@ -9,11 +9,40 @@ The previous chapter covered several features of Windows and Linux operating sys
 3. Conduct privilege escalation methods within compromised systems.
 4. Identify buffer overflow vulnerabilities and craft exploits to hijack the application's execution flow.
 ## Post Exploitation
-## Persistence 
+An attacker gaining access to a system is only the first milestone of their illicit behavior.  There are several ways in which an attacker gains initial access some of which we will cover later in this textbook.  One such technique could be a phishing email being sent to victim that includes some malware attached to it.  When the victim downloads and run this malware it could result in an attacker gaining remote access to their system.  
 
-Windows Persistence Techniques
+Once a threat actor gains access into a network or system they usually begin **post exploitation** activities.  These activities may influenced by the attacker's ultimate objectives but they usually include the following activities:
+1. **Persistence** - Techniques used to maintain attacker access access should they be discovered or lose their initial connection.
+2. **Pillage** - Enumerate a compromised system to gain an understanding of what it is used, collect data, and discover secrets such as passwords.
+4. **Privilege Escalation** - Often the initial access obtained by the attacker is for a user with low privileges.  This attacker activity aims to achieve a higher level permission on the system, such as administrator or root.
+5. **Pivot** - The initial system that is compromised is used as a launch point to gain access to other systems within the network, or other connected networks, in this attacker activity phase.
+
+Each of the listed activities under post exploitation are mutually exclusive and could be performed individually and in any order.  Generally the order listed above is the order most usually seen as there is a progressive nature to the activities.  Regardless, the activities are iterative as well.  For example, an attacker that achieves initial access may pillage and discover an administrator password used to accomplish privilege escalation.  Once their privileges are escalated the attacker may then re-do their initial pillage activities in an attempt to discover more information about the system under the privileged context.  In another example, an attacker may wish to re-establish a persistence mechanism once privilege escalation has been achieved, or maybe the persistence technique relies on privilege escalation first being obtained as is the case with a new user account being created.
+
+The following sections focus on persistence and privilege escalation techniques on Linux and Windows operating systems.  In the previous Operating System Security chapter we covered several operating system features that have material security significance as they could be abused to an attacker's advantage.  You will find that the persistence and privilege escalation techniques covered in detail within this chapter leverage the foundational knowledge of those operating system features previously covered.  We don't cover all such techniques and methods and readers are encouraged to explore the provided resources and experiment in their lab environments.
+### Windows Persistence 
+Attackers aiming to maintain system access to a Windows system could leverage several native operating system features.  Often the attacker will create a malicious script or executable that will be periodically ran from the victim's device.  This malware will establish a network connection to an attacker control server which will grant them remote access to the victim's machine.  Should the victim restart their device, the malicious persistence mechanism will re-run and re-establish the connection for the attacker to use.  Such malicious programs can be executed using services and startup tasks or other Windows features such as registry startup tasks covered in the previous chapter.
+
+In some cases, the attacker will have network access to the system over remote management protocols or tools, such as *virtual network computing (VNC)*, *remote desktop protocol (RDP)* or *secure shell (SSH)*.  This could include cloud based solutions as well, such as software provided by AnyDesk, TeamViewer, or GoToMyPC.  If the attacker has the victim's username, password, and network access, they can leverage these tools and protocols to regain access to the system.  However, the attacker might not have the user's password even regardless of their initial access exploitation as often these attacks only provide the attacker with connection.  Therefore, the attacker may reset the user's password but the next time the user attempts to login they will likely  be alerted that security has been compromised.  To avoid this, an attacker may create a new user account that they can use at any time.  The username of for this new malicious account will likely be something that is easily missed by an observer, such as a generic name like "eric" or "desktop-user".  Even craftier usernames to hide the malicious use of the new account could be in reference to software that is used by the organization or system like "slack-agent" or "discord-service".  Unsuspecting system users may see these accounts and dismiss that they are malicious.  You wouldn't expect the attacker to name the malicious account something obvious like "backdoor-hacker" would you?
+
+> [!info] Info - Windows Persistence Techniques Resource
+> Many other Windows persistence techniques are covered within the InternalAllTheThings GitHub book maintained by swisskyrepo.  https://swisskyrepo.github.io/InternalAllTheThings/redteam/persistence/windows-persistence/
+
 
 > [!activity] Activity - Windows Persistence with Registry
+> One place an attacker can stash a malicious backdoor binary is within the run tasks of the user's registry.  In lieu of creating a network backdoor executable, which will be covered in a later chapter, I'll use the calculator (calc.exe) application as a stand in replacement to a backdoor executable.  As a compromised logged in user, I'll set a new registry key under the Windows startup run tasks pointing to the "malicious" calc.exe.  Then upon reboot, I'll log in and witness the calculator app is automatically launched.  A real threat would launch the process in the background as to not alert the victim.
+> 
+> After powering up the Windows machine and logging in, I open a command prompt and run the following registry command that adds the key `NotEvil` with the regular string value of the path to the calc.exe file.
+> ```cmd
+> reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v NotEvil /t REG_SZ /d "C:\Windows\System32\calc.exe“
+> ```
+> ![[../images/06/win_persistence_reg_command.png|Adding Key to Registry Run|600]]
+> The operation completes successfully.  To test it I reboot the Windows VM and witness the calculator app automatically launches at login!  This simulates re-establishing a connection if a malicious binary was running instead of the harmless calculator app.
+> ![[../images/06/win_persistence_calc_launch.png|Calculator Runs at Login|300]]
+> I'll inspect the registry by opening the Registry Editor application as administrator from the Windows search bar and accepting any UAC prompt.  Upon launching, I navigate to the Run key under the current user hive and find the persistence key NotEvil.
+> ![[../images/06/win_persistence_regedit.png|Registry Editor Run Key with NotEvil]]
+> Because I don't want the calculator app to run each time I start this VM I go ahead and delete this key by right-clicking it and selecting the Delete button from the context menu.
+>   
 
 > [!exercise] Exercise - Windows Persistence with Registry
 > Using the Windows VM in Bridge Adapter network mode, you will add a Run Registry Key to launch the calculator app as a placeholder for malware.
@@ -27,9 +56,29 @@ Windows Persistence Techniques
 > #### Step 3 - Remove Persistence
 > Launch the Registry Editor as Administrator accepting the UAC prompt. Navigate to “Computer\HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run” and observe the Key “NotEvil”.  Right click the NotEvil entry and Delete.
 
-Linux Persistence Techniques
+### Linux Persistence
+Attackers can leverage very similar persistence techniques as Windows.  This includes creating new users and leveraging operating system features such as cron and services.  Even seemingly benign features such as the *message of the day (MOTD)*, which displays a banner message at CLI creation, can be used to hide malicious code to be executed at login.  There are many creative places a backdoor can be hidden by an attacker to maintain a foothold onto a victim computer.  Knowing what and where these operating system persistence techniques are used assist defenders particularly incident response, threat hunting, and malware analysis professionals.  Host based intrusion detection systems and antimalware solutions should also be tuned to monitor these operating system hiding spots for abnormal activity.
+
+> [!info] Info - Linux Persistence Resource
+> Swisskyrepo has also created a Linux - Persistence resource on the GitBook Internal All The Things.  Interested readers should check out this resource and the listed techniques. https://swisskyrepo.github.io/InternalAllTheThings/redteam/persistence/linux-persistence/
 
 >[!activity] Activity - Linux Persistence with Cronjob
+>Attacker persistence can be achieved using a cronjob that executes a malicious script.  I'll demonstrate this by creating a cronjob for the victim Ubuntu VM user that will run each time the machine is rebooted.  I'll use a harmless command that creates a cron.txt file on the user's desktop in lieu of creating a backdoor; however you can imagine this command being replaced with a script that makes a connection back to the attacker.
+>
+>With the Ubuntu VM started and the `daniel` user logged in, simulating an attacker's initial access, I create a cronjob that applies the date into a text file on the user's desktop upon reboot.  I also list the cron table to confirm the job was applied.
+>```bash
+>echo "@reboot date > /home/daniel/Desktop/cron.txt " | crontab 2> /dev/null
+>crontab -l
+>```
+>![[../images/06/linux_persistence_crontab.png|Applying Cronjob Persistence Example|600]]
+>Once applied I reboot the VM and login as the user.  Upon login I can see that the cron.txt file was created and now exists on the desktop!  While this document isn't exactly scary, you can imagine if instead a binary or script was ran that reaches back out to the attacker's server and establishes a remote terminal session on the device.
+>![[../images/06/linux_persistence_cron_success.png|Cronjob Executed Creating Text File|300]]
+>Because I don't want this file to be created each time I reboot, I remove the cronjob with the following command and delete the cron.txt file.
+>```bash
+>echo "" | crontab 2> /dev/null
+>crontab -l
+>```
+>![[../images/06/linux_persistence_removed.png|Cronjob Persistence Removed|600]]
 
 > [!exercise] Exercise - Linux Persistence with Cronjob
 > This task uses the Ubuntu VM in Bridge Adapter mode to schedule a cronjob that launches bash commands as a stand in for malware.
@@ -47,10 +96,64 @@ Linux Persistence Techniques
 > echo "" | crontab 2> /dev/null
 > crontab -l
 > ```
-## Privilege Escalation
-Windows Privilege Escalation Techniques
+### Windows Privilege Escalation
+Another task an attacker seeks to achieve after initial access is to elevate their permissions to an administrator.  Doing so allows the attacker to have full system access where they can fully pillage the device's data, disable security solutions, delete logs, and anything else they desire.  Certainly if an attacker is able to compromise an elevated user's password then they would already be running in a privileged user context.  In a previous activity, I demonstrated how to extract NTLM hashed passwords from the SAM database and crack passwords using John the Ripper tool.  However, accessing the SAM and SYSTEM databases required elevated access which provides a challenge to an attacker with only low privileged user access.  Sometimes a Windows system could have misconfigurations or vulnerabilities that can be leveraged by an attacker to gain access to such areas.
+
+> [!story] Story - HiveNightmare
+> In 2021 a vulnerability CVE-2021-36934, known as HiveNightmare and SeriousSAM, was disclosed in which the Windows *volume shadow copy service (VSS)* was found to be making copies of sensitive SAM and SYSTEM files with global read access.  If an attacker gained access to the device they could dump hashed passwords and attempt offline cracking or perform pass-the-hash attacks.  These files include the local administrator hashed passwords which could easily lead to privilege escalation.
+
+Privilege escalation vulnerabilities can also be found within the Windows *kernel*, which is the core of the operating system that interfaces with all connected hardware.  The kernel runs with SYSTEM permissions and all users interface with it during normal use of the operating system.  Vulnerabilities in the kernel can often result in privilege escalation because the kernel expects user interaction and input.  Such vulnerabilities often have exploits created which are accessible on the clear web, such as on GitHub or on ExploitDB.  A quick search on ExploitDB for Windows shows several available exploits including a recent kernel based privilege escalation for Windows 11 22h2. [^1]
+![[../images/06/exploit_db.png|ExploitDB Windows Search]]
+Selecting that exploit link provides us with the source code and references.  Often these exploits will even include instructions on how to compile them.  Looks like for this one we are on our own for figuring that out.
+![[../images/06/exploit_db_code.png|Kernel Exploit Code from ExploitDB]]
+Actually, all of the exploits from this website are already included on the Kali VM.  They are searchable and using the `searchsploit` command followed by a query term as shown in the following image.
+![[../images/06/exploitdb_searchsploit.png|Searchsploit Windows Query|600]]
+After identifying the target exploit using `searchsploit`, you can copy it and use it as needed.  Here we find the same C program as on the ExploitDB website.
+![[../images/06/exploitdb_searchsploit_copy.png|Searchsploit Copy of Kernel Exploit|600]]
+> [!info] Info - Windows Privilege Escalations Resource
+> There are many kernel privilege escalation exploits but they are not the only method of access as there can be misconfigurations on a system as well that leaves it vulnerable.  Another of my favorite security websites is Carlos Polop's Hacktricks book which includes a long list of viable attacks.  https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation
+
+Consider the running processes on the Windows VM that we previously reviewed.  Some of those processes run in an elevated context, as the SYSTEM account or as our logged in user who is a member of the local administrators group.  If an attacker can hijack any of those running elevated processes then they could run any command or perform any activity from that process.  We also covered Windows services which launch an executable from an event such as the machine's start up.  Every service that launches will create a process under the user context configured as part of the service.  A Windows service could be hijacked if it includes an *unquoted service path*.  For example, if the path has a folder writable by an attacker and that folder's name includes spaces such as "Program Files", the attacker can place a malicious binary in a folder with the first word of that two spaced word folder name ("Program").  Due to a quirk on how executable are found by the operating system, Windows will search for the binary in the path first checking the name of the folder with the first word. 
 
 >[!activity] Activity - Windows Service Privilege Escalation
+>Another possible misconfiguration using Windows service is when an administrator grants too many permissions to the service.  I will demonstrate how an administrator can give a custom service permissions to all users to write, modify, and run a service.  A malicious user can then abuse this misconfigured and vulnerable service to escalate their privileges.
+>
+>From the Windows VM I start by setting up a vulnerable service simulating a careless system administrator.  With a command prompt started as an administrator, I use the sc command to create a service named `vulnerable`.  I give this service the binary path to the SearchIndexer executable to mimic an existing legitimate service.
+>```shell
+>sc create vulnerable binPath= "C:\Windows\system32\SearchIndexer.exe /Embedding”
+>```
+>![[../images/06/win_privesc_service_create.png|Creating a Windows Service|600]]
+>After the service is successfully created, I update the ACL of the service to be world writable using the sdset option of the sc command.  This setting allows any user to modify the service opening it up to abuse.  The long string that is included within the command can be deciphered using Winhelponline's great article.  [^2]
+>```cmd
+>sc sdset vulnerable "D:(A;;CCLCSWRPWPDTLOCRRC;;;WD)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;WD)(A;;CCLCSWLOCRRC;;;WD)(A;;CCLCSWLOCRRC;;;WD)S:(AU;FA;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;WD)"
+>```
+>![[../images/06/win_privesc_permissions.png|Setting Permissions on Vulnerable Service|600]]
+>The last component of the vulnerable setup is to have a low privileged user that we will use as the simulated victim an attacker has compromised.  Using the net commands I check my system and see that I still have the `tester` user created from a previous activity.  I also confirm that the tester user is not a member of the local administrators group.
+>```cmd
+>net user
+>net localgroup administrators
+>```
+>![[../images/06/win_privesc_net_user.png|Confirming Low Privileged User Tester Exists|600]]
+>My `daniel` user is a member of the local administrator group but `tester` is not.  I log out of the `daniel` account and then login as the `tester` user.  Then I open a command prompt (non-admin), as the attacker who compromised the `tester` user, and update the vulnerable service with a new command.  This malicious command adds the `tester` user to the local administrators group.
+>```cmd
+>sc config vulnerable binpath= "net localgroup administrators tester /add"
+>```
+>![[../images/06/win_privesc_update_service.png|Updating Vulnerable Service With Malicious Command|600]]
+>The service has been updated with my new command.  Once the service is restarted, such as during a reboot, the `tester` user should be made an administrator.  The service can do this because it runs as the SYSTEM user and can run any valid command on the system.  If I tried adding the `tester` user to the admin group with just that net localgroup command, I would receive a permission denied error.  I can force the service start by running the following command.
+>```cmd
+>sc start vulnerable
+>```
+>![[../images/06/win_privesc_start_service.png|Starting Windows Vulnerable Service|600]]
+>Notice the StartService failure message?  This is because the command provided as a binary path isn't a valid binary.  But the command should have still ran regardless of the failure message.  To confirm, I re-run the net localgroup command and see that the `tester` user is now a member of the local administrator group!
+>```cmd
+>net localgroup administrators
+>```
+>![[../images/06/win_privesc_success.png|Tester User Privileges Escalated to Local Admin|600]]
+>For sake of clean up, I remove the vulnerable service with the following command.
+>```cmd
+>sc delete vulnerable
+>```
+>![[../images/06/win_privesc_cleanup.png|Removing Vulnerable Service|600]]
 
 > [!exercise] Exercise - Windows Service Privilege Escalation
 > You will create a vulnerable service and then escalate your privileges by exploiting this service in your Windows VM with Bridge Adapter network mode.
@@ -95,7 +198,7 @@ Windows Privilege Escalation Techniques
 > sc delete vulnerable
 > ```
 
-Linux Privilege Escalation Techniques
+### Linux Privilege Escalation
 
 > [!activity] Activity - Linux SUID Privilege Escalation
 
@@ -384,3 +487,6 @@ A well written program can avoid memory security issues and the vulnerabilities 
 > python -c 'print("A"*120+"SHELLCODE")' > exploit.txt
 > ```
 > Observe hidden function message “Congrats, you found me!”!
+
+[^1]:Windows 11 22h2 - Kernel Privilege Elevation; Exploit-DB 02/24/2024; https://www.exploit-db.com/exploits/51544
+[^2]: How to View and Modify Service Permissions in Windows; Winhelponline; May 7, 2021; https://www.winhelponline.com/blog/view-edit-service-permissions-windows/
