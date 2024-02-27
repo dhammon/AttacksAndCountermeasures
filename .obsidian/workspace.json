@@ -18,18 +18,6 @@
                 "source": false
               }
             }
-          },
-          {
-            "id": "227f8add6107dc12",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "textbook/00-Introduction.md",
-                "mode": "source",
-                "source": false
-              }
-            }
           }
         ]
       }
@@ -160,19 +148,19 @@
   },
   "active": "2ec839b962581d99",
   "lastOpenFiles": [
+    "files/2016-04-16-traffic-analysis-exercise.pcap.zip",
+    "images/07/snort_activity_custom_rule.png",
+    "images/07/snort_activity_download.png",
+    "textbook/00-Introduction.md",
+    "textbook/07-SecuritySystems.md",
+    "images/07/snort_activity_install.png",
+    "images/07/snort_rule.png",
+    "images/07/inline_arch.png",
+    "images/07/tap_arch.png",
     "images/07/email_arch.png",
     "images/07/vuln_activity_finding.png",
     "images/07/vuln_activity_host_results.png",
     "images/07/vuln_activity_scanning.png",
-    "images/07/vuln_activities_scan_setup.png",
-    "images/07/vuln_activity_scan_template.png",
-    "images/07/vuln_activity_splash_page.png",
-    "images/07/vuln_activity_initialization.png",
-    "images/07/vuln_activity_user_create.png",
-    "images/07/vuln_activity_activation.png",
-    "images/07/vuln_activity_setup_screen.png",
-    "textbook/07-SecuritySystems.md",
-    "textbook/00-Introduction.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "images/07/security_patch.jpg.crdownload",
     "images/07",

@@ -139,11 +139,48 @@ Security training topics and content should ideally meet the userbase where they
 - **Physical Security** - Often overlooked due to the assumption that an attacker would only attempt attacks remotely, physical security measure can be critical to information security.  Training should include topics like tailgating where an attacker follows someone into a building to avoid using a key card to unlock doors, locking computer stations when not in use to prevent someone from accessing logged in systems, and to watch out for rogue devices that look out of place as they could be a drop box planted by an attacker.
 
 ## IDS/IPS
-Tap Architecture
-Rules
+Attacker behaviors can be inspected by the types of network packets they send, system processes they run, and system artifacts they create.  These clues are referred to as **indicators of attack (IoA)** and **indicators of compromise (IoC)** and can be programed into monitoring or alerting systems that notify security analysts to investigate.  IoAs are caused by suspected attacker behavior prior to a successful breach of security.  An example of an IoA would be an incoming HTTP request that includes a malicious payload.  An IoC is hallmark that a breach of security has already occurred such as the identification of malware installation on a computer endpoint.  Both IoAs and IoCs are written into detection rules for security systems by security engineers.  They achieve this by first studying malicious behaviors of attackers and malware and identify unique characteristics that can be specifically measured.  Common categories to identify include filename syntax, IP addresses, strings in files or packets, hexadecimal bytes in specific positions of requests, and many more.  When a security system triggers on one or more of these identifiers written into rules, the system creates an alert for a security analyst to triage.
 
->[!activity] Activity - Snort Detection
->lol
+> [!note] Note - Other Monitoring Systems
+> Malicious activity can also be detected in the system and application logs which are aggregated and monitored for in a *system information and event management (SIEM)* solution.
+
+**Intrusion detection systems (IDS)** and **intrusion preventions systems (IPS)** are a class of security system that is designed to monitor for IoA and IoCs.  These solutions are commonly found within firewalls, endpoints or workstations, and standalone network devices.  They include a rules engine that can be fed custom rules or subscribed to proprietary or community based rulesets.  As new attacks and breaches are discovered, researchers and engineers update rulesets to ensure systems can detect the latest threats.  IDS systems are designed to run in *monitor only* mode and will trigger alerts when a threat is detected; whereas IPS systems detect, block, and alert the potential malicious activity.  These systems deployed on devices are referred to as *host-based IDS (HIDS)* and can monitor network, file, and process activities.  IDS/IPS systems are often found within secured networks installed on firewalls and routers or as stand alone *security appliances*.  Network based IDS/IPS solution architecture options are *tap* or *inline*.  Under the tap architecture the appliance is installed and connected to a networking device such as a router or switch.  The network devices interfaces are *mirrored*, or traffic is cloned, and forwarded to the IDS appliance.  The appliance then inspects the traffic for IoA/IoCs and alerts as appropriate.  This tap architecture only works for IDS as the traffic that is inspected is only a copy and the original traffic is passed through as demonstrated in the following image.
+![[../images/07/tap_arch.png|IDS Tap Architecture|350]]
+However, an inline architecture supports both IDS and IPS as all traffic is first routed through the security appliance before being passed along to the networking equipment.  The appliance can then drop network packets with IoA/IoCs preventing the malicious activity from reaching its destination.
+![[../images/07/inline_arch.png|IDS/IPS Inline Architecture|350]]
+The inline architecture could become a bottleneck for network activity as it must process and inspect all network traffic.  This could result in the unavailability of network resources which may be intolerable in which case using the tap architecture ensures the network won't become unavailable due to the security appliance.  However, the tap architecture wouldn't prevent malicious activity and often won't inspect all traffic if it reaches capacity.  Systems, network, and security engineers must come to terms on which risks they want to optimize for, security or performance.
+### Detection Rules
+The quality of a written rule may depend on how clearly the IoA/IoC to determine the security significance.  They should include descriptions, references to additional resources, be logically named, and labeled with an appropriate severity rating.  Another measurement of a well written rule is the number of *false positives (type 1)* and *false negatives (type 2)* errors they generate.  A rule that produces alerts on normal user or network activity will slow analyst productivity and worse create *alert fatigue* in which a real threat might be overlooked because the analyst has been conditioned to believe the rule is low quality.  Worse yet are false negatives where the alerting system fails to notify the analyst of an actual threat.  Usually decreasing type 1 errors will increase type 2 errors or inversely decreasing type 2 will increase type 1.  Therefore, a careful balance needs to be achieve given resource constraints and the risk tolerance of the organization.  Some security systems allow for the creation of exceptions which allows analysts to *tune* a rule by muting it under specific conditions.  For example, an exception can be created that ignores the alerting activity from a specific IP address which is often needed when running a vulnerability management scanner.
+
+The syntax and layout of a rule is largely dependent on the security system it is being written for.  One popular IDS/IPS security solution is the free and opensource tool Snort.  It has been around for many years and has wide community support.  The following image breaks down the anatomy of a demo rule from Snorts documentation on https://docs.snort.org/rules/.  
+![[../images/07/snort_rule.png|Demo Snort Rule Anatomy|550]]
+Each rule must include a header and option section.  The header is the first line of the rule and includes the action, TCP and/or UDP protocol, source address and port, directionality of the network request ingress or egress, and the destination addresses or ports.  They system allows for macro variable creations and supports IP and port ranges.  The body of the rule, options, is a list of key value pairs.  There are several options available that are not listed in this sample, therefore many options are not required.  However common options include the `msg` key which is used as the name or description of the alert, the flow of data, file data, the content to be found, the service to inspect, and an `sid` to uniquely index the rule.
+
+>[activity] Activity 7.3 - Snort PCAP Analysis
+>Snort is a fantastic tool that supports preinstalled and custom rules.  I will use a packet capture from malware-traffic-analysis.net who maintains a growing list of network attack samples to practice analyzing.  Beware that the cases on malware-traffic-analysis.net contain real malware and you should proceed with caution.
+>
+>Using the Ubuntu VM in Bridge Adapter network mode, I login, open a terminal, and install Snort after updating the machine.  I accept the default network configurations for Snort when the Package configuration interface pops up.
+>```bash
+>sudo apt update -y
+>sudo apt install snort -y
+>```
+>![[../images/07/snort_activity_install.png|Installing Snort on Ubuntu VM|600]]
+>Next I download the PCAP from the accompanying support files and unzip its contents.  The file is originally from https://malware-traffic-analysis.net/ and has been password protected with the word `infected`.
+>```bash
+>cd ~/Downloads
+>unzip 2016-04-16-traffic-analysis-exercise.pcap.zip
+>```
+>![[../images/07/snort_activity_download.png|Unzipping PCAP|600]]
+>This PCAP includes case information surrounding a phishing site with a spoofed Paypal credentials form.  The indicators of attack include the IP address 91.194.91.203 on port 80 and the page includes the keyword "paypal".  With this information I create a Snort detection rule that can be used to detect network traffic reaching the malicious site.  The following command adds the custom rule to the local rules file in the Snort configuration.
+>```bash
+>sudo su -
+>echo 'alert tcp 91.194.91.203 80 -> $HOME_NET any (msg:"Paypal phishing form"; content:"paypal"; sid:21637; rev:1;)' >> /etc/snort/rules/local.rules
+>```
+>![[../images/07/snort_activity_custom_rule.png|Creating Custom Snort Rule|600]]
+>With the rule in place I scan the case PCAP file using Snort.  The following command uses the default configuration file, reads the PCAP file to the console, and has the options `-q` which removes the banner, `-K` enables logging mode, and `-A` that enables alert mode.
+>```bash
+>
+>```
 
 ## Data Loss Prevention
 Insider Threat
@@ -152,16 +189,16 @@ DLP
 ## Honeypots
 Canary tokens
 
-> [!activity] Activity - MySQL Honeypot
+> [!activity] Activity 7.4 - MySQL Honeypot
 > lol
 
 ## Exercises
-> [!exercise] Exercise 1 - Breach Report
+> [!exercise] Exercise 7.1 - Breach Report
 > In this task you will read the CrowdStrike 2023 Global Threat Report and briefly summarize its contents. 
 > #### Step 1 - Read and Report
 > Download the CrowdStrike 2023 Global Threat Report and read it while taking notes on any interesting facts you discovered.  Write a brief ½ page summary describing where a company may want to invest its security resources and why.  The report should be written in with Executive Management and/or Board of Directors as the target audience.  Avoid too much use of technical jargon. 
 
-> [!exercise] Exercise 2 - Nessus Vulnerability Scan
+> [!exercise] Exercise 7.2 - Nessus Vulnerability Scan
 > Using all three of your VMs in a NAT Network for this task, you will perform Nessus vulnerability scans on the Windows and Ubuntu VMs from the Kali VM. 
 > 
 > #### Step 1 - Configure Network
@@ -197,7 +234,7 @@ Canary tokens
 > #### Step 6 - Analyze Results
 > Now that the scan has completed, explore the Hosts and Vulnerabilities tabs.  The vulnerabilities are listed in order of severity.  Only a few items of concern were identified.  Explore further details on one of the items by clicking on the vulnerability. 
 
-> [!exercise] Exercise 3 - Snort Detection
+> [!exercise] Exercise 7.3 - Snort Detection
 > In this task you will use Snort to analyze a packet capture from malware-traffic-analysis.net. 
 > #### Step 1 - Install Snort
 > On your Ubuntu VM with Bridge Adapter network mode, login and open a terminal.  Apply updates on your system using the following command. 
@@ -235,7 +272,7 @@ Canary tokens
 > sudo snort -c /etc/snort/snort.conf -r 2016-04-16-traffic-analysis-exercise.pcap -q -K none -A console 
 > ```
 
->[!exercise] Exercise 4 - MySQL Honeypot
+>[!exercise] Exercise 7.4 - MySQL Honeypot
 >You will use the opensource python honeypots module to create a honeypot running on your Ubuntu VM in Bridge Adapter network mode. You will then attack the Ubuntu VM from your Kali VM also in Bridge Adapter network mode. https://github.com/qeeqbox/honeypots 
 >#### Step 1 - Install Honeypots
 >From your Ubuntu VM, install python3-pip. 
