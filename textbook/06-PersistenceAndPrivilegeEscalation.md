@@ -36,11 +36,11 @@ In some cases, the attacker will have network access to the system over remote m
 > ```cmd
 > reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run" /v NotEvil /t REG_SZ /d "C:\Windows\System32\calc.exe“
 > ```
-> ![[../images/06/win_persistence_reg_command.png|Adding Key to Registry Run|600]]
+> ![[win_persistence_reg_command.png|Adding Key to Registry Run|600]]
 > The operation completes successfully.  To test it I reboot the Windows VM and witness the calculator app automatically launches at login!  This simulates re-establishing a connection if a malicious binary was running instead of the harmless calculator app.
-> ![[../images/06/win_persistence_calc_launch.png|Calculator Runs at Login|300]]
+> ![[win_persistence_calc_launch.png|Calculator Runs at Login|300]]
 > I'll inspect the registry by opening the Registry Editor application as administrator from the Windows search bar and accepting any UAC prompt.  Upon launching, I navigate to the Run key under the current user hive and find the persistence key NotEvil.
-> ![[../images/06/win_persistence_regedit.png|Registry Editor Run Key with NotEvil]]
+> ![[win_persistence_regedit.png|Registry Editor Run Key with NotEvil]]
 > Because I don't want the calculator app to run each time I start this VM I go ahead and delete this key by right-clicking it and selecting the Delete button from the context menu.
 >   
 
@@ -70,15 +70,15 @@ Attackers can leverage very similar persistence techniques as Windows.  This inc
 >echo "@reboot date > /home/daniel/Desktop/cron.txt " | crontab 2> /dev/null
 >crontab -l
 >```
->![[../images/06/linux_persistence_crontab.png|Applying Cronjob Persistence Example|600]]
+>![[linux_persistence_crontab.png|Applying Cronjob Persistence Example|600]]
 >Once applied I reboot the VM and login as the user.  Upon login I can see that the cron.txt file was created and now exists on the desktop!  While this document isn't exactly scary, you can imagine if instead a binary or script was ran that reaches back out to the attacker's server and establishes a remote terminal session on the device.
->![[../images/06/linux_persistence_cron_success.png|Cronjob Executed Creating Text File|300]]
+>![[linux_persistence_cron_success.png|Cronjob Executed Creating Text File|300]]
 >Because I don't want this file to be created each time I reboot, I remove the cronjob with the following command and delete the cron.txt file.
 >```bash
 >echo "" | crontab 2> /dev/null
 >crontab -l
 >```
->![[../images/06/linux_persistence_removed.png|Cronjob Persistence Removed|600]]
+>![[linux_persistence_removed.png|Cronjob Persistence Removed|600]]
 
 > [!exercise] Exercise - Linux Persistence with Cronjob
 > This task uses the Ubuntu VM in Bridge Adapter mode to schedule a cronjob that launches bash commands as a stand in for malware.
@@ -103,13 +103,13 @@ Another task an attacker seeks to achieve after initial access is to elevate the
 > In 2021 a vulnerability CVE-2021-36934, known as HiveNightmare and SeriousSAM, was disclosed in which the Windows *volume shadow copy service (VSS)* was found to be making copies of sensitive SAM and SYSTEM files with global read access.  If an attacker gained access to the device they could dump hashed passwords and attempt offline cracking or perform pass-the-hash attacks.  These files include the local administrator hashed passwords which could easily lead to privilege escalation.
 
 Privilege escalation vulnerabilities can also be found within the Windows *kernel*, which is the core of the operating system that interfaces with all connected hardware.  The kernel runs with SYSTEM permissions and all users interface with it during normal use of the operating system.  Vulnerabilities in the kernel can often result in privilege escalation because the kernel expects user interaction and input.  Such vulnerabilities often have exploits created which are accessible on the clear web, such as on GitHub or on ExploitDB.  A quick search on ExploitDB for Windows shows several available exploits including a recent kernel based privilege escalation for Windows 11 22h2. [^1]
-![[../images/06/exploit_db.png|ExploitDB Windows Search]]
+![[exploit_db.png|ExploitDB Windows Search]]
 Selecting that exploit link provides us with the source code and references.  Often these exploits will even include instructions on how to compile them.  Looks like for this one we are on our own for figuring that out.
-![[../images/06/exploit_db_code.png|Kernel Exploit Code from ExploitDB]]
+![[exploit_db_code.png|Kernel Exploit Code from ExploitDB]]
 Actually, all of the exploits from this website are already included on the Kali VM.  They are searchable and using the `searchsploit` command followed by a query term as shown in the following image.
-![[../images/06/exploitdb_searchsploit.png|Searchsploit Windows Query|600]]
+![[exploitdb_searchsploit.png|Searchsploit Windows Query|600]]
 After identifying the target exploit using `searchsploit`, you can copy it and use it as needed.  Here we find the same C program as on the ExploitDB website.
-![[../images/06/exploitdb_searchsploit_copy.png|Searchsploit Copy of Kernel Exploit|600]]
+![[exploitdb_searchsploit_copy.png|Searchsploit Copy of Kernel Exploit|600]]
 > [!info] Info - Windows Privilege Escalations Resource
 > There are many kernel privilege escalation exploits but they are not the only method of access as there can be misconfigurations on a system as well that leaves it vulnerable.  Another of my favorite security websites is Carlos Polop's Hacktricks book which includes a long list of viable attacks.  https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation
 
@@ -122,38 +122,38 @@ Consider the running processes on the Windows VM that we previously reviewed.  S
 >```shell
 >sc create vulnerable binPath= "C:\Windows\system32\SearchIndexer.exe /Embedding”
 >```
->![[../images/06/win_privesc_service_create.png|Creating a Windows Service|600]]
+>![[win_privesc_service_create.png|Creating a Windows Service|600]]
 >After the service is successfully created, I update the ACL of the service to be world writable using the sdset option of the sc command.  This setting allows any user to modify the service opening it up to abuse.  The long string that is included within the command can be deciphered using Winhelponline's great article.  [^2]
 >```cmd
 >sc sdset vulnerable "D:(A;;CCLCSWRPWPDTLOCRRC;;;WD)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;WD)(A;;CCLCSWLOCRRC;;;WD)(A;;CCLCSWLOCRRC;;;WD)S:(AU;FA;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;WD)"
 >```
->![[../images/06/win_privesc_permissions.png|Setting Permissions on Vulnerable Service|600]]
+>![[win_privesc_permissions.png|Setting Permissions on Vulnerable Service|600]]
 >The last component of the vulnerable setup is to have a low privileged user that we will use as the simulated victim an attacker has compromised.  Using the net commands I check my system and see that I still have the `tester` user created from a previous activity.  I also confirm that the tester user is not a member of the local administrators group.
 >```cmd
 >net user
 >net localgroup administrators
 >```
->![[../images/06/win_privesc_net_user.png|Confirming Low Privileged User Tester Exists|600]]
+>![[win_privesc_net_user.png|Confirming Low Privileged User Tester Exists|600]]
 >My `daniel` user is a member of the local administrator group but `tester` is not.  I log out of the `daniel` account and then login as the `tester` user.  Then I open a command prompt (non-admin), as the attacker who compromised the `tester` user, and update the vulnerable service with a new command.  This malicious command adds the `tester` user to the local administrators group.
 >```cmd
 >sc config vulnerable binpath= "net localgroup administrators tester /add"
 >```
->![[../images/06/win_privesc_update_service.png|Updating Vulnerable Service With Malicious Command|600]]
+>![[win_privesc_update_service.png|Updating Vulnerable Service With Malicious Command|600]]
 >The service has been updated with my new command.  Once the service is restarted, such as during a reboot, the `tester` user should be made an administrator.  The service can do this because it runs as the SYSTEM user and can run any valid command on the system.  If I tried adding the `tester` user to the admin group with just that net localgroup command, I would receive a permission denied error.  I can force the service start by running the following command.
 >```cmd
 >sc start vulnerable
 >```
->![[../images/06/win_privesc_start_service.png|Starting Windows Vulnerable Service|600]]
+>![[win_privesc_start_service.png|Starting Windows Vulnerable Service|600]]
 >Notice the StartService failure message?  This is because the command provided as a binary path isn't a valid binary.  But the command should have still ran regardless of the failure message.  To confirm, I re-run the net localgroup command and see that the `tester` user is now a member of the local administrator group!
 >```cmd
 >net localgroup administrators
 >```
->![[../images/06/win_privesc_success.png|Tester User Privileges Escalated to Local Admin|600]]
+>![[win_privesc_success.png|Tester User Privileges Escalated to Local Admin|600]]
 >For sake of clean up, I remove the vulnerable service with the following command.
 >```cmd
 >sc delete vulnerable
 >```
->![[../images/06/win_privesc_cleanup.png|Removing Vulnerable Service|600]]
+>![[win_privesc_cleanup.png|Removing Vulnerable Service|600]]
 
 > [!exercise] Exercise - Windows Service Privilege Escalation
 > You will create a vulnerable service and then escalate your privileges by exploiting this service in your Windows VM with Bridge Adapter network mode.
@@ -210,7 +210,7 @@ Several demonstrations throughout this book use the `sudo` command to elevate pe
 
 In the Operating System Security chapter we examined what SUID executables are and how they work to provide users permissions to run the executable as the file's owner.  Similar to the sudo abuses to escalate privileges, SUIDs too can be abused by an attacker to potentially achieve and escalation of privilege.  One of my favorite websites that itemizes sudo and SUID privilege escalation abuses is GTFOBins.  It maintains a curated list of many native Linux binaries and known ways they can be abused.  The following image shows how the `base64` command can be used to escalate privileges for SUID and sudo if a system is misconfigured. [^4]
 
-![[../images/06/gtfobins.png|Base64 Page From GTFOBins Website]]
+![[gtfobins.png|Base64 Page From GTFOBins Website]]
 
 
 > [!activity] Activity - Linux SUID Privilege Escalation
@@ -221,19 +221,19 @@ In the Operating System Security chapter we examined what SUID executables are a
 > sudo install -m =xs $(which base64) .
 > ls -la base64
 > ```
-> ![[../images/06/linux_privesc_base64_copy.png|Creating Vulnerable Base64 Binary|600]]
+> ![[linux_privesc_base64_copy.png|Creating Vulnerable Base64 Binary|600]]
 > The action above simulates a system administrator configuring the binary for elevated use.  Although the `daniel` user is a member of the sudo group, I won't use sudo to access the restricted shadow file.  For example, attempting to cat the shadow file or base64 encoding it results in permission denied messages.  I use the which command to find the original base64 binary and specify its use when testing the shadow file.
 > ```bash
 > cat /etc/shadow
 > which base64
 > /usr/bin/base64 /etc/shadow
 > ```
-> ![[../images/06/linux_privesc_denied.png|Permission Denied Accessing Shadow File|600]]
+> ![[linux_privesc_denied.png|Permission Denied Accessing Shadow File|600]]
 > Now the user can abuse the SUID base64 binary version that is installed on the desktop by base64 encoding the shadow file and then base64 decoding the encoded output to reveal the contents of the shadow file!
 > ```bash
 > ./base64 "/etc/shadow" | base64 --decode
 > ```
-> ![[../images/06/linux_privesc_base64_abuse.png|Abusing Base64 SUID Revealing Shadow Contents|600]]
+> ![[linux_privesc_base64_abuse.png|Abusing Base64 SUID Revealing Shadow Contents|600]]
 > The output to the command above displays the root user's hashed password which can be attempted to brute force offline and then used to escalate privileges to the root user. 
 
 > [!exercise] Exercise - Linux SUID Privilege Escalation
@@ -292,14 +292,14 @@ Having a firm understanding of these registers are needed in order to debug and 
 A system's CPU can only process a small amount of data, or instructions, at a time as it has a limited number of registers.  Therefore, the CPU needs to offload the storage of data onto another fast, but not as fast, cache location.  Systems leverage *random access memory (RAM)*, exactly for this task.  When an executable is initiated, its code and data are copied from disk and placed into memory where it will be used by the CPU during runtime.
 
 Programs are initialized into memory within a block space which is separated into the *stack*, *heap*, *data*, and *text* segments.  The following illustration shows the order of the segments with the lowest (first) segment used for text and the highest segment used for the stack segment.  The space between the stack and heap segments can dynamically adjusted for either segment as needed by the program.
-![[../images/06/buffer_mem_layout.png|Memory Layout Segment Order|150]]
+![[buffer_mem_layout.png|Memory Layout Segment Order|150]]
 You can think of the block of memory as a empty cup.  Water (data) fills the cup (block) from the bottom to the top.  The stack segment holds data that will be processed by program functions.  Other data used by the program is stored within the heap segment.  Global variables are located in the data segment while all the program's code is within the text segment.  Memory address space is represented as a 4 or 8 byte hexadecimal value in 32-bit or 64-bit architecture systems respectively.  As one byte includes two hexadecimal digits, the an example address for a 32-bit system would look something like `0x012A341C`. 
 
 > [!tip] Tip - Working in Memory
 > When first learning about how computer memory is organized I often confused a memory address with the data residing at that memory location as they are both in hexadecimal.  It is important to understand that both address and the values at those addresses are typically represented as hexadecimal values.
 
 The stack segment is highly used and very dynamic.  Program functions that execute tasks usually require inputs, often called *parameters* or *variables*.  These values can be supplied from system data or even input from the user.  The variable is put onto the stack by the *POP* assembly mnemonic in a last in first out (LIFO) order.  The CPU can then reference this value from the stack using its memory address.  Once the function's execution is complete, and a new function is needed to be setup in the stack, the values are removed using the *PUSH* mnemonic.  The stack is comprised of *stack frames* for each function being executed which is illustrated in the following image.   
-![[../images/06/buffer_stack.png|Stack Frame Topology|150]]
+![[buffer_stack.png|Stack Frame Topology|150]]
 
 The stack's starting location has an address in memory called the *stack pointer*, at the lowest address space, and is be used to reference the stack for execution.  Above the stack pointer is the *buffer* space of the stack frame where variables are store that are used for the function during processing.  The end of the stack frame is represented as the *base pointer* which is used by the CPU to track the stack frame's ending space.  Above (higher address space) the base pointer is the *return address* which is used to notify the running program where to go next after the function's execution is complete.  
 ### Analysis Tools
@@ -311,7 +311,7 @@ There is another class of tool that is useful for analyzing a program during run
 
 > [!tip] Tip - Endianness
 > Data sitting in memory may be written in a linear or reverse order depending on the type of architecture on the system.  The order of bytes written into memory is known as **Endianness** and requires careful consideration when manually analyzing memory.  *Big Endian* is when data is written from left to right whereas *Little Endian* is when data is written from right to left.  Endianness is a result of the designers of CPU architectures decided different ways on how to order data being streamed into memory based on a first in first out (FIFO) or a last in first out (LIFO) patterns.  The following diagram demonstrates how the decimal 1024 is written in hexadecimal in memory.  This decimal in hexadecimal encoding is `0x0400`.  Under big endian it would appear in memory as `0x0400` whereas using little endian format would be written as `0x0004`.
-> ![[../images/06/buffer_endianness.png|Endianness of Decimal 1024|300]]
+> ![[buffer_endianness.png|Endianness of Decimal 1024|300]]
 ### Overflow Security
 Careful memory management is required as programs often ingest inputs of varying size.  Such as in the case of a user supplied input, the size of the value needed in the program may not be known at the time the program is compiled so the programmer must allocate sufficient space on the stack to handle the variable.  If the developer, or compiler, does not properly handle the amount of space to be allocated in memory for the variable, they could introduce memory related security vulnerabilities.  These vulnerabilities could enable an attacker to hijack the execution flow of the program causing it to execute arbitrary code.  The impact of such a vulnerability depends on the context of the running program  For instance is the program is ran as a networked service, it could enable an attacker to gain initial access to the operating system the program is running on.  In another example, if the program is running under a privileged user context, like administrator or root, then the attacker can inject code into the program or cause the program to execute remote code under the privileged user context, known as privilege escalation.
 
@@ -330,13 +330,13 @@ A well written program can avoid memory security issues and the vulnerabilities 
 > sudo apt update -y
 > sudo apt install gdb -y
 > ```
-> ![[../images/06/buffer_activity_gdb_install.png|Installing GDB on Kali|600]]
+> ![[buffer_activity_gdb_install.png|Installing GDB on Kali|600]]
 > After GDB installation is complete I clone the Peda repository and the associated Python binary to the GDB configuration file.  Peda enhances GDB with features and formatting that I personally enjoy.
 > ```bash
 > git clone https://github.com/longld/peda.git ~/peda
 > echo "source ~/peda/peda.py" >> ~/.gdbinit
 > ```
-> ![[../images/06/buffer_activity_peda_install.png|Installing and Configuring Peda|600]]
+> ![[buffer_activity_peda_install.png|Installing and Configuring Peda|600]]
 > With GDB and Peda setup, I'll create the vulnerable C program under the file `program.c`.  This very simple program includes two functions called `hidden` and `main`.  The main function creates a buffer space of 100 bytes and uses the `gets` utility to accept user input and renders the input from the printf function.  The hidden function simply displays a static message; however there is no execution path to it from main.  This hidden function won't ever be ran by in this simple application.  I place the following source code into the program.c file.  
 > ```c
 > #include <stdio.h>
@@ -349,88 +349,88 @@ A well written program can avoid memory security issues and the vulnerabilities 
 > 	printf("Buffer Content is : %s\n",buffer);
 > }
 > ```
-> ![[../images/06/buffer_activity_program_source.png|Program Source Code|600]]
+> ![[buffer_activity_program_source.png|Program Source Code|600]]
 > After the C code is written, I compile it using the GCC compiler while application level security settings into an executable file `program`.  The compiler's output warns us the the gets function is dangerous - we'll ignore that concern and exploit it soon.
 > ```bash
 > gcc  -no-pie -fno-stack-protector -z execstack program.c -o program
 > ```
-> ![[../images/06/buffer_activity_compile.png|Compiling the Vulnerable Program|600]]
+> ![[buffer_activity_compile.png|Compiling the Vulnerable Program|600]]
 > I also want to disable ASLR protections on the operating system with the following command.  This ensures that each time our program runs it will use the same address space.
 > ```bash
 > echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
 > ```
-> ![[../images/06/buffer_activity_aslr_disable.png|Disabling ASLR Protections|600]]
+> ![[buffer_activity_aslr_disable.png|Disabling ASLR Protections|600]]
 > When the program is ran from the command line it waits for a user input.  When an input is entered the program takes the input and places it on the stack and then retrieves the value and prints it to the screen.  At no time is the hidden function executed as the static message "Congrats, you found me!" is displayed. I run the function using the following command and supplying it with "lol" then pressing enter.  As expected, it reflects back what I inputed.
 > ```bash
 > ./program
 > lol
 > ```
-> ![[../images/06/buffer_activity_baseline_input.png|Running Program With Non-Malicious Input|600]]
+> ![[buffer_activity_baseline_input.png|Running Program With Non-Malicious Input|600]]
 > I'll run the program again, but this time I'll supply it with around 150 letter "A"s.  This time the program returns a segmentation fault which means it likely found a return address in memory that it could not find so the program crashes.  This demonstrates the identification of the vulnerability as a well behaving program would fail gracefully.
 > ```
 > ./program
 > AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 > ```
-> ![[../images/06/buffer_activity_segfault.png|Identifying the Buffer Overflow|600]]
+> ![[buffer_activity_segfault.png|Identifying the Buffer Overflow|600]]
 > Now that an overflow vulnerability was detected I can being to explore how to hijack the execution flow of the program using the GDB debugger.  Before I start the application in the dugger I create an input.txt file that has 200 letter "A"s using Python.
 > ```bash
 > python -c "print('A'*200)" > input.txt
 > ```
-> ![[../images/06/buffer_activity_input_test.png|Creating Input File|600]]
+> ![[buffer_activity_input_test.png|Creating Input File|600]]
 > To launch the program into the debugger I run GDB with the `-q` flag to ignore the onload header and version banner while supplying GDB with the program name.  After GDB launches I am presented with the gdb-peda command line interface.
 > ```bash
 > gdb -q ./program
 > ```
-> ![[../images/06/buffer_activity_gdb_start.png|Starting Program in GDB|600]]
+> ![[buffer_activity_gdb_start.png|Starting Program in GDB|600]]
 > With GDB started I run the program and redirect the input text file with 200 "A"s into the program.  The program loads with the content of index.txt and immediately segmentation faults (segfaults).
 > ```bash
 > run < input.txt
 > ```
-> ![[../images/06/buffer_activity_gdb_segfault.png|Running Program in GDB with Input|600]]
+> ![[buffer_activity_gdb_segfault.png|Running Program in GDB with Input|600]]
 > GDB returns the register, code, and stack at the time of the segfault.  The first section of the GDB report shows me all the CPU registers and their values when the program crashed.  The 200 "A"s filled up the buffer and then wrote over the stack and base pointer (RBP/RSP) registers which cause the program to crash.
-> ![[../images/06/buffer_activity_initial_registers.png|Initial Crash Registers|600]]
+> ![[buffer_activity_initial_registers.png|Initial Crash Registers|600]]
 > The bottom half of the report includes the code, stack, and summary sections.  The stack if filled with the letter "A" and the end of the report suggests that the program reached an address `0x401196` referenced in the index pointer (RIP) to a location memory that return a value that was not accessible or executable by the program so it crashed.
-> ![[../images/06/buffer_activity_initial_stack.png|Initial Crash Stack|600]]
+> ![[buffer_activity_initial_stack.png|Initial Crash Stack|600]]
 > I want to target the index pointer register to eventually hijack the execution flow by inserting an address into the index pointer to code that I want to run - the hidden function.  I need to identify which position of the 200 "A"s write into the index pointer register.  I use the Peda pattern create utlitity which make a non-repeating string that I'll use as the input when I rerun the program.  Then I can see the value written into the index pointer and find the position in the pattern create string that matches telling me which character position of my input eventually overwrites the index pointer.
 > ```bash
 > pattern create 125 pattern.txt
 > ```
-> ![[../images/06/buffer_activity_pattern.png|GDB Pattern Create|600]]
+> ![[buffer_activity_pattern.png|GDB Pattern Create|600]]
 > I run the GDB loaded program again but redirect the input pattern.txt.  Once again this causes the program to crash except this time I can observe the RIP has a string value `jAA9A` that will match some part of the string from pattern.txt.
 > ```bash
 > run < pattern.txt
 > ```
-> ![[../images/06/buffer_activity_pattern_crash.png|Crash From Pattern Input|600]]
+> ![[buffer_activity_pattern_crash.png|Crash From Pattern Input|600]]
 > Using the Peda plugin pattern tool again, I reference the index pointer value from the crash to find the character position that overwrites the index pointer, called the *offset*.  The pattern offset command requires the hexadecimal value of the string.  The offset command identifies that the 120th character is the start of the string segment.
 > ```bash
 > pattern offset 0x413941416a
 > ``` 
->  ![[../images/06/buffer_activity_offset.png|Pattern Offset Character Position|600]]
+>  ![[buffer_activity_offset.png|Pattern Offset Character Position|600]]
 >  To test the offset I'll craft a new input that places 120 letter "A"s and then 6 letter "B"s into a new text file using a fresh terminal (outside of GDB).  This file will next be used as the input to another run command that causes another crash.
 >  ```bash
 >  python -c 'print("A"*120+"BBBBBB")' > rip.txt
 >  ```
->  ![[../images/06/buffer_activity_rip_test.png|Crafting Index Pointer Offset Test Input|600]]
+>  ![[buffer_activity_rip_test.png|Crafting Index Pointer Offset Test Input|600]]
 >  Running the new input should cause the program to crash, except this time the index pointer should be overwritten with just the letter "B".  Once confirmed, I can swap out that position in the input with another memory address where I want the program to execute.
 >  ```bash
 >  run < rip.txt
 >  ```
->  ![[../images/06/buffer_activity_write_b.png|Testing Index Pointer Overwrite with B|600]]
+>  ![[buffer_activity_write_b.png|Testing Index Pointer Overwrite with B|600]]
 >  Looking at the index pointer I see it is now `0x424242424242` which is hexadecimal for the letter "B"!  Now that I have demonstrated that I can take control of the program, I need to identify what code that is loaded into memory that I want to execute.  As the objective of this demonstration was to execute the `hidden` function that is otherwise unreachable, I need to find where that function is on the stack.  To do this I use the `p` command in GDB and supply the name of the function which returns its memory address `0x401146`.
 >  ```bash
 >  p hidden
 >  ```
->  ![[../images/06/buffer_activity_func_address.png|Finding Hidden Function's Address|600]]
+>  ![[buffer_activity_func_address.png|Finding Hidden Function's Address|600]]
 >  Now I have all the pieces needed to craft an exploit that hijacks the program's execution path and causes the hidden function to be executed.  My goal is to overwrite the index pointer with the address of the hidden function.  This will require me to convert that hidden function address into shellcode little endian 64-bit format which is `\x46\x11\x40\x00\x00\x00`.  This is the reverse order of hexadecimal values with `00` used as padding to fill the 64-bit space.  Note that each hexadecimal has `\x` preceding it.  I place 120 "A"s and then the shellcode address to the hidden function into an exploit text file from a new terminal outside of GDB.  Observe too that the hexadecimal is not render to standard output because the values are non-ascii.
 >  ```bash
 >  python -c 'print("A"*120+"\x46\x11\x40\x00\x00\x00")' > exploit.txt
 >  ```
->  ![[../images/06/buffer_activity_exploit_dev.png|Crafting Exploit|600]]
+>  ![[buffer_activity_exploit_dev.png|Crafting Exploit|600]]
 >  Finally, it is time to run the program with the exploit as the input and see if I get the hidden function to print the static "Congrats, you found me!" output.
 >  ```bash
 >  ./program < exploit.txt
 >  ```
->  ![[../images/06/buffer_activity_exploited.png|Program Exploited|600]]Huzzah!
+>  ![[buffer_activity_exploited.png|Program Exploited|600]]Huzzah!
 
 
 > [!exercise] Exercise - Stack Smashing the Hidden Function

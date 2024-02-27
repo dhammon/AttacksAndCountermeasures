@@ -26,7 +26,6 @@ Commands with `<SOME_VALUE>` should be replaced with the value relative to your 
 Code blocks
 ```
 
-
 > [!info]
 callout block
 
@@ -51,3 +50,9 @@ Lab assignments
 Demos and activities
 ## Acknowledgments
 https://www.bing.com/images/create
+
+## TODO
+- Create Activities for exercises in Cryptology
+- Create Activities for exercises in Network Security
+- Move chapters 1-6 Exercises to end of chapter
+- Security resources: podcasts, sites, training, youtube, reddit, newsletters
