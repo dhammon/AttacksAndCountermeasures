@@ -156,7 +156,7 @@ The syntax and layout of a rule is largely dependent on the security system it i
 ![[../images/07/snort_rule.png|Demo Snort Rule Anatomy|550]]
 Each rule must include a header and option section.  The header is the first line of the rule and includes the action, TCP and/or UDP protocol, source address and port, directionality of the network request ingress or egress, and the destination addresses or ports.  They system allows for macro variable creations and supports IP and port ranges.  The body of the rule, options, is a list of key value pairs.  There are several options available that are not listed in this sample, therefore many options are not required.  However common options include the `msg` key which is used as the name or description of the alert, the flow of data, file data, the content to be found, the service to inspect, and an `sid` to uniquely index the rule.
 
->[activity] Activity 7.3 - Snort PCAP Analysis
+>[!activity] Activity 7.3 - Snort PCAP Analysis
 >Snort is a fantastic tool that supports preinstalled and custom rules.  I will use a packet capture from malware-traffic-analysis.net who maintains a growing list of network attack samples to practice analyzing.  Beware that the cases on malware-traffic-analysis.net contain real malware and you should proceed with caution.
 >
 >Using the Ubuntu VM in Bridge Adapter network mode, I login, open a terminal, and install Snort after updating the machine.  I accept the default network configurations for Snort when the Package configuration interface pops up.
@@ -170,17 +170,20 @@ Each rule must include a header and option section.  The header is the first lin
 >cd ~/Downloads
 >unzip 2016-04-16-traffic-analysis-exercise.pcap.zip
 >```
->![[../images/07/snort_activity_download.png|Unzipping PCAP|600]]
+>![[../images/07/snort_activity_unzip.png|Unzipping PCAP|600]]
 >This PCAP includes case information surrounding a phishing site with a spoofed Paypal credentials form.  The indicators of attack include the IP address 91.194.91.203 on port 80 and the page includes the keyword "paypal".  With this information I create a Snort detection rule that can be used to detect network traffic reaching the malicious site.  The following command adds the custom rule to the local rules file in the Snort configuration.
 >```bash
 >sudo su -
 >echo 'alert tcp 91.194.91.203 80 -> $HOME_NET any (msg:"Paypal phishing form"; content:"paypal"; sid:21637; rev:1;)' >> /etc/snort/rules/local.rules
+>exit
 >```
 >![[../images/07/snort_activity_custom_rule.png|Creating Custom Snort Rule|600]]
 >With the rule in place I scan the case PCAP file using Snort.  The following command uses the default configuration file, reads the PCAP file to the console, and has the options `-q` which removes the banner, `-K` enables logging mode, and `-A` that enables alert mode.
 >```bash
->
+>sudo snort -c /etc/snort/snort.conf -r 2016-04-16-traffic-analysis-exercise.pcap -q -K none -A console
 >```
+>![[../images/07/snort_activity_scan.png|Scanning PCAP With Snort|600]]
+>Snort alerts on several items, but notably it alerts on the Paypal phishing form rule created earlier!
 
 ## Data Loss Prevention
 Insider Threat

@@ -146,13 +146,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2ec839b962581d99",
+  "active": "0222551eff2d37c8",
   "lastOpenFiles": [
+    "images/07/snort_activity_scan.png",
+    "images/07/snort_activity_unzip.png",
+    "images/07/snort_activity_download.png",
+    "textbook/07-SecuritySystems.md",
     "files/2016-04-16-traffic-analysis-exercise.pcap.zip",
     "images/07/snort_activity_custom_rule.png",
-    "images/07/snort_activity_download.png",
     "textbook/00-Introduction.md",
-    "textbook/07-SecuritySystems.md",
     "images/07/snort_activity_install.png",
     "images/07/snort_rule.png",
     "images/07/inline_arch.png",
@@ -160,7 +162,6 @@
     "images/07/email_arch.png",
     "images/07/vuln_activity_finding.png",
     "images/07/vuln_activity_host_results.png",
-    "images/07/vuln_activity_scanning.png",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "images/07/security_patch.jpg.crdownload",
     "images/07",
@@ -176,7 +177,6 @@
     "images/06",
     "README.md",
     "images/05",
-    "files/kansascityWEP.pcap",
-    "files"
+    "files/kansascityWEP.pcap"
   ]
 }
