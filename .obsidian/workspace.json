@@ -146,12 +146,13 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0222551eff2d37c8",
+  "active": "2ec839b962581d99",
   "lastOpenFiles": [
+    "textbook/03-NetworkSecurity.md",
+    "textbook/07-SecuritySystems.md",
     "images/07/snort_activity_scan.png",
     "images/07/snort_activity_unzip.png",
     "images/07/snort_activity_download.png",
-    "textbook/07-SecuritySystems.md",
     "files/2016-04-16-traffic-analysis-exercise.pcap.zip",
     "images/07/snort_activity_custom_rule.png",
     "textbook/00-Introduction.md",
@@ -161,7 +162,6 @@
     "images/07/tap_arch.png",
     "images/07/email_arch.png",
     "images/07/vuln_activity_finding.png",
-    "images/07/vuln_activity_host_results.png",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "images/07/security_patch.jpg.crdownload",
     "images/07",
@@ -170,7 +170,6 @@
     "files/2023-data-breach-investigations-report-dbir.pdf",
     "files/2016-04-16-traffic-analysis-exercise-alerts.zip",
     "textbook/04-NetworkServices.md",
-    "textbook/03-NetworkSecurity.md",
     "textbook/02-Cryptology.md",
     "textbook/01-InformationSecurity.md",
     "textbook/05-OperatingSystemSecurity.md",
