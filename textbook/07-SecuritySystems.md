@@ -191,11 +191,55 @@ The Verizon DBIR suggests a material percentage of data breaches are caused by i
 Regardless of the motivation, insiders pose a significant threat to the confidentiality of information at organizations.  There are several systems usually in use at most organizations that can assist with **data loss prevention (DLP)** in which the system can identify, alert, and block data exfiltration attempts.  Traditionally, DLP efforts relied on existing tools such as disabling USB ports removing DVD burners on workstations.  Other legacy efforts could rely on *URL filtering* at the firewall blocking certain file sharing websites, such as Dropbox, from being reachable from within organization networks.  Email systems also have capabilities built in to identify and prohibit certain types of outbound emails by searching for strings of characters or *regular expressions* within the body of emails or file attachments.  These traditional methods are effective at blocking many types of inadvertent attempts but they are not centralized or comprehensive.
 
 The next generation of DLP solutions hitting the marketplace over the last several years solve for some of the challenges with legacy features of existing tools.  Most of them require an organization to have a firm understanding of the type of data it wishes to protect, such as a clear data classification and labeling scheme.  The DLP solution installs on workstations and proxies all network connections monitoring the destination and data contents while classifying the data in accordance with policies.  They build profiles of user behavior and rate each user by risk so that security analysts can focus efforts on those posing the most risk.  For instance, these systems could identify if an organization member has access to a lot of classified data and are visiting common job listing websites while having a resume file on their desktop.  The system would rate this behavior as a high risk and an analyst could monitor their actions more carefully.  The current DLP solutions enable administrators to limit a vast array of websites data is permitted to be transferred to as well - keeping up to date with the less popular or more obscure sites someone might use to extract data from the organization.
-## Honeypots
-Canary tokens
+## Deceptive Security
+Defenders can leverage an attacker's own activity against them through **deceptive security** where the malicious actor is tricked into setting off an alarm.  This can be accomplished by enticing them with a lure, or something an asset that is too good to pass up.  After initial access, attackers may enumerate files and network devices from the compromised machine.  A carefully placed file or system with an interesting name may attract the advisory into open the file or establishing a network connection.  Those within the network would otherwise have no business opening these files or establishing such network connections providing the defender with the opportunity to easily identify potential malicious activity.
+
+These deception techniques are designed to alert security analysts of the activity providing a critical opportunity to identify should an attacker have breached the network.  One type of deception technique is the use of **canary tokens**, named after the canary in the coalmine to notify miners of poisonous gasses that kill the bird before the workers, that are often stored within files, credentials or even database values.  If the file is opened it reaches out to a server with the token value that is associated with metadata related to the placement of the file as illustrated in the image below.
+![[../images/07/canary.png|Attacker Triggering Alert From A Canary File|300]]
+
+These work as many rich filetypes, such as Microsoft Word, allow for rich content such as rendering images.  The token value can be used in the source of the URL where the image is to be requested from thus triggering the alert.  Similarly a canary token can be placed within the contents of a database or file and a firewall rule can be created that alerts should that value ever be present in an outbound connection.  This scenario would indicated an attacker exfiltrating data.
+
+
+> [!tip] Tip - Thinkst Canary Tokens
+> One of the industry leaders of deceptive security is Thinkst.  They maintain the free website https://canarytokens.org/generate where you can create a canary laced file and listener hosted on their servers.  Place the file on a file share and if anyone opens it a connection with the canary value is made to the Thinkst servers where an email alert will be triggered and sent to you.
+
+Another deception technique that attracts a malicious actor inside a network is a **honeypot**.  These are usually servers that have one or many network ports and services open to the network.  If any connection is made to the server an alert is sent to security administrators to investigate.  A good honeypot is carefully designed as to not alert the attacker that it is a honeypot, both before and after any connection attempts are made.  Many security researchers setup honeypots on the open internet in order to gather public attack statistics.  In fact, VulnCheck suggests that of the 200,000+ Atlassian Confluence servers on the internet, some 97% are actually honeypots! [^2] 
+
+![[../images/07/honeypots.png|Honeypot Network Setup|400]]
+
+The image above illustrates an attacker making a network connection to a honeypot which in turn notifies the security team.  Network defenders setup honeypots within trusted networks to be notified should their perimeter be breached.  Both honeypots and canaries are excellent indicator of compromise (IoC) solutions that are widely used in mature security organizations.
 
 > [!activity] Activity 7.4 - MySQL Honeypot
-> lol
+> I'll demonstrate the installation and setup of a honeypot on the Ubuntu VM from Qeeqobx's honeypots Python module at https://github.com/qeeqbox/honeypots.  This honeypot will serve a MySQL database that appears like a functional service but will produce logs of any activity.  A MySQL database would likely be of interest to an attacker as they may be interested in accessing the organization's data.  These logs can be sent to a SIEM or other monitoring solutions to notify defenders.  Using the Kali VM, I'll attempt a connection and observe the logging capabilities of the service.
+> 
+> After starting the Ubuntu VM in Bridge Adapter network mode and then logging in, I open a terminal install Python's Pip3 package manager which will allow me to install python modules.
+> ```bash
+> sudo apt install python3-pip -y
+> ```
+> ![[../images/07/honey_activity_pip_install.png|Installing Python3 PIP|600]]
+> Once Pip is installed I install the honeypots Python module with the following command.  Several supporting dependencies are installed along side the honeypots module.
+> ```bash
+> pip3 install honeypots
+> ```
+> ![[../images/07/honey_activity_install.png|Installing Honeypots Module|600]]
+> I also check the IP address of the Ubuntu VM to use later in the attack.  I can see my IP address is 192.168.4.169.
+> ```bash
+> ip a
+> ```
+> ![[../images/07/honey_activity_ip.png|Ubuntu IP Address Check|600]]
+> The final step to setup the MySQL honeypot is to run Python specifying the honeypots module with the setup option that specifies the MySQL service and port as shown in the following command.  The command's output displays the service settings and suggests everything looks good.
+> ```bash
+> python3 -m honeypots --setup mysql:3306
+> ```
+> ![[../images/07/honey_activity_honeypot_setup.png|Running the MySQL Honeypot|600]]
+> With the honeypot setup and running I start the Kali VM in Bridge Adapter network mode which will serve as the attacker.  After logging in and opening a terminal I attempt a MySQL connection to the honeypot using the MySQL client already installed on Kali.  I guess a username (admin) and password (Password123) to simulate an attacker probe but receive a valid MySQL error 1045.  This would lead the attacker to believe that the MySQL server is valid but the guessed credentials were not valid.
+> ```bash
+> mysql -h 192.168.4.169 -u admin -pPassword123
+> ```
+> ![[../images/07/honey_activity_attack.png|Attacker Connecting to MySQL Honeypot|600]]
+> Jumping over to the Ubuntu VM and observing the honeypot log I can see the attacker connection attempt!  It includes information such as the timestamp, guessed username, and source IP address of where the attack came from.
+> ![[../images/07/honey_activity_log.png|Honeypot Log of Attack|600]]
+> In a full setup this log would be used to trigger an alert to a security operations team who would investigate and determine the severity of the alert.
 
 ## Exercises
 > [!exercise] Exercise 7.1 - Breach Report
@@ -306,3 +350,4 @@ Canary tokens
 >Return to the Ubuntu VM and observe attack registered! 
 
 [^1]:2023 Verizon Data Breach Investigations Report; 2023 Verizon
+[^2]: There Are Too Many Damn Honeypots; February 2, 2024; Jacob Baines; https://vulncheck.com/blog/too-many-honeypots

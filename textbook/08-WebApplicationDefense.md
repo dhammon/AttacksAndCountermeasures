@@ -1,0 +1,267 @@
+# Web Application Defense
+![](../images/08/web_defense.jpg)
+
+The connections of networks with other networks has given rise to the internet over the past several decades.  However, the internet's popularity grew substantially in the late 90's due to the rise of the *hypertext transfer protocol (HTTP)* and web sites.  Many people came to understand the internet as a collection of web pages; however, informed individuals know that the internet offers much more.  Early websites often only offered a static brochure of information with little interaction from website users.  As popularity grew so did the demand and expectation of dynamic features which eventually carved the way to *web applications*.  These sites provide users with a rich experience comprising of dynamically generated pages and user inputs while at the same time increasing the security risks.  In this chapter we will explore the web application fundamentals and basic security architectures used with modern domains.  We will also learn how organizations ensure the secure development of web applications.
+
+**Objectives**
+1. Understand the basic architecture of web application and supporting systems.
+2. Harden web application servers with encryption and web application firewalls.
+3. Ensure the secure development of modern web applications.
+## Web Application Fundamentals
+The first major section of this chapter will offer the reader a brief working overview of web architecture and design.  It will also cover some of the common development strategies and technologies in use by organizations.
+### Web Architecture
+You may recall covering the *client-server model* in earlier networking chapters.  HTTP is a stateless protocol which means that the connection state does not persist after data transfer.  This means that, as part of the protocol itself, a client and server's interaction starts and ends with a request and a response while over TCP.  The client is usually a web browser, such as Chrome or Firefox, and the server is a *web server* which has an HTTP service.  Common web server technologies for Linux systems are Apache and Nginx and for Microsoft systems *Internet Information Services (ISS)*.  These technologies are installed on base operating systems and configured to listen on network ports waiting for requests.  HTTP is usually served over port 80 or 443 when using transport layer security (TLS).   As illustrated below, a request connection is initiated by the client.  The web server receives the request and provides the response.  Typically, the data retrieved from web servers are files, images, and data.
+![[../images/08/client_webserver.png|Connections Between Clients and Web Servers|250]]
+
+These servers can deliver *static* files including *hypertext markup language (HTML)* content, *cascading style sheets (CSS)* used for centralized formatting, and images.  The developers of these sites design the layout and flow of pages but are not too prevalent with today's modern web systems.  The next generation of web technologies enabled the *dynamic* generation of web pages.  Typically the client provides the web server some information which is used by the web server's technology stack to process the input and generate a unique page for the client.  This is a common approach to delivering dynamically generated web pages that is used by PHP, Java Server Pages (JSP), and other technologies.  Usually there is a database server that holds all the data which supports the functioning of the web site.  As part of the web server's processing of client requests, it reached out to the database server and *creates*, *reads*, *updates*, or *deletes* *(CRUD)* information that is used in the final file response to the client.  The database server, such as MySQL or Postgres, can be installed on the same server as the web server, but is best installed as a stand alone server and not directly exposed to the internet.  Having these servers on different machines ensures *separation of concerns* and allows administrators to maintain components individually.  The collection of the system server, web technology, database, and programming language is often referred to as the *technology or web stack*.
+
+A downside to the dynamically generated page architecture is that it requires heavy processing and rendering of pages on the web server.  A lot of server resources are wasted generating the same pages over and over again with only some data content differing between each generation.  It also requires that the single server maintain the front and backend logic of the application which violates the separation of concerns.  Instead of having a unique dynamically generated file for each page or file, modern systems are **single page applications (SPA)** where a single frontend file is downloaded to the client and subsequently updated locally instead of being processed by the web server.  The web server free of generating pages instead handles the logic to generate data to send to the client.  The client receives the data and updates the SPA presented to the user.
+
+![[../images/08/spa.png|Single Page Application Architecture|350]]
+The SPA architecture illustrated above demonstrates how the front end of the application is first delivered to the client.  The client then requests data from the web server who uses the information stored in the database to generate and deliver a response.  The data returned to the client is then injected into the front end page originally requested by the client.  You may have notice some websites you visit load partially and after a second or two, hopefully not more than that, then display the relevant data on the page.  This could be indicative of an SPA first downloading the application from a frontend system, and then retrieving data from the backend system.  As you navigate the site the pages being rendered are actually all done locally in your browser; however, the data of the pages is being retrieved from the web server!  As mentioned earlier in this section, browsers can interpret HTML, CSS, and image files but the use of logic in those technologies is very limited.  JavaScript is used to interact with the browser's *document object model (DOM)*, which include the features and elements of a page, and to apply logical operations.  This language originally was developed for client browser use but has recently been popularized for backend programming as well through NodeJS.  Therefore a frontend SPA is usually written in JavaScript while the backend can be written in many other programming languages, including the ones mentioned earlier or even JavaScript!
+
+Backend web application systems, sometimes referred to as *services or microservices*, are not designed for user experience.  They are web-based **application program interface (API)** meant for machine to machine interactions and not human to machine.  Each API URL, called *endpoints*, accept one or more *HTTP methods* that usually align with CRUD operations.  API's respond with a blob of data that is organized in a manner that can be easily processed by the SPA.  The format of this data is commonly *extensive markup language (XML)* or *JavaScript object notation (JSON)* formats.
+
+> [!info] HTTP Methods
+> HTTP supports several request types called HTTP methods.  Common methods are PUT, GET, POST, DELETE which align with database CRUD operations.  When a client makes a request to a web server, it must include the HTTP method along with the file and any parameters.  The web server receives the request and parses the method, file path, and parameters which are used in the logic to prepare the response.
+
+The following diagram builds off the basic client and web server model shared earlier in which an SPA client makes an HTTP request to an API endpoint on a web server.  The web server responds with a JSON object that includes key value pairs of data that is processed by the SPA to give the user a unique experience. 
+![[../images/08/api.png|API Interaction with SPA|450]]
+In this image the data returned from the server is the name of the user and an empty response for the car variable.  The SPA parses this data and uses the name field to render the text "Welcome John!" and display the no car selected banner.  The delivery of this small JSON file is less resource intensive then the web server having to process and generate the entire page as with dynamically generated pages.
+### Engineering Processes
+Organizations with more than a handful of web developers will usually establish technologies and practices to facilitate building of web applications.  As web development teams expand, it becomes increasingly important to establish how software is created and delivered to ensure the consistency and functionality the web application.  Additionally, these management systems assist in the later modification of the web application helping to ensure changes don't break the application's functionality for its userbase.
+
+There have been many **software development lifecycles (SDLC)**, or generalized software development management models, created over the decades and we will focus on the two major ones.  The SDLC *waterfall* is a method of planning and executing the workload of a software project.  It usually begins with a team determining the objectives, timelines, and documentation of the needed software.  These plans are then passed to a team of developers who are responsible for the creating the software to terms with the plan.  Once created the software is tested and delivered as a final product at which point it goes into a maintenance mode of making only needed changes to ensure its continued functionality.  Waterfall is usually criticized for being rigid, unadaptable, and costly due to underestimates of timelines and costs.  A software project that takes two years to create may miss market opportunities and therefore delivery little business value.  Many development shops now use the *agile methodology* of designing and delivering software.  Workload under agile management systems is created and added to a backlog of requests for development.  Agile teams then select and commit to work in 1-3 week *sprints* after which a new sprint or catalog of work is created and the process continues.  This method of development allows for the capitalization of changing market conditions however is often criticized for not allowing enough investment into any one area long enough to produce the business value needed.
+
+As an application grows in size and complexity it becomes increasingly difficult to ensure the quality of the software.  Many tactics are used used by developers to ensure the organization and quality of the source code such as *clean code strategies* and frameworks. **Software testing** is the process of ensuring that the software created performs as expected.  Tests are written alongside the application and are used to continuously validate the functionality of the code being developed.  *Unit* test logic ensures a specific function or method returns specific output given a set of inputs.  *Integration* testing measures the connections between systems, such as between a web server and a third party API.  *Functional* testing follows along the user interface and checks that the flow of the application performs as intended.  Finally there are *security* tests that check for vulnerabilities and misconfigurations - which we will explore in the second half of this chapter.
+
+> [!info] Monoliths Versus Microservices
+> Some software is developed into one large and complex project called a *monolith*.  These systems require a high cognitive load and learning curve for developers to understand how the application functions.  Another concern with monoliths is that they may run on a single system and if that system malfunctions the entire application could become unavailable - a single source of failure.  The *microservice* architecture breaks a monolith into interconnected yet independently ran components.  Doing so allows each component to be ran on separate systems from each other.
+
+Developers need a method of sharing the source code they develop with each other as well as the administrators or operators who deploy the code to web servers.  **Version control systems (VCS)**, such as the very popular GitHub, are source code management systems that provide developers many features including a central place to store and share code, ability to verify code before it is merged into the system, and audit functionality to review code changes over time or even revert the change.  These systems are of great security interest as many organizations place a high value on the source code of their applications.
+
+Some development shops divide the work development work and the running of applications between two teams known as development and operations.  The separation of these two entities provides an opportunity for control as the operators, who are usually system administrators, can ensure developed software meets system requirements prior to being released to a production environment.  However, this division in responsibilities can lead to a moral hazard where a developer may not care about the performance of their code as the operating system it runs on is not their problem.  Another criticism is that administrators may prevent the deployment of software as a gatekeeper without understanding the business demands or how the application works.  Out of these problems a newer process for operations emerged known as *devops* which is the combination of development and operations.  In its purist form, devops engineers are developers that are responsible for the deployment and maintenance of systems their applications run on.  Such a strategy requires the developer to understand both development as well as system administration which could be steeper learning curve than most developers are willing or able to handle.  Many development shops instead have a separate development teams and devops teams that work closely together to deliver safe and stable software - which seems to strike a good balance of needs for most organizations.
+
+I can be a challenge for a developer to deliver an application being developed to a devops team for deployment, or even to share the application with other developers.  The developer will usually be focused on the application and not the prerequisite technologies or instrumentation needed to run the application.  To streamline this process, many teams make use of **container** technologies which separate the running of applications in a segmented local environment that uses the host's operating system.  Containers offer the developer a method of transferring the needed system setup between their local environment to another developers all the way to a production environment.  Containers differ from virtual machines, which run independent operating systems on hypervisors, in that they use the host's operating system for interaction with the system hardware.  Containers are often mistook for security segmentation - a container does not represent a security boundary and should not be expected to protect the host computer from attacks through the container.
+## Web Application Defense
+Armed with our basic understanding of web application architecture and engineering practices we can begin to examine the security of web technology systems and secure development processes.  This section examines how to setup a web server with TLS encryption and a web application firewall.  Then we review web application security risks and treatments alongside the practical application of security scanning tools.
+### Encrypting HTTP
+When an client establishes an HTTP connection with a web server the communication between the two entities is in plaintext.  Any device sitting between the two entities, such as routers or MitM attackers, can inspect the traffic in its plain form.  This is a risk that is intolerable as many web applications today accept and transmit sensitive information like online bank login credentials and credit card numbers.  The confidentiality of such information is one serious concern, but so is the integrity of the data.  It is just as likely that ensuring the data is what is should be is just as important to web users as keeping the data private.  For example, ensuring a bank transfer account number wasn't altered while in transit over HTTP would be very important to the person expecting to send or receive those funds.
+
+The **transport layer security (TLS)** protocol supports many networking technologies by providing cryptographic features to the protocol, including HTTP.  Usually a protocol that uses TLS adds the letter "S" to the end of the protocol acronym as is the case for HTTP where the encrypted version is called HTTPS.  This secured protocol is served over port 443 by default and is recognized by clients automatically.  It is easy to not notice when a web site uses HTTPS as it has become the expected for any reputable website.  In order to use TLS with HTTP, a web server must be configured with a valid certificate.  Once configured, the system uses asymmetric encryption keys, one public and one private, to encrypt messages with clients as demonstrated in the figure below.
+![[../images/08/https.png|HTTPS Connection Flow|400]]
+An HTTP client establishes a TCP connection with a web server over port 443 configured for TLS encryption.  The client and web server then negotiate the encryption ciphers and key strength they can use selecting the most secure available to both.  The web server then delivers its **certificate** which includes the information about the encryption it uses, such as key expiration, issuer, and its public key.  Having received the web server's public key, the client generates a unique private symmetric key and encrypts it using the web server's public key.  The client then sends its encrypted symmetric key to the web server who uses it to encrypt responses to the client.  The client also uses the symmetric key it generated to encrypt any requests.
+
+A TLS certificate can be generated using tools like OpenSSL which we used in the Cryptology chapter.  But the issue is that web browsers won't recognize such certificates as they have been **self-signed** instead of being issued by a recognized **certificate authority (CA)**.  A *root CA* can generate certificates or can generate *intermediate CAs* that can also create certificates.  CAs can also expire certificates earlier through *certificate revoke lists (CRL)* should a private key ever be compromised.   The following diagram illustrates a root server which stores the private keys needed to create certificate authorities with a *conical name (CN)*.  The CA can then issue certificates with their own name, domain, expiration and public key.  
+![[../images/08/certificate_authorities.png|Certificate Authority Creation Flow|600]]
+
+Protecting the root CA server that holds the private keys to create CAs and certificates is paramount.  Should the server ever be compromised all of its trusted certificates would need to be invalidated as the attacker could decrypt or modify any HTTPS traffic encrypted by them.  By default all certificates generated by all CAs are not trusted by operating systems and browsers and the use of any untrusted certificate will result in encryption error messages usually preventing access to the requested resource for your own protection.  Therefore, all browsers and operating systems come pre-installed with dozens of already vetted and trusted CAs.  Administrators can add any CA to a browser or operating system at which point the client will trust, assuming no misconfigurations or expirations, any certificate produced by that CA.
+### Web Application Firewall
+We covered network and host firewalls in earlier chapters but there is another firewall type often used with well protected web applications called a **web application firewall (WAF)**.  These firewalls are used for inspecting HTTP traffic for malicious payloads which they will alert and block from reaching the web server.  WAF solutions, such as the opensource ModSecurity or the commercial Imperva, sit between the client and the web server and act as a proxy, or MitM, relaying traffic to and from the entities.  This would ordinarily break TLS encryption so the WAF solution must be configured with its own TLS certificates and perform decryption and encryption activities in order to inspect HTTPS data without causing TLS errors to be presented to the client.  WAF technologies are very helpful at preventing the exploitation of known or unknown vulnerabilities in a web application.  For example, if there is a known SQL injection vulnerability in an application which requires some lead time to fix, a WAF can block any traffic while developers work to correct the vulnerability.
+
+>[!warning] Warning - Using WAFs Instead of Secure Code
+>WAFs should never be used as a replacement for secure code.  It is tempting for business managers to over rely on a WAF solution instead of implementing secure code practices or investing on fixing legacy security vulnerabilities.  This is not recommended as with any control there are often ways to bypass them.  For example, most WAF solutions won't inspect the entire HTTP request and an attacker could smuggle a malicious payload in a large request exploiting a vulnerability that was thought otherwise protected. 
+
+When the WAF inspects the traffic it runs the HTTP packets through a library of rules that have been developed to detect malicious patterns in the header and data sections of requests and responses.  Each WAF solution has their own syntax for creating rules but all have some common characteristics such as a name or description of the rule, the action the rule should take like alert or block the packet, and a regular expression that will identify a malicious pattern.  Some rules are proprietary however there are many opensource and free community supported rulesets that can be used.  The following image shows an example of a ModSecurity rule that will deny any HTTP requests that include `/index.php` in it URI.
+![[../images/08/waf_rule.png|WAF Rule Example|500]]
+A ModSecurity rule syntax starts with the label "SecRule" which informs the WAF of the rule configuration.  The next block in the rule contains a variable from a preset list which sets the context for the rule.  In the example above the variable `REQUEST_URI` is shown which will be used to set a rule on an incoming request's URI data.  The next block in the rule contains the operators which can include the logic of the rule, such as regular expressions.  Finally the actions section of the rule includes metadata about the rule, transformations or how the data should be preprocessed before applying the rule logic, and the action the rule should take such as logging or blocking.
+
+
+>[!activity] Activity 8.1 - Web Server Security
+>Usually system administrators or DevOps engineers, setup the TLS encryption and WAF services protecting web applications.
+>
+>Cert
+>WAF
+
+### Threat Modeling
+STRIDE
+>[!activity] Activity 8.2 - Threat Model
+>group activity
+
+### OWASP Top 10 Risks
+
+### Solving Stateless HTTP
+
+### Software Composition Analysis (SCA)
+### Software Application Security Testing (SAST)
+Sources and Sinks
+Analysis Types
+
+>[!activity] Activity 8.3 - Security Coding
+>DVNA
+>SAST
+>SCA
+### Dynamic Application Security Testing (DAST)
+
+>[!activity] Activity 8.4 - DAST Scan
+
+## Exercises
+
+>[!exercise] Exercise 8.1 - Web Server Security
+>In this task you will install Apache web server on your Ubuntu VM and secure it with an OpenSSL self-signed cert and Modsecurity WAF.
+>#### Step 1 - Install Apache
+>Start your Ubuntu VM and open a bash terminal. Change directory to the root folder and switch to the root user. 
+>```bash
+>su -
+>cd /
+>```
+>Update the Ubuntu system so all required packages are up to date. 
+>```bash
+>apt update -y
+>```
+>Install Apache web server from the Ubuntu apt repositories. 
+>```bash
+>apt install apache2 -y
+>```
+>Start Apache web server on the Ubuntu VM.
+>```bash
+>systemctl start apache2
+>```
+>Open the Firefox web browser within the Ubuntu VM and navigate to the [http://localhost/](http://127.0.0.1/). Observe the default Apache page loads!  Update the default index.html page with your name and the date. Replace the NAME and DATE fields in the command below with your name and today's date.
+>```bash
+>echo "NAME DATE" > /var/www/html/index.html 
+>```
+>Revisit [http://localhost/](http://localhost/) in your browser and confirm the new page loads showing your name and today's date.
+>Update the default web page
+>#### Step 2 - Configure Apache SSL
+>Using your root user terminal, enable SSL on the Apache web server.
+>```bash
+>a2enmod ssl
+>```
+>Enable the default SSL site that installs with Apache. 
+>```bash
+>a2ensite default-ssl
+>```
+>Restart the Apache web server to enable the new site settings.
+>```bash
+>systemctl restart apache2 
+>```
+>Create a private certificate authority with the following command and observe root-ca.key and root-ca.crt files are created.
+>```bash
+>openssl req -x509 -nodes -newkey RSA:2048 -keyout root-ca.key -days 365 -out root-ca.crt -subj '/C=US/ST=Denial/L=Earth/O=Atest/CN=root_CA_for_firefox' 
+>```
+>Create a private key and certificate signing request from the previously created CA certificates.  The private key will be used to secure our SSL site. Observe server.key and server.csr files created. 
+>```bash
+>openssl req -nodes -newkey rsa:2048 -keyout server.key -out server.csr -subj '/C=US/ST=Denial/L=Earth/O=Dis/CN=anything_but_whitespace' 
+>```
+>Create TLS self-signed certificate which will be used in our Apache SSL site configuration. Observe server.crt file created. 
+>```bash
+>openssl x509 -req -CA root-ca.crt -CAkey root-ca.key -in server.csr -out server.crt -days 365 -CAcreateserial -extfile <(printf "subjectAltName = DNS:localhost\nauthorityKeyIdentifier = keyid,issuer\nbasicConstraints = CA:FALSE\nkeyUsage = digitalSignature, keyEncipherment\nextendedKeyUsage=serverAuth")
+>```
+>Replace the default certificate and key for our site and then restart Apache. 
+>```bash
+>cp server.crt /etc/ssl/certs/ssl-cert-snakeoil.pem
+>cp server.key /etc/ssl/private/ssl-cert-snakeoil.key
+>systemctl restart apache2
+>```
+>Using the Firefox browser in the Ubuntu VM, navigate to [https://localhost/](https://localhost/). Observe the insecure TLS warning and detail by pressing the Advanced button.
+>
+>Add the certificate authority file we created earlier to Firefox's allowed CAs. 
+>1. Press the "hamburger menu" (three stack horizontal lines icon) in the upper right corner of the browser and select Settings. 
+>2. In the Settings page, search for Certificate and select "View Certificates..." to launch the Certificate Manager.  
+>3. With the Authorities tab selected, press the Import button at the bottom of the Certificate Manager window.  
+>4. Navigate to the root directory where we stored our certificates and keys by selecting Other Locations on the left navigation menu, and then Computer.  
+>5. Select the "root-ca.crt" file and press the Select button in the upper right corner.  
+>6. With the Downloading Certificate window launched, select "Trust this CA to identify websites", press Ok and then Ok again to close the Certificate Manager window.  
+>7. Open a new tab in Firefox and navigate to [https://localhost](https://localhost/). 
+>
+>Observe the page loads without error and is TLS secured (lock icon in URL bar)!
+>#### Step 3 - Install ModSecurity
+>Using the Ubuntu VM root bash terminal, install Modsecurity using apt.
+>```bash
+>apt install libapache2-mod-security2 -y 
+>```
+>Setup the Modsecurity configuration file based on the provided recommended config file.
+>```bash
+>apt install libapache2-mod-security2 -y
+>```
+>Setup the Modsecurity configuration file based on the provided recommended config file.
+>```bash
+>mv /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
+>```
+>Update the configuration file to turn Modsecurity blocking mode on.
+>```bash
+>sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/g' /etc/modsecurity/modsecurity.conf
+>```
+>Restart Apache so the Modsecurity updates take effect. Note that the command takes ~10 seconds to complete.
+>```bash
+>systemctl restart apache2
+>```
+>#### Step 4 - Test WAF
+>Using the Ubuntu VM's Firefox browser, navigate to [https://localhost/](https://localhost/) and observe the page renders without issue.
+>
+>Now, we will use a classic cross-site scripting testing payload within the URL. The Modsecurity rule will detect this malicious string and block our HTTPS request. This time, navigate to the site with the URL `https://localhost/?<script>alert('xss')</script>` and observe the Forbidden response! 
+
+> [!exercise] Exercise 8.2 - Secure Coding
+> You will run secure code tooling against the DVNA code base in this lab task using your Kali VM.
+> #### Step 1 - Install DVNA
+> Download the DVNA repository using git from the home directory of your Kali VM user.
+> ```bash
+> git clone https://github.com/appsecco/dvna
+> ```
+> #### Step 2 - Install Snyk
+> *Note, you can skip the account creation sub-step if you already have a Github OR a Google account you'd like to use with Snyk.*
+> 
+> Setup Github account by navigating to https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home and entering your email (CSUS/personal), a password, and a username. You may have to verify that you are not a bot and submit a token that is emailed to your email.  
+> 
+> Setup Snyk account after you have created (or already have) a Github account by navigating to [https://app.snyk.io/login/](https://app.snyk.io/login/) and using the Github button and the Authorize Snyk button.
+> 
+> While logged into the Snyk website, enable Snyk Code for remote SAST scanning by navigating to Settings (left menu), Snyk Code (sub menu), Enable Snyk Code (bottom), and hit save.
+> 
+> Install the Snyk linux binary and configure it's use.
+> ```bash
+> wget https://static.snyk.io/cli/latest/snyk-linux
+> chmod +x snyk-linux
+> sudo mv snyk-linux /usr/local/bin/snyk
+> ```
+> Authenticate with Snyk. After running the following command, a browser will launch prompting you to login to Snyk usingyour Github (or Google) account, sign in, and press the Authenticate button
+> ```bash
+> snyk auth
+> ```
+> #### Step 3 - Snyk SCA Scan
+> Run a software composition analysis (SCA) scan against the dvna repository on Github. We are running this scan locally on the remote repository to avoid having to install NPM packages on our Kali VM. Observe several vulnerabilities are discovered after a few seconds of analysis.
+> ```bash
+> snyk test https://github.com/appsecco/dvna
+> ```
+> Snyk should have several vulnerabilities of varying severity. Select one vulnerability that interests you and write a summary of what its cause and impacts are.
+> #### Step 4 - Snyk SAST Scan
+> Execute a static application security test (SAST) on the DVNA local repository using Snyk. Navigate to the dvna directory and run the following Snyk command. Results will appear after a few seconds of analysis.
+> ```bash
+> cd dvna
+> snyk code test
+> ```
+> Identify another vulnerability different from the SCA scan and research its cause and impact. Write a summary of what you learned during your research.
+
+> [!exercise] Task 3 - DAST Scan
+> In this task you will run a DVNA web application and scan it using Dastardly from your Kali VM.
+> #### Step 1 - Install Docker
+> Both Dastardly and DVNA will run in containers using docker. Update your Kali VM to ensure all required packages are on the needed versions.
+> ```bash
+> sudo apt update -y 
+> ```
+> After updates are complete, install docker packages.
+> ```bash
+> sudo apt install -y docker.io -y 
+> ```
+> Once docker is installed, add your Kali VM user to the docker group so it can run docker commands without root.
+> ```bash
+> sudo usermod -aG docker $USER 
+> ```
+> Changes for your logged in user won't take effect until the next login. Reboot your Kali VM and log back in to avoid issues launching docker containers.
+> #### Step 2 - Run DVNA
+> Once your Kali VM account has logged in again with docker group permissions, open a terminal and run the dvna docker container. The image will download and the container will launch while forwarding port 9090 to the host.
+> ```bash
+> docker run --name dvna -p 9090:9090 -d appsecco/dvna:sqlite
+> ```
+> Open the Firefox browser within the Kali VM and navigate to [http://127.0.0.1:9090](http://127.0.0.1:9090/). Observe the DVNA is up and running!
+> #### Step 3 - Run Dastardly Against DVNA
+> From within your Kali VM terminal, look up the VM's IP address under interface eth0 to use as a target for Dastardly.
+> ```bash
+> ip a
+> ```
+> While the DVNA application is running locally on the Kali VM, launch a Dastardly container targeting the local DVNA server. Make sure to replace the IP_ADDRESS with the IP address of the Kali VM. Wait a few moments for the image to download and the scan to begin.
+> ```bash
+> docker run --user $(id -u) --rm -v $(pwd):/dastardly -e DASTARDLY_TARGET_URL=http://IP_ADDRESS:9090/ -e DASTARDLY_OUTPUT_FILE=/dastardly/dastardly-report.xml public.ecr.aws/portswigger/dastardly:latest
+> ```
+> After a couple minutes the scan completes with a few low findings. Dastardly is unable to scan authenticated pages and tests for only a few vulnerability classes.
+> 

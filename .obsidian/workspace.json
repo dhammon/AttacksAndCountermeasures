@@ -13,7 +13,19 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/07-SecuritySystems.md",
+                "file": "textbook/08-WebApplicationDefense.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "3e6afd15e3dff403",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "textbook/00-Introduction.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "textbook/07-SecuritySystems.md",
+                "file": "textbook/08-WebApplicationDefense.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +114,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "textbook/07-SecuritySystems.md",
+                "file": "textbook/08-WebApplicationDefense.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +137,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "textbook/07-SecuritySystems.md"
+                "file": "textbook/08-WebApplicationDefense.md"
               }
             }
           }
@@ -148,34 +160,37 @@
   },
   "active": "2ec839b962581d99",
   "lastOpenFiles": [
+    "images/08/waf_rule.png",
+    "images/08/certificate_authorities.png",
+    "images/08/https.png",
+    "images/08/api.png",
+    "images/08/spa.png",
+    "images/08/client_webserver.png",
+    "textbook/01-InformationSecurity.md",
+    "textbook/08-WebApplicationDefense.md",
+    "textbook/02-Cryptology.md",
     "textbook/03-NetworkSecurity.md",
-    "textbook/07-SecuritySystems.md",
-    "images/07/snort_activity_scan.png",
-    "images/07/snort_activity_unzip.png",
-    "images/07/snort_activity_download.png",
-    "files/2016-04-16-traffic-analysis-exercise.pcap.zip",
-    "images/07/snort_activity_custom_rule.png",
-    "textbook/00-Introduction.md",
-    "images/07/snort_activity_install.png",
-    "images/07/snort_rule.png",
-    "images/07/inline_arch.png",
-    "images/07/tap_arch.png",
-    "images/07/email_arch.png",
-    "images/07/vuln_activity_finding.png",
+    "textbook/04-NetworkServices.md",
+    "textbook/05-OperatingSystemSecurity.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "textbook/07-SecuritySystems.md",
+    "textbook/09-WebApplicationAttacks.md",
+    "images/08/web_defense.jpg.crdownload",
+    "textbook/00-Introduction.md",
+    "images/08/web_defense.jpg",
+    "images/08",
+    "images/New folder",
+    "images/07/canary.png",
+    "images/07/honeypots.png",
+    "textbook/08-",
+    "images/07/honey_activity_log.png",
+    "images/07/honey_activity_attack.png",
+    "files/2016-04-16-traffic-analysis-exercise.pcap.zip",
     "images/07/security_patch.jpg.crdownload",
     "images/07",
-    "images/New folder",
     "files/CrowdStrike2023GlobalThreatReport.pdf",
     "files/2023-data-breach-investigations-report-dbir.pdf",
     "files/2016-04-16-traffic-analysis-exercise-alerts.zip",
-    "textbook/04-NetworkServices.md",
-    "textbook/02-Cryptology.md",
-    "textbook/01-InformationSecurity.md",
-    "textbook/05-OperatingSystemSecurity.md",
-    "images/06",
-    "README.md",
-    "images/05",
-    "files/kansascityWEP.pcap"
+    "README.md"
   ]
 }
