@@ -68,10 +68,106 @@ A ModSecurity rule syntax starts with the label "SecRule" which informs the WAF 
 
 
 >[!activity] Activity 8.1 - Web Server Security
->Usually system administrators or DevOps engineers, setup the TLS encryption and WAF services protecting web applications.
+>Usually system administrators or DevOps engineers, setup the TLS encryption and WAF services protecting web applications.  I'll demonstrate installing Apache web server configured to use a self-signed certificate.  I will also install ModSecurity WAF and test its functionality by attempting a cross site scripting (XSS) payload.
 >
->Cert
->WAF
+>The Ubuntu VM will be used in this demonstration.  Once booted up and logged in, I open a terminal and switch to the root user on the root directory.
+>```bash
+>su -
+>cd /
+>```
+>![[../images/08/server_activity_root.png|Switch to Root User and Directory|600]]
+>Because I'll be installing software, I run an update on the system before attempting any software installations.
+>```bash
+>apt update -y
+>```
+>![[../images/08/server_activity_update.png|System Update|600]]
+>Looks like my system was already up to date.  The next step is installing Apache from the apt repository using the following command.  Apache is a very common long standing web server technology that is free and open sourced.
+>```bash
+>apt install apache2 -y
+>```
+>![[../images/08/server_activity_apache_install.png|Installing Apache Web Server|600]]
+>Once Apache installation is completed I use systemctl to start the apache2 daemon which will serve the default web page.  I also check that everything is running as expected using the status command from systemctl.
+>```bash
+>systemctl start apache2
+>systemctl status apache2
+>```
+>![[../images/08/server_activity_start_apache.png|Starting the Web Server Daemon|600]]
+>Everything looks to be in working order so I open Firefox and navigate to http://localhost/ and observe the default Apache page is served.  Notice that this page is served over HTTP and not HTTPS, therefore is not using TLS encryption.
+>![[../images/08/server_activity_http.png|Apache Default Web Page Over HTTP|500]]
+>In order to setup TLS encryption on my Apache web server I have to make some quick configurations.  I use the a2enmod command to enable the SSL module.
+>```bash
+>a2enmod ssl
+>```
+>![[../images/08/server_activity_enable_ssl.png|Enable SSL on Apache|600]]
+>The output suggest restarting Apache, but before I do that I need to enable the default SSL site using the a2ensite command.  This command instructs Apache to use the default configuration file for SSL.
+>```bash
+>a2ensite default-ssl
+>```
+>![[../images/08/server_activity_enable_ssl_config.png|Enable SSL Apache Configuration|600]]
+>Apache comes with a pre-installed self-signed certificate but I want to make my own certificate using my own certificate authority.  I use openssl to create the CA which outputs an RSA key called root-ca.key and the CA certificate called root-ca.crt.
+>```bash
+>openssl req -x509 -nodes -newkey RSA:2048 -keyout root-ca.key -days 365 -out root-ca.crt -subj '/C=US/ST=Denial/L=Earth/O=Atest/CN=root_CA_for_firefox'
+>```
+>![[../images/08/server_activity_create_ca.png|Create CA and Key|600]]
+>Next I'll create a server private key and certificate signing request (CSR) in a file called server.csr using openssl again.  The CSR is needed before issuing a signed certificate and will be used in an upcoming command.
+>```bash
+>openssl req -nodes -newkey rsa:2048 -keyout server.key -out server.csr -subj '/C=US/ST=Denial/L=Earth/O=Dis/CN=anything_but_whitespace'
+>```
+>![[../images/08/server_activity_csr.png|Creating Certificate Signing Request|600]]
+>The CA and CSR are created so I can now create a certificate from the CA.  To do so requires the use of the root-ca.crt, root-ca.key, and the server.csr files created in the last two steps.  The certificate created will be set to expire in 365 days and be named server.crt.
+>```bash
+>openssl x509 -req -CA root-ca.crt -CAkey root-ca.key -in server.csr -out server.crt -days 365 -CAcreateserial -extfile <(printf "subjectAltName = DNS:localhost\nauthorityKeyIdentifier = keyid,issuer\nbasicConstraints = CA:FALSE\nkeyUsage = digitalSignature, keyEncipherment\nextendedKeyUsage=serverAuth")
+>```
+>![[../images/08/server_activity_cert_generated.png|Generating Certificate|600]]
+>The certificate signature outputs as "ok" so this certificate should be valid.  My next step is to load this certificate and encryption key into the private repository Apache uses in the default SSL configuration.  I'll replace the existing ssl-cert-snakeoil PEM and Key files with the server.crt and server.key using the following commands.
+>```bash
+>cp server.crt /etc/ssl/certs/ssl-cert-snakeoil.pem
+>cp server.key /etc/ssl/private/ssl-cert-snakeoil.key
+>```
+>![[../images/08/server_activity_update_keys.png|Replacing Default Keys with Generated Keys|600]]
+>Everything should be in order for the Apache web server with SSL now.  To recap, I've installed Apache, installed and enabled the SSL module, created a CA and signed certificate, and replaced the default certificate and key with the generated ones.  The following command restarts the Apache server.  I also check to confirm the status is active without errors.
+>```bash
+>systemctl restart apache2
+>systemctl status apache2
+>```
+>![[../images/08/server_activity_apache_restart.png|Restarting Apache With SSL|600]]
+>With Apache configured with SSL and restarted I open Firefox and navigate to the default web page using TLS via  https://localhost.  However this time I'm presented with a security warning related to the certificate.
+>![[../images/08/server_activity_warning.png|SSL Self-Signed Certificate Warning|500]]
+>I receive this warning because browsers don't trust self-signed certificates by default as they could have been created by anyone instead of a trusted CA.  While I could accept the risk and bypass this warning it would be better to demonstrate how to get a browser to trust the certificate through importing my generated CA into Firefox.  I press the hamburger menu (three stack horizontal lines icon) in the upper right corner of the browser and select Settings.  While in the settings page I search for the certificate and press the View Certificates.. button which launches the Certificate Manager window.
+>![[../images/08/server_activity_cert_settings.png|Searching For Certificate Settings|500]]
+>The Certificate Manager Authorities tab lists all of the trusted CAs that came preinstalled with Firefox.  To add my generated CA, I select the Authorities tab and press the Import button at the bottom of the Certificate Manager window to launch the file manager window.
+>![[../images/08/server_activity_cert_manager.png|Certificate Manager Authorities Tab|500]]
+>I navigate to Other Locations on the left navigation bar and select the Computer button.  Then I scroll down and select the root-ca.crt file that we created using openssl.  Adding this file instructs Firefox to trust any certificate that is created using it which should solve our SSL warning when opening our web server page over HTTPS.
+>![[../images/08/server_activity_import.png|Import ROOT-CA.CRT Into Browser Store|600]]
+>When importing the root-ca.crt file Firefox asks me what I want to trust.  I select "Trust this CA to identify websites" as the CA is being used to generate certificates for websites, then I press OK.  I press OK again to close the Certificate Manager.
+>![[../images/08/server_activity_trust.png|Trust CA Options|600]]
+>With the CA imported into Firefox, I reload the TLS default page at https://localhost and see there is no more SSL warning!
+>![[../images/08/server_activity_https.png|HTTPS Loaded  Successfully|500]]
+>Apache and SSL are all set up now on my Ubuntu VM.  Next I'll install ModSecurity by jumping back into my root terminal and using apt to install the needed packages.
+>```bash
+>apt install libapache2-mod-security2 -y
+>```
+>![[../images/08/server_activity_modsec_install.png|Installing ModSecurity Packages|600]]
+>ModSecurity comes with a default configuration file but is named in a way that it will be ignored.  I'll rename the recommended configuration file to one that is automatically picked up in the default configuration for ModSecurity.
+>```bash
+>mv /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
+>```
+>![[../images/08/server_activity_config_move.png|Enabling ModSecurity Default Configuration|600]]
+>The default configuration has blocking mode disabled.  I want to ensure any malicious requests are block from reaching Apache.  I replace the DetectionOnly setting with the On setting that ensures malicious requests are blocked.
+>```bash
+>sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/g' /etc/modsecurity/modsecurity.conf
+>```
+>![[../images/08/server_activity_blocking_mode.png|Enable ModSecurity Blocking Mode|600]]
+>That's it for the basic ModSecurity configuration.  Because the Apache daemon is already running and I've made changes by installing and configuring ModSecurity, I'll need to restart Apache so that the changes take effect.  It takes about 30 seconds for ModSecurity to fully load.
+>```bash
+>systemctl restart apache2
+>systemctl status apache2
+>```
+>![[../images/08/server_activity_restart_modsec.png|Restarting Apache With ModSecurity|600]]
+>The daemon appears to be running without any issues since ModSecurity was installed.  I open Firefox and reload the HTTPS web page using `CTRL+SHIFT+R` to confirm it is still serving normally.
+>![[../images/08/server_activity_modsec_happy_page.png|ModSecurity Loaded Page|500]]
+>The page loads normally with ModSecurity running!  Now, I will use a classic cross-site scripting payload within the URL to test the WAF.  The ModSecurity rule will detect this malicious string and block our HTTPS request.  This time I navigate to the site with the URL `https://localhost/?<script>alert('xss')</script>` and observe the Forbidden response!
+>![[../images/08/server_activity_forbidden.png|Blocked Request By ModSecurity|500]]
 
 ### Threat Modeling
 STRIDE
@@ -102,7 +198,7 @@ Analysis Types
 >#### Step 1 - Install Apache
 >Start your Ubuntu VM and open a bash terminal. Change directory to the root folder and switch to the root user. 
 >```bash
->su -
+>sudo su -
 >cd /
 >```
 >Update the Ubuntu system so all required packages are up to date. 
