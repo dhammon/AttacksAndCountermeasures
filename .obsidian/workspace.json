@@ -25,13 +25,14 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/00-Introduction.md",
+                "file": "textbook/08-WebApplicationDefense.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -158,8 +159,14 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0222551eff2d37c8",
+  "active": "3e6afd15e3dff403",
   "lastOpenFiles": [
+    "images/08/dfd_login.png",
+    "images/08/stride.png",
+    "textbook/09-WebApplicationAttacks.md",
+    "textbook/00-Introduction.md",
+    "textbook/08-WebApplicationDefense.md",
+    "images/08/dfd.png",
     "images/08/server_activity_forbidden.png",
     "images/08/server_activity_modsec_happy_page.png",
     "images/08/server_activity_restart_modsec.png",
@@ -168,20 +175,14 @@
     "images/08/server_activity_modsec_install.png",
     "images/08/server_activity_https.png",
     "images/08/server_activity_trust.png",
-    "images/08/server_activity_import.png",
-    "images/08/server_activity_cert_manager.png",
-    "images/08/server_activity_cert_settings.png",
     "textbook/01-InformationSecurity.md",
-    "textbook/08-WebApplicationDefense.md",
     "textbook/02-Cryptology.md",
     "textbook/03-NetworkSecurity.md",
     "textbook/04-NetworkServices.md",
     "textbook/05-OperatingSystemSecurity.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/07-SecuritySystems.md",
-    "textbook/09-WebApplicationAttacks.md",
     "images/08/web_defense.jpg.crdownload",
-    "textbook/00-Introduction.md",
     "images/08",
     "images/New folder",
     "textbook/08-",
