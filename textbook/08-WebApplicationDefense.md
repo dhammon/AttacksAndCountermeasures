@@ -187,9 +187,23 @@ After all the elements are mapped onto a DFD, the group analyzes each element fo
 >![[../images/08/dfd_login.png|DFD For Web Authentication|350]]
 
 ### OWASP Top 10 Risks
+The *Open Worldwide Application Security Project (OWASP)* is a nonprofit organization that supports the creation of web application security projects, tools and standards.  One such project is the **OWASP Top 10** which lists the most common risks to web applications.[^1]  The list is updated every handful of years with new items being added, old items being removed, and existing items being reordered or updated.  At the time of this writing, the 2021 version is the most up to date version that includes the following risks in order:
 
-### Solving Stateless HTTP
+1. *Broken Access Control* - Unauthorized access to software and its data
+2. *Cryptographic Failures* - Exposes sensitive data
+3. *Injection* - Allow inputs to be used as commands, code, and queries to cause the software to perform actions otherwise not intended
+4. *Insecure Design* - Missing or ineffective control design of the software
+5. *Security Misconfiguration* - Insecure settings that expose software to attack
+6. *Vulnerable and Outdated Components* - Security issues in packages or libraries used within software
+7. *Identification and Authentication Failures* - Defects in the proving of identity and session management
+8. *Software and Data Integrity Failures* - Use of malicious or tampered code or data
+9. *Security Logging and Monitoring Failures* - Inability to detect and respond to breaches
+10. *Server-Side Request Forgery* - Server sends URL requests to unexpected destinations
 
+This list is beneficial to developers and security professionals as it amplifies the risks modern web applications may face.  It provides a risk model to teams when assessing their applications and known findings.  Most web application penetration test findings will reference or tie the subject finding back to the OWASP Top 10 list to support the rationale of the issue.  Developers should study these common risks and how they could be realized in their applications.  For instance, each of the items on the list comes with generalized examples and mitigations which serves as a basis for additional research.
+
+>[!info] Info - OWASP Application Security Verification Standard (ASVS)
+>Another awesome resource from OWASP is their ASVS project which offers a very detail security standard or framework for web applications. [^2]  It enumerates hundreds of standards organized by control objective and provides levels of maturity and *common weakness enumeration (CWE)* references.  Driven by community developers, the ASVS can be used as an audit tool to assess the security posture of a web application, its systems, and development processes.
 ### Software Composition Analysis (SCA)
 ### Software Application Security Testing (SAST)
 Sources and Sinks
@@ -372,4 +386,6 @@ Analysis Types
 > docker run --user $(id -u) --rm -v $(pwd):/dastardly -e DASTARDLY_TARGET_URL=http://IP_ADDRESS:9090/ -e DASTARDLY_OUTPUT_FILE=/dastardly/dastardly-report.xml public.ecr.aws/portswigger/dastardly:latest
 > ```
 > After a couple minutes the scan completes with a few low findings. Dastardly is unable to scan authenticated pages and tests for only a few vulnerability classes.
-> 
+
+[^1]:OWASP Top Ten; OWASP Foundation; March 8th 2024; https://owasp.org/www-project-top-ten/
+[^2]: OWASP Application Security Verification Standard; OWASP Foundation; March 8th 2024; https://owasp.org/www-project-application-security-verification-standard/
