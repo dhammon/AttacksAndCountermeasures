@@ -1,6 +1,7 @@
 # Introduction
 Not compressive.  Any chapter/topic could be expanded into its own book.  Not a deep dive into every area but a high level overview to introduce how security can be organized and to provide an approach framework securing technology.
 
+## Chapter Summaries
 ## Prerequisites
 - Networking
 - Windows and Linux fundamentals

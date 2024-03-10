@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/08-WebApplicationDefense.md",
+                "file": "textbook/09-WebApplicationAttacks.md",
                 "mode": "source",
                 "source": false
               }
@@ -25,14 +25,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/08-WebApplicationDefense.md",
+                "file": "textbook/09-WebApplicationAttacks.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -98,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "textbook/08-WebApplicationDefense.md",
+                "file": "textbook/09-WebApplicationAttacks.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +114,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "textbook/08-WebApplicationDefense.md",
+                "file": "textbook/09-WebApplicationAttacks.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +137,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "textbook/08-WebApplicationDefense.md"
+                "file": "textbook/09-WebApplicationAttacks.md"
               }
             }
           }
@@ -159,22 +158,8 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "3e6afd15e3dff403",
+  "active": "2ec839b962581d99",
   "lastOpenFiles": [
-    "images/08/dfd_login.png",
-    "images/08/stride.png",
-    "textbook/09-WebApplicationAttacks.md",
-    "textbook/00-Introduction.md",
-    "textbook/08-WebApplicationDefense.md",
-    "images/08/dfd.png",
-    "images/08/server_activity_forbidden.png",
-    "images/08/server_activity_modsec_happy_page.png",
-    "images/08/server_activity_restart_modsec.png",
-    "images/08/server_activity_blocking_mode.png",
-    "images/08/server_activity_config_move.png",
-    "images/08/server_activity_modsec_install.png",
-    "images/08/server_activity_https.png",
-    "images/08/server_activity_trust.png",
     "textbook/01-InformationSecurity.md",
     "textbook/02-Cryptology.md",
     "textbook/03-NetworkSecurity.md",
@@ -182,16 +167,29 @@
     "textbook/05-OperatingSystemSecurity.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/07-SecuritySystems.md",
+    "textbook/08-WebApplicationDefense.md",
+    "textbook/09-WebApplicationAttacks.md",
+    "textbook/00-Introduction.md",
+    "images/09/web_attacks.jpg",
+    "images/09",
+    "images/New folder",
+    "images/08/web_attacks.jpg",
+    "images/08/web_attacks.jpg.crdownload",
+    "images/08/dast_activity_scan_end.png",
+    "images/08/dast_activity_start_result.png",
+    "images/08/dast_activity_ip.png",
+    "images/08/dast_activity_dvna_login.png",
+    "images/08/dast_activity_dvna_status.png",
+    "images/08/dast_activity_dvna_run.png",
+    "images/08/dast_activity_docker_group.png",
+    "images/08/dast_activity_docker_install.png",
     "images/08/web_defense.jpg.crdownload",
     "images/08",
-    "images/New folder",
     "textbook/08-",
     "files/2016-04-16-traffic-analysis-exercise.pcap.zip",
     "images/07/security_patch.jpg.crdownload",
     "images/07",
     "files/CrowdStrike2023GlobalThreatReport.pdf",
-    "files/2023-data-breach-investigations-report-dbir.pdf",
-    "files/2016-04-16-traffic-analysis-exercise-alerts.zip",
     "README.md"
   ]
 }

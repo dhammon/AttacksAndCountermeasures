@@ -205,17 +205,139 @@ This list is beneficial to developers and security professionals as it amplifies
 >[!info] Info - OWASP Application Security Verification Standard (ASVS)
 >Another awesome resource from OWASP is their ASVS project which offers a very detail security standard or framework for web applications. [^2]  It enumerates hundreds of standards organized by control objective and provides levels of maturity and *common weakness enumeration (CWE)* references.  Driven by community developers, the ASVS can be used as an audit tool to assess the security posture of a web application, its systems, and development processes.
 ### Software Composition Analysis (SCA)
+Software is often built using third party libraries which contain packages of code that provide some extended functionality.  These packages are abstractions of what would otherwise be a complex undertaking to code independently.  The package is centered around a specific task or activity and can be thought of as a building block used to streamline the development process because a developer won't have to build all needed functionality from scratch.  Each popular language has a *library manager* that also serves as a *repository* of all packages, such as NodeJS's *node package manager (NPM)* and Python's *preferred installer program PIP*.  Developers can download any published package from the repository and then use its functions within their own project.  Similarly, just about anyone can create a new package and upload it to the repository for others to use.  Packages can also be referred to as a *dependency* to a project.  
+
+> [!tip] Info - Packages Using Packages
+> Software packages can themselves use other third party packages.  This causes a layering or nesting of any number packages within packages.  The term **transitive dependency** is used to describe a deeply nested package within a project that uses a package that includes other packages.
+
+Any package, if not all, is subject to having vulnerabilities such as the ones outlined in the OWASP Top 10.  Security researchers and developers may find  vulnerabilities within a package and follow the responsible disclosure process outlined in the Security Systems chapter.  This would result in a common vulnerabilities and exposure (CVE) report for the package name and version which can then be used by a special class of vulnerability scanner called **software composition analysis (SCA)**.  Such tools look at the manifest file that imports packages by version, or the installed packages themselves, and compares them to a database of CVEs.  If there is a match from the package version and a CVE a finding is generated and alerted to the user of the scanner.  The SCA tool can be ran on the command line, installed as a plugin within an *integrated development environment (IDE)*, or integrated within development pipelines where code is merged and deployed.  While SCA tool results are typically thought of as very accurate, one criticism of them is that the vulnerabilities identified are almost always overstated.  For instance, a package might have a function that includes a command injection vulnerability, but if the parent project does not use that function it avoids the practical exploitation of that dependency's command injection vulnerability.  The probability of a path to this exploitation decreases depending on how transitive the dependency is.  At the time of this writing, I am only aware of one SCA vendor (Contrast Security) that is able to identify vulnerable paths of packages through *reachability analysis*.  Their premium service is costly as they have to employ an army of researchers to develop tools that identify each CVE's reachability which is a laborious endeavor.
+
+SCA can be used to generate *software bill of materials (SBOM)* which is a composed list of all the packages and their versions that make up the software project.  Many software due diligence efforts now focus on the availability or producibility of SBOM when evaluating the security wherewithal of software.  The process of a software development's team to identify, select, use, and continuously evaluate packages is called *dependency management* which can vary in the level of formality between organizations.  There should exist some sort of diligence efforts by the developer to select packages believed to have good security hygiene and then periodically reevaluate to ensure the package's standard don't fall below a risk threshold.  Some of the criteria used in dependency management include, but are not limited to, popularity, maintenance frequency, community support, license compatibility, security responsiveness, and many more.
 ### Software Application Security Testing (SAST)
-Sources and Sinks
-Analysis Types
+One way developers and security professionals detect vulnerabilities within code is through the use of a **software application security testing (SAST)** solution.  This class of tooling looks at the code statically, or without running it, and identifies vulnerable patterns by using a rules engine which can be a scan or a path analysis.  The engine uses a library of rules that have been crafted to detect patterns using regular expressions.  Some of these patterns identify the *sources* and the *sinks* of code within a file or even between files depending on the tool.  Consider the following code block written in PHP that accepts a user supplied GET parameter into the version variable which is eventually render on the page using an echo statement.
+
+```php
+<?php​
+$version = $_GET['version'];​
+if($version == 2) {​
+     //do stuff​
+}​
+echo "Version: ".$version;
+```
+
+Continuing with the above example, a SAST scanner should identify a *cross site scripting (XSS)* vulnerability with the `$_GET['version']` identified as the source and the `echo "Version: ".$version;` as the sink.  Many types of software vulnerabilities result in the mishandling of user inputs (sources) or the mishandling of outputs (sinks).  Unlike SCA, where vulnerabilities identified are rarely a false positive, SAST findings have a high volume of false positives due to the nature their rules.  These rules are not great at identifying mitigations and the scanner outputs should be used as a guide during secure code reviews.
+
+The following list outlines the broad categories of SAST scanners available in the marketplace today. [^3]  Each SAST tool deploys at least one of these strategies to evaluate code and find potential vulnerabilities.  
+
+1. Configuration - Checks configuration files
+2. Semantic - Syntax and susceptible functions such as `executeQuery()`
+3. Dataflow - Tracks sources to sinks
+4. Control Flow - Identifies dangerous sequences, race conditions, and validation misses
+5. Structural - Evaluates code structure such as class design and declarations
+
+>[!info] Info - Secret Scanning
+>Another useful SAST-like tool is a *secrets scanner*.  Including secrets in source code is a bad practice because the secrets could be compromised due to unauthorized access to the code.  It is best to keep secrets within encrypted vaults where they can be retrieved at runtime which avoids this risk.  Secret scanning tools scan source code, development logs, and other sources for secrets such as passwords, keys, and authentication tokens.  They too run on a rules library which is usually comprised of regular expressions tuned to identify specific secrets.  A great opensource secret scanner is TruffleHog while the best enterprise solution I have found is by Cycode Security.
+
+SAST tools vary in support for languages with some only supporting a specific development language.  They are a great resource to developers that can be installed within IDEs and provide close to real-time detections of vulnerabilities being introduced while a developer writes code.  When a detectable vulnerability is identified, the SAST scanner plugin will highlight the vulnerable code and offer recommendations to resolve.  These tools can also be added into version control systems and developer pipelines to detect and block vulnerabilities from being merged into code or released to runtime environments.
 
 >[!activity] Activity 8.3 - Security Coding
->DVNA
->SAST
->SCA
+>It is a basic practice for developers to run SCA and SAST scans during development processes.  Application security professionals use these tools too when conducting secure code reviews.  One of the most widely used tool platforms in this area is Snyk because of its quality, coverage, and security community support.  Their toolset, which includes SCA and SAST, has a broad range of language coverage and provides good results.  Better yet, Snyk offers their tool for free for individual non-commercial use and they support many in the community with advertisement copy.  Thanks Snyk!  I'll demonstrate using Snyk SCA and SAST tools against a vulnerable by design node application DVNA on my Kali VM.
+>
+>After the Kali VM is launched and logged in, I open a terminal and download the vulnerable by design Node application DVNA from its git repository.  This repository contains all the source code and package listing that I'll scan using Snyk's SCA and SAST tools.
+>```bash
+>git clone https://github.com/appsecco/dvna
+>```
+>![[../images/08/snyk_activity_dvna_clone.png|Clone the Git Repository DVNA by Appsecco|600]]
+>The next step is to acquire Snyk which is free to use but requires me to authenticate to their web site.  Creating a new account is very easy but requires a GitHub account.  Because I already have a GitHub account I'll use it to register and login to Snyk.  If you are following along with this activity and don't have a GitHub account, I'd recommend that you set one up now (both GitHub and Snyk are free to register and use).  Creating a GitHub account can be done by navigating to https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home and entering your email address, username, and password.
+>
+>With the GitHub account setup, I navigate to Snyk's login page https://app.snyk.io/login/  and press the GitHub button to login.
+>![[../images/08/snyk_activity_snyk_login.png|Snyk Login Page|600]]
+>After entering in my GitHub username, password, and authentication token sent to my email, I am presented with the Snyk web console.
+>![[../images/08/snyk_activity_snyk_page.png|Logged In Snyk Home Page|600]]
+>After I have logged into Snyk, I download the Snyk command line interface (CLI) tool from the terminal.  I make the tool executable and then move it into the binary folder so I can use it from any folder while in the terminal.
+>```bash
+>wget https://static.snyk.io/cli/latest/snyk-linux
+>chmod +x snyk-linux
+>sudo mv snyk-linux /usr/local/bin/snyk
+>```
+>![[../images/08/snyk_activity_download.png|Installing Snyk in Kali VM|600]]
+>The Snyk CLI requires authentication before I can use it.  I've already logged into the Snyk website so when I trigger the CLI tool authentication I'll be presented with an authorization button.  If I wasn't logged into Snyk already I'd have to first login before hitting the authorize button.  I start the authentication sequence by first running the Snyk authentication command.
+>```bash
+>snyk auth
+>```
+>![[../images/08/snyk_activity_auth.png|Snyk CLI Authentication Initialize|600]]
+>This command launches a browser tab where I press the Authenticate button to log the CLI tool in.
+>![[../images/08/snyk_activity_authenticate.png|Authenticate Snyk CLI|500]]
+>I return to the terminal after pressing the Authenticate button on the Snyk web page and see that the login was successful.
+>![[../images/08/snyk_activity_auth_confirmed.png|Snyk Authentication Successful|600]]
+>Now that the DVNA app is downloaded and the Snyk tool is installed and configured I am ready to start scanning!  I'll start with an SCA scan against the DVNA package file targeted from the GitHub repository.
+>```bash
+>snyk test https://github.com/appsecco/dvna
+>```
+>![[../images/08/snyk_activity_sca_start.png|Beginning of SCA Scan Results|600]]
+>![[../images/08/snyk_activity_sca_end.png|End of SCA Scan Results|600]]
+>The scan downloads the package.json file, which contains all the packages built into DVNA, and scans each package version against the vulnerability database.  The SCA scan found 49 paths to vulnerable packages ranging from low to critical severities!  You may recall as part of the security vulnerability disclosure process that the maintainer of the code will release a security patch to cure the security vulnerability.  Therefore, most of these SCA vulnerabilities could likely be mitigated by updating the versions of the packages being used by DVNA.
+>
+>Next I'll run a SAST scan against DVNA's source code that was cloned locally.  I change the directory of my terminal to dvna and then run a Snyk code test.
+>```bash
+>cd dvna
+>snyk code test
+>```
+>![[../images/08/snyk_activity_sast_start.png|Beginning of Snyk SAST Scan Results|600]]
+>![[../images/08/snyk_activity_sast_end.png|End of Snyk SAST Scan Results|600]]
+>Another 37 vulnerabilities were found in the source code with five of them rated High.  Mitigations to these vulnerabilities are not as easy as SCA where a package version usually has to be updated.  SAST finding remediation requires more knowledge of how the application functions as the fix should not break the functionality of the application.  Therefore each finding has to be manually triaged and repaired using techniques unique to the class of vulnerability.  In the next chapter we will fix the source code of a few web application vulnerabilities.
+
 ### Dynamic Application Security Testing (DAST)
+While SAST tools look at static code to find vulnerabilities, **dynamic application security testing (DAST)** tools scan live applications looking for vulnerabilities.  Imagine navigating to a site and sending a malicious payload, such as a cross site scripting (XSS) attempt, to the application server for a get parameter on the page.  There are several hundred XSS payload variations you could try so you would evaluate the source code and careful craft a payload that seems viable as many payloads would not be applicable depending on the site.  Now imagine having to do this for every class of vulnerability in the dozens for every potential user input field on every page and you'd quickly scale to hundreds of thousands manual tests to run - which is prohibitive.  DAST scanner help to automate, or augment, this type of security testing work.
+
+>[!tip] Tip - What Payloads To Try?
+>Checkout Swisskyrepo's PayloadsAllTheThings GitHub repository (https://github.com/swisskyrepo/PayloadsAllTheThings​) for a list of web application vectors and payloads. 
+
+This class of tool first scans the application mapping out its structure, such as available pages.  It works much like a web crawler by identifying hyperlinks and following them until it has exhausted all available linked pages.  After the tool has mapped each page it analyzes the page for input vectors such as HTTP headers, HTTP parameters like GET and POST, and storage locations like the cookie jar.  Then each input vector is tested with malicious payloads and the returned page is compared to a baseline page.  The differences between the pages are evaluated and if the malicious payload is found to have been successful an alert is raised.  DAST scanners tend to miss a lot of vulnerabilities as they are unable to adapt to nuances of how an application functions and can often miss deep rooted pages that require special circumstances to be reachable.  However, they have a low false positive rate and can find common application vulnerabilities with high accuracy.  These tools can only be ran against live applications which means their implementation is usually conducted post release.
 
 >[!activity] Activity 8.4 - DAST Scan
+>I'll continue using the DVNA to demonstrate the use of a popular free-mium DAST scanner by PortSwigger called Dastardly in the Kali VM.  I will also launch DVNA as a containerized application, which is a convenient way to run an application without having to setup the system dependencies needed.  Dastardly too will run as a containerized app which makes it portable and usable on any system that has Docker installed.
+>
+>Because both DVNA and Dastardly run as containers I'll need to install Docker and configure its use on my Kali VM.  Before I do that I run updates on my system to make sure all dependencies Docker will need are up to date.
+>```bash
+>sudo apt update -y
+>```
+>![[../images/08/dast_activity_update.png|Update Kali System|600]]
+>With the system up to date I install Docker form the apt repository.
+>```bash
+>sudo apt install docker.io -y
+>```
+>![[../images/08/dast_activity_docker_install.png|Installing Docker on Kali|600]]
+>After Docker is installed I add my user the the Docker group using the usermod command as root.  This will allow my user to run Docker commands and run containers without running into permissions issues.  After I run the command I reboot and to log back into the system so that my user's group change takes effect.
+>```bash
+>sudo usermod -aG docker $USER
+>reboot
+>```
+>![[../images/08/dast_activity_docker_group.png|Adding User to Docker Group|600]]
+>Now that Docker is installed I can seamlessly download the DVNA image and run it as a container on my Kali host machine mapping the container's HTTP port 9090 to my host machine's port 9090. 
+>```bash
+>docker run --name dvna -p 9090:9090 -d appsecco/dvna:sqlite
+>```
+>![[../images/08/dast_activity_dvna_run.png|Running DVNA Container|600]]
+>The DVNA maintainers created that downloaded image to run the application on start.  I can see that the container is running in the background with mapped ports 9090 using the docker container command.
+>```bash
+>docker container ps -a
+>```
+>![[../images/08/dast_activity_dvna_status.png|Listing Running Docker Containers|600]]
+>Launching Firefox and navigating to localhost port 9090 greets me with a DVNA login page!
+>![[../images/08/dast_activity_dvna_login.png|DVNA Login Page on Localhost Port 9090|600]]
+>With DVNA running I am ready to launch the Dastardly DAST scan against it.  Dastardly is a limited free tool maintained by PortSwigger.  I scans for only a few types of vulnerabilities and cannot be configured to use credentials to login into the DVNA application.  There are other scanners that can be used to perform authenticated scans, such as OWASP's ZAP if you are interested in exploring DAST tooling further.  Before I setup and run the scanner I need to know the IP address of the host using the IP command.  I see that it is 192.168.4.167 and that there is now a docker0 interface.  This Docker interface is a virtual interface used between the host (Kali) machine and the Docker containers.
+>```bash
+>ip a
+>```
+>![[../images/08/dast_activity_ip.png|Kali IP Address on Ethernet Interface|600]]
+>I'll run Dastardly against the DVNA container using another Docker container.  The following command will download and run the Dastardly image from the public repository.  I instruct Docker to run as my current user and pass the present working directory as a shared folder to the running Dastardly container.  I feed the image the target URL using the host IP address on port 9090 where the DVNA application is reachable while specifying an output file that can be used to revisit the results of the scan.
+>```bash
+>docker run --user $(id -u) --rm -v $(pwd):/dastardly -e DASTARDLY_TARGET_URL=http://192.168.4.167:9090/ -e DASTARDLY_OUTPUT_FILE=/dastardly/dastardly-report.xml public.ecr.aws/portswigger/dastardly:latest
+>```
+>![[../images/08/dast_activity_start_result.png|Running Dastardly As Container Against DVNA|600]]
+>![[../images/08/dast_activity_scan_end.png|Dastardly Output Vulnerable JavaScript Findings|600]]
+>The scanner starts by mapping the site then tests for security vulnerabilities from its limited test set that includes reflected XSS and vulnerable JavaScript dependencies. [^4]   After a few minutes of running the scan completes and was able to detect a few vulnerable JavaScript dependencies!
 
 ## Exercises
 
@@ -389,3 +511,5 @@ Analysis Types
 
 [^1]:OWASP Top Ten; OWASP Foundation; March 8th 2024; https://owasp.org/www-project-top-ten/
 [^2]: OWASP Application Security Verification Standard; OWASP Foundation; March 8th 2024; https://owasp.org/www-project-application-security-verification-standard/
+[^3]: SAST Tools & Testing: How Does it Work and Why Do You Need it?; Snyk; March 9th 2024; https://snyk.io/learn/application-security/static-application-security-testing/
+[^4]: Scan Checks - Dastardly, from Burp Suite; PortSwigger; March 9th 2024; https://portswigger.net/burp/dastardly/scan-checks
