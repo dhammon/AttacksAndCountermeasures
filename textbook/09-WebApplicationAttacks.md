@@ -2,48 +2,99 @@
 # Web Application Attacks
 ![](web_attacks.jpg)
 
-intro
+Web applications are often made accessible to the wide internet for convenience of user reachability.  Doing so opens these sites up to anonymous attacks from anywhere in the world.  This chapter will focus on the risks web applications face and some of the attack techniques and vulnerability classifications.  Using a vulnerable by design local web application, you will test its security and remediate some vulnerabilities identified while using common attacking tools.
 
 **Objectives**
-1. Risk
-2. Discovery
-3. Testing
+1. Explain the risks associated with web applications and how they can be tested.
+2. Demonstrate passive and active reconnaissance and discovery techniques of web applications.
+3. Conduct a directory busting attack against a victim web applications using Gobuster.
+4. Understand how web applications manage sessions and escalate privileges of a vulnerable application.
+5. Perform cross site scripting and SQL injection attacks and remediate their vulnerabilities.
 
 ## Web Security Risks
-Web Risks
-### Classification Schemes
-### Manual Testing
+Understanding the impacts that can be caused by a security breach of a web application is paramount as without it the application is sure to have untreated risks.  If the risks are not well understood, or worst yet fully dismissed, then the likelihood and impact of realizing those risks increases dramatically.  Every web application's impact will vary depending on the organization, the type of data that is processed, and many other factors we could imagine.
 
+>[!activity] Activity 9.1 - Web Security Risks
+>Take a few minutes to critically think why web application security is important.  Try to thoroughly consider the following questions:
+>1. What can happen if there are weaknesses in web security?
+>2. How can those weaknesses be used to impact the greater organization?
+>3. How many weaknesses are there and what level of impact would each one have?
+
+We can imagine that an untreated vulnerability could lead to the complete compromise of an entire compromise of an organization's systems and data.  Other vulnerabilities could lead to the compromise of individual user accounts of that web application and their respective data.  Yet more vulnerabilities could result in the web application's integrated systems being taken over.  The impact of these, and countless other vulnerability scenarios can be extremely high as web applications are often facing the public internet offering a front door to the organization's larger network.
+
+In the previous Web Application Defense chapter we introduced the OWASP Top 10, which is a list of generalized and common web application risks.  The list outlines broad categories of risk and its supporting documentation outlines examples of web application vulnerabilities associated with that risk.  It is a useful reference to categorize and prioritize the types of issues a web application has, but it does not provide a comprehensive mapping or description of all the vulnerabilities an application could have.  For example, number three on the 2021 OWASP Top 10 list is *injection* which goes on to describe common injection attacks such as SQL and OS command. [^1]  But there are many other injection attacks that could be described in further detail as to how they work and how to prevent them.
+
+The MITRE project *common weakness enumeration (CWE)* attempts to aggregate and correlate software vulnerabilities into a classification scheme in much richer detail then the generalized format OWASP Top 10 provides us.  The CWE library, which can be browsed at https://cwe.mitre.org/, currently comprises of nearly one thousand weaknesses across software and hardware.  Each weakness is tracked using a unique ID with the syntax `CWE-##` and given a title, for example CWE-77 Improper Neutralization of Special Elements used in a command ('Command Injection') whose screenshot is below. [^2]  
+
+![[../images/09/cwe_command_injection.png|CWE Command Injection Page]]
+
+This empowers OWASP Top 10 maintainers to attribute CWEs with each of the listed top 10 risk categories.  Each CWE entry includes verbose descriptions, related CWEs and categories, technical impacts, detailed examples with code snippets, real world vulnerabilities discovered, and mitigation strategies to cure the weakness.  Security professionals in this space, such as Application Security Engineers or Web Application Penetration Testers, often reference the CWEs related to discovered vulnerabilities.  Doing so supports the validity of the concern as some stake holders may debate the validity of the security concern - using CWEs demonstrates the wider industry's understanding of the risk.  But the security professional wouldn't use the CWE database as a means to systematically test an application as it is not organized in a manner that is conducive to efficient testing.
+
+Rather, a security professional could use a testing framework designed in a natural flow to identify vulnerabilities.  Almost like a checklist to ensure they don't miss categories of vulnerabilities that they would otherwise be working off their infallible memory.  One great resource that attempts to organize such testing efforts is the *OWASP Web Security Testing Guide (WSTG)* available at https://owasp.org/www-project-web-security-testing-guide/stable/.  This is another opensource and free resource sponsored by the OWASP Foundation.  The first few sections of the guide introduces secure development practices and instructions on how to use the guide.  Of particular interest is section 4 Web Application Security Testing that outlines many web application attack vectors in a logical order.  Major subsections of section 4 include the following:
+
+- Information Gathering
+- Configuration and Deployment Management Testing
+- Identity Management Testing
+- Authentication Testing
+- Authorization Testing
+- Session Management Testing
+- Input Validation Testing
+- Testing for Error Handling
+- Testing for Weak Cryptography
+- Business Logic Testing
+- Client-side Testing
+- API Testing
+
+Each of these subsections are further broken down into yet further subsections which are tailored to specific vectors.  Continuing with our earlier command injection topic, which was identified in the OWASP Top 10 and the CWE, is the WSTG's subsection 4.7.12 Testing for Command Injection. [^3] The WSTG entry for command injection provides an overall summary, testing instructions which include the technical details and malicious payloads to attempt, as well as recommended remediation steps.  Unlike CWE which categorizes and supports the type of vulnerability, WSTG entries give detailed testing instructions on how to approach the discovery of the vulnerability.
+![[../images/09/wstg_command_injection.png|WSTG Testing for Command Injection Page]]
+
+The remainder of this chapter will explore the practical demonstration of web application security vulnerabilities.  It won't be comprehensive and interested readers are encouraged to explore the mentioned resources to learn more about this risky and highly in demand information security sub-discipline.
 ## Application Discovery
-### Google Dorking
-GHDB
+I have personally heard, on more than one occasion, management of organizations making the argument that security is not a concern because the business was too small or otherwise not signification enough to be targeted by threat actors.  That couldn't be further from the reality of how the average attacker targets their victims.  While it is feasible that a malicious actor might target a specific organization for explicit reasons that speak true to misinformed managers I've dealt with, the majority of attacks come from opportunity.  As so many organizations have a web presence now, with robust web applications facing the internet, as well as the use of countless *software as a service (SaaS)* applications, the opportunity for attacks is very high.  
+
+Because the internet is so vast, and well indexed, attackers leverage the ability to detect application types using free and available online resources.  For instance, they will identify a vulnerability in a technology and then seek all the instances on the internet that are using the vulnerable technology to create a potential population to attack.  Then they systematically attack that list to achieve some impact.  They might use those compromised systems in a bot net, to ransom, or sell that access to another criminal group.  In this section, we will explore a few ways attackers can use internet available resources to identify potential targets.  We won't cover all the methods but you should develop a general understanding how easy it is to conduct *passive reconnaissance* against web applications.
+### Google Dorks
+Search engines constantly scour the internet's IP ranges, registered domains, and shared links caching and index web site context and content to make available within their web based querying utilities by any anonymous user.  These organizations do this by creating bot programs called *crawlers* that scrape a targeted website for content and links to other internet resources then repeating the process.  Crawlers will periodically revisit the site to identify any changes and update its records.  They are extremely good at finding and categorizing files on the internet which supports the business model of search engine companies.  Afterall, search engine companies, like Google, want to provide their userbase with quality results, so the more accurate and expansive the index generated by crawlers the better experience for users and the more popular it will become - and the more advertisements that can be placed.
+
+Anybody reading this text undoubtably would have used a search engine recently and understands the basic premise of searching the internet.  Visit the search engine page, or built in search/URL field in a browser, enter a few key words related to what you are looking for, and be presented with a list of many websites all but guaranteed related to what you are searching for.  But that only describes the basic search query and most of the popular search engines support *advanced queries*.   For instance, on Google's Advanced Search page you tailor searches to deliver exact phrases, exclude items, or target specific file types or domains. [^4] 
+
+Combining the thoroughness of crawlers, powerful search indexes, and use of advance search features empowers anyone to query for targeted items, including attackers.  For instance, assume a malicious actor finds a novel vulnerability in Atlassian's Confluence web application and wants to find an indiscriminate list of potential targets to attack, they could use Google's advanced search to find all web sites whose website title includes the word "confluence".  In another example, maybe an attacker wants to search for publicly exposed SQL backup files that includes sensitive information like the usernames and passwords of a custom web application that is exposed to the internet, they could use an advanced query that that searches for the file type ".sql" and the keyword "backup".  If we use our imagination we could come up with a list of potential things to search for on Google that have a material security interest.  Such search criteria is called a **Google dork** and communities have been formed to crowdsource lists of thousands of interesting dorks.
+
+> [!activity] Activity 9.2 - Google Dorks
+> We explored the Exploit Database website in the Security Systems chapter as it contains a library of exploit code for known vulnerabilities.  This site also contains a crowdsourced library of Google dorks call the *Google Hacking Database (GHDB)*. [^5]   This database is constantly being added to and currently contains nearly ten thousand entries.  Conveniently, it has a search feature to narrow down what we could target.  Searching for a dork regarding back SQL databases returns a list of 11 entries.
+> ![[../images/09/dork_activity_dorks.png|GHDB Search for SQL Backup Dorks]]
+> The 9th dork on the list looks interesting to me as it is dynamic using "or" operatives and a wide range of SQL backup related keywords.  Jumping to a fresh browser I search the dork and find several interesting websites indexed by Google.  I took the liberty of redacting some of the specific details of the first entry.
+> ![[../images/09/dork_activity_search.png|Google Dork Results for SQL Backup Files|500]]
+> I select the first page that is returned and I am presented with a small list of zipped SQL files that are a few years old.
+> ![[../images/09/dork_activity_dbs.png|List of SQL Backups|400]]
+> Downloading and opening the first SQL backup file I can see there is a table called customers that includes columns like email, date of birth, password, API token, phone number, bank name, account number, and other less interesting information.
+> ![[../images/09/dork_activity_customer_schema.png|SQL Backup Customers Table Schema|500]]
+> The table after this is the backup table with the insert command and the information of a couple dozen "customer" accounts.
+> ![[../images/09/dork_activity_customer_values.png|Customer Table Values|550]]
 
 ### Website Discovery
 Website Discovery
 crt.sh
 google
 
-### Virtual Hosts Discovery
-DNS Dumpster
-
-### Directory Busting
->[!activity] Activity 9.1 - Directory Busting
-
 ## Web Attacks
+### Directory Busting
+>[!activity] Activity 9.3 - Directory Busting
+
 ### Solving Stateless HTTP
 Authentication
 Cookie Security
-> [!activity] Activity 9.2 - Cookie Privesc
+> [!activity] Activity 9.4 - Cookie Privesc
 
 ### Cross Site Scripting (XSS)
 XSS Types
->[!activity] Activity 9.3 - Cross Site Scripting
+>[!activity] Activity 9.5 - Cross Site Scripting
 
 ### Relational Databases
 Database Queries
 SQL Injection (SQLi)
 SQLi Mitigations
-> [!activity] Activity 9.4 - SQL Injection
+> [!activity] Activity 9.6 - SQL Injection
 
 ### Web Proxy Tool - BurpSuite
 BurpSuite
@@ -221,3 +272,8 @@ PortSwigger Academy
 >```
 
 
+[^1]: A03 Injection; OWASP Top 10.2021; March 10th 2024; https://owasp.org/Top10/A03_2021-Injection/
+[^2]: CWE - CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection') (4.14); MITRE CWE; March 10th 2024; https://cwe.mitre.org/data/definitions/77.html
+[^3]: WSTG - Stable; Testing for Command Injection; OWASP Foundation; March 10th 2024; https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/07-Input_Validation_Testing/12-Testing_for_Command_Injection
+[^4]: Google Advanced Search; Google; March 10th 2024; https://www.google.com/advanced_search
+[^5]:Google Hacking Database (GHDB) - Google Dorks, OSINT, Recon; Exploit Database; March 10th 2024; https://www.exploit-db.com/google-hacking-database
