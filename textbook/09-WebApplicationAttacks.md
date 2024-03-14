@@ -73,10 +73,31 @@ Combining the thoroughness of crawlers, powerful search indexes, and use of adva
 > ![[../images/09/dork_activity_customer_values.png|Customer Table Values|550]]
 
 ### Website Discovery
-Website Discovery
-crt.sh
-google
+The *uniform resource locator (URL)*, or web address, comprises of the protocol, subdomain, domain. top level domain, and path to the file.  Take the following URL as an example:
 
+```
+https://www.google.com/
+```
+
+The protocol is `https://`, the subdomain is `www`, the domain is `google`, the top level domain is `com`, while the path is `/`.  Once a system administrator purchases a domain from a registrar, they create an A DNS record that points that domain to a specified IP address.  But the administrator can create other subdomains with corresponding CNAME records that point to other IP addresses.  Any number of subdomains can be created this way without requiring the purchasing of additional domains.  In fact, any number of nested subdomains can be created to!  This means that a given domain may have multiple web applications nested under it facing the public internet.
+
+Once an attacker has a target domain, they can use search engines to discover other web sites and applications related to the domain.  The last section described search engine web crawlers and their indexing capabilities.  We can use our advanced querying knowledge to identify all of the subdomains a domain might have using Google dorks.  Say I wanted to target Yahoo and find all of their subdomains.  I could search for all pages on the domain and then note the subdomains that are listed.  I'll use the following search query in Google to list all Yahoo webpages.
+```
+site:yahoo.com
+```
+![[../images/09/yahoo_search.png|Google Dork Yahoo Site]]
+The first couple results show `login.yahoo.com` and `fr.yahoo.com` subdomains and then there are some 109 million additional pages.  As I am trying to compile a list of all the subdomains Yahoo has, I note these first to and then exclude them from my subsequent queries using the minus character.
+```
+site:yahoo.com -site:login.yahoo.com -site:fr.yahoo.com
+```
+![[../images/09/yahoo_subdomains.png|Refining Dork to Exclude Select Subdomains]]
+The next two subdomains are `shopping.yahoo.com` and `finance.yahoo.com` and the total results are now about 86 million.  Not bad shaving off 23 million records!  I add shopping and finance to my growing list of discovered subdomains for Yahoo and repeat the process until I have exhausted all Google results.  You might be thinking that this task could be automated, and you'd be right!  Checkout the Sublist3r tool by aboul3la on GitHub. [^6]   This opensource tool written in Python scrapes search engines for a given domain and returns a list of subdomains.  Watch out though, as Google is pretty good at detecting and thwarting automated scans such as these by pacing CAPTCHAs.
+
+>[!info] Info - OSINT
+>*Open source intelligence (OSINT)* is the passive reconnaissance technique of using available information on a target usually on the internet or public sources.  Much of the activities discussed in this section are OSINT techniques, although there are many more that are not covered in this chapter.
+
+There are other methods to discover subdomains on a target.  One of my favorite sites is `crt.sh` which gathers TLS certificate information on domains and compiles it into a searchable online database.  Often certificates include subdomains under the domain that are trusted under the certificate.  This listing can be scrapped together as yet another source to compile a live list of targets.  The following screenshot is taken from crt.sh after querying for "google.com".  It returns a long list of Google subdomains!
+![[../images/09/crt_sh.png|Crt.sh Query for Google Subdomains]]
 ## Web Attacks
 ### Directory Busting
 >[!activity] Activity 9.3 - Directory Busting
@@ -277,3 +298,4 @@ PortSwigger Academy
 [^3]: WSTG - Stable; Testing for Command Injection; OWASP Foundation; March 10th 2024; https://owasp.org/www-project-web-security-testing-guide/stable/4-Web_Application_Security_Testing/07-Input_Validation_Testing/12-Testing_for_Command_Injection
 [^4]: Google Advanced Search; Google; March 10th 2024; https://www.google.com/advanced_search
 [^5]:Google Hacking Database (GHDB) - Google Dorks, OSINT, Recon; Exploit Database; March 10th 2024; https://www.exploit-db.com/google-hacking-database
+[^6]: aboul3la/Sublist3r: Fast subdomains enumeration tool for penetration testers; GitHub; March 13 2024; https://github.com/aboul3la/Sublist3r
