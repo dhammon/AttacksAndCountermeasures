@@ -210,7 +210,7 @@ As you can tell not all cookies need protections and several of the cookies from
 > ![[../images/09/cookie_activity_home_update.png|Fixing Home File To Use $_SESSION|550]]
 > After saving the file I restart the browser and login using the low privileged `daniel` user.  Navigating back to the developer tools I see that the role cookie is no longer available!
 > ![[../images/09/cookie_activity_fixed.png|Role Cookie Removed]]
-### Cross Site Scripting (XSS)
+### Client Scripting
 Modern web browsers have built-in JavaScript engines closely coupled with the *domain object model (DOM)* extending browser features and capabilities while enhancing user experience.  JavaScript runs in browsers and is currently the dominant programing language for dynamic front end development.  Software engineers take advantage of browsers running of JavaScript by developing applications, whose components or the entire application, that run client side.  Web sites can run JavaScript code from a file downloaded locally, a remote source, or inline within other file types such as HTML.
 
 Any system that runs, or executes, code has an interest to security because a vulnerability in that system could lead to *code injection* vulnerabilities.  Browsers use of JavaScript is no exception to this security impact as an attacker that exploits such a vulnerability would be able to run arbitrary code on the client's device.  These **cross site scripting (XSS)** attacks are performed by attackers by injecting malicious JavaScript that victims execute that can compromise the user's web application account.  Imagine a payload that grabs the application's session token from the cookie jar and forwards it to an attacker controlled system.  With this token an attacker can access the web application as that user from any device!  These same vulnerabilities could even lead to the victim's device or system becoming compromised if the attacker is able to exploit a vulnerability in the browser itself.  Such severity is usually limited to those who do not keep their browsers updated with the latest security patches, but there are many critical vulnerabilities discovered in modern browsers all the time.
@@ -266,16 +266,67 @@ While input validation deals with the vulnerability at the source, *output encod
 >```
 >Reloading the malicious URL now renders the payload in the version parameter on the page without executing it.
 >![[../images/09/xss_activity_fixed.png|Fixed XSS Vulnerability Renders as Plain Text]]
+
 ### Relational Databases
+Web applications store, update and retrieve data from databases of information as part of the back end system.  One such system, **relational databases management systems (DBMS)**, store data in a manner similar to Microsoft's Excel where data is stored in tables of rows and columns.  There are several flavors of relational databases that vary slightly in their syntax but are mostly similar.  Some of the most popular relational databases available today include MySQL, PostgreSQL, Oracle Database, and Microsoft SQL Server.  The web application establishes a connection with the SQL database server, sends SQL statements, and collects data responses.  
+![[../images/09/sql_connection.png|Server Connection to DBMS|250]]
+The image above illustrates a web server's connection to DBMS while sending a SQL query for information.  The data in these systems is interacted with using *structured query language (SQL)*, pronounced "SEE-QWELL", which is coded into the business logic of a web application.  SQL is a very human friendly language that prides itself on its intuitive readability.  The following image taken from a MySQL server shows a database CLI query.  The query `select * from users` requests a selection of all data from the table named users.  
+![[../images/09/sql_table.png|SQL Statement Showing Table Data|400]]
+The output of the command in the image above lists a table with columns and rows showing the ID, username, password, and role of two users.  A row, also referred to as a row or a tuple, represents a user in the system.  Organizing data this way enables the logical structure of data which can be requested or changed by a web application.  Once data is retrieved, or otherwise updated, the web application uses the values from the database in its business logic as appropriate.  For instance, a user logging into a system may have their name retrieved from the database which is then used in the rendering of the logged in page in a welcome message.
 
-Database Queries
-SQL Injection (SQLi)
-SQLi Mitigations
+The passing of SQL queries from a web server to a database is not without its risk.  If the query was manipulated by an attacker, in what is called a **SQL injection (SQLi)**, they could retrieve data that they are not authorized to have access to.  For example, an attacker that is able to retrieve the users table in its entirety would be a big security risk as they would have access to everyone's passwords.  To mitigate against this most security focused web applications will hash the web application users' passwords before storing them in the database.  This prevents an attacker from ever obtaining all users plaintext passwords.  But that is not enough to fully mitigate all the risk of SQLi as there may be other sensitive data available or the attacker could even trick the system into logging them in using someone else's account.   Some misconfigured DMBS combined with SQLi may even result in *remote code execution* exploits empowering the attacker to gain full system access.
+
+SQLi vulnerabilities are the result of improper handling of users input where a user controlled string is dynamically inserted into a SQL query by the web application's business logic.  Such a setup would be benign if not for an attacker extending the SQL query with their own code.  SQL allows for conditions and other logical operators that can be abused in a SQLi attack.  Take the following vulnerable code snippet for authenticating a user as an example.
+```php
+$sql = "SELECT * FROM users WHERE username='".$_GET['username']."' AND password='".$_GET['password']."'";
+
+```
+This vulnerable line of code takes GET parameters and concatenates them into a query variable which will be passed to the DBMS.  Entering valid values for the parameters allows the application to function normally but an attacker could inject SQL syntax and hijack the logic of the command.  For instance, if the attacker supplied `lol' OR 1=1-- -` as their username with this vulnerable code they would be logged into the system without providing valid credentials!  This works because the apostrophe ends the username string in the query and the query's logic is extended with the OR operator that always returns true because one equals one.  The `-- -` is used to comment out the remainder of the query resulting in the final query being `SELECT * FROM users WHERE username='lol' OR 1=1-- -` .  The application's business logic would provide an affirmative response to its authentication check and log the malicious user into the application!
+
 > [!activity] Activity 9.6 - SQL Injection
+> You could have guessed that the Vulnerable Site application we have been demonstrating with in this chapter is vulnerable to SQL injection attacks.  As explained above, we can leverage the vulnerability to log into the system without credentials.  But we can also use the vulnerability to extract all the data within the database.  Furthermore, the attack could be automated using a tool called SQLMap which will be demonstrated on my Kali VM.
+> 
+> Starting the Kali VM, Vulnerable Site application, and navigating to http://127.0.0.1/ I am once again presented with the login screen of my application.  If I provide invalid credentials I receive a friendly error message.
+> ![[../images/09/sqli_activity_error.png|Bad Credentials Error Message]]
+> Navigating back to the login page, I test for SQL injection vulnerabilities by submitting apostrophes in the form's fields.  This time the application behaves differently by not displaying any error message.  This is a strong indicator that the application could be vulnerable to a SQL injection because it behaves in an unexpected way.  It isn't the only indicator an application could have.  I have seen other applications output SQL error messages for example.
+> ![[../images/09/sqli_activity_test.png|SQLi Test]]
+> Iterating on the SQLi vulnerability I return to the login screen and provide `lol' OR 1=1-- -` as the username or password.  Hitting submit sends me to the authenticated and privileged home page!
+> ![[../images/09/sqli_activity_logged_in.png|SQLi Exploit Logged In As Administrator]]
+> I can expand this attack by dumping the entire database.  While this can be accomplished manually, it is much more efficient to use SQLMap to automate the task.  Kali has SQLMap installed by default so I only need to point the tool at the vulnerable page to begin attacking it.  SQLMap will test every parameter with several injection tests and identify all the ways the application is vulnerable to SQLi.  I use the batch option to answer yes to any of SQLMap's questions.
+> ```bash
+> sqlmap -u ' http://127.0.0.1/?username=lol&password=lol&version=beta' --batch
+> ```
+> ![[../images/09/sqli_activity_initial_map.png|Initial SQLMap Scan of Index Page|600]]
+> After a few moments, SQLMap finds that the username parameter is vulnerable to time-based blind SQL injection and the backend DBMS is MySQL.
+> ![[../images/09/sqli_activity_timebased.png|SQLMap Initial Results|600]]
+> I rerun the same SQLMap command but with the `--dbs` option to identify what databases are within this MySQL DBMS.  SQLMap picks up where it left off and automatically uses the time-based blind injection vulnerability to extract the database names.  The time-based method is very slow as SQLMap has to guess each letter of every database name one at a time.  If the application responds slowly it indicates whether the guessed letter is correct or not and then continues guessing the next letter until all database names are uncovered.
+> ```bash
+> sqlmap -u ' http://127.0.0.1/?username=lol&password=lol&version=beta' --batch --dbs
+> ```
+> ![[../images/09/sqli_activity_dbs.png|Dumping Databases Using SQLMap|600]]
+> After a minute or two all database names are presented.  The schema, mysql, and sys databases are default databases used by MySQL to organize databases.  Actually the information_schema database has a table where all the databases and tables are listed which is what SQLMap uses to find the database names.  I see a database named company which looks interesting.
+> ![[../images/09/sqli_activity_dbs_results.png|Discovered Databases by SQLMap|600]]
+> To explore the tables within the company database I specify `-D company` and the `--dump` option.
+> ```bash
+> sqlmap -u ' http://127.0.0.1/?username=lol&password=lol&version=beta' --batch -D company --dump
+> ```
+> ![[../images/09/sqli_activity_tables.png|Dumping Table Names From Company Database|600]]
+> After a few minutes of SQL injections, SQLMap dumps the contents of the tables in the company database which includes usernames and passwords for all the accounts!
+> ![[../images/09/sqli_activity_user_dump.png|Users Table Dumped By SQLMap|600]]
 
-### Web Proxy Tool - BurpSuite
-BurpSuite
-PortSwigger Academy
+The SQLi vulnerabilities can be mitigated by using input validation techniques covered in the XSS section of this chapter.  However, it is not advisable to rely on input validation as sometimes the data needing to be passed into the DMBS will require the use of valid SQL syntax.  Instead, queries should be crafted by web applications in a safe manner which ensures user input won't be executed as part of the query.  The standard method of doing so is through *prepared statements* that replace concatenated strings with question marks and encoded variable values replace them during processing of requests.  Major web programming languages have this functionality built in so developers are encouraged to use them over input validation.
+### Web Proxy Tooling
+The ability to capture inbound and outbound web traffic to inspect, modify and forward enables security researchers, attackers, and interested parties to examine how web applications operate between their web servers and clients.  These **web proxy tools** installed client side use browsers' proxy settings to direct traffic through the tool.  They can be configured to even intercept TLS traffic by importing the proxying tool's certificate into the browser.
+
+The most popular tools are PortsWigger's BurpSuite and OWASP's ZAP.  BurpSuite's community edition has many free features such as intercept, automations like brute forcing, and repeater which allows for the quick resending of requests.  BurpSuite's Pro edition, costing around $400 per year, removes built in throttles, includes a fantastic DAST scanner, web spider, and other features.  ZAP has all these features all for free but the interface is less appealing, at least in my opinion.  
+
+Kali Linux has BurpSuite, and ZAP, preinstalled and can be launched from the applications menu.  Once the tool is started you can launch the built-in Chromium based browser *Burp browser* which already has the TLS certificate imported and is configured to run through the proxy tool.  Navigate to Target (tab), Site Map (sub tab) and press the Open Browser (button) to start an instance of the browser.  Opening a web site in the Burp browser starts capturing traffic which is logged and can be later analyzed.  The image below shows Burp browser on the right and the BurpSuite interface on the left.  The BurpSuite window is showing captured requests and response in the bottom panes. 
+
+![[../images/09/burp_proxy.png|BurpSuite Intercepting Traffic]]
+These captured requests can be modified and replayed through the Repeater and Intruder features.  There are so many features worth exploring on how to use Burp and a robust community extending its capabilities through add-on extensions which can be downloaded from the marketplace.  Anyone doing web application security testing is likely using a web proxy such as ZAP or Burp as they are very powerful tools that enrich the testing experience.
+
+> [!tip] Tip - Free Web Application Security Labs
+> Another service PortsWigger provides is their Academy which has over one hundred free web application penetration testing labs that include a wide array of vulnerability classes spanning various difficulties.  The Academy even tracks your progress and is gamified with a leaderboard.  Readers interested in resources to practice their web application security skills should invest time in PortsWigger's Academy.  See https://portswigger.net/web-security for details.
 
 ## Exercises
 >[!exercise] Exercise 9.1 - Directory Busting
