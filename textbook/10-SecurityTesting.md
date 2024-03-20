@@ -1,24 +1,114 @@
 # Security Testing
-Image
+![](../images/10/security_tools.jpg)
 
-Intro
+Regular testing for vulnerabilities provides assurances to stakeholders that systems, networks, and applications are potentially free from security issues.  An entire subindustry has developed over the years in which organizations can hire security professionals to test the security of their systems and information.  This chapter will examine security testing processes and tools, why it is important to organization management, and how security professionals perform such tests.
 
 **Objective**
-1. lol
-
+1. Describe the types and scope of security testing processes.
+2. Perform shell and reverse shell connections.
+3. Understand the components of the security testing process.
+4. Conduct a penetration test against Metasploitable2.
 ## Security Testing Fundamentals
+Organizations will engage with security professionals to evaluate with degree of security misconfigurations and vulnerabilities that are reasonably discoverable in their systems.  These reviews provide management with assurances that systems are secure but often an organization's customers, owners, or regulators too demand evidence of the overall security posture of the company.  Therefore, it is common that a regularly occurring security testing process is performed in organizations that produces evidence that the activity was completed competently.
 ### Security Testing Types
+There are several types of security testing organizations participate in.  This textbook's Information Security chapter already described one of these security testing types related to audits.  Usually internal or external security audits center around the reconciliation of observed security controls against a framework or a standard, such as policies, procedures, laws, regulations, or guidance.  They are often performed by an audit professional and not a technical security professional so the tests focus on the existence and proficiency of security controls versus the discovery of vulnerabilities and misconfigurations.
 
-### Scope
-Inhouse/3rd Party
-Network/Web
-Internal/External
-Authenticated/Anon
+The Security Systems chapter introduced the vulnerability management process most organizations perform to ensure regular security hygiene of their systems.  This process can be performed by the organization or outsourced to an external party.  A **vulnerability assessment** is performed by a third party and typically consists of them scanning systems or networks for common misconfigurations and vulnerabilities.  They don't perform any manual testing and instead rely on the output of scanning tools to produce a report that is then made available to organization management.  The issue with vulnerability assessments is that the scanners are limited to the types of issues they can find.  They can only discover what they are programmed to do and many vulnerabilities require special attention to be identified.  
 
-### Frameworks
+Another type of security testing is through **penetration testing**, or *pentest*, which involves the engagement of a security professional over some period of time, usually two weeks, to evaluate a system for known vulnerabilities and misconfigurations.  Sometimes these testing efforts will discover novel security issues or attack techniques as the testing process extends beyond just running a scanning tool and has the tester perform tests manually.  These engagements could include the testing of locations and buildings which is called a *physical penetration test*.  Organization customers typically expect at least an annual test conducted by a qualified third party be performed.  The tester may discover a range of security issues with a variety of severities which would be reported to the organization's management in a final report.  The organization is responsible for mitigating these issues and may re-engage the penetration tester to verify remediated issues are resolved.  Sometimes organizations perform penetration testing activities inhouse or continuously depending on their risk tolerance and security culture.
+
+Over the last several years **bug bounty programs** have become very popular.  These programs were developed because independent security researchers were conducting unsolicited security testing of networks and applications.  Performing such tests puts the organization and the security research in jeopardy as the systems being tested to be negatively impacted and the research held legally and criminally liable.  However, many organizations began to recognize the talent in the security community and wanted to focus it in a productive manner.  Bug bounty programs involve an incentive, usually financial, for the discovery and responsible disclosure of unique security issues.  But organizations were having to build from scratch the legal and engagement processes, marketing to security researchers, scoping criteria, and many other details which became a friction to implementing a program.  In response to this problem a handful of bug bounty platforms sprang up that streamlines the setup process and registers security researchers.  This structuring of the market enabled organizations to quickly implement a program and security researchers to find new targets.  Also, by formalizing security researcher's efforts they are protected from legal prosecution while satiating their desire to perform real world engagements ad hoc.  There are several issues associated with these programs.  Popular targets often have the same issues discovered but only one bounty will be paid, leaving a large administrative burden by the organization to assess and compare all reported vulnerabilities.  Another criticism is the potential for abuse due to the financial incentive of vulnerabilities.  Imagine a developer purposefully introducing a vulnerability to have a friend report it and split the proceeds.
+
+>[!info] Info - Beg Bounties
+>Some "researchers" scan organizations targets irrespective of bug bounty program participation and then solicit, even demand, a bounty from the company.  These individuals typically find low value security issues discovered by a scanner and email the organization requesting payment.  I would caution anyone from obliging such requests as any serious researcher wouldn't request a payment or would use a legitimate bug bounty program provider. 
+
+The last security testing type is that of a **red team** test which typically lasts several weeks or months, sometimes up to a year.  The red team test will involve a small team of highly skilled security professionals that will simulate an *advance persistent threat* and use almost any attack method, including phishing, to gain access to systems.  These engagements are often very expensive due to the timeframe and skills needed.  They are usually very successful and go unnoticed by security alerting systems.  A report is created at the end of the engagement that describes the weaknesses to access systems and information for the organization to follow up on.  The term red team, and opposite *blue team*, has its origins in the military and represents attackers (red) and defenders (blue).  Overlaying this concept on security as there are both attackers and defenders helps structure the context, type of work and systems security professionals are involved in.  Another testing activity popularized over the last several years is the concept of **purple teaming** where the red and blue teams work together in tandem to evaluate the security of a system.
+### Testing Scope
+Before a security test begins, especially for third party penetration tests, an agreement is formalized called the *engagement letter*.  Sometimes these agreements are governed by a *master service agreement (MSA)* that provides overarching provisions of expectations between the two parties.  It includes details surrounding the work that will be performed known as the **scope**.  This usually entails information such as the dates work will be performed, the assets that will be assessed, and other information pertaining to the agreement.  It is vital that such information is documented, agreed and adhered to as it protects the tester from liability.  Professional entities do not perform security testing without having an engagement letter executed as it would otherwise appear that they are attempting to compromise assets with malicious intent.
+
+Prior to the preparation of the engagement letter an organization must consider whether to perform the security testing inhouse or to outsource it to a third party.  There are benefits and drawbacks between either of these methods.  An organization may not have the talent or skills to perform a comprehensive and thorough test or may have potential or perceived conflicts of interest.  An stakeholder, such as a customer, might not put much value in the attestation of internal testing as they would not be perceived as independent.  Another concern is that internal resources may already be constrained for time and allotting efforts to perform such tests put off other work that might also need to be completed known as an *opportunity cost*.  However, the value of performing inhouse testing is that the testers are highly familiar with the environment, its people, and its processes which enables them to work very efficiently.  In additional they might have the opportunity to perform tests ad hoc or to any desired duration without the consideration of costs, as their salaries are already a *sunk cost* being spent regardless of test.
+
+Using a third party testing firm absolves stakeholder concerns for conflicts of interests as the testing firm is independent of the organization's management.  These third party firms also attract and retain high skilled security professionals that spend the majority of their time on such engagements which might qualify their expertise over inhouse personnel.  But this isn't always the case as not all security testing companies maintain high levels of expertise which an organization might not be able to fully confirm.  For instance, I once hired a firm to perform a penetration test and confirmed the qualifications of the assigned tester before testing commenced.  That individual had a number of professional certifications, a lot of experience, and was well known in the security community.  Just days before the test was to start, the testing company reassigned the vetted tester and assigned a new tester.  When I interviewed the new tester I discovered they had less than a year of professional experience and no certifications.  
+
+Another criticism of using third party testing firms is that they are engaged for a brief period of time, usually around two weeks.  Much of this time is spent setting up and learning about the environment they are testing.  They also have to juggle multiple clients as they test due to retesting requirements as well as follow up questions post test.  There are other demands for their time and attention outside testing windows as they have to conceivably perform other duties for their firms such as staff meetings and trainings.  Given these pros and cons on inhouse versus outsourced testers, ideally a mixture of the two is performed getting the best of both and compensating for each others misgivings - if an organization can afford it.
+
+The scope of an engagement must define what is to be tested.  That scope should define the type of assets that will be tested.  Some of the most common engagements will be centered around some number of networks, web or mobile applications, or physical locations.  In a network penetration test the tester will be provided one or more IP addresses to assess.  You could imagine these tests start with a port and service scan on each IP followed up by a version discovery and vulnerability scan.  In a web application test the engagement would define what domains or URLs are within the scope and for a mobile application test a copy of the application might be directly provide.  Physical security tests should clearly document address locations and what areas are in target.  In addition to detailing the targets, *objectives* must also be defined.  These objectives would detail the goals the tester might attempt to achieve, such as obtaining domain admin privileges, accessing a privileged page or discovering remote code execution, or accessing a server room.
+
+>[!info] Info - Cloud Security Testing
+>A subset of network tests that have become increasingly popular over the years is testing cloud environments.  These *cloud pentests* are similar to traditional network tests in concept but are tailored to cloud technologies which require an almost entirely different skillset and experience.  I highly recommend Rhino Security Labs (https://rhinosecuritylabs.com/) which has contributed to the community greatly with opensource tools and literature on cloud security testing.
+
+Test engagements should also define the approach to the environment that is to be tested.  The approach would detail if the tests are conducted from within or outside the environment - or internal vs external to the environment.  The following diagram illustrates this concept from a network engagement, but the idea could also apply to an application or physical test.
+![[../images/10/internal_external_test.png|Internal Versus External Testing|400]]
+External testing as demonstrated by the attacker outside the red dotted network boundary provides the tester with only a public network to attack.  It is similar to the internet's perspective of the organization's network.  External tests are typically less resource intensive, less costly, as the number of reachable assets are limited.  However, they also only provide an outside point of view and will exclude many vulnerabilities and misconfigurations that exist within a network.  Internal testing, represented by the attacker in the hat within the red dotted lines, provides the tester with direct access to the network.  This could include a *drop box*, such as a Raspberry Pi or laptop controlled by the tester, placed within and connected to the network enabling them to reach internal resources behind the router or network firewall.
+
+In addition to internal or external considerations, authentication must be determined prior to starting tests.  Unauthenticated tests, called *black box tests*, do not provide the tester with credentials to the networks, systems, or locations being tested.  This greatly limits the testers ability to discover issues but it does offer insights as to what an anonymous attacker could discover.  *Grey box* tests provide testers with credentials to the scoped assets giving them an insider perspective.  These tests might include low privileged, privileged, or both sets of credentials depending on the objectives of the tester.  An even more thorough scoped test is a *white box test* where any internal documentation, including but not limited to source code and network topologies, is provided to the tester.  The tester uses this information to more efficiently identify areas of weakness in the assets they are testing.  Many third party firms charge a premium for these tests as they are more laborious to execute.
+
+> [!tip] Tip - Provide Firewall Bypass
+> It is recommended to allowlist tester IP addresses in security systems like WAFs and IPSs during the testing window.  This removes obstacles that might otherwise hide the root cause of security issues or waste limited and costly time.
+## Frameworks
+A **framework** in the context of security testing is a toolset designed to manage the assessment of targets.  It provides the tester with a suite of tools that can identify and exploit targets but also to administer the connections from compromised endpoints.  Typically these tools can handle a high volume of compromised devices.  Once an endpoint is compromised, additional tools within the framework are available to extend post exploitation techniques including moving laterally within compromised networks.  Along the way the framework logs activity and results to support findings and generate reports.
+
+There are many frameworks a tester can use that range from free to use to commercial paid.  Like many other security research and tools, frameworks are useful to both security professionals as well as malicious actors.  Metasploit, now owned by the company Rapid7, is one of the most popular frameworks due to is large feature set, community support, and corporate investment.  It comes pre-installed within Kali Linux operating systems and is a great introduction to the power of these frameworks.
+
 >[!activity] Activity 10.1 - Metasploit Basics
+>The Metasploit framework has verbose documentation published on https://docs.metasploit.com/ that explains the modules included within the framework and the toolset's basic usage.  Metasploit is divided into the following *modules*:
+>- Auxiliary - performs tasks, such as scanning,
+>- Encoder - converts data into specified encodings,
+>- Evasion - tools to bypass security monitoring tools like antivirus,
+>- Exploit - executes payloads that leverage vulnerabilities to achieve code execution,
+>- Payload - encapsulates shellcode used within exploit modules,
+>- Post - tasks for gathering, collecting or enumerating compromised endpoints
+>Readers are encouraged to explore Metasploit's rich documentation that explains its architecture, basic usage, and ways to contribute.  In this activity I will demonstrate starting and navigating Metasploit before we use it again in later activities within this chapter.
+>
+>After starting my Kali VM and launching a terminal, I launch Metasploit using the following command.
+> ```bash
+> sudo msfdb run
+> ```
+> ![[../images/10/basics_activity_msf_start.png|Starting Metasploit Framework on Kali|600]]
+> The first time launching Metasploit creates a database which is used to store testing information.  Framework users can create new databases for each engagement they are on to keep interests separate from each other.  After waiting a minute for the database to initialize we are presented with some ASCII art, that changes each time the tool is started, and the `msf6` command line known as the *console*.
+> ![[../images/10/basics_activity_msf6.png|Metasploit Fully Loaded|600]]
+> Metasploit is a command line tool that uses its own command prompt with built in commands.  The best command to learn first is the `help` command as it will display a description of all other commands.
+> ```
+> help
+> ```
+> ![[../images/10/basics_activity_help.png|Metasploit Help Menu|600]]
+> The help menu organizes commands in sections that include Core Commands, Module commands, Job Commands, as well as a few others.  Core Commands help with administering the console and includes commands such as `set` that assigns a given value to a variable, `quit` which exits the console, and `sessions` that list all the available sessions created.  The following list from the help menu describes all available commands.
+> ![[../images/10/basics_activity_core.png|Metasploit Core Commands|600]]
+> The next section of the help menu is the Module Commands section.  These commands are used to find, select and navigate modules within the framework.  The `info` command describes information about a module while the `search` command can help find a module by keywords.  Other useful module commands are `use` which selects a module, `options` that displays the configuration for the module, and `back` to exit out of the module.
+> ![[../images/10/basics_activity_module.png|Metasploit Module Commands|600]]
+> I will demonstrate the navigation of Metasploit by searching for modules related to SMB, which is a popular Windows protocol for sharing remote services like printers and files.  Using the search command with keyword SMB, a list of all the modules in Metasploit are displayed.
+> ```
+> search smb
+> ```
+> ![[../images/10/basics_activity_search.png|Searching SMB In Metasploit]]
+> The search reveals over one hundred modules with the keyword SMB in its name or description.  It produced a list of modules from auxiliary, post exploitation, and exploit categories.  I'll refine my search to identify modules related to the Eternal Blue vulnerability and exploits.  Eternal Blue was made famous through its use in WannaCry ransomware as well as the story behind its discovery being leaked by a threat actor that hacked the NSA and leaked it online.  The exploit leverages particular weaknesses in SMB to achieve remote code execution as the System user.
+> ```
+> search eternal
+> ```
+> ![[../images/10/basics_activity_eternal_search.png|Searching Eternal Blue Exploits In Metasploit|600]]
+> This list of modules includes the Eternal Blue exploit I am searching for.  To select it I issue the `use` command while specifying the relative index number in the first column or the full path name of the module.
+> ```
+> use 0
+> use exploit/windows/smb/ms17_010_eternalblue
+> ```
+> ![[../images/10/basics_activity_use_eternal.png|Selecting Eternal Blue Module|600]]
+> Upon selecting the module the console description appends the name of the module to the command line evidencing the module is selected.  Before I configure the Eternal Blue module I need to identify what variables it needs to have set.  Running the `options` command displays each variable along with if it is required, its current value, and a brief description.
+> ```
+> options
+> ```
+> ![[../images/10/basics_activity_options.png|Eternal Blue Options|600]]
+> You may have noticed between running the use and options commands that Metasploit logged a "No payload configured" message to the console and that a payload was automatically assigned.  This module requires the use of a payload module which also has settings that are displayed after running options.  The payload options LHOST and LPORT are used to instruct Metasploit where to make a reverse connection to which requires a *listener*.  We have used listeners, such as Netcat, in other chapters of this textbook but Metasploit also has the capability of setting them up.  We will explore listeners and payloads later in this chapter, but they're configuration is worth noting here.
+> ![[../images/10/basics_activity_payload_options.png|Payload Options For Eternal Blue|600]]
+> The Eternal Blue module needs to be instructed which asset to target.  The "R" in "RHOSTS" and "RPORT" stands for remote and is used to specify the target to attack.  I will need to set RHOSTS because it is currently blank and is required.  Running the options command again I can see RHOSTS is no longer blank!
+> ```
+> set RHOSTS 192.168.1.5
+> options
+> ```
+> ![[../images/10/basics_activity_set_rhosts.png|Setting RHOSTS For Eternal Blue|600]]
+> Once all required settings are configured, and a listener is setup which it currently isn't, the exploit module can be launched using the `run` or the `exploit` commands.
 
-## Command and Control
+While Metasploit generally focuses on the compromise of targets, other frameworks are built to optimize **command and control (C2)** through the use of agents.  A free and opensource C2 framework is Covenant while a common and often abused commercial grade framework is Cobalt Strike.  This type of framework is explored in more detail within the following section.
+### Command and Control
 Basic Infrastructure
 Resilient Infrastructure
 Agents

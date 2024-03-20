@@ -20,18 +20,19 @@
             }
           },
           {
-            "id": "e91152f361e90dc4",
+            "id": "8b8bdde7fa825de1",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/08-WebApplicationDefense.md",
+                "file": "textbook/10-SecurityTesting.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -158,39 +159,40 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2ec839b962581d99",
+  "active": "8b8bdde7fa825de1",
   "lastOpenFiles": [
-    "textbook/09-WebApplicationAttacks.md",
-    "textbook/10-SecurityTesting.md",
-    "textbook/08-WebApplicationDefense.md",
-    "images/09/burp_proxy.png",
-    "Pasted image 20240318163620.png",
-    "images/09/sqli_activity_user_dump.png",
-    "images/09/sqli_activity_tables.png",
-    "images/09/sqli_activity_dbs_results.png",
-    "images/09/sqli_activity_dbs.png",
-    "images/09/sqli_activity_timebased.png",
-    "images/09/sqli_activity_initial_map.png",
-    "images/09/sqli_activity_logged_in.png",
-    "README.md",
-    "images/09/sqli_activity_test.png",
-    "textbook/01-InformationSecurity.md",
-    "textbook/02-Cryptology.md",
-    "textbook/03-NetworkSecurity.md",
-    "textbook/04-NetworkServices.md",
-    "textbook/05-OperatingSystemSecurity.md",
-    "textbook/06-PersistenceAndPrivilegeEscalation.md",
-    "textbook/07-SecuritySystems.md",
-    "textbook/00-Introduction.md",
-    "images/09",
+    "images/10/basics_activity_set_rhosts.png",
+    "images/10/basics_activity_payload_options.png",
+    "images/10/basics_activity_options.png",
+    "images/10/basics_activity_use_eternal.png",
+    "images/10/basics_activity_eternal_search.png",
+    "images/10/basics_activity_search.png",
+    "images/10/basics_activity_module.png",
+    "images/10/basics_activity_core.png",
+    "images/10/basics_activity_help.png",
+    "images/10/basics_activity_msf6.png",
+    "images/10/basics_activity_msf_start.png",
+    "images/10/security_tools.jpg.crdownload",
+    "images/10",
     "images/New folder",
+    "textbook/09-WebApplicationAttacks.md",
+    "textbook/08-WebApplicationDefense.md",
+    "textbook/07-SecuritySystems.md",
+    "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "textbook/05-OperatingSystemSecurity.md",
+    "textbook/04-NetworkServices.md",
+    "textbook/03-NetworkSecurity.md",
+    "textbook/02-Cryptology.md",
+    "textbook/01-InformationSecurity.md",
+    "textbook/00-Introduction.md",
+    "textbook/10-SecurityTesting.md",
+    "README.md",
+    "images/09",
     "images/08/web_attacks.jpg.crdownload",
     "images/08/web_defense.jpg.crdownload",
     "images/08",
     "textbook/08-",
     "files/2016-04-16-traffic-analysis-exercise.pcap.zip",
-    "images/07/security_patch.jpg.crdownload",
-    "images/07",
-    "files/CrowdStrike2023GlobalThreatReport.pdf"
+    "images/07/security_patch.jpg.crdownload"
   ]
 }
