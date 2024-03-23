@@ -124,11 +124,71 @@ Victims communicate with frameworks using an *agent* that has been installed on 
 ![[../images/10/c2_agents.png|C2 Agent Communication Flow|550]]
 
 When the attacker is ready to have a victim or group of victims perform some task, such as a *distributed denial of service (DDoS)* attack, they log into the framework C2 and insert a command.  When the agents eventually check in, they see the command and execute it.  After the victim executes the command, the results are returned to the C2 and then the querying recommences.  In the next section we will explore shells and *reverse shells* that work similarly to agents.
-## Remote Connections
-Shell
->[!activity] Activity 10.2 - SSH
+## Remote Shells
+The interface where a user can enter commands to a computer is often referred to as a shell, terminal, console, and command line interface although technically each of these terms have a distinguished meaning.  While it is common to use them interchangeably, as I have and will continue to in this text, it is beneficial to know their differences.  A **shell** is a computer program that provides a text only interface and is used to give the machine instructions to run other programs.  The **command line interface (CLI)**, or prompt, is part of the shell that starts with the blinking cursor where the shell user enters commands.  **Terminal** and **console** have their roots in the early days of networked computing where a device, the console, connected to a mainframe via an interface, the terminal.
+
+> [!info] Info - Shell Options
+> The most common shells for Unix and Linux operating systems are variants the *Bourne shell (sh)* command line interpreter which is often installed by default.  Other common shells that perform similarly to the Bourne shell are Bash and the Z shells (zsh).
+
+Shells offer a convenient way to interact with a computer that has low overhead relative to a GUI.  Another feature is the ability to group commands together with logic into *scripts* which can automate tasks improving quality and efficacy.  Another profound capability of shells is that they can be used locally or remotely.  This can empower administrators and system users to connect to a device from anywhere over the internet as if they were sitting in front of it.  However, before a remote shell connection can be made, the remote device must be appropriately configured with a shell program that interacts with the networking stack.  Once the needed software and running the program runs as a service and is bound to a network port awaiting incoming connections.  
+
+The security of remote shells is very important since it effectively turns the remote device into a server that can be connected to and controlled by anonymous users on a network.  The most basic forms of security for remote shells are authentication, such as requiring a username and password before admitting a shell connection, and encryption, where the network traffic is protected from manipulation and eavesdropping.  Advanced security measures ensure accounts making remote shell connections are authorized with least privileges even through the use of a *restricted shell* or *jail* which limit the commands that can be used.  
+
+> [!warning] Warning - Using Non-Default Remote Management Ports for Security
+> Some administrators will establish remote management ports on non-default numbers expecting the service won't be discovered.  Such efforts are trivially bypassed by a simple port scan and provide little to no real security protection.  This type of effort is called *security through obscurity* which is a technique used to hide vulnerabilities from being discovered.
+
+A common remote shell protocol and application is Telnet which is still used today however it should be avoided.  Even though Telnet, on port 23, has authentication features built-in, it does not support encryption leaving it susceptible to MitM attacks.  Alternatively, the *secured shell (SSH)* protocol over port 22 offers enhanced authentication method, such as the use of passkeys instead of passwords, while also being secured using AES encryption.  Microsoft Windows also supports secured remote shells within over their proprietary Windows Remote Manager (WinRM) on ports 5985 and 5986 and SSH.  The following diagram depicts the most basic of SSH connections where a client establishes a remote session with a device that has a listening SSH service.
+
+![[../images/10/shell_ssh.png|Basic SSH Connection|275]]
+
+>[!activity] Activity 10.2 - SSH Connection
+>To demonstrate SSH, I will setup the Ubuntu VM as an SSH server and then connect to it using the Kali VM which will require both VMs to be on the same network using Bridge Adapter network modes in VirtualBox.
+>
+>After starting the Ubuntu machine and starting a terminal, I check to see what network sockets the machine has listening.  You can think of these as being discoverable by an NMAP port scan by another device; however, using the Socket Statistics (ss) command shows the available sockets on the host machine.
+>```bash
+>ss -ant
+>```
+>![[../images/10/ssh_activity_ss.png|Socket Statistics On Ubuntu|600]]
+>From the ss command I see that TCP ports 631, 53, 80, and 443 are listening.  Ports 80 and 443 are related to the Web Application Defense chapter's activities while the other ports came preconfigured when I installed Ubuntu.  Of note, port 22 for SSH is not displayed so I install OpenSSH using the following command.
+>```bash
+>sudo apt install openssh-server -y
+>```
+>![[../images/10/ssh_activity_openssh.png|Installing OpenSSH on Ubuntu|600]]
+>Once OpenSSH is installed I start the SSH service and check its status which shows that the daemon is active and running without error.
+>```bash
+>sudo systemctl start ssh
+>systemctl status ssh
+>```
+>![[../images/10/ssh_activity_start_ssh.png|Starting SSH Service on Ubuntu|600]]
+>Checking Socket Statistics again now shows that port 22 is open to network connections!
+>```bash
+>ss -ant
+>```
+>![[../images/10/ssh_activity_ss_confirmed.png|Socket Statistics Port 22 Listening|600]]
+>Before I attempt to connect to the Ubuntu VM over SSH from Kali, I will need to know its IP address which is found to be 192.168.4.169.
+>```bash
+>ip a
+>```
+>![[../images/10/ssh_activity_ip.png|Ubuntu VM's IP Address|600]]
+>After starting the Kali VM, logging in, and opening a terminal, I run the preinstalled SSH client software to connect to the Ubuntu VM.  This command requires the use of sudo as it establishes a new network connection.  The command syntax for SSH is "username" at "IP address" as demonstrated in the following command.
+>```bash
+>sudo ssh daniel@192.168.4.169
+>```
+>![[../images/10/ssh_activity_connect.png|SSH Connection to Ubuntu From Kali|600]]
+>After entering the command the Kali VM prompts me for the Kali `daniel` user password since I am using sudo.  Then, SSH instructs me that the Ubuntu host I'm seeking to connect to does not have a local asymmetric key associated with it and asks me if I trust the host and public key provided by Ubuntu.  I enter `yes` which adds the key to my local known_hosts file to be trusted in the future.  The next SSH session I make with Ubuntu won't prompt me again unless the keys are rotated.
+>
+>Once I enter yes I am prompted to provide the password for the `daniel` user on the Ubuntu VM.  I then enter the password for the user and I'm greeted with the Ubuntu terminal's message of the day and provided a command line interface!  My shell is transformed to `daniel@154-ubuntu` indicating that my terminal to the Ubuntu shell is ready for commands.
+>
+>I can now enter commands directly on the Ubuntu VM from my Kali VM's terminal that made the SSH connection.  The following commands demonstrates this capability.
+>```bash
+> whoami
+> uname -a
+> ip a
+>```
+>![[../images/10/ssh_activity_remote_commands.png|Remote Commands From Kali On Ubuntu|600]]
 
 Hardened Network
+programs that allow reverse shells
 Reverse Shell
 > [!activity] Activity 10.3 - Reverse Shell
 
