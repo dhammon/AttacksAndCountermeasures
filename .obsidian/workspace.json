@@ -8,7 +8,7 @@
         "type": "tabs",
         "children": [
           {
-            "id": "2ec839b962581d99",
+            "id": "8b8bdde7fa825de1",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -20,19 +20,18 @@
             }
           },
           {
-            "id": "8b8bdde7fa825de1",
+            "id": "85e85445779c4343",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/10-SecurityTesting.md",
+                "file": "textbook/06-PersistenceAndPrivilegeEscalation.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -161,30 +160,29 @@
   },
   "active": "8b8bdde7fa825de1",
   "lastOpenFiles": [
+    "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "textbook/10-SecurityTesting.md",
+    "images/10/crackstation.png",
+    "images/10/breach_directory.png",
+    "images/10/exploitdb_vsftpd.png",
+    "images/10/nmap_vstfpd.png",
+    "images/10/shodan.png",
+    "images/10/wappalyzer.png",
+    "textbook/04-NetworkServices.md",
+    "textbook/03-NetworkSecurity.md",
+    "textbook/09-WebApplicationAttacks.md",
+    "textbook/05-OperatingSystemSecurity.md",
+    "textbook/02-Cryptology.md",
+    "textbook/01-InformationSecurity.md",
     "images/10/rev_activity_sysinfo.png",
     "images/10/rev_activity_help.png",
     "images/10/rev_activity_connection.png",
     "images/10/rev_activity_smartscreen_2.png",
-    "images/10/rev_activity_downloaded.png",
-    "images/10/rev_activity_smartscreen_1.png",
-    "images/10/rev_activity_edge_bypass.png",
-    "images/10/rev_activity_edge_block.png",
-    "images/10/rev_activity_files.png",
-    "images/10/rev_activity_run_listener.png",
-    "images/10/rev_activity_configure_listener.png",
-    "textbook/10-SecurityTesting.md",
     "images/10/security_tools.jpg.crdownload",
     "images/10",
     "images/New folder",
-    "textbook/09-WebApplicationAttacks.md",
     "textbook/08-WebApplicationDefense.md",
     "textbook/07-SecuritySystems.md",
-    "textbook/06-PersistenceAndPrivilegeEscalation.md",
-    "textbook/05-OperatingSystemSecurity.md",
-    "textbook/04-NetworkServices.md",
-    "textbook/03-NetworkSecurity.md",
-    "textbook/02-Cryptology.md",
-    "textbook/01-InformationSecurity.md",
     "textbook/00-Introduction.md",
     "README.md",
     "images/09",
