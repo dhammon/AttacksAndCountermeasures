@@ -105,7 +105,7 @@ Web servers maintain files that can be downloaded by clients.  Sometimes these f
 
 Take the example of a file named `backup.sql` or `staging.zip`.  It is imaginable that these files could contain sensitive information and be mistakenly left in the web root of a server.  We could attempt at blindly guessing common filenames and extensions and if we are luckily stumble upon a download.  The process of guessing web server paths and files using a dictionary list is called **directory busting**.  There are many tools that perform this activity and also several wordlists that contain popular folder names, file names, and extensions.  Combining these tools and wordlists while targeting a website could return an HTTP status 200 response, or perhaps a response that does not include an error message.  Filtering out the invalid responses and displaying only valid responses maps out a web application's directories and files somewhat like a *sitemap*.
 
->[!activity] Activity 9.3 - Directory Busting
+>[activity] Activity 9.3 - Directory Busting
 >Let's demonstrate a directory busting attack against a vulnerable by design PHP application that I created.  I'll run the application in a Docker container and use the directory busting tool Gobuster on my Kali VM.  I already have Docker installed from activities performed in the Web Application Defense chapter.  Consider revisiting the last chapter for details on the installation and configuration of Docker if needed.
 >
 >After starting the Kali VM and opening a terminal, I download, or clone, the vulnerable-site PHP application using the following git command.
@@ -116,7 +116,7 @@ Take the example of a file named `backup.sql` or `staging.zip`.  It is imaginabl
 >Once cloned, I change the directory to vulnerable-site and create a new container named vulnerable-site from a LAMP image by mattrayner.  The container maps port 80 to my host's port 80 while also sharing the app folder from the cloned repository.
 >```bash
 >cd vulnerable-site
->docker run -it -d -p "80:80" -v ${PWD}/app:/app --name vulnerable-site mattrayner/lamp:latest
+>docker run -it -d -p "80:80" -v ${PWD}/app:/app --name vulnerable-site mattrayner/lamp:0.8.0-1804-php7
 >```
 >![[../images/09/bust_activity_docker_run.png|Running Vulnerable Site as Docker Container|600]]
 >The LAMP image is downloaded which includes preinstalled a Linux, Apache, MySQL, and PHP stack.  I can check the status of the running container using the following Docker command.
