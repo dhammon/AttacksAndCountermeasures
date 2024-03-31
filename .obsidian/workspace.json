@@ -159,26 +159,27 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0222551eff2d37c8",
+  "active": "81600ea89fcd7422",
   "lastOpenFiles": [
+    "images/11/forensics_activity_carving.png",
+    "images/11/forensics_activity_deleted_files.png",
+    "images/11/forensics_activity_mismatch.png",
+    "images/11/forensics_activity_file_types.png",
+    "images/11/forensics_activity_phone_search.png",
+    "images/11/forensics_activity_keyword_list.png",
+    "images/11/forensics_activity_drive_review.png",
+    "images/11/forensics_activity_autopsy.png",
+    "images/11/forensics_activity_modules.png",
+    "images/11/forensics_activity_data_source.png",
+    "images/11/forensics_activity_case_info_2.png",
+    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "files/forensics.E01",
     "images/11",
-    "images/11/forensics.png",
     "textbook/10-SecurityTesting.md",
     "textbook/00-Introduction.md",
-    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/09-WebApplicationAttacks.md",
-    "images/09/bust_activity_docker_run.png",
     "textbook/08-WebApplicationDefense.md",
     "textbook/01-InformationSecurity.md",
-    "images/10/pentest_activity_background.png",
-    "images/10/pentest_activity_rce_terminal.png",
-    "images/10/pentest_activity_interactive_session.png",
-    "images/10/pentest_activity_session.png",
-    "images/10/pentest_activity_exploit.png",
-    "images/10/pentest_activity_use_exploit.png",
-    "images/10/pentest_activity_search.png",
-    "images/10/pentest_activity_metasploit_start.png",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/04-NetworkServices.md",
     "textbook/03-NetworkSecurity.md",
@@ -193,7 +194,6 @@
     "images/08/web_attacks.jpg.crdownload",
     "images/08/web_defense.jpg.crdownload",
     "images/08",
-    "textbook/08-",
-    "files/2016-04-16-traffic-analysis-exercise.pcap.zip"
+    "textbook/08-"
   ]
 }
