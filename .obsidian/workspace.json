@@ -18,21 +18,8 @@
                 "source": false
               }
             }
-          },
-          {
-            "id": "81600ea89fcd7422",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "textbook/11-ForensicsAndMalwareAnalysis.md",
-                "mode": "source",
-                "source": false
-              }
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -159,20 +146,19 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "81600ea89fcd7422",
+  "active": "8b8bdde7fa825de1",
   "lastOpenFiles": [
+    "images/11/yara_activity_run.png",
+    "Pasted image 20240403203552.png",
+    "textbook/11-ForensicsAndMalwareAnalysis.md",
+    "images/11/yara_activity_install_dpkg.png",
+    "images/11/yara_activity_rule.png",
+    "images/11/yara_activity_hex.png",
+    "images/11/yara_activity_strings.png",
+    "images/11/yara_activity_install.png",
     "images/11/forensics_activity_carving.png",
     "images/11/forensics_activity_deleted_files.png",
     "images/11/forensics_activity_mismatch.png",
-    "images/11/forensics_activity_file_types.png",
-    "images/11/forensics_activity_phone_search.png",
-    "images/11/forensics_activity_keyword_list.png",
-    "images/11/forensics_activity_drive_review.png",
-    "images/11/forensics_activity_autopsy.png",
-    "images/11/forensics_activity_modules.png",
-    "images/11/forensics_activity_data_source.png",
-    "images/11/forensics_activity_case_info_2.png",
-    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "files/forensics.E01",
     "images/11",
     "textbook/10-SecurityTesting.md",
