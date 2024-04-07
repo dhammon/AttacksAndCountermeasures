@@ -8,12 +8,12 @@
         "type": "tabs",
         "children": [
           {
-            "id": "8b8bdde7fa825de1",
+            "id": "0b85070ecd421293",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/11-ForensicsAndMalwareAnalysis.md",
+                "file": "textbook/12-IncidentResponse.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "textbook/11-ForensicsAndMalwareAnalysis.md",
+                "file": "textbook/12-IncidentResponse.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "textbook/11-ForensicsAndMalwareAnalysis.md",
+                "file": "textbook/12-IncidentResponse.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "textbook/11-ForensicsAndMalwareAnalysis.md"
+                "file": "textbook/12-IncidentResponse.md"
               }
             }
           }
@@ -146,40 +146,41 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "8b8bdde7fa825de1",
+  "active": "0b85070ecd421293",
   "lastOpenFiles": [
-    "images/11/yara_activity_run.png",
-    "Pasted image 20240403203552.png",
+    "textbook/00-Introduction.md",
+    "images/12/soc.jpg",
+    "images/12/soc.jpg.crdownload",
+    "images/12",
+    "images/New folder",
+    "textbook/12-IncidentResponse.md",
+    "textbook/01-InformationSecurity.md",
+    "textbook/02-Cryptology.md",
+    "textbook/03-NetworkSecurity.md",
+    "textbook/04-NetworkServices.md",
+    "textbook/05-OperatingSystemSecurity.md",
+    "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "textbook/07-SecuritySystems.md",
+    "textbook/08-WebApplicationDefense.md",
+    "textbook/09-WebApplicationAttacks.md",
+    "textbook/10-SecurityTesting.md",
     "textbook/11-ForensicsAndMalwareAnalysis.md",
-    "images/11/yara_activity_install_dpkg.png",
-    "images/11/yara_activity_rule.png",
-    "images/11/yara_activity_hex.png",
-    "images/11/yara_activity_strings.png",
-    "images/11/yara_activity_install.png",
-    "images/11/forensics_activity_carving.png",
-    "images/11/forensics_activity_deleted_files.png",
-    "images/11/forensics_activity_mismatch.png",
+    "images/11/pestudio.png",
+    "images/11/process_monitor.png",
+    "images/11/analysis_activity_any_result.png",
+    "images/11/analysis_activity_any_search.png",
+    "images/11/analysis_activity_any_search.png",
+    "images/11/analysis_activity_vt_imports.png",
+    "Pasted image 20240406084642.png",
+    "images/11/analysis_activity_vt_basic.png",
+    "images/11/analysis_activity_vt_hits.png",
     "files/forensics.E01",
     "images/11",
-    "textbook/10-SecurityTesting.md",
-    "textbook/00-Introduction.md",
-    "textbook/09-WebApplicationAttacks.md",
-    "textbook/08-WebApplicationDefense.md",
-    "textbook/01-InformationSecurity.md",
-    "textbook/06-PersistenceAndPrivilegeEscalation.md",
-    "textbook/04-NetworkServices.md",
-    "textbook/03-NetworkSecurity.md",
-    "textbook/05-OperatingSystemSecurity.md",
-    "textbook/02-Cryptology.md",
     "images/10/security_tools.jpg.crdownload",
     "images/10",
-    "images/New folder",
-    "textbook/07-SecuritySystems.md",
     "README.md",
     "images/09",
     "images/08/web_attacks.jpg.crdownload",
-    "images/08/web_defense.jpg.crdownload",
-    "images/08",
-    "textbook/08-"
+    "images/08/web_defense.jpg.crdownload"
   ]
 }

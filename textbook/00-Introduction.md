@@ -49,6 +49,7 @@ callout block
 Recommended syllabus
 Lab assignments
 Demos and activities
+14 chapters + 2 weeks for final project
 ## Acknowledgments
 https://www.bing.com/images/create
 
