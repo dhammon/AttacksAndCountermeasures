@@ -60,7 +60,69 @@ Most SIEMs offer a range of capabilities that are fairly consistent regardless o
 
 SIEMs usually have reporting and dashboards features powered by the query system.  A dashboard is useful to analyst and their management as it enables them to focus their attention on the types of risks that matter most.  Deriving reports from the SIEM is typically important to SOC managers to identify security and performance trends of the operation.  They can be used to justify the investment in the SIEM by clearly describing the number of malicious events detected for example.
 
->[!activity] Activity 12.1 - SIEM Setup
+>[activity] Activity 12.1 - SIEM Setup
+> Splunk is a very popular SIEM solution that has all the modern features needed for security teams to identify and track threats in an environment.  Splunk offers a free license that has a limit of 500 MB ingestion a day and also excludes features such as alerting, user management, and data forwarding.  Having a basic understanding of how to setup and use the tool serves as the foundation many SOC analysts' careers are built from.  In this activity I will demonstrate the local installation and features of Splunk using the BOTSV3 dataset.
+> 
+> After starting the Ubuntu VM in Bridge Adapter network mode, I launch a browser and navigate to the Splunk Enterprise registration page https://www.splunk.com/en_us/download/splunk-enterprise.html.  The form on this page requires the use of a business email - I recommend university students use their `.edu` emails as these are typically accepted by Splunk.
+> ![[../images/12/splunk_activity_register.png|Splunk Registration|600]]
+> Upon logging in I reach the download page where I select the Linux tab and download the `.deb` installer.  This immediately takes me to the EULA acceptance page that I agree to and submit to commence the download.
+> ![[../images/12/splunk_activity_download.png|Splunk DEB Download|600]]
+> With the download completed, I open a terminal, update my system, install the dependency curl, using apt, then finally install the Splunk `.deb` file using dpkg.  The `.deb` file is a Debian repository file that contains instructions and files to install Splunk.
+> ```bash
+> sudo apt update -y
+> sudo apt install curl -y
+> sudo dpkg -i ~/Downloads/splunk*.deb
+> ```
+> ![[../images/12/splunk_activity_curl_install.png|Installing Curl on Ubuntu|600]]
+> The installation takes a minute to complete as there are a lot of files to unpack!
+> ![[../images/12/splunk_activity_splunk_install.png|Installing Splunk Using Dpkg|600]]
+> As soon as Splunk's installation is completed, it can be started suing the Splunk binary stored in the `/opt/splunk/bin/` directory.  The initial start requires acceptance of the license agreement using the `q` and the `y` letters.  Additionally, the CLI requires entering the username and password to create a new user for web console access.
+> ```bash
+> sudo /opt/splunk/bin/splunk start
+> ```
+> ![[../images/12/splunk_activity_start.png|Startng Splunk|600]]
+> ![[../images/12/splunk_activity_config.png|Accepting License and Creating User|600]]
+> The installation completes in a few seconds and then returns me to the command prompt with a message to access Splunk over http://154-ubuntu:8000 which is the name of my virtual machine.
+> ![[../images/12/splunk_activity_install_complete.png|Splunk Installation Complete|600]]
+> I then open the browser in my VM and navigate to http://154-ubuntu:8000.  I'm presented with a login page where I enter my username and password I established during the installation of the software.
+> ![[../images/12/splunk_activity_login.png|Local Splunk Instance Login Page|600]]
+> Splunk isn't very useful without data so the next step is to populate the system with various data sources.  An organization would configure systems with agents and connections to continuously feed data into Splunk.  Because this is just a demonstration I will be using a prepared test data set published on Splunk's GitHub page.  I navigate to https://github.com/splunk/botsv3 and download the BOTSV3 Dataset which is a curated set of logs used in Splunk's Boss of the SOC capture the flag challenge.
+> ![[../images/12/splunk_activity_bots_download.png|BOTSV3 Download Page|600]]
+> After the download completes, which takes a few minutes, I move the `.tgz` file from the downloads folder into the `/opt/splunk/etc/apps/` directory.  Then I unzip the download using gunzip and unarchive the unzipped file using tar.
+> ```bash
+> sudo mv ~/Downloads/botsv3_data_set.tgz /opt/splunk/etc/apps/
+> sudo gunzip /opt/splunk/etc/apps/botsv3_data_set.tgz
+> sudo tar -xvf /opt/splunk/etc/apps/botsv3_data_set.tar -C  /opt/splunk/etc/apps/
+> ```
+> ![[../images/12/splunk_activity_extract_bots.png|Extracting BOTSV3 Dataset Into Splunk|600]]
+> A restart of Splunk is required for the dataset to be recognized in the console.
+> ```bash
+> sudo /opt/splunk/bin/splunk restart
+> ```
+> ![[../images/12/splunk_activity_restart.png|Restarting Splunk|600]]
+> Once restarted, I navigate back to the app (http://154-ubuntu:8000) and press the Apps dropdown on the top navigation bar and select "Search & Reporting".
+> ![[../images/12/splunk_activity_search_view.png|Splunk Search View|400]]
+> 
+> Afterwards I enter the SPL, or search query, `index=botsv3` into the search bar and change the time scope to "All Time" since this dataset is older.  Millions of events are eventually loaded after a few minutes!
+> ![[../images/12/splunk_activity_init_search.png|Intial SPL Search Over All Time|600]]
+> With all 2 million events matched in the botsv3 index, I scroll down to the Fields navigation on the left pane just below the timeline.  Splunk will index every record by field and summarize each field's count statistic while providing a quick link to filter just those events.  I select "host" which lists all the hosts on the network and chose the "matar" option to filter just the events related to this host.
+> ![[../images/12/splunk_activity_host_field.png|Host Field Navigation|600]]
+> Once selected, I observe the search field has been updated with new SPL `host=matar`.  SPL is updated using the GUI; however, a much richer experience is to write your own SPL to include operators and logic to filter and derive information from the available data.  I append `| stats count by source` to the SPL and hit enter.  This query pipes all filtered matar results to the SPL command stats where all sources are counted and displayed in the Statistics tab in the results section.
+> ```SPL
+> index=botsv3 host=matar | stats count by source
+> ```
+> ![[../images/12/splunk_activity_stats.png|Using Pipes and Commands in SPL|600]]
+> This view helps me understand the types and volume of records related to the host.  Scrolling through the stats summaries I find events for stream:smtp.  SMTP, a protocol used for email, can be interesting so I select the entry and press View events which will update the SPL and show all SMTP events on the host.
+> ![[../images/12/splunk_activity_smtp_filter.png|SMTP Search|400]]
+> The events pane is populated with SMTP events for the matar host.  Looking at the first record I observe an odd subject line of a sent email "Fw: All your datas belong to us".
+> ![[../images/12/splunk_activity_email_1.png|Email Forward Discovery|600]]
+> Perhaps this user of the matar host is a victim of ransomware and this is a ransom note being forwarded.  I am curious if any other emails have a similar subject line.  The act of finding data and searching elsewhere for similar artefacts is called *pivoting*.  While still using the botsv3 index, I query `subject:"All your datas*`.  The star symbol is a wildcard which means any other characters.  
+> ![[../images/12/splunk_activity_subject_search.png|Subject Line Pivot Search|600]]
+> Looks like there are two hits for this subject line with the second event being the original email with a src_ip address of 104.47.34.50 - perhaps this is the attacker's IP!
+> ![[../images/12/splunk_activity_srcip.png|Attacker IP Address Identified|500]]
+> 
+> 
+> 
 ## Threat Hunting
 
 Methodologies
