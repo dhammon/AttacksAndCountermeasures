@@ -18,8 +18,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "5dd9bea898b22654",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "textbook/12-IncidentResponse.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -146,24 +159,25 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0b85070ecd421293",
+  "active": "0222551eff2d37c8",
   "lastOpenFiles": [
+    "images/12/splunk_activity_final_dash.png",
+    "images/12/splunk_activity_config_dash.png",
+    "images/12/splunk_activity_dashboard_create.png",
+    "images/12/splunk_activity_radial_settings.png",
+    "images/12/splunk_activity_visualization.png",
+    "images/12/splunk_activity_failed_login.png",
+    "images/12/splunk_activity_report_view.png",
+    "images/12/splunk_activity_report.png",
+    "images/12/splunk_activity_top10.png",
+    "textbook/11-ForensicsAndMalwareAnalysis.md",
+    "textbook/12-IncidentResponse.md",
     "images/12/splunk_activity_srcip.png",
     "images/12/splunk_activity_subject_search.png",
-    "images/12/splunk_activity_email_1.png",
-    "images/12/splunk_activity_smtp_filter.png",
-    "images/12/splunk_activity_stats.png",
-    "images/12/splunk_activity_host_field.png",
-    "images/12/splunk_activity_search_view.png",
-    "images/12/splunk_activity_init_search.png",
-    "images/12/splunk_activity_restart.png",
-    "images/12/splunk_activity_extract_bots.png",
-    "images/12/splunk_activity_bots_download.png",
     "textbook/00-Introduction.md",
     "images/12/soc.jpg.crdownload",
     "images/12",
     "images/New folder",
-    "textbook/12-IncidentResponse.md",
     "textbook/01-InformationSecurity.md",
     "textbook/02-Cryptology.md",
     "textbook/03-NetworkSecurity.md",
@@ -174,7 +188,6 @@
     "textbook/08-WebApplicationDefense.md",
     "textbook/09-WebApplicationAttacks.md",
     "textbook/10-SecurityTesting.md",
-    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "files/forensics.E01",
     "images/11",
     "images/10/security_tools.jpg.crdownload",
