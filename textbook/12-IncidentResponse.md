@@ -157,19 +157,39 @@ SIEMs usually have reporting and dashboards features powered by the query system
 >![[../images/12/splunk_activity_final_dash.png|Final Dashboard|650]]
 >I can add new visualizations, sections and change the format of the dashboard to meet my security monitoring needs and using the Dashboards tab in the top menu will let me navigate back to any of my dashboards at will.
 ## Threat Hunting
+So far we have explored how a SOC analyst would use a SIEM to alert and investigate potential security incidents based off feeds of system events.  The SOC analyst follows a pattern of detect and respond to ensure security of networks and systems.  However, another approach to security while leveraging the power of the SIEM is **threat hunting** that proactively searches for potential cyber threats.  The role of a threat hunter, who typically works in the SOC and uses the SIEM, can be a dedicated individual, team, or a shared role.  Many SOCs rotate personnel between roles to keep team members engaged and challenged.
+### Process of Hunting
+Threat hunting starts with an idea or hypothesis with the assumption that a threat actor has conducted some malicious activity that has yet been discovered in the network.  This ideation phase includes studying how that attack would transpire, which technologies and protocols it would use, and consider the IoCs and artifacts that could be identified on systems.  Armed with the anticipated attacker behavior and targets, the threat hunter will next analyze systems searching for evidence of the threat.  Hopefully this results in nothing being identified, not due to a lack of quality, but due to the fact that there was no security breach!  In the final phase of threat hunting, a collection of IoCs and artifacts could be fed back into the SIEM in the form of SPLs, alerts, dashboards, and reports as prudent.  The threat hunter will typically prepare a report that describes their efforts starting from the idea, research and results of the investigation.  Of course, should the threat hunter detect a threat they would immediately escalate to the SOC's incident responders.
+### Hunt Methodologies
+The real art of a threat hunt centers around the initial idea phase.  Threat hunters must identify a plausible threat scenario to base their investigation on.  These ideas can be driven by a few categories of research as follows:
 
-Methodologies
-Threat Intelligence 
-Process
-- trigger
-- investigate
-- resolve
+1. **Hypothesis Driven** - Anticipated new threat behaviors including tools, techniques, and procedures
+2. **Known IoC/IaAs** - Indicators collected from existing threat behaviors and *threat intelligence* resources
+3. **Advanced Analytics** - Use of big data and statistical measurements to identify anomalous activity
+
+Really any reasonable idea could be worth exploring.  Sometimes a threat hunt can center around an organization specific activity.  For instance, an organization can plan for a sensitive data migration between vendors.  Under this circumstance, a threat hunter can design an investigation with the data transfer context in mind.  Other common threat hunting scenarios will focus on common, popular, or well publicized attacks usually centered around a powerful exploit.  A great resource for such attacks is maintained by the Cybersecurity & Infrastructure Security Agency (CISA) in their Known Exploited Vulnerabilities Catalog (https://www.cisa.gov/known-exploited-vulnerabilities-catalog).
+
+### Threat Intelligence
+Many vendors offer **threat intelligence** services that attempt to build profiles of threat actors including their tools, techniques and procedures.  This information is highly valuable to incident responders during attribution efforts - determining who compromised them.  But threat intelligence can also be a valuable resource to threat hunters during the idea and analysis phases of their investigations.  
+
+> [!activity] Activity 12.4 - Threat Intelligence Using MITRE ATT&CK Framework
+>  Perhaps the greatest resource to threat hunters developing scenarios using the known IoCs method is MITRE's ATT&CK framework (https://attack.mitre.org/).  We've covered this resource in earlier chapters which emphasized the categorization of attack tools, techniques and procedures (TTP).
+>  ![[../images/12/mitre_attack.png|MITRE ATT&CK Framework Website|600]]
+>  MITRE's database includes dozens of threat actor groups in the https://attack.mitre.org/groups/  page.  Many of these groups are referred to by different names depending on the organizations that track them.  Navigating to the group page I find an interesting North Korean state sponsored group Lazarus.
+>  ![[../images/12/threat_activity_groups.png|Lazarus Group Summary on MITRE ATT&CK|600]]
+>  Selecting the group's link reveals much more information on the threat including the campaigns that have been attributed to them.  In this campaign a list of techniques are provided that include further details on how to detect them within a network.  Aggregating several of these techniques could build a case worthy of a threat hunt!
+>  ![[../images/12/threat_activity_campaign.png|Operation Dream Job Lazarus Campaign Techniques|600]]
+>  The many to many nature of the ATT&CK framework affords us the ability to start with a technique to develop threat hunts off of.  Navigating to https://attack.mitre.org/techniques/enterprise/  reveals hundreds of available techniques associated with threat actors.
+>  ![[../images/12/threat_activity_techniques.png|Threat Actor Techniques|600]]
+>  Technique "Bypass User Account Control" T1548 at catches my eye to dive into.  I follow the technique link (https://attack.mitre.org/techniques/T1548/002/) and scroll down to the Detection section of the technique which shows several methods to detect the malicious behavior.  
+>  ![[../images/12/threat_activity_detection.png|T1548 Detection Methods|600]]
+>  With this information I can begin building a threat hunt and search criteria within the SIEM to detect the malicious behavior.  
 ## Incident Response
 
 Incident Response Life Cycle
 Plan
 
->[!activity] Activity 12.2 - Security Incident
+>[!activity] Activity 12.5 - Security Incident
 >Take a moment and consider the following questions:
 >1. Define a security incident
 >2. Identify 3 examples of what is a security incident
@@ -181,7 +201,7 @@ Detection and analysis
 Containment & eradication
 Post incident recovery
 
->[!activity] Activity 12.3 - Splunk Enterprise Security
+>[!activity] Activity 12.6 - Splunk Enterprise Security
 
 ## Exercises
 
