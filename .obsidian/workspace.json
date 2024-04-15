@@ -13,13 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/12-IncidentResponse.md",
+                "file": "textbook/13-CloudSecurity.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "9f626da57870262e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "textbook/00-Introduction.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -85,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "textbook/12-IncidentResponse.md",
+                "file": "textbook/00-Introduction.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "textbook/12-IncidentResponse.md",
+                "file": "textbook/00-Introduction.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "textbook/12-IncidentResponse.md"
+                "file": "textbook/00-Introduction.md"
               }
             }
           }
@@ -146,8 +159,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0b85070ecd421293",
+  "active": "9f626da57870262e",
   "lastOpenFiles": [
+    "textbook/13-CloudSecurity.md",
+    "textbook/12-IncidentResponse.md",
+    "images/13",
+    "textbook/13-CloudSecurity",
     "images/12/enterprise_activity_course.png",
     "images/12/enterprise_activity_homepage.png",
     "images/12/incident_phases.png",
@@ -158,9 +175,7 @@
     "images/12/threat_activity_groups.png",
     "images/12/mitre_attack.png",
     "images/12/splunk_activity_final_dash.png",
-    "images/12/splunk_activity_config_dash.png",
     "textbook/11-ForensicsAndMalwareAnalysis.md",
-    "textbook/12-IncidentResponse.md",
     "textbook/00-Introduction.md",
     "images/12/soc.jpg.crdownload",
     "images/12",
@@ -180,8 +195,6 @@
     "images/10/security_tools.jpg.crdownload",
     "images/10",
     "README.md",
-    "images/09",
-    "images/08/web_attacks.jpg.crdownload",
-    "images/08/web_defense.jpg.crdownload"
+    "images/09"
   ]
 }

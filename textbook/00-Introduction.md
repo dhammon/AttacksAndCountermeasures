@@ -57,5 +57,9 @@ https://www.bing.com/images/create
 - Create Activities for exercises in Cryptology
 - Create Activities for exercises in Network Security
 - Move chapters 1-6 Exercises to end of chapter
-- Security resources: podcasts, sites, training, youtube, reddit, newsletters
-- Certification paths
+- bonus chapter
+	- job hunt
+	- resumes
+	- certifications
+	- continued learning
+	- Security resources: podcasts, sites, training, youtube, reddit, newsletters
