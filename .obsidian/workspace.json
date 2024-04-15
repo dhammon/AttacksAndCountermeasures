@@ -18,21 +18,8 @@
                 "source": false
               }
             }
-          },
-          {
-            "id": "5dd9bea898b22654",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "textbook/12-IncidentResponse.md",
-                "mode": "source",
-                "source": false
-              }
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -159,8 +146,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0222551eff2d37c8",
+  "active": "0b85070ecd421293",
   "lastOpenFiles": [
+    "images/12/enterprise_activity_course.png",
+    "images/12/enterprise_activity_homepage.png",
+    "images/12/incident_phases.png",
+    "images/12/irt_escalate.png",
     "images/12/threat_activity_detection.png",
     "images/12/threat_activity_techniques.png",
     "images/12/threat_activity_campaign.png",
@@ -168,10 +159,6 @@
     "images/12/mitre_attack.png",
     "images/12/splunk_activity_final_dash.png",
     "images/12/splunk_activity_config_dash.png",
-    "images/12/splunk_activity_dashboard_create.png",
-    "images/12/splunk_activity_radial_settings.png",
-    "images/12/splunk_activity_visualization.png",
-    "images/12/splunk_activity_failed_login.png",
     "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/12-IncidentResponse.md",
     "textbook/00-Introduction.md",
