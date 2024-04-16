@@ -1,4 +1,4 @@
-# Incident Response
+# Chapter 12 - Incident Response
 ![][../images/12/soc.jpg]
 
 Information and cybersecurity can be summarized as detecting and preventing vulnerabilities and threats.  With the exception of the last chapter, much of this textbook has focused on the vulnerability side of infosec as vulnerabilities in their most general form provide the opportunity for threats to succeed.  This chapter will focus on how organizations prepare, identify and react to threats.  It is the second part of the detection and response section that expands on the previous Forensics and Malware Analysis chapter.  Readers will learn about the systems used to aggregate data and how threats are found within networks and systems.  We will also cover administrative efforts organizations place on planning for security incidents.

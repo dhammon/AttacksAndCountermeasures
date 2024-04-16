@@ -1,4 +1,4 @@
-# Persistence and Privilege Escalation
+# Chapter 6 - Persistence and Privilege Escalation
 ![](endpoint_hacked.jpg)
 
 The previous chapter covered several features of Windows and Linux operating systems that have a security impact.  Some of those features promote security while other features were utilities that could be abused.  In this chapter we will cover some common threat actor techniques after initial compromise.  We will explore some of the activities performed by attackers that are already in victim machines including how attackers gain further access into the compromised system as well as how they maintain their access overtime.  The last section of the chapter focuses on memory issues of applications that can be abused to increase permissions and sometimes obtain initial access to systems.

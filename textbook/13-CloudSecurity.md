@@ -1,26 +1,49 @@
-# Cloud Security
-img
+# Chapter 13 - Cloud Security
+![](../images/13/cloud_security.jpg)
 
-desc
+Some organizations still maintain data centers and on premise server rooms with racks of network and compute equipment that powers an organization; however, more and more companies are moving to cloud services to support operations and streamline technical staff needed to support information technology.  The past decade has seen more information technology moved to the cloud in an array of services with no end to the upward trend.  This rise in investment has generated many new cloud offerings and services that increases overall productivity.  These services represent abstractions of core computer science topics like compute, networking, and applications.  As such, many of the traditional information security risks still translate into the cloud and new tools, techniques and procedures have been developed to break the security of cloud tenants.  Within this chapter you will learn the fundamentals of cloud technologies and how they are used in organizations.  From there you will discover the ways in which an organization can protect and defend cloud environments and methods used to attack cloud services.
 
 **Objectives**
 1. Explain how organization use the cloud and the services they offer.
 2. Create and configure an AWS cloud account with users of various permission levels
 3. Understand the basic AWS security services and how to harden AWS accounts using CSPM.
 4. Distinguish between traditional network and system attacks and methods for attacking cloud services.
-### Cloud Overview
-Cloud Models
-Cloud Characteristics
-Service Models
+## Cloud Overview
+Before we begin studying the attacks and countermeasures of the cloud, its important to understand what the cloud is and how organizations use it.  The cloud is a generalized term that can be thought of as "someone else's computer".  Instead of an organization buying, installing, and configuring network and server equipment on racks in a server room or data center, the outsource that effort to a third party.  This enables the business, and its technology specialists, to focus on their competitive advantages and less on the maintenance of physical infrastructure.  The following section will introduce the reader to the cloud models, characteristics of cloud use cases, the types of service models available in the marketplace, and some of the most popular cloud providers.
+### Cloud Models
+One of the fundamental aspects of the cloud is the idea of *tenancy* or how data and systems are separated between customers of a cloud environment.  Its common for an organization to expect that their systems are not accessible to third parties as most traditional networks enjoy physical separation from other organizations.  Even in a colocation data center, that is shared with many customers, each tenant would be provided a physical cage that is separate from the racks and servers of other tenant cages.  These same principles of separation apply to cloud environments to varying degrees. 
+
+Most organizations that are on the cloud are on a **public cloud model** where all customers share network, compute, and storage resources.  These resources share the same physical space.  For instance a single hypervisor might host virtual machines for different customers.  However, the public cloud model logically separates client tenants using virtualized technologies such as *virtual local area networks (VLAN)*.  This ensures that customer traffic can't reach third party tenants.  But some customers may have significant reservations to sharing resources with other tenants.
+
+Logical separations are not impervious to vulnerabilities that allow escaping or breaking out of logical restrictions.  It is feasible, and not as rare as you might think, that a vulnerability in the underlying host will enable an attacker to move laterally between tenants.  For customers that have a low tolerance for breaches, and who are willing to pay a premium, they can procure a **private cloud** that keeps their data and systems physically separate from other tenants.  As we'll explore in the following section, this allows the customer to enjoy the same benefits of cloud services while have a more strict security posture.
+
+On the opposite side of the cloud model spectrum from private cloud is the **community cloud model** where a single tenant hosts multiple customers.  This was particularly true when the cloud was in its infancy as many network services were shared among all customers.  For example, each customer virtual machine was on the same network as the other!  Another interpretation of a community cloud is one that is shared between partnering customers.  This is common in organizations that form strategic partnerships with each other finding the sharing of resources to be most effective for their operations.
+
+As we will later cover many organization's approach to the cloud is heterogenous and they use many cloud models, services, and vendors.  Under the **hybrid cloud model** a customer might have any mixture of cloud models they use for their operation.  For example, an organization could maintain normal services from a public cloud while offering federal government customers a service from a private cloud.
+### Cloud Characteristics
+on demand
+broad access
+resource pooling
+elasticity
+measured service
+finance models
+### Service Models
+SaaS
+PaaS
+IaaS
+
 Responsibility Matrix
-Cloud Providers
+![[../images/13/responsiblity_matrix.png|Responsibility Matrix|700]]
+### Cloud Providers
 Popular Enterprise Cloud Services
 Multi Cloud Network
-### Amazon Web Services
+![[../images/13/multi_cloud.png|Multi Cloud Network|350]]
+
+## Amazon Web Services
 AWS Regions
 AWS Services
 >[!activity] Activity 13.1 - Create and Setup AWS Account
-### Defending the Cloud
+## Defending the Cloud
 Cloud Security
 AWS Key Management Service
 AWS CloudTrail
@@ -29,7 +52,7 @@ AWS IAM
 IAM Policies
 Cloud Security Posture Management
 >[!activity] Activity 13.2 - ScoutSuite CSPM
-### Attacking the Cloud
+## Attacking the Cloud
 Initial Access
 Credentials
 >[!activity] Activity 13.3 - Leaked Credentials

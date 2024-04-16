@@ -1,4 +1,4 @@
-# Security Testing
+# Chapter 10 - Security Testing
 ![](../images/10/security_tools.jpg)
 
 Regular testing for vulnerabilities provides assurances to stakeholders that systems, networks, and applications are potentially free from security issues.  An entire subindustry has developed over the years in which organizations can hire security professionals to test the security of their systems and information.  This chapter will examine security testing processes and tools, why it is important to organization management, and how security professionals perform such tests.

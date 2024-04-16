@@ -1,4 +1,4 @@
-# Network Security
+# Chapter 3 - Network Security
 ![](../images/03/globe_internet_connections.jpg)
 
 Technologies that connect computer systems into groups or networks has increased the capabilities of systems and complexity by several orders of magnitude.  It has given rise to the internet and a countless ever expanding range of services.  Governments, organizations and individuals all rely on network systems to conduct a range of tasks that everyone depends on.  This level of complexity and dependency has given rise to many new account vectors for which we will focus on some of them in this chapter.  While it is assumed the reader knows some basic networking, we will revisit general networking technologies and concepts.  We will then introduce some of the technologies and practices used to secure networks.  In the later half of this chapter, we will analyze and exploit common networking technologies.  Not all network security concepts could be covered in one chapter, but the reader will become familiar with the basics of network security and at the same time learning how to approach other network related technologies and systems.

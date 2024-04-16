@@ -1,4 +1,4 @@
-# Web Application Defense
+# Chapter 8 - Web Application Defense
 ![](../images/08/web_defense.jpg)
 
 The connections of networks with other networks has given rise to the internet over the past several decades.  However, the internet's popularity grew substantially in the late 90's due to the rise of the *hypertext transfer protocol (HTTP)* and web sites.  Many people came to understand the internet as a collection of web pages; however, informed individuals know that the internet offers much more.  Early websites often only offered a static brochure of information with little interaction from website users.  As popularity grew so did the demand and expectation of dynamic features which eventually carved the way to *web applications*.  These sites provide users with a rich experience comprising of dynamically generated pages and user inputs while at the same time increasing the security risks.  In this chapter we will explore the web application fundamentals and basic security architectures used with modern domains.  We will also learn how organizations ensure the secure development of web applications.

@@ -1,4 +1,4 @@
-# Operating System Security
+# Chapter 5 - Operating System Security
 ![](../images/05/windows_linux.jpg)
 
 Modern operating systems (OS) have built in security measures to ensure that information stored and processed by them are secured to authorized users.  Administrators and object owners can determine who and what level of access accounts have on the device.  Operating systems also have features that have security implications that we will explore.  These features themselves can be abused to enable an attacker to meet their impact objectives.  Learning about them and how they work will help us when we explore persistence and privilege escalation techniques in the next chapter.

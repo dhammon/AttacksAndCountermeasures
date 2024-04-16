@@ -1,5 +1,4 @@
-
-# Web Application Attacks
+# Chapter 9 - Web Application Attacks
 ![](web_attacks.jpg)
 
 Web applications are often made accessible to the wide internet for convenience of user reachability.  Doing so opens these sites up to anonymous attacks from anywhere in the world.  This chapter will focus on the risks web applications face and some of the attack techniques and vulnerability classifications.  Using a vulnerable by design local web application, you will test its security and remediate some vulnerabilities identified while using common attacking tools.

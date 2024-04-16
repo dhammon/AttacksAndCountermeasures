@@ -1,4 +1,4 @@
-# Defending and Attacking Network Technologies
+# Chapter 4 - Defending and Attacking Network Technologies
 
 ![](../images/04/ethernet_shield.jpg)
 
