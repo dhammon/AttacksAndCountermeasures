@@ -55,10 +55,30 @@ These are the three big players in the cloud space that comprise of the majority
 Google Workspace is also very popular as it is a less expensive, and just about as good, alternative to Microsoft's Office.  Many companies use Workspace for their basic application needs which can be served to any device with a browser and shared between members of an organization.  It is very common for organizations to have a *multi cloud network* where users access several cloud providers as depicted below.
 ![[../images/13/multi_cloud.png|Multi Cloud Network|350]]
 Here, a developer may access AWS using Entra to deploy an application and store their technical documentation in Workspace!  Having a firm knowledge of the services from the providers is a marketable skillset.  The next section will explore AWS's infrastructure services and creation of a new cloud account.
-## Amazon Web Services
-AWS Regions
-AWS Services
->[!activity] Activity 13.1 - Create and Setup AWS Account
+## Amazon Web Services (AWS)
+AWS is the most popular cloud provider as of the time of this writing.  In many ways, AWS pioneered the space with its offering of cloud based storage solutions called simple storage solution (S3) and virtual machines called elastic compute cloud (EC2) in 2006.[^1]  This drew a crowd of administrators and developers to the platform as they could quickly deploy applications with low up front costs.  The company has grown at a fast rate and is now in 33 *regions* across the globe.  Regions consist of several physical data centers that make up *availability zones* offering regional redundancy and capacity for customers.
+
+> [!info] Info - Private EC2
+> It would be a full three years before AWS began offering virtual private cloud (VPC) services where customers could place EC2 virtual machines in private networks.  Before then, all instances were on the same network!
+
+Cloud offerings are described as services by AWS and the count in the dozens with new services being developed and released every year.  Some of these services are more common or popular than others and usually have a non-cloud analog they are based off of.  Mentioned earlier in this section is S3, which provides a file storage or server solution.  Building services off of traditional on-premise concepts facilitates the knowledge transfer to the cloud.  However, these services typically only offer a simplistic generalized form of the on-premise solution.  While this makes it easier to master it also limits the capabilities of the service versus on-premise.  If you want granular control, the cloud isn't usually the best option.  But if you are seeking ease of implementation, cloud services can get you operating within minutes.
+
+The cloud is divided into two conceptual planes called *control plane* and the *data plane*.  The management plane is where AWS users or administrators can deploy services such as an EC2 instance.  This can be accomplished using the web console or through API calls possibly made through a CLI tool.  The control plane empowers users to administer the objects of the services and its configuration but excludes the inner workings of that object.  However the data plane is where the service value is realized.  Using the EC2 example, the data plane would be when an administrator makes a terminal connection and installs then runs an application within the VM.
+
+Maintaining access control of an AWS environment is crucial for its security.  All AWS accounts come with a *root* account that has all permissions over the account.  The root user must be protected at all costs as the loss of this user account means the loss of the entire AWS account.  AWS offers the *identity and access management (IAM)* service to create and manage users as well as their permissions.  Access can be administered through control plane where IAM user accounts are created much like any other system.  Policies with permissions can then be applied to the IAM account to give them capability to use the AWS account.
+
+>[activity] Activity 13.1 - Create and Setup AWS Account
+>Setting up an AWS account is relatively straight forward but the service isn't free, or at least not for more than modest usage.  Therefore AWS requires that new accounts provide a credit card when signing up to charge accrued monthly costs to.  There is no way to cap or limit this, so you must be very careful not to leave an account exposed.  If an attacker obtains IAM user or root accounts, they could run up large costs that the owner of the account (you) are responsible for.  In this activity I will demonstrate how to setup an AWS account, create an IAM user, and configure multifactor authentication for both the IAM and root users.
+>
+>From my host computer I navigate to https://aws.amazon.com/  and press the "Create an AWS account" button in the top right corner.  This prompts me to enter an email address and account name before requesting an email verification.
+>![[../images/13/aws_activity_signup.png|AWS Signup Page|500]]
+>After submitting the form, I am prompted to the next page requesting a verification token.  I navigate to my email account to retrieve the token emailed to me during the previous step.  I enter the code and press the "Verify" button to establish my control over the email account.  The next page in the AWS signup wizard request I enter, and reenter, a password for the root user.  **The password should have high entropy (long and random) and not be used anywhere else!**
+>![[../images/13/aws_activity_password.png|AWS Create Root User Password|500]]
+>The next page of the wizard has me enter my name, contact information, address and how I plan to user the account (I chose "Personal - for your own projects").  Then I am prompted to enter my billing information such as a credit card.  It is best to use a credit card over a debit card as the latter takes money directly from your bank account whereas the former only accrues charges which can always be disputed if there is fraudulent activity.  You could dispute fraudulent debit card charges just the same, however in the mean time you would have still had the money deducted from your bank account.
+>![[../images/13/aws_activity_billing.png|AWS Billing Setup|500]]
+>Pressing "Verify and continue" after entering my credit card details takes me to the phone number and proof I'm not a robot step where I have to complete a CAPTCHA.  Submitting this sends me a verification code to my phone where I enter on the following page to prove my phone number.  The last page in the wizard has me select a support plan.  Because this account is for personal use, I select the "Basic support -Free" plan and press the "Complete sign up" button.
+>![[../images/13/aws_activity_support.png|Support Plan Selection|500]]
+>The account is officially created!
 ## Defending the Cloud
 Cloud Security
 AWS Key Management Service
@@ -66,6 +86,7 @@ AWS CloudTrail
 AWS GuardDuty
 AWS IAM
 IAM Policies
+AWS VPC and Security Groups
 Cloud Security Posture Management
 >[!activity] Activity 13.2 - ScoutSuite CSPM
 ## Attacking the Cloud
@@ -204,3 +225,4 @@ Pacu
 > - Fix the service, run the scan, and then remove the fix to avoid/minimize the cost; OR 
 > - Incur the cost.
 
+[^1]: Timeline of Amazon Web Services; Wikipedia; April 19th 2024; https://en.wikipedia.org/wiki/Timeline_of_Amazon_Web_Services

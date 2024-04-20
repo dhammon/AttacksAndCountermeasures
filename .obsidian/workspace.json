@@ -158,8 +158,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0b85070ecd421293",
+  "active": "0222551eff2d37c8",
   "lastOpenFiles": [
+    "images/13/aws_activity_support.png",
+    "images/13/aws_activity_billing.png",
+    "images/13/aws_activity_password.png",
+    "images/13/aws_activity_signup.png",
     "images/13/multi_cloud.png",
     "images/13/responsiblity_matrix.png",
     "textbook/12-IncidentResponse.md",
@@ -184,10 +188,6 @@
     "images/12/enterprise_activity_homepage.png",
     "images/12/incident_phases.png",
     "images/12/irt_escalate.png",
-    "images/12/threat_activity_detection.png",
-    "images/12/threat_activity_techniques.png",
-    "images/12/threat_activity_campaign.png",
-    "images/12/threat_activity_groups.png",
     "images/12/soc.jpg.crdownload",
     "images/12",
     "images/New folder",
