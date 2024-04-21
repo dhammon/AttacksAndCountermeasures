@@ -67,7 +67,7 @@ The cloud is divided into two conceptual planes called *control plane* and the *
 
 Maintaining access control of an AWS environment is crucial for its security.  All AWS accounts come with a *root* account that has all permissions over the account.  The root user must be protected at all costs as the loss of this user account means the loss of the entire AWS account.  AWS offers the *identity and access management (IAM)* service to create and manage users as well as their permissions.  Access can be administered through control plane where IAM user accounts are created much like any other system.  Policies with permissions can then be applied to the IAM account to give them capability to use the AWS account.
 
->[activity] Activity 13.1 - Create and Setup AWS Account
+>[!activity] Activity 13.1 - Create and Setup AWS Account
 >Setting up an AWS account is relatively straight forward but the service isn't free, or at least not for more than modest usage.  Therefore AWS requires that new accounts provide a credit card when signing up to charge accrued monthly costs to.  There is no way to cap or limit this, so you must be very careful not to leave an account exposed.  If an attacker obtains IAM user or root accounts, they could run up large costs that the owner of the account (you) are responsible for.  In this activity I will demonstrate how to setup an AWS account, create an IAM user, and configure multifactor authentication for both the IAM and root users.
 >
 >From my host computer I navigate to https://aws.amazon.com/  and press the "Create an AWS account" button in the top right corner.  This prompts me to enter an email address and account name before requesting an email verification.
@@ -78,23 +78,112 @@ Maintaining access control of an AWS environment is crucial for its security.  A
 >![[../images/13/aws_activity_billing.png|AWS Billing Setup|500]]
 >Pressing "Verify and continue" after entering my credit card details takes me to the phone number and proof I'm not a robot step where I have to complete a CAPTCHA.  Submitting this sends me a verification code to my phone where I enter on the following page to prove my phone number.  The last page in the wizard has me select a support plan.  Because this account is for personal use, I select the "Basic support -Free" plan and press the "Complete sign up" button.
 >![[../images/13/aws_activity_support.png|Support Plan Selection|500]]
->The account is officially created!
+>The account is officially created!  Next I sign into the management console by pressing the "Sign In to the Console" or "Go to the AWS Management Console" buttons on the page after the initial setup.  Alternatively, I could go to https://aws.amazon.com and press the "Sign In to the Console" button in the top right corner to login at any time.  I select the "Root user" and enter my email address, press Next, and then password to login under the root user account.
+>![[../images/13/aws_activity_login_root.png|Root User Login|350]]
+>Now logged in as the root user, I navigate to the user settings by selecting the account drop down menu in the top right corner and select "Security Credentials."  
+>![[../images/13/aws_activity_root_settings.png|Root Account Settings|250]]
+>The security settings for the logged in user allow us to set credentials, changes passwords, and setup multi-factor authentication (MFA) devices.  Because the root account is so important and internet accessible, I want to setup MFA which will mitigate the risks of losing the account to an attacker guessing the root password along with the impacts that could cause.  I scroll down to the "Multi-factor authentication (MFA)" section and press the "Assign MFA device" button.
+>![[../images/13/aws_activity_mfa_start.png|Root Account MFA Setup|600]]
+>AWS prompts me to enter an MFA device name and MFA device.  I already have an authenticator app install on my smart phone that I use for MFA.  Some great choices are the Google or the Microsoft Authenticators apps available for free in the app stores.  I enter a name, select Authenticator app, and press the Next button.
+>![[../images/13/aws_activity_mfa_selection.png|MFA Device Selection|600]]
+>Pressing the "Show QR code" link in the second sub-step reveals a QR code.  With my phone's  authenticator app launched, I press the new account option which opens the camera feature on my phone.  Next I point my phone's camera to the QR code on the AWS page which instantly creates the account in my authenticator app.  I enter the first 6 digit code into the "MFA code 1" field of the AWS console page, wait 30 seconds for a new code to be generated, and then enter the second (new) code into the MFA code 2 field of the AWS console page.  Then I press the "Add MFA" button to complete the MFA device setup.
+>![[../images/13/aws_activity_mfa_config.png|MFA Configuration|600]]
+>Its a bad practice to use the AWS root account for normal use.  It should be used rarely which will limit the opportunity of being compromised.  A better practice is to create a new IAM account with administrator capabilities for privileged actions.  It would be awful if the admin account is compromised, but not nearly as bad as if the root account was!  In order to create the IAM account, I must open the IAM service by searching for "iam" in the top search bar.
+>![[../images/13/aws_activity_iam_search.png|IAM Service Search|600]]
+>The launched IAM service can be navigated using the options tree on the left pane.  To create a new user I select the "Users" link and the the "Create user" button on the page in the right pane.
+>![[../images/13/aws_activity_create_user.png|IAM Service User Page|500]]
+>Within the create user page, I enter my name in the "User name" field, check the box "Provide user access to the AWS Management Console" to allow web GUI access, and select the "I want to create an IAM user" option.  Then I enter a strong and high entropy password that is not used for any other account or system and unselect the "Users must create a new password at next sign-in" checkbox.  Finally I press the "Next" button to continue the account creation process.
+>![[../images/13/aws_activity_create_user 1.png|Create User Settings|600]]
+>The next page in the wizard is used to configure the user privileges.  While I could create custom policies with any combination of permissions, AWS comes with managed policies for common use cases.  This includes the "AdministratorAccess" policy which grants all permissions to all services.  I select the "Attach policies directly" option and mark the "AdministratorAccess" policy checkbox before pressing the "Next" button to continue the account creation.
+>![[../images/13/aws_activity_policy.png|IAM User Policy Selection|600]]
+>The last page summarizes all the configurations which I review and confirm is correct then press the "Create user" button to create the IAM admin user account.  The account creates successfully and I am navigated to the final step "Retrieve password" in the wizard.  This page includes a "Console sign-in URL" link which has the AWS account number embedded within it as a subdomain.  I write this number down as it is needed when logging in from the main AWS login page - otherwise I would have to log in as the root user and find the account number anytime I wanted to log in as the new IAM user.
+>
+>The new administrator user I just created needs MFA but the only way to set it is to login as the admin user.  My next step is to log out of the root user account and then login using the link in the previous step with my username and password.  Just like I did for the root user, I navigate to the "Security credentials" of the logged in admin user and set the MFA device.
 ## Defending the Cloud
-Cloud Security
-AWS Key Management Service
-AWS CloudTrail
-AWS GuardDuty
-AWS IAM
-IAM Policies
-AWS VPC and Security Groups
-Cloud Security Posture Management
+In many ways, defending the security of the cloud is no different then defending traditional computer and network systems.  Fundamentally, the cloud has similar threats and mitigations as on-premise information technology.  One could argue that the cloud imposes more security risk as most organizations operate on public cloud providers, and their accounts can be accessed from anywhere.  Comparing that to a traditional on-premise network, and a remote user may not be able to access the entire control plane of the network.  As demonstrated in the last section, AWS empowers users to access their AWS account and all of the account's infrastructure and data through their website - accessible from anywhere.  That alone is enough to make some IT folks concerned about putting anything in the cloud.
+
+Throughout the chapters in this textbook we have explored several staples of securing data, systems, and networks.  So much of security is about finding and mitigating vulnerabilities, protecting data with encryption, managing people and system's access and permissions, and then monitoring and responding to security threats.  These same activities are translated into cloud services at all the major cloud providers.  Continuing the focus on AWS, let's explore some of the most common security related services available to customers.
+
+> [!tip] Tip - Other AWS Services
+> There are many more AWS security services and additional features of the services we briefly covered here.  Interested readers should checkout AWS's expansive and detailed docs to learn more! https://docs.aws.amazon.com/
+
+**Amazon Inspector** is a security service that integrates across a handful of computing related AWS services (EC2, ECR, Lambda).  It is most analogous to a traditional vulnerability management scanner but is less feature rich.  Inspector regularly scans compute instances and identifies common vulnerabilities and exposures (CVE) from a known, and frequently updated, vulnerabilities database.  It can be deployed with a few clicks of a button and will begin reporting findings within the AWS console in a matter of hours.  The ease of implementation and integration with existing services makes it an attractive option as part of a vulnerability management program.
+
+Data should be protected while in transit and at rest.  AWS services generally use transport layer security (TLS) to protect data while in transit between their services since all services rely on APIs.  The **AWS Certificate Manger** service empowers account holders to generate certificate authorities and signed certificates that can be used for encrypting data in transit.  This service, which is accessible through the AWS Console, integrates with other AWS services which use TLS certificates, such as Amazon CloudFront - a content delivery network (CDN) service.  AWS also offers the **Key Management Service (KMS)** to store, create, and manage encryption keys used to encrypt data at rest.  KMS includes both AWS managed and customer managed keys that integrate across many AWS services such as the simple queue service (SQS) and relational database service (RDS) among others.
+![[../images/13/kms.png|AWS Key Management Service (KMS) Console|600]]
+
+We have already had a glance into the **Identity and Access Management (IAM)** service AWS offers when we created a new IAM user in the last activity.  This service also supports creating *groups* to manage homogenous cohorts of user types associated with needed permission levels.  *Roles* are also part of this service which are used to manage access from machine entities and third parties.  For example, you can create a role that allows access AWS resources and assign the role to an infrastructure resource like and EC2 virtual machine instance.  This will allow that instance to access the service through the control plane.  It is just as easy to configure a role to allow a resource, like and EC2 instance, from another AWS account to also access your used AWS services!  
+
+We also briefly explored the concept of *policies* during the last activity where we assigned the AdministratorAccess policy to an IAM user.  Custom policies can be created that define which permissions and services are allowed or denied to any entity assigned the policy.  AWS uses *policy based access control (PBAC)* as a method of managing authorization in the cloud.  The policy itself is in a JSON format and can be written manually or developed using the AWS Console's policy editor.  The following policy allows the AWS API Gateway service to invoke a specific (although ambiguous here) Lambda function.
+![[../images/13/policy.png|AWS IAM Policy Sample|450]]
+Each policy includes an action section that lists the service and permission that is included in the scope of the policy block, an effect such as deny or allow, the principal the policy applies to, and a resource section which lists the specific resources within the scope of the policy.  The action and resource sections allow the administrator of the policy to define if a user can access all resources of the service or only specific ones.  For example, defining the actions to include permissions related to EC2 can be made available to all instances or a specific EC2 instance.  This format allows for as much granularity in access control as desired, but is easy to misconfigure!
+
+>[!warning] Warning - Principal Star
+>AWS IAM policies support wildcards using the `*` symbol.  A common misconfiguration is to place a wildcard in the principal field of an IAM policy.  If this policy is attached to a resource, such as a container image, it means that any principal can access the resource including principals from other AWS accounts!
+
+Most activity that is performed on the control plane of an AWS account is logged into an AWS service called **CloudTrail**.  The first *trail* is free but any additional trails created are priced on usage rates.  Every time a user interacts with the AWS Console or sends commands through the API, using various tools like the AWS CLI or Terraform, the actions are logged and stored for 90 days.  Each record, or entry, can be searched and filtered using the console supporting troubleshooting and security investigations.  Many organizations transfer these logs into a SIEM for a longer retention and to correlate logs with other sources.  
+![[../images/13/cloudtrail.png|AWS CloudTrail Console|600]]
+
+AWS also offers the **GuardDuty** service which has pre-built threat monitoring rules that detect potentially malicious behavior from sources like CloudTrail.  While GuardDuty does not support custom rules it does have a long list of managed rules that are essential to detect active threats, indicators of compromise, and indicators of attacks and rates them by severity.  For instance, exposing SSH to the internet on an EC2 instance will result in attackers attempting to brute force entry.  If GuardDuty is enabled, it will detect the attempts and generate an alert for security analysis.
+![[../images/13/guardduty.png|Amazon GuardDuty Alerts|600]]
+In the Operating System Security chapter we used a benchmarking tool called Inspec by Chef.  This tool scanned our Ubuntu operating system and advise us where system settings were not as security as they could be.  There is a similar class of tools designed for the cloud call **cloud security posture management (CSPM)** where a scan is completed assessing the resources and configurations against a rules engine to draw out any potential security misconfigurations.  Snyk, which was introduced in the Web Application Defense chapter, offers a great CSPM scanner for enterprise (paid) users.  There are also free and opensource solutions such as ScoutSuite which supports all the major cloud vendors, custom rules, and ignore lists.  This class of tool is vital to the security programs of organizations that use the cloud and is ran regularly by security engineers to identify and then mitigate security vulnerabilities. 
+
 >[!activity] Activity 13.2 - ScoutSuite CSPM
+>Before running ScoutSuite against my AWS account, it needs user credentials that can read all the resources and their settings.  Its a bad practice to use an account that has anything more than read permissions, so using my admin account for this purpose is not recommended.  Organizations may want to run the tool periodically, such as daily or weekly, in an automated fashion so have a dedicated user account that is only used for the tool would be ideal.  Doing so protects the account by reducing the opportunities its credentials could be compromised, and if they were to ever be rotated avoids breaking the processes other tools and systems that would otherwise be using them.  So the first thing I'll do is setup a low privileged IAM user before running the scan.
+>
+>First, I log into my AWS account using my administrator IAM user (not the root user) and navigate to the IAM service then the Users page.  I press the "Create user" button to start the user creation process and enter its name as `auditor`.  Unlike the administrator user I created in the previous activity, this user will leave the "Provide user access to the AWS Management Console" unchecked.  I also generate a long and high entropy password that isn't used anywhere else.  Because this IAM user will be used as a *service* account, it won't have MFA enabled as it isn't practical for automated machine connections.
+>![[../images/13/cspm_activity_user_create.png|Create Auditor IAM User|600]]
+>The next step in the wizard is to assign a policy with permissions that fit the need of the IAM user.  Because this IAM user only needs to read resources, I choose the "ReadOnlyAccess" and the "SecurityAudit" policies before pressing "Create user".
+>![[../images/13/cspm_activity_policy.png|IAM Policy Setting|600]]
+>I can see the newly created user `auditor` listed in the Users page within the Users section.  I'll need to generate access keys which will be used to authenticate to the AWS account when running the scan.  To set these up I press the username link for `auditor` which takes me to the user settings page.  I then navigate to the "Security credentials" tab and scroll down to the "Access keys" section, underneath the MFA section, and the press "Create access key" button.
+>![[../images/13/cspm_activity_keys.png|Creating Auditor User Access Keys|600]]
+>This launces the key creation wizard where I select the "Command Line Interface (CLI)" option and agree to the confirmation before hitting "Next" and then "Create access key".
+>![[../images/13/cspm_activity_cli_selection.png|CLI Key Selection|600]]
+>Once the access key is created, I press the "Show" link to reveal the secret access key.  I'll copy both the "Access key", which is like the username, as well as the "Secret access key", similar to a password, values to my password manager for safe keeping and to use later.  Its important I do this now as once I click off the page I won't be able to review the secret key again.  If I miss this opportunity to show the key, I'll have to destroy the old key and replace it with a new one.
+>![[../images/13/cspm_activity_keys_show.png|Auditor Access Keys View|600]]
+>Now that the IAM user is create I can begin the process of installing and using ScoutSuite to perform a CSPM scan against my AWS account.  A prerequisite to the tool is the AWS CLI which can be installed through the default Ubuntu APT repositories.  I launch my Ubuntu VM in Bridge Adapter network mode, start a terminal, update my machine and the run the install command.
+>```bash
+>sudo apt update -y
+>sudo apt install awscli -y
+>```
+>![[../images/13/cspm_activity_awscli.png|Installing AWS CLI on Ubuntu|600]]
+>The AWS CLI needs to be fed credentials and other setting which can be stored within a profile and referenced when running ScoutSuite.  I'll name the profile `audiotr` and enter the access key, the secret key, the region as "us-west-1" since that is where my default AWS region was when I created the AWS account, and JSON as the output format.
+>```bash
+>aws configure --profile auditor
+>```
+>![[../images/13/cspm_activity_aws_config.png|AWS CLI Configuration|600]]
+>ScoutSuite also will run best in a Python virtual environment as many of its dependencies might interfere with the Ubuntu VM's Python libraries.  Using Python virtual environments are a great way to sandbox applications to avoid such conflicts.  Before creating a virtual environment I have to install the tool using APT.  
+>```bash
+>sudo apt install python3-virtualenv -y
+>```
+>![[../images/13/cspm_activity_virtenv_install.png|Installing Python Virtual Environment|600]]
+>Now I can create the Python virtual environment, calling it `venv` which creates like name folder in my current working directory.  Within the `venv` folder is a binary called activate that will start the virtual environment.  Noce that the command line changes with a preceeding `(venv)` to denote I am working within the virtual environment.
+>```
+>virtualenv -p python3 venv
+>source venv/bin/activate
+>```
+>![[../images/13/cspm_activity_start_virtenv.png|Creating and Starting Virtual Environment|600]]
+>Any changes to Python libraries will be contained within this virtual environment.  I can leave the environment anytime by entering the `deactivate` command.  I'll use PIP to install ScoutSuite.
+>```bash
+>pip install scoutsuite
+>```
+>![[../images/13/cspm_activity_install_scout.png|Installing ScoutSuite In Virtual Environment|600]]
+>I'm finally ready to run my scan that will discovery any potential security misconfigurations in my AWS account.  ScoutSuite will make API calls to all AWS services using the auditor account and compare results to a rules engine that will identify any potential security flaws.  Running the following command instructs ScoutSuite to run AWS checks using the auditor profile configured earlier.
+>```bash
+>scout aws --profile auditor
+>```
+>![[../images/13/cspm_activity_scout_scan.png|Launching ScoutSuite Scan|600]]
+>Once the scan is complete, an HTML report is generated and automatically opened in the VM's browser.
+>![[../images/13/cspm_activity_scan_result.png|ScoutSuite Service Report|600]]
+>The HTML report contains several static pages that allows me to drill down into each service and review the vulnerabilities identified by ScoutSuite.  We can see that the default AWS account could use some hardening.  One failed rule that catches my eye is in the IAM service where ScoutSuite calls out a policy setting that could be applied to restrict unused credentials.  
+>![[../images/13/cspm_activity_iam_finding.png|ScoutSuite IAM Finding|600]]
 ## Attacking the Cloud
 Initial Access
 Credentials
 >[!activity] Activity 13.3 - Leaked Credentials
 
 Misconfigurations
+The cloud makes the provisioning and deployment of IT solutions too easy.  So easy, in fact, that anyone can do it.  This is accomplished through abstracting away the complexity of the system; however without sufficient knowledge of the underlying technology, a novice user could inadvertently expose their infrastructure to security threats.  While this isn't uncommon for on-premise networks, it is more common in the cloud as there are naturally more novice users while at the same time exposing infrastructure to the anonymous internet!  
 >[!activity] Activity 13.3 - S3 Buckets
 
 AWS Privilege Escalation

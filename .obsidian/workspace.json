@@ -18,18 +18,6 @@
                 "source": false
               }
             }
-          },
-          {
-            "id": "9f626da57870262e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "textbook/00-Introduction.md",
-                "mode": "source",
-                "source": false
-              }
-            }
           }
         ]
       }
@@ -160,34 +148,34 @@
   },
   "active": "0222551eff2d37c8",
   "lastOpenFiles": [
-    "images/13/aws_activity_support.png",
-    "images/13/aws_activity_billing.png",
-    "images/13/aws_activity_password.png",
-    "images/13/aws_activity_signup.png",
-    "images/13/multi_cloud.png",
-    "images/13/responsiblity_matrix.png",
-    "textbook/12-IncidentResponse.md",
+    "images/13/cspm_activity_iam_finding.png",
+    "images/13/cspm_activity_scan_result.png",
+    "images/13/cspm_activity_scout_scan.png",
+    "images/13/cspm_activity_install_scout.png",
+    "images/13/cspm_activity_start_virtenv.png",
+    "images/13/cspm_activity_virtenv_install.png",
+    "images/13/cspm_activity_aws_config.png",
+    "images/13/cspm_activity_awscli.png",
+    "images/13/cspm_activity_keys_show.png",
+    "images/13/cspm_activity_cli_selection.png",
+    "images/13/cspm_activity_keys.png",
+    "textbook/05-OperatingSystemSecurity.md",
+    "textbook/13-CloudSecurity.md",
+    "textbook/00-Introduction.md",
     "textbook/11-ForensicsAndMalwareAnalysis.md",
+    "textbook/12-IncidentResponse.md",
     "textbook/10-SecurityTesting.md",
     "textbook/09-WebApplicationAttacks.md",
     "textbook/08-WebApplicationDefense.md",
     "textbook/07-SecuritySystems.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
-    "textbook/05-OperatingSystemSecurity.md",
     "textbook/04-NetworkServices.md",
     "textbook/03-NetworkSecurity.md",
     "textbook/02-Cryptology.md",
     "textbook/01-InformationSecurity.md",
-    "textbook/13-CloudSecurity.md",
-    "textbook/00-Introduction.md",
-    "images/13/cloud_security.jpg",
     "images/13/cloud_security.jpg.crdownload",
     "images/13",
     "textbook/13-CloudSecurity",
-    "images/12/enterprise_activity_course.png",
-    "images/12/enterprise_activity_homepage.png",
-    "images/12/incident_phases.png",
-    "images/12/irt_escalate.png",
     "images/12/soc.jpg.crdownload",
     "images/12",
     "images/New folder",
