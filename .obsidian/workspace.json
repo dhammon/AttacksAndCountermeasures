@@ -13,7 +13,19 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/13-CloudSecurity.md",
+                "file": "textbook/14-MobileSecurity.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "8a0cb3bbe6e8d925",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "textbook/00-Introduction.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "textbook/13-CloudSecurity.md",
+                "file": "textbook/14-MobileSecurity.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +114,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "textbook/13-CloudSecurity.md",
+                "file": "textbook/14-MobileSecurity.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +137,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "textbook/13-CloudSecurity.md"
+                "file": "textbook/14-MobileSecurity.md"
               }
             }
           }
@@ -148,41 +160,41 @@
   },
   "active": "0b85070ecd421293",
   "lastOpenFiles": [
-    "images/13/rhino_privesc.png",
-    "images/13/bucket_activity_file.png",
-    "images/13/bucket_activity_backup_buckets.png",
-    "images/13/bucket_activity_landing.png",
-    "images/13/leaked_activity_commit.png",
     "textbook/13-CloudSecurity.md",
-    "images/13/leaked_activity_commits.png",
-    "Pasted image 20240421075352.png",
-    "images/13/cspm_activity_iam_finding.png",
-    "images/13/cspm_activity_scan_result.png",
-    "images/13/cspm_activity_scout_scan.png",
-    "images/13/cspm_activity_install_scout.png",
-    "textbook/05-OperatingSystemSecurity.md",
-    "textbook/00-Introduction.md",
-    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/12-IncidentResponse.md",
+    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/10-SecurityTesting.md",
     "textbook/09-WebApplicationAttacks.md",
     "textbook/08-WebApplicationDefense.md",
     "textbook/07-SecuritySystems.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "textbook/05-OperatingSystemSecurity.md",
     "textbook/04-NetworkServices.md",
     "textbook/03-NetworkSecurity.md",
     "textbook/02-Cryptology.md",
+    "textbook/14-MobileSecurity.md",
+    "files/newtonanalytics-modernportfoliotheory-2.apk",
+    "files/newtonanalytics-modernportfoliotheory-2-30493285-78aeb6462dbc775a70fdc6ecf4270175.apk",
+    "textbook/00-Introduction.md",
+    "images/14/android_armor.jpg",
+    "images/android_armor.jpg.crdownload",
+    "images/14",
+    "images/New folder",
+    "images/13/rhino_privesc.png",
+    "images/13/bucket_activity_file.png",
+    "images/13/bucket_activity_backup_buckets.png",
+    "images/13/bucket_activity_landing.png",
+    "images/13/leaked_activity_commit.png",
+    "images/13/leaked_activity_commits.png",
+    "Pasted image 20240421075352.png",
+    "images/13/cspm_activity_iam_finding.png",
+    "images/13/cspm_activity_scan_result.png",
     "textbook/01-InformationSecurity.md",
     "images/13/cloud_security.jpg.crdownload",
     "images/13",
     "textbook/13-CloudSecurity",
     "images/12/soc.jpg.crdownload",
     "images/12",
-    "images/New folder",
-    "files/forensics.E01",
-    "images/11",
-    "images/10/security_tools.jpg.crdownload",
-    "images/10",
     "README.md"
   ]
 }
