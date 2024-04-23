@@ -8,26 +8,32 @@ Prior to artificial intelligence, blockchain or web 3.0, and cloud technologies 
 2. Understand the security features and risks of Android applications.
 3. Conduct basic static and dynamic analysis of Android applications using Qark and Android Studio.
 ## Android Application Basics
-App Basics
-- android developers https://developer.android.com/guide/components/fundamentals
-- Kotlin/Java/C++
-- Package
-- App Bundle
-- Signed
+Having a basic understanding of how Android applications are developed and operate is important before discussing their security.  At their core, application developers can chose to develop them using Java's Kotlin or C++ languages.  Source code is then compiled using the Android software development kit (SDK) into an Android package file with the extension `.apk`.[^1]  This portable file contains all the data, resources, and source code to run an application on an Android operating system.  They are digitally signed using a developer maintained certificate before being uploaded to Google Play using a developer account.  Once in the store, they can be downloaded and installed by any internet user.
 
-- Security Sandbox
-- Least Privilege
+APKs are effectively archive files that can be installed manually onto a device, known as *side loading*, without the use of the Google Play app.  The benefit of installing an app from Google Play is that it must meet Googles privacy and security requirements; although there are plenty of malicious apps that are published at any given time.  It is inadvisable to install Android apps from third party stores or installing manually through side loading, unless the user has taken precautions or otherwise trusts the application source.
+
+Applications running on an Android system, such as a smart phone or tablet, are ran within a segregated process called a *security sandbox*.  This separation from other applications and core features of the operating system helps to minimize the impact a malicious application could have on a device.  We will explore how a misbehaving application takes advantage of Android components to exploit vulnerabilities in other applications later in this chapter.  The application is assigned a unique Linux user that only has access to that application's files using the operating system's discretionary access control policies set by the system.  When the application is launched it is given its own process and runs in isolation from other applications running the environment.
+
+Each app running in a sandbox is also granted least privileges by default.  Application developers have the ability to loosen permission controls on their application to allow various sources to interact with its components.  If mishandled, these less restrictive permissions could open the application up to security vulnerabilities.  Applications can also used other operating system drivers to utilize hardware components, such as contact lists or the camera.  Android ensures these permissions are explicitly granted by the user when installing the app.  You may have seen this as a pop up message during app installations giving you the ability to allow or deny application permissions.
+![[../images/14/app_runtime.png|Android Application Runtime Environment|500]]
+The graphic above attempts to illustrate some of the previous points.  There are three applications titled A, B, and C (light blue boxes) running within sandboxes on top of the operating system (bottom grey bar).  The operating system maintains each of the application's permissions describing what the application is allowed to access.  In this table, on the bottom left of the graphic, App C has permissions to the camera which is also depicted using a camera icon within the app on the right.  The operating system also maintains databases, such as SQLite, the file system, application users and manages the running applications as processes.  As we will learn in the following section, each application has components that can be invoked using *intents*.  These components access are managed by each application and setup during development.  They restrict an application's ability to interact with other application as shown between App A and App B's blocked arrow.  But they can also enable applications to interact with each other as shown between App B and App C with the green arrows traversing through the intents system.
 ### Components of Android Applications
+
 Activities
 Services
 Broadcast Receivers
 Content Providers
 Intents
 Manifest File
+![[../images/14/manifest.png|Android Application Manifest File|500]]
 App Resources
 App Source Code
 
 >[!activity] Activity 14.1 - Mobile App Risk Assessment
+>Individually, or in a small group, analyze what you now understand about mobile applications and determine their:
+>- attack surface
+>- impact of exploitations
+>- mitigations 
 ## Defending Android Applications
 Security Guidelines
 - https://developer.android.com/privacy-and-security/security-tips
@@ -46,7 +52,9 @@ Security Guidelines
 
 ### Means of Attacks
 Vulnerable APIs
+![[../images/14/vuln_api.png|Attacking Application HTTP APIs|450]]
 Malicious Application
+![[../images/14/mal_app.png|Malicious Android Application Interactions|500]]
 ### Components Attack Surface
 - Activities
 - Broadcasts
@@ -184,3 +192,5 @@ Tools
 >Send an intent from the debugger to evidence open Activity using Android debugger.
 >
 >Observe that the app is launched in the emulator! Because this is the first time the app has been launched, we are prompted with a permissions request.
+
+[^1]:Application fundamentals | Android Developers; Android; April 22nd, 2024; https://developer.android.com/guide/components/fundamentals
