@@ -82,23 +82,32 @@ To avoid having to re-write an entire application, many organizations leveraged 
 >[!warning] Warning - Dynamically Loaded Code
 >Updating applications through the Play Store can be a chore and some developers might have the idea to avoid having to submit version changes through the application store altogether by dynamically referencing source code from a remote location.  This practice is very dangerous as it provides an opportunity for a stealthy side channel attack.  Such a setup could go wrong many ways and cause the application to be fully compromised.  The attacker could gain control over the remote resource or could trick the application into accepting an update from another resource.  Using the Play Store provides some level of protection against this and dynamically loaded code should be consider insecure.
 ## Attacking Android Applications
-
-### Means of Attacks
-Vulnerable APIs
-![[../images/14/vuln_api.png|Attacking Application HTTP APIs|450]]
-Malicious Application
-![[../images/14/mal_app.png|Malicious Android Application Interactions|500]]
+This section provides an overview on approaches and methodologies for attacking mobile applications.  It will analyze the attack surface of mobile application architecture and system design and demonstrate the risks and vulnerabilities applications face.  In the last part of this section we explore methods of statically and dynamically testing an Android application's security to discovery weaknesses and vulnerabilities.
 ### Components Attack Surface
-- Activities
-- Broadcasts
-- Services
-- Receivers
-### Application Attack Types
-- Command Injection
-- Information Disclosure
-- Path traversal
-- SQLi
-- Tapjacking
+Many mobile applications are really wrappers of a mobile application or would otherwise rely on remote internet services to store and retrieve data that the application uses.  Imagine a social networking mobile application that is launched and displays content and messages from other users.  This information wouldn't be readily available within the device's storage and would have to be retrieved from the application's web servers.  Researchers can identify these web endpoints in a few ways such as monitoring traffic from the device or decompiling the application and searching for IP addresses and *fully qualified domain names (FQDN)*.
+![[../images/14/vuln_api.png|Attacking Application HTTP APIs|450]]
+The diagram above demonstrates a mobile application (App B) making network connections to internet resources.  Given the distributed nature of mobile applications, these internet services can be reachable by any anonymous users.  Attacking *application program interfaces (API)* is beyond the scope of this chapter, but is absolutely part of the attack surface of a mobile application.  Malicious actors can attack the API web endpoints directly which should require strong authentication, authorization and encryption to mitigate many attacks.
+
+>[!story] Story - Social Media Application
+>Once, while I was learning about mobile application security, I targeted a new social media application that was recently published onto the Play Store.  After downloading the application and decompiling it I hunted for any remote endpoints the application would connect to.  I found an IP address and loaded it into my browser and was presented with an "Index of" page that listed the web server file contents of the web root directory.  It included a `stage.zip` file which I downloaded and unzipped.  This folder contained the raw source code of the mobile and web applications including a configuration file that housed plaintext secrets to the application's database, integrations with email and social media systems, and other credentials.
+>
+>Alarmed by my discovery, I contacted the application's developer listed in the Play Store and notified them of the sensitive files in a responsible manner.  I suggested they remove the zip file and rotate all credentials as they would likely have been exposed and would be abused.  The application owner was so appreciative of my efforts they offered me a contract for penetration testing services on their technologies!
+
+Mobile application security could be quickly as the attack scenarios are not intuitive.  Vulnerabilities in a web application could lead to a system, network, or data breach in an organization whereas vulnerabilities within a mobile application only affect the client.  Developers could take this into consideration and lower security expectations thinking that a mobile device user wouldn't have the need or desire to exploit vulnerabilities within their own device.  It might not be obvious how a malicious actor could interact with a mobile application installed on a users device especially if that application doesn't use components that directly ingest events from remote sources like an incoming SMS message.
+
+The basic threat model to exploit mobile application vulnerabilities consists of a malicious application installed on the same device as the victim application.  The malicious application will be designed to send malicious payloads to the target application with the intent to steal or modify data or take advantage of the user's trust of the vulnerable application.  A user might think they are interacting with their trusted application, but the vulnerable application could be completely compromised.  The following diagram shows the paths of a malicious application's interactions with a vulnerable application and its content providers.
+![[../images/14/mal_app.png|Malicious Android Application Interactions|500]]
+Malicious applications will send payloads to the vulnerable application through the operating system's intents.  This requires the vulnerable application to have components that have generous permissions that chain together with other vulnerabilities to achieve some impact.  These impacts will vary depending on the victim application's context and severity of vulnerability which we will explore in the next section.  Vulnerable components could allow an attacker to start an authenticated user flow without having to know the user's credentials or access data stored on the device that isn't directly accessible by the application.  In 2017, the ride sharing company Uber was alleged to have been spying on driver's use of the Lyft application, another ride sharing company, through vulnerabilities within Lyft's mobile application to gain competitive advantage over the competitor.  Allegedly, Uber used their application to collect data from the vulnerable Lyft application![^2]
+### Application Vulnerabilities
+There are many types of mobile application vulnerabilities that can be identified through analysis of the application.  Mobile application penetration testers and security researchers define these vulnerabilities into risk types such as those found in OWASP's Mobile Top 10 (https://owasp.org/www-project-mobile-top-10/).  We've mentioned a few of the risks already throughout the chapter but will highlight more common vulnerabilities in this section.
+
+A mobile application might accept an input used to run commands on the operating system's sandbox through *command injection* which is caused by failure to validate input and encode outputs to system functions.  This results in the attacker's ability to access and modify any data being processed by the application's memory or files.  It could be further leveraged by the attacker to even achieve a reverse shell onto the victim's device where they can attempt further exploitations to escape the application's sandbox.
+
+It is also common to find *information disclosures* within a mobile application's decompiled source code.  This can include secrets used to authenticate with remote systems and other proprietary information of the developer organization.  Hardcoded secrets are far too common especially even at mature organizations.  Similarly, *path traversal* vulnerabilities can be exploited to gain access to files that are meant to be protected by from general access in the application.  This is a result of mishandling permissions as well as a failure of input validation on requests to content providers.
+
+Many applications use the built-in SQLite database to store and process data within tables that are protected from access by applications.  However, raw SQL statements which don't use parameterized requests could expose all the data within an application's local database to an attacker.  The risk of a *SQL injections* on the local database are pronounced when that data contains sensitive information, such as personally identifiable information of contacts or is used to store secrets to other applications like banking information.
+
+The last vulnerability and exploitation worth considering is *tap jacking* which is similar to web site click jacking.  Tap, or click, jacking attacks overlay invisible elements over application functions that will perform some activity when the user presses the element.  Because the malicious invisible element is in the foreground and is placed over the victim application, anytime the victim user attempts to interact with the vulnerable application they are actually engaging with a malicious element.  The malicious actor exploiting this attack can use those taps by the user to send requests to other systems left to their imagination.  It could be as benign as tricking the user to "like" something on a social media app, or click an advertisement that the attacker collects money on, or as bad as hijacking authenticated requests to connected sensitive systems.  Tap jacking is the result of allowing all permissions on exported activities.
 ### Enumerating Applications
 Methodologies
 - Static Analysis
@@ -227,3 +236,4 @@ Tools
 >Observe that the app is launched in the emulator! Because this is the first time the app has been launched, we are prompted with a permissions request.
 
 [^1]:Application fundamentals | Android Developers; Android; April 22nd, 2024; https://developer.android.com/guide/components/fundamentals
+[^2]:Uber allegedly used secret program to undermine rival Lyft | Uber | The Guardian; April 27, 2024; https://www.theguardian.com/technology/2017/apr/13/uber-allegedly-used-secret-program-to-cripple-rival-lyft
