@@ -109,18 +109,146 @@ Many applications use the built-in SQLite database to store and process data wit
 
 The last vulnerability and exploitation worth considering is *tap jacking* which is similar to web site click jacking.  Tap, or click, jacking attacks overlay invisible elements over application functions that will perform some activity when the user presses the element.  Because the malicious invisible element is in the foreground and is placed over the victim application, anytime the victim user attempts to interact with the vulnerable application they are actually engaging with a malicious element.  The malicious actor exploiting this attack can use those taps by the user to send requests to other systems left to their imagination.  It could be as benign as tricking the user to "like" something on a social media app, or click an advertisement that the attacker collects money on, or as bad as hijacking authenticated requests to connected sensitive systems.  Tap jacking is the result of allowing all permissions on exported activities.
 ### Enumerating Applications
-Methodologies
-- Static Analysis
-- Dynamic Analysis
+The last section of this chapter explores some tools and techniques that can identify vulnerabilities within Android applications.  Using my Android application Modern Portfolio Theory as the target, we will conduct static an dynamic analysis to find several vulnerabilities throughout the application.  Our efforts will use several open source and free tools enabling us to enumerate and exploit weaknesses in the application.
 
-Tools
+>[!story] Story - Newton Analytics - Modern Portfolio
+>I found an interest in developing web and  mobile applications related to finance which effectively laid the foundation to what would become my career in cybersecurity.  The inspiration for developing the Modern Portfolio application by my entity Newton Analytics came during my time studying portfolio optimization with Professor Hamid Ahmadi.  It was developed during a time when I was learning about mobile applications and certainly didn't understand the security implications covered in this chapter which makes it an excellent opportunity to find vulnerabilities!  
+>
+>While Professor Ahmadi's class academically focused on finance, and not computer science, it introduce me to advance Excel and Visual Basic for applications.  Like many of Professor Ahmadi's students, I drew great inspiration from his intellect and teaching style and I am proud to include this application as the target in this chapter.  Sadly, Professor Ahmadi past away a couple years ago at the time of this writing.  He was brilliant, inspirational, and will be sorely missed.  Thank you Professor, you touched the lives of many students especially myself.   
 
->[!story] Story - Newton Analytics - Modern Portfolio Theory
+As we have explored during other sections of this text, static analysis is typically consists of the review of an application that is not running.  Our static analysis of a mobile application consists of unpacking, disassembling, and decompiling an application to review its source code and configurations, such as the manifest file.  Obtaining an APK is relatively easy through online downloaders such as on https://apkcombo.com/ or through using the Google CLI which will require a Google account.  Once acquired the APK is inflated and its Java archive files are disassembled and decompiled into human readable formats.  There are several tools that can assist in the extraction of an application's source code including the Quick Android Review Kit (QARK).  Qark includes the reverse engineering tool Smali that performs the disassembly and decompiling revealing the app's source code.  Interested readers should checkout Payatu's great write up on how Smali works at https://payatu.com/blog/an-introduction-to-smali/.  After the source code files are obtained, we can manually review the source for potential vulnerabilities, misconfigurations, and information disclosures.  Qark also performs a vulnerability and misconfiguration scan which can be used as a starting point for finding issues within a targeted Android application.
 
->[!activity] Activity 14.2 - Static Analysis
+>[!activity] Activity 14.2 - Static Analysis Using Qark
+>In this activity I will demonstrate the acquisition of the Modern Portfolio APK and its static analysis using Qark.  After starting the Kali VM in Bridge Adapter network mode, I open a browser and navigate to https://androidappsapk.co/apkdownloader.  I then search for `newtonanalytics.modernportfolio` and follow the link of the Newton Analytics application.  The app's page loads and I press the download button for the latest version avoiding any ads.
+>![[../images/14/static_activity_download.png|Downloading APK|600]]
+>Still within the Kali VM I open a terminal and clone the Qark GitHub repository.
+>```bash
+>git clone https://github.com/linkedin/qark
+>```
+>![[../images/14/static_activity_clone.png|Cloning Qark Repository|600]]
+>Once cloned I change my working directory to the `qark` folder and setup a python virtual environment.  Qark is fairly old and requires many outdated packages in Python to run, so setting up the application in its own virtual environment protects any dependency conflicts with my Kali host's Python installation.
+>```bash
+>cd qark
+>virtualenv -p python3 venv
+>source venv/bin/activate
+>```
+>![[../images/14/static_activity_env.png|Setting Up Python Virtual Environment|600]]
+>Notice how the CLI prompt changes to include `(venv)` which signals we are in the activate virtual environment.  I can leave the environment anytime by running the `deactivate` command which returns me to the host's CLI.  Qark comes with a `requirements.txt` file that lists all the packages and versions needed to run the application.  Using pip, I install Qark's required packages.
+>```bash
+>sudo pip install -r requirements.txt
+>```
+>![[../images/14/static_activity_requirements.png|Installing Qark's Requirements|600]]
+>Everything seems to install without error except the `egg_info` module which will be fine for this demonstration.  Qark also comes with a `setup.py` file which I run to complete the installation.  The setup file warns me of the deprecation of the install command; however, it seems to install normally so I disregard it for now.
+>```bash
+>sudo python setup.py install
+>```
+>![[../images/14/static_activity_setup.png|Setup Qark|600]]
+>With Qark now installed I'm ready to analyze the APK downloaded at the beginning of this activity.  Running the tool decompresses and decompiles the application before analyzing it and producing a report of any findings.
+>```bash
+>sudo qark --apk ~/Downloads/newtonanalytics.modernportfoliotheory*.apk
+>```
+>![[../images/14/static_activity_qark_run.png|Running Qark on Modern Portfolio|600]]
+>After a few moments Qark completes decompiling and analyzing and outputs a path to the report it generated.  I notice that the egg_info module failed which is expected because that module errored when it initially installed.
+>![[../images/14/static_activity_report_path.png|Qark Scan Completion|600]]
+>I copy the path of the report and open in my Kali VM's Firefox browser since it is an HTML report.  The report isn't too fancy but includes many findings from various Java files that were decompiled by Qark.  The issues format includes a header, description, and a link to the file and line number where the problem was found.
+>![[../images/14/static_activity_report.png|Qark Report Results|600]]
+>The third issue `INFO Hardcoded HTTP url found` displays an HTTP link to the newtonanalytics.com domain.  Seeing HTTP used without TLS is definitely worth calling out since traffic is unencrypted.  But this issue also informs us of remote resources that might also be worth investigating.  A humble request from my readers here, this domain is my domain and I would appreciate it if you refrained from attacking it - thank you in advance!
+>
+>It is worth exploring this issue's source code since Qark decompiled it.  I return to my terminal and navigate to the `build/qark/cfr/newtonanalytics/modernportfoliotheory/` directory from my present working directory `qark`.  Listing out the contents shows several Java files appearing to be application components.
+>![[../images/14/static_activity_path.png|Listing Decompiled Files|600]]
+>That hardcoded HTTP url was found in the `Run.java` file on line 95.  Displaying the file using `cat` and scrolling through its content I can see the FQDN endpoint!
+>```bash
+>cat Run.java
+>```
+>![[../images/14/static_activity_url.png|FQDN Manually Found|600]]
+>Looks like the application is concatenating several parameters and rendering the page results in a WebView.  There might be a server side request forgery (SSRF) or another type of path manipulation vulnerability here which would require dynamic testing.  Above the FQDN I also spot some database references so this application is likely using the native SQLite database.
+>
+>It is also worth exploring the application's manifest file content for more context on the components being used by the application and to potentially spot any over permissive settings.  The `AndroidManifest.xml` file can be found in the `build/qark` folder listed here.
+>```bash
+>cd ~/qark/build/qark
+>```
+>![[../images/14/static_activity_list.png|Listing Application Files|600]]
+>I dump the contents of the manifest file to the terminal's standard output using cat and explore its contents which includes a few activities as well as information about the application's version.
+>```bash
+>cat AndroidManifest.xml
+>```
+>![[../images/14/static_activity_manifest.png|Dumping AndroidManifest.xml File Contents|600]]
+>I've only just scratch the surface of my static analysis and have already learned so much about the application.  In a full demonstration I might run SAST tooling against the source code, enumerate all of Qark's findings, and map out the entire application's logic flow.
 
->[!activity] Activity 14.3 - Dynamic Analysis
+Once static analysis is performed the next step is to evaluate the application at runtime through *dynamic analysis*.  It is best to run the application in a development environment with an emulator as other tools can be installed on the host system to monitor the application.  Examples of this include BurpSuite or WireShark which can capture network requests for analysis of the running application's behavior.  The Android Studio integrated development environment comes with many useful tools for debugging Android applications, such as its built in emulator and the Android Debugger (ADB).  These tools will enable the researcher to load the acquired APK into a virtual environment along with console access to the virtual environment operating system.  Monitoring an application's behavior enables interactivity and lays the foundation of developing proof of concept exploits and effective payloads that would otherwise be difficult to craft confidently during static analysis.
 
+
+>[!activity] Activity 14.3 - Dynamic Analysis Using Android Studio and ADB
+>Android Studio offers developers an integrated development environment with device emulators and built-in debugging tools.  In this activity I will setup Android Studio on my Windows host and dynamically analyze the application using the Android debugger ADB.
+>
+>From my Windows host I open a browser and navigate to https://developer.android.com/studio  and press the "Download Android Studio" button which beings the download over the installer file.  It is about 1GB in size and takes a few minutes to complete.
+>![[../images/14/dynamic_activity_download.png|Downloading Android Studio Installer|600]]
+>Once the download is complete I open my Downloads folder and double click on the Android Studio executable to start the installation.  The installer requires administrative permissions which cause the UAC prompt that I accept before pressing Next to begin the installation.
+>![[../images/14/dynamic_activity_setup.png|Starting the Installation of Android Studio|400]]
+>The setup wizard walks me through the installation where I make sure to select the components "Android Studio" and the "Android Virtual Device".  I accept the default installation location and any other default recommendations which starts Android Studio after the initial setup where I'm presented with the "Welcome to Android Studio" message.
+>![[../images/14/dynamic_activity_welcome.png|Complete Installation of Android Studio|600]]
+>>[!note] Note - Missing SDK
+>>It is important that the Android software development kit (SDK) is installed.  Sometimes Android Studio doesn't install the SDK by default.  If so, you would be presented with the "Missing SDK" window instead of the "Welcome to Android Studio" screen.  Make sure to install Android SDK - Android API 34 if you are following along!
+>
+>I'll be using the virtual device Pixel 3a with API 34 for the dynamic analysis.  Options to set up a virtual device are found under the More Actions dropdown menu in the main pane of the Welcome to Android Studio screen under the "Virtual Device Manager" option.
+>![[../images/14/dynamic_activity_vdm.png|Selecting Virtual Device Manager|500]]
+>The Device Manager window lists all devices that are ready to be emulated.  To add a new device, I press the "Create Device" button in the top left corner of the window.  I choose the Pixel 3a hardware and press Next.
+>![[../images/14/dynamic_activity_hardware.png|Selecting Hardware|600]]
+>Then I select the API 34 image that will be installed on the virtual device and press the download icon.  The API is about 1GB in size and takes some time to download and install.  
+>![[../images/14/dynamic_activity_image.png|Selecting Image|600]]
+>The interaction also requires me to accept the license agreement but eventually installs the related SDK.
+>![[../images/14/dynamic_activity_sdk_install.png|SDK Installation|600]]
+>Once the API and SDK are downloaded and installed I return back to the Android Virtual Device wizard and name the AVD `Pixel 3a API 34` before finishing the setup of the device.
+>![[../images/14/dynamic_activity_avd_finish.png|Complete AVD Setup|600]]
+>Now that Android Studio and the SDK is installed, along with setting up an AVD, I am ready to launch the emulator.  From my Windows host I open a command prompt and navigate to the SDK's emulator folder.
+>```cmd
+>cd AppData\Local\Android\Sdk\emulator
+>```
+>![[../images/14/dynamic_activity_dir.png|Navigating to Emulator Directory|600]]
+>Using the emulator executable I list the available AVDs which show the Pixel 3a device I setup in the previous step.  These are the devices I have setup to emulate.
+>```cmd
+>emulator.exe -list-avds
+>```
+>![[../images/14/dynamic_activity_avds.png|Listing AVDs Using Emulator Executable|600]]
+>To start the AVD I use the emulator executable with the `-avd` option and the name of the AVD ID listed in the previous command.
+>```cmd
+>emulator.exe -avd Pixel_3a_API_34
+>```
+>![[../images/14/dynamic_activity_start_avd.png|Starting AVD Using Emulator|600]]
+>After a few moments my Pixel 3a emulated device pops up and eventually fully loads!  I can interact with is using my mouse simulating taps and drags much like a real phone.  The emulator has several settings that can be adjusted in the context menu show on the right of the emulated device.
+>![[../images/14/dynamic_activity_avd_init.png|Emulated Pixel 3A Home Screen|200]]
+>Now that the emulated device is running I will download the APK to my host computer using the same method as the previous activity.  Next I open an new terminal session on my Windows host, navigate to the SDK's platform tools directory where ADB is located, and install the application from the host. The first install command failed because the debugger daemon was not initially running but it shows that it was started so I re-ran the same command and received a Success message suggesting Modern Portfolio was installed on the emulated device.
+>```cmd
+>cd .\AppData\Local\Android\Sdk\platform-tools\
+>.\adb.exe install --bypass-low-target-sdk-block C:\Users\danie\Downloads\newtonanalytics.modernportfoliotheory_1.1_androidappsapk.co.apk
+>```
+>![[../images/14/dynamic_activity_install.png|Installing Modern Portfolio On AVD|600]]
+>ADB is a powerful tool that can run commands on the device and provide us terminal access to the AVD.  To launch a shell on the emulated device, I run ADB with the shell command which immediately drops me into a new CLI.
+>```cmd
+>.\adb.exe shell
+>```
+>![[../images/14/dynamic_activity_adb_shell.png|ADB Shell On Emulated Device|600]]
+>Let's verify that the Modern Portfolio application is indeed installed while enumerating any other packages by running the debugger's built in package manager command.
+>```adb
+>pm list packages
+>```
+>![[../images/14/dynamic_activity_list_packages.png|Listing AVD Packages Using ADB Shell|600]]
+>About halfway down the list I see the installed application!
+>![[../images/14/dynamic_activity_confirm_install.png|Confirming App Installation|600]]
+>Similarly, jumping onto the emulated device GUI and swiping up lists the applications installed which now includes Modern Portfolio (grey icon)!
+>![[../images/14/dynamic_activity_gui_app_confirm.png|AVD GUI Application Install Confirmation|200]]
+>Let's see if we can start the application using an intent from the operating system.  I'll target the MainActivity component we observed in the manifest file during static analysis.  While within the ADB shell, I run the activity manager command targeting the package and activity name.
+>```adb
+>am start -n newtonanalytics.modernportfoliotheory/.MainActivity
+>```
+>![[../images/14/dynamic_activity_intent.png|Starting MainActivity Using Intents|600]]
+>And jumping to the emulated device I see that the app was launched!
+>![[../images/14/dynamic_activity_launched.png|Launched Modern Portfolio App|200]]
+>If I try to launch another activity from ADB, such as the DisplayContact activity, I get a permission denied error which suggests that the permissions on this activity mitigate other applications from launching it!
+>![[../images/14/dyanamic_activity_denied.png|Intent Permission Denied|600]]
+>In this activity we established how we can dynamically test an application while using Android Studio's emulator and debugger.  From here we can start testing payloads against some of the vulnerabilities identified during static analysis.  We could also use additional tools to capture and monitor how the application interacts with the network interface of the emulated device.
+
+Developing exploits and proofs of concepts can be a little time consuming.  Therefore some security professionals have developed exploit kits that streamline common exploits of known vulnerability classes.  These tools are typically compiled Android applications that have been configured to target a vulnerability discovered in a victim application.  Compiling the malicious application, installing it, and then running its exploits quickly demonstrate to application owners the severity of the vulnerabilities discovered.  They also serve as a great tool for testing vulnerability mitigations as they can provide measurable assurance that a vulnerability has been remediated.    One of my favorite testing frameworks is Drozer by WithSecureLabs.  You can find its source code and use instructions in https://github.com/WithSecureLabs/drozer.
 ## Exercises
 >[!exercise] Exercise 14.1 - Static Analysis
 >Static analysis of Android applications starts with acquiring the app file APK.  Unzipping the file and then decompiling/disassembling the application allows for review of the app's source code and settings.  The process of preparing and analyzing the app can be automated using the Qark tool.
