@@ -1,4 +1,4 @@
-# Chapter 4 - Defending and Attacking Network Technologies
+# Chapter 4 - Network Services
 
 ![](../images/04/ethernet_shield.jpg)
 
@@ -508,7 +508,7 @@ The other type of attack we covered is the DHCP spoofing attack and the rouge DH
 
 ![[../images/04/dhcp_snooping.png|DHCP Snooping|450]]
 
-## TCP
+## Transmission Control Protocol (TCP)
 We have already covered the basics of TCP in the last chapter.  You may recall the introduction of the three-way hand shake where a client sends a SYN packet to the server, the server responds with a SYN+ACK, and the client finally sends an ACK packet before starting the transmission of data.  TCP is heavily used in networking with most popular protocols relying on it as the resilient means to communicate.
 
 Another packet sent by the client to the server is the **reset (RST)** packet which terminates a connection stream.  You can see this packet ending a transmission in the figure below.

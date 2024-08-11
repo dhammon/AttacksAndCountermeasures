@@ -1,5 +1,14 @@
-# AttacksAndCountermeasures
-
+# Attacks And Countermeasures
+Use Obsidian software for the best viewing experience.
 ## Versioning
-Semver
-edition.release.wip
+Git branches are used to organize drafts of this textbook.  Branch naming syntax follows semantic versioning `edition.release.wip`.
+## TODO
+- Create Activities for exercises in Cryptology
+- Create Activities for exercises in Network Security
+- Move chapters 1-6 Exercises to end of chapter
+- bonus chapter
+	- job hunt
+	- resumes
+	- certifications
+	- continued learning
+	- Security resources: podcasts, sites, training, youtube, reddit, newsletters

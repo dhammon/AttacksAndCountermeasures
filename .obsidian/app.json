@@ -3,8 +3,8 @@
   "pdfExportSettings": {
     "pageSize": "Letter",
     "landscape": false,
-    "margin": "2",
-    "downscalePercent": 85
+    "margin": "0",
+    "downscalePercent": 80
   },
   "alwaysUpdateLinks": true
 }

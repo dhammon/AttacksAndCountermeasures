@@ -8,30 +8,43 @@
         "type": "tabs",
         "children": [
           {
-            "id": "0b85070ecd421293",
+            "id": "c1a2dd920546313f",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/14-MobileSecurity.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "8a0cb3bbe6e8d925",
+            "id": "0b85070ecd421293",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/00-Introduction.md",
+                "file": "textbook/01-InformationSecurity.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "7fa20b43442d8dec",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "textbook/07-SecuritySystems.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -97,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "textbook/14-MobileSecurity.md",
+                "file": "textbook/01-InformationSecurity.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -114,7 +127,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "textbook/14-MobileSecurity.md",
+                "file": "textbook/01-InformationSecurity.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -137,7 +150,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "textbook/14-MobileSecurity.md"
+                "file": "textbook/01-InformationSecurity.md"
               }
             }
           }
@@ -160,7 +173,10 @@
   },
   "active": "0b85070ecd421293",
   "lastOpenFiles": [
+    "textbook/07-SecuritySystems.md",
     "textbook/01-InformationSecurity.md",
+    "README.md",
+    "textbook/00-Introduction.md",
     "textbook/14-MobileSecurity.md",
     "textbook/13-CloudSecurity.md",
     "textbook/12-IncidentResponse.md",
@@ -168,7 +184,6 @@
     "textbook/10-SecurityTesting.md",
     "textbook/09-WebApplicationAttacks.md",
     "textbook/08-WebApplicationDefense.md",
-    "textbook/07-SecuritySystems.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/05-OperatingSystemSecurity.md",
     "textbook/04-NetworkServices.md",
@@ -186,7 +201,6 @@
     "images/14/dynamic_activity_avd_init.png",
     "files/newtonanalytics-modernportfoliotheory-2.apk",
     "files/newtonanalytics-modernportfoliotheory-2-30493285-78aeb6462dbc775a70fdc6ecf4270175.apk",
-    "textbook/00-Introduction.md",
     "images/android_armor.jpg.crdownload",
     "images/14",
     "images/New folder",
@@ -194,7 +208,6 @@
     "images/13",
     "textbook/13-CloudSecurity",
     "images/12/soc.jpg.crdownload",
-    "images/12",
-    "README.md"
+    "images/12"
   ]
 }
