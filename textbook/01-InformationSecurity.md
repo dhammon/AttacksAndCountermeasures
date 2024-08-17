@@ -321,7 +321,7 @@ Each chapter of this book will include lab exercises on the covered topics.  Rea
 > 15. On the fifth and last "Partition disks" page, select “Yes” to the "Write the changes to disks" question (note default option is no) and press Continue.
 > 16. While in the "Software selection" window, wait for the system to install.  Then use the default software selections and press continue.
 > 17. Once the software installs after waiting for ~25 minutes, the "Install the GRUB boot loader" window appears.  Select "Yes" and then press Continue.
-> 18. Still on the "Install the GRUB boot loader" page, select the available device (not "Enter device manually") and press Continue to install the boot loader.
+> 18. Still on the "Install the GRUB boot loader" page, select the available device `/dev/sda` (not "Enter device manually") and press Continue to install the boot loader.
 > 19. Wait some time for the installation to finish and the "Finish the installation" page will appear.  Press Continue to complete the installation.
 > #### Step 3 - Configure Kali
 > 1. The system will reboot and launch the login menu.  Enter the username and password used during installation.  If the VM boots to a black screen, you may need to increase the "Video Memory" of the VM.  Navigate to VirtualBox, select your VM, press Settings, choose Display from the navigation menu on the left, and then increase the Video Memory.
@@ -344,11 +344,11 @@ Each chapter of this book will include lab exercises on the covered topics.  Rea
 > 
 > We will use an Ubuntu VM throughout the course as a victim, server, or to illustrate secure configurations.  Ubuntu is another Debian distribution maintained by Conical and is one of the most popular Linux operating systems.  You will download an ISO image and install the system using the unattended installation feature.  Once completed, we will configure the VM to share resources with the host.
 > #### Step 1 - Download and Setup Ubuntu VM
-> 1. Navigate to [https://ubuntu.com/download/desktop](https://ubuntu.com/download/desktop and download the Ubuntu 22+ LTS image.
-> ![[../images/01/lab_09_ubuntu_download.png|Ubuntu Download Page]]
+> 1. Navigate to https://releases.ubuntu.com/22.04/ and download the Ubuntu version 22.0.4 image.
+> ![[../images/01/ubuntu22_download.png|Ubuntu Download Page]]
 > 2. With the ISO for Ubuntu fully downloaded (~10-20 minutes depending on internet speeds), navigate to the running VirtualBox application and select the “New” button.
 > 3. The VirtualBox "Create Virtual Machine" wizard will launch.  On the "Virtual machine Name and Operating System" page, enter "ubuntu" in the name field and select the Ubuntu ISO image you downloaded in the previous step.  Leave the "Skip Unattended Installation" checkbox UNCHECKED and press Next.
-> 4. Within the "Unattended Guest OS Install Setup" page, change the username and password, change the domain name to "lan".  Ensure the "Guest Additions" option is checked and press Next.
+> 4. Within the "Unattended Guest OS Install Setup" page, change the username to your name, enter a password, and change the domain name to "lan".  Ensure the "Guest Additions" option is checked and press Next.
 > 5. In the "Hardware" page, select a "Base Memory" of 4096MB and set "Processors" to 2 CPUs (these settings can be adjusted later if more/less resources are needed).
 > 6. On the "Virtual Hard disk" page, choose the option "Disk Size" and set it to 30 GBs then press Next.
 > 7. Review your settings on the "Summary" page and press "Finish" to complete the setup.
@@ -374,7 +374,7 @@ Each chapter of this book will include lab exercises on the covered topics.  Rea
 > #### Step 2 - Setup the Windows VM
 > 1. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
 > 2. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
-> 3. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with username and password of your choosing, set the "Doman Name" to lan, and check the "Guest Additions" options.  We won’t be licensing Windows so don’t worry about the Product Key and press the Next button.
+> 3. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Doman Name" to lan, and check the "Guest Additions" option.  We won’t be licensing Windows so don’t worry about the Product Key and press the Next button.
 > 4. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
 > 5. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 40 GB and press Next.
 > 6. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
