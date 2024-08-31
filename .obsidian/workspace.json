@@ -20,24 +20,12 @@
             }
           },
           {
-            "id": "0b85070ecd421293",
+            "id": "b3952a1d0b505a2d",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/01-InformationSecurity.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "7fa20b43442d8dec",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "textbook/07-SecuritySystems.md",
+                "file": "textbook/03-NetworkSecurity.md",
                 "mode": "source",
                 "source": false
               }
@@ -110,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "textbook/01-InformationSecurity.md",
+                "file": "textbook/03-NetworkSecurity.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -127,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "textbook/01-InformationSecurity.md",
+                "file": "textbook/03-NetworkSecurity.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -150,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "textbook/01-InformationSecurity.md"
+                "file": "textbook/03-NetworkSecurity.md"
               }
             }
           }
@@ -171,12 +159,23 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0222551eff2d37c8",
+  "active": "b3952a1d0b505a2d",
   "lastOpenFiles": [
-    "images/01/ubuntu22_download.png",
-    "textbook/07-SecuritySystems.md",
     "textbook/01-InformationSecurity.md",
+    "textbook/02-Cryptology.md",
+    "textbook/03-NetworkSecurity.md",
+    "images/02/activity_stego_extract.png",
+    "images/02/activity_stego_eog.png",
+    "images/02/activity_stego_embed.png",
+    "images/02/activity_stego_message.png",
+    "images/02/activity_stego_download.png",
+    "images/02/activity_stego_install.png",
+    "images/02/activity_steg_usermod.png",
+    "images/02/activity_symmetric_decrypt.png",
+    "images/02/activity_symmetric_cat.png",
+    "images/02/activity_symmetric_encrypt.png",
     "README.md",
+    "textbook/07-SecuritySystems.md",
     "textbook/00-Introduction.md",
     "textbook/14-MobileSecurity.md",
     "textbook/13-CloudSecurity.md",
@@ -188,18 +187,6 @@
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/05-OperatingSystemSecurity.md",
     "textbook/04-NetworkServices.md",
-    "textbook/03-NetworkSecurity.md",
-    "textbook/02-Cryptology.md",
-    "images/14/dyanamic_activity_denied.png",
-    "images/14/dynamic_activity_launched.png",
-    "images/14/dynamic_activity_intent.png",
-    "Pasted image 20240428154930.png",
-    "images/14/dynamic_activity_gui_app_confirm.png",
-    "images/14/dynamic_activity_list_packages.png",
-    "images/14/dynamic_activity_confirm_install.png",
-    "images/14/dynamic_activity_adb_shell.png",
-    "images/14/dynamic_activity_install.png",
-    "images/14/dynamic_activity_avd_init.png",
     "files/newtonanalytics-modernportfoliotheory-2.apk",
     "files/newtonanalytics-modernportfoliotheory-2-30493285-78aeb6462dbc775a70fdc6ecf4270175.apk",
     "images/android_armor.jpg.crdownload",
