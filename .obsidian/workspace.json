@@ -173,6 +173,8 @@
   },
   "active": "4aae1357551ca1ed",
   "lastOpenFiles": [
+    "images/04/activity_dnsspoof_edge_settings.png",
+    "images/04/activity_dnsspoof_control.png",
     "textbook/03-NetworkSecurity.md",
     "textbook/04-NetworkServices.md",
     "README.md",
@@ -186,7 +188,6 @@
     "images/03/activity_util_kali_trace.png",
     "images/03/activity_util_win_ping.png",
     "images/03/activity_util_kali_ping_success.png",
-    "images/03/activity_util_kali_ping_fail.png",
     "textbook/01-InformationSecurity.md",
     "textbook/02-Cryptology.md",
     "textbook/07-SecuritySystems.md",
