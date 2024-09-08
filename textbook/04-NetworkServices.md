@@ -23,44 +23,56 @@ Network devices, such as computers and switches, catalog the results of ARP mess
 
 Static entries are set manually by system or network administrators, whereas dynamic entries are set by the ARP protocol discovery efforts.  ARP table entries also include expiration times where the entry will no longer be considered valid and will eventually fall off the table.  The expirations help keep the table from growing too large, and therefore slower, as devices are added and removed from the network.  In addition, IP addresses can change frequently so there could be new IP addresses for existing MAC addresses in the table.  Entries also specify which network interface the IP address is associated with to support devices that have multiple interfaces.
 
-> [!activity] Activity - ARP
-> Let's demonstrate how ARP works using our lab environment.  I'll start the Ubuntu VM in NAT mode so it has connection to the internet and install the network packet capturing tool Tcpdump which works similar to Wireshark but is a command line tool.  Then I'll restart the Ubuntu VM and start the Windows VM both in `Host Only Adpater` to ensure they can reach each other.  With the environment setup, we will run a packet capture for ARP packets on the Ubuntu VM and invoke ARP requests and responses from the Windows VM.
+> [!activity] Activity 4.1 - ARP
+> Let's demonstrate how ARP works using our lab environment.  I'll start the Ubuntu VM in NAT mode so it has connection to the internet and install the network packet capturing tool `tcpdump` which works similar to Wireshark but is a command line tool.  Then, I'll restart the Ubuntu VM and start the Windows VM both in `Host Only Adpater` to ensure they can reach each other.  With the environment setup, I will run a packet capture on the Ubuntu VM and invoke ARP requests and responses from the Windows VM.
 > 
-> With the Ubuntu VM started in `NAT` network mode, I'll open a terminal and run the apt install command to install net-tools which includes Tcpdump.  Note, it is a good practice to first update your system before installing new tools.
-> `sudo apt update -y`
-> `sudo apt install net-tools`
-> ![[../images/04/arp_nettools_install.png|600]]
-> I power off the Ubuntu VM after net-tools is installed.  I then start both Windows and Ubuntu VMs in `Host Only Adpater` network mode.  With the Windows VM started and logged in, I start a command prompt and check the machine's IP address using ipconfig.
-> `ipconfig`
+> With the Ubuntu VM started in `NAT` network mode, I open a terminal and run the `apt` install command to install `net-tools` which includes `tcpdump`.  Note, it is a good practice to first update your system before installing new tools.
+> ```bash
+> sudo apt update -y
+> sudo apt install net-tools
+> ```
+> ![[../images/04/arp_nettools_install.png|Installing Net Tools|600]]
+> I power off the Ubuntu VM after net-tools is installed.  I then start both Windows and Ubuntu VMs in `Host Only Adpater` network mode on the "VirtualBox Host-Only Ethernet Adapter" setting.  With the Windows VM started and logged in, I launch a command prompt and check the machine's IP address using ipconfig.
+> ```bash
+> ipconfig
+> ```
 > ![[../images/04/arp_win_ip.png|Windows IP Check|600]]
-> Similarly, I'll log into the Ubuntu VM, start a terminal session, and check its IP address using the ip command.  We can see that the Ubuntu VM's IP address is assigned on the `enp0s3` interface which will be used later when we run Tcpdump.
-> `ip a`
+> Similarly, I log into the Ubuntu VM, start a terminal session, and check its IP address using the `ip` command.  I can see that the Ubuntu VM's IP address is assigned on the `enp0s3` interface which I'll need to know for later when I run `tcpdump`.
+> ```bash
+> ip a
+> ```
 > ![[../images/04/arp_ubuntu_ip.png|Ubuntu IP Check|600]]
-> Both VMs are observed to be on the 192.168.56.0/24 subnet which means they should be reachable.  Next, I'll check the ARP table on the Windows VM using the arp command to see what entries it currently has.  The `-a` option shows all entries.
+> Both VMs are observed to be on the 192.168.56.0/24 subnet which means they should be able to communicate with each other.  Next, I check the ARP table on the Windows VM using the `arp` command to see what entries it currently has.  The `-a` option shows all entries.
 > `arp -a`
 > ![[../images/04/arp_win_table.png|ARP Table Entries|600]]
-> While there are several entries, we do not see on for the Ubuntu IP address.  This means that the Windows VM hasn't made any recent connections to Ubuntu.  Jumping back onto the Ubuntu VM I'll start a packet capture using Tcpdump setting the interface with the `-i` option and only capturing `arp` packets.  I'll also use the `-vv` for very verbose output to give us details on the captured packets.
-> `sudo tcpdump -i enp0s3 arp -vv`
+> While there are several entries, I do not see an entry for the Ubuntu IP address.  This means that the Windows VM hasn't made any recent connections to Ubuntu.  Jumping back onto the Ubuntu VM I start a packet capture using `tcpdump` while setting the interface using the `-i` option and only capturing ARP packets.  I also use the `-vv` for very verbose output to give me details on the captured packets.
+> ```bash
+> sudo tcpdump -i enp0s3 arp -vv
+> ```
 > ![[../images/04/arp_tcpdump_listen.png|Tcpdump Listening|600]]
-> The Tcpdump command remains idle waiting for incoming and outgoing packets.  I'll run the ping utility on the Windows VM to initiate a MAC resolution since the Windows VM does not yet have it in the ARP table.  Back on the Windows machine I run the following ping targeting Ubuntu.
+> The `tcpdump` command remains idle waiting for incoming and outgoing packets.  I will run the `ping` utility on the Windows VM to initiate MAC resolution since the Windows VM does not yet have the Ubuntu VM in the ARP table.  Back on the Windows machine, I run the following `ping` targeting Ubuntu.
 > `ping 192.168.56.251`
 > ![[../images/04/arp_ping.png|Ping Ubuntu|600]]
-> The ping was successful!  Now I'll recheck the Windows VM ARP table to see if an entry exists for the Ubuntu IP address using the arp command.
-> `arp -a`
+> The `ping` was successful!  Now I recheck the Windows VM ARP table to see if an entry exists for the Ubuntu IP address using the `arp` command.
+> ```bash
+> arp -a
+> ```
 > ![[../images/04/arp_table_2.png|ARP Table Recheck|600]]
-> Awesome, the Ubuntu VM has a record now in the Windows VM ARP table.  We can observe the Ubuntu MAC address now!  Let's review the packets capture on the Ubuntu VM's running tcpdump.
+> As highlighted in the screenshot above, the table now has a record for the  Ubuntu VM that includes its MAC address!  Next, I review the packets capture on the Ubuntu VM's running `tcpdump`.
 > ![[../images/04/arp_captured_packets.png|Tcpdump Captured ARP Packets|600]]
-> The packet capture collected two ARP packets.  The first packet, unhighlighted, displays the REQ from our Windows VM at 192.168.56.253.  The second packet, highlighted in white, shows the Ubuntu RES packet including the Ubuntu MAC address 08:00:27:6d:b9:2e.
+> The packet capture collected two ARP packets.  The first packet that is unhighlighted in the screenshot, displays the REQ from our Windows VM at 192.168.56.253.  The second packet which is highlighted in white, shows the Ubuntu RES packet including the Ubuntu MAC address 08:00:27:6d:b9:2e.
 ### MiTM ARP Attacks
-Consider the implications of the ARP protocol as demonstrated in the last activity.  The packets captured in Tcpdump displayed the request and the response in a healthy network.  But this is very trusting by nature as any device on the network receives the packets and can respond, even if they don't hold that IP address.  By default, there isn't much stopping another device from claiming they hold the IP address and responding with their own MAC address.  This could trick a victim into communicating with the wrong device!
+Consider the implications of the ARP protocol as demonstrated in the last activity.  The packets captured using `tcpdump` displayed the request and the response in a healthy network.  But this is very trusting by nature as any device on the network receives the packets and can respond, even if they don't hold that IP address.  By default, there isn't much stopping another device from claiming they hold the IP address and responding with their own MAC address.  This could trick a victim into communicating with the wrong device!
 
-An unauthorized entity that intercepts network traffic, usually by proxying or funneling that traffic, is known as a **man in the middle (MitM)** attack.  This attack requires the threat actor to place themselves between at two, or more, entities and routes traffic between them.  The victims of this attack think they are communicating directly with their target but in fact all traffic is being sent to the attacker instead.  The attacker's device will receive the victim's traffic, inspect or manipulate it, and forward it to the appropriate destination.  The receiver of the attacker proxy traffic responds the the request sending it to the attacker who again inspects or manipulates the data before relaying back to the original victim.
+An unauthorized entity that intercepts network traffic, usually by proxying or funneling that traffic, is known as a **man in the middle (MitM)** attack.  This attack requires the threat actor to place themselves between two or more entities and then routes traffic between them.  The victims of this attack think they are communicating directly with their intended target, but all traffic is being sent to the attacker instead.  The attacker's device will receive the victim's traffic, inspect or manipulate it, and forward it to the appropriate destination.  The receiver of the attacker proxy traffic responds to the request by sending traffic back to the attacker who can inspect or manipulate the data before relaying to the original victim.
 
-The ARP protocol can be abused by an attacker on a network through responses to victim's ARP requests.  An attacker can poison a victim's ARP table by flooding the victim ARP RES packets claiming to be at an IP address it is not.
+The ARP protocol can be abused by an attacker on a network by responding to a victim's ARP requests.  This attacker can poison the victim's ARP table by flooding the victim with ARP RES packets that claim the IP address the victim is looking for belongs to the attacker.
+
 ![[../images/04/mitm_arp.png|MitM ARP Poisoning|400]]
-The figure above captures the poisoning of devices on a network by a malicious actor.  Devices send request packets and the attacker responds to each with poisoned packets claiming to be at the request IP addresses.
 
->[!activity] Activity 4.1 - ARPSpoof
+The figure above captures the poisoning of devices on a network by a malicious actor.  The victim sends request packets and the attacker responds with poisoned packets claiming to be at the request IP addresses being requested.
+
+>[!activity] Activity 4.2 - ARPSpoof
 >Let's demonstrate the ARP poisoning and spoofing attack in our lab.  I'll use the Kali and Ubuntu VMs in a virtual network.  The Kali VM will poison the ARP table of the victim Ubuntu machine.  The traffic from Ubuntu will then be routed through the attacker Kali machine and available for inspection.
 >
 >I'll begin by creating a virtual NAT network in VirtualBox by going to Tools, Network Settings.
@@ -157,7 +169,7 @@ While DNS servers face the internet and serve anonymous queries, DNS records are
 
 Relying on a single authoritative server could impose availability risks with a domain.  For instance, when the server needs updates, it will temporarily go offline resulting in downtime for a domain or website.  Therefore, most administrators will ensure that they have at least one other authoritative server to maximize the availability of their domain in the DNS system.  Keeping both servers in sync with the same records then becomes a chore as the administrators have to update both servers every time there is an update to the DNS record set.  If the administrators managed a fleet of DNS servers, there is a greater chance of missing an update on a server and could cause clients to intermittently fail DNS resolutions.  Therefore, many administrators will establish some form of automation by leveraging **zone transfers**.  These zone transfers enable the synchronization, or copying, of domain zones along with all DNS records between authoritative server clusters.  However, as mentioned earlier in this section, an administrator would want to avoid exposing the zone transfer service to unauthorized users by ensuring access to TCP port 53 DNS service is restricted.
 
->[!activity] Activity 4.2 - Zone File
+>[!activity] Activity 4.3 - Zone File
 >Let's demonstrate some of what we've learned so far on DNS records and zone transfers.  I'll use "dnsdumpster.com" to investigate Google's domain and see which records have been publicly collected.  Then I'll attempt a zone transfer of Google's domain before demonstrating a live zone transfer on a vulnerable by design domain.
 >
 >Using the Ubuntu VM with `NAT` network mode set to ensure access to the internet, I open the default browser Firefox and navigate to "dnsdumpster.com".  Once at the site, I enter `google.com` into the domain and review the results.
@@ -208,7 +220,7 @@ Some networks connected to the internet are limited by the ports and application
 
 To accomplish **DNS tunneling exfiltration**, an attacker segments a file into small clips and then encodes them into an HTTP compliant character set (a-z0-9-.).  Each segment is then used as the subdomain of an attacker control domain and resolver.  The victim's resolver won't recognize the subdomain and will initiate a request to the attacker's authoritative server.  The attacker controlled authoritative server logs are then compiled and reassemble the decoded subdomains back into the original file!  This technique is useful to attackers that have compromised a network and want to exfiltrate data discretely.
 
->[!activity] Activity 4.3 - DNS Spoofing
+>[!activity] Activity 4.4 - DNS Spoofing
 >I will demonstrate a DNS spoofing attack using the three VMs, Kali, Ubuntu, and Windows using `Bridge Adpater` network settings.  The Kali VM will serve as the attacker, the Ubuntu machine will be set up as a DNS resolver using `dnsspoof`, and the Windows VM will be our victim.
 >
 >Starting with the Ubuntu machine, I install `dsniff` after I update the system.
@@ -316,7 +328,7 @@ In the previous DHCP Risks section, a DoS threat was described which impacts the
 Another interesting DHCP attack, is a **DHCP spoofing** attack that has the goal of assigning an attacker controlled device as the network's default gateway.  If the attacker can get the DHCP server and clients to assign and use the attacker's IP as the gateway, the attacker can inspect and manipulate all traffic within the network.  This attack works because the attacker acts as the DHCP server and responds to DHCP requests on the network before the real DHCP server has a chance to.  As suggested in the figure below, DHCP responses include the default gateway address which would be defined by the attacker.  The victim then sends their outbound traffic to the attacker instead of the network's gateway!
 ![[../images/04/dhcp_spoofing.png|DHCP Spoofing Attack|300]]
 
->[!activity] Activity 4.4 - DHCP Spoofing Attack
+>[!activity] Activity 4.5 - DHCP Spoofing Attack
 >I'll demonstrate a DHCP spoofing attack using Ettercap, which provides a nice GUI to perform and manage several networking attacks.  The Windows VM will act as my victim and I'll launch the attack from the Kali VM, both using the `Bridge Adapater` network modes.
 >
 > For sake of the demonstration, I need to know the Windows VM's IP address and the gateway of the network.  This could be determined using NMAP or another host discovery tool.  I launch a command prompt and run `ipconfig` to view the needed network details of the victim.  I find that it is on the 192.168.4.0/24 network, has the IP address 192.168.4.168, and shows the default gateway as 192.168.4.1.
@@ -347,7 +359,7 @@ Another interesting DHCP attack, is a **DHCP spoofing** attack that has the goal
 > ![[../images/04/dhcp_activity_renew.png|Windows IP Release and Renewal|600]]
 > The default gateway now shows as 192.168.4.167 which is the Kali VM!  Going back to Kali's Ettercap application I can see DORA packets showing in the log pane.
 > ![[../images/04/dhcp_activity_logs.png|DORA Packets in Ettercap Logs]]
-> At this point any Windows traffic will be routed through the Kali machine!
+> At this point any victim traffic will be routed through the Kali machine!
 > 
 ### DHCP Security
 Network switch devices can mitigate the DHCP starvation and snooping attacks through built in security features.  During DHCP starvation attacks, the threat actor sends multiple requests to the DHCP server with different MAC addresses requesting issuance of new IP addresses.  These requests traverse the network switch sending the packets to the DHCP server.  Many managed network switches have a security setting call **port security** which is applied to each interface, or port, of the switch.  Port security can be set to allow a certain number of MAC addresses per interface.  If the number of MAC addresses associated with the interface exceeds the port security limit, then the switch will disable the interface blocking any further traffic.  Port security thresholds can be set to one or more MAC addresses allowed, usually the first address connected to the port.  A network administrator would then need to purposefully reopen the interface to allow traffic to flow again.  This security setting mitigates several network attacks including the DHCP starvation as it shuts the misbehaving interface down early in the attack as demonstrated in the figure below.
@@ -370,7 +382,7 @@ TCP, which resides in layer 4 of the OSI model, is subject to attacks with effec
 Every TCP connection starts with a client SYN packet and then a server SYN+ACK response.  A misbehaving client can send repeated SYN packets causing the server to open a connection for each one.  These open connections eventually expire, but if a client or group of misbehaving clients sends many requests at once, they can quickly fill the TCP connection capacity of the server and block legitimate clients from establishing connections.  This coordinated DoS is referred to as a **TCP SYN flood** attack and is illustrated below.
 ![[../images/04/tcp_flood_attack.png|TCP Flood Attack|500]]
 
-> [!activity] Activity 4.5 - TCP SYN Flood Attack
+> [!activity] Activity 4.6 - TCP SYN Flood Attack
 > I'll demonstrate such an attack from the Kali VM against the Ubuntu VM acting as a TCP server.  Using the `Bridge Adpater` settings on each VM, I'll configure the Ubuntu machine to serve HTTP traffic, a TCP protocol, and launch a **TCP SYN flood** attack on it.
 > 
 > After launching Ubuntu and opening a terminal, I start a simple HTTP server over port 80 using a Python built-in module.  Once the server is started, it sits idle waiting for incoming connections.
@@ -406,7 +418,7 @@ Every TCP connection starts with a client SYN packet and then a server SYN+ACK r
 TCP does not utilize encryption which leaves all of its wrapper information exposed as plaintext.  However, TCP's data payload include higher layer data that may be encrypted using transport layer security (TLS).  TCP connections can also be hijacked by attackers enabling them to take control of the connection as demonstrated in previous man in the middle (MitM) attacks.  Without sufficient mitigating controls, an attacker can launch a **TCP reset attack** that will cause the client-server connection to terminate.  This attack requires the attacker to know the sequence number and sockets of the victim's connection, which can be obtained through brute force or packet sniffing. 
 ![[../images/04/tcp_reset_attack.png|TCP Reset Attack|300]]
 
->[!activity] Activity 4.6 - TCP Reset Attack
+>[!activity] Activity 4.7 - TCP Reset Attack
 >To demonstrate a TCP reset attack, I'll use the Kali VM on `Bridge Adapter` network mode.  The Kali machine will serve as both the client and the server using Netcat.  With Wireshark capturing packets, I'll establish a connection between the client and server and obtain details about the connection.  This information will be used with the Netwox tool that will send a RST packet and break the client-server connection.
 >
 >First, I start Wireshark through the applications menu and select the Loopback interface.  Double clicking this interface starts a packet capture.
