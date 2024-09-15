@@ -384,9 +384,11 @@ Deauth attacks can be a component of other attacks where the malicious actor att
 > #### Step 2 - Capture Packets
 > With Wireshark launched, select the primary network interface (example eth0) and start a packet capture using the "blue fin" button in the upper left corner of the application.  Observe that packets start to collect in the main pane of the application.
 > #### Step 3 - Analyze Traffic
-> Launce a browser from the Kali VM while the Wireshark packet capture is running.  In the launched browser, navigate to the following URLs.  Note the protocol difference in the provided URLs.
+> Launch a browser from the Kali VM while the Wireshark packet capture is running.  In the launched browser, navigate to the following URLs.  Note the protocol difference in the provided URLs.
+> 
 > `http://example.com`
 > `https://example.com`
+> 
 > After loading each site, stop the packet capture, then find the related packets in Wireshark and view each stream using filters `http` and `tls` respectively.  To explore a stream, right-click the subject packet, select “Follow” in the context menu, and then select TCP/HTTP/TLS stream. 
 
 >[!exercise] Exercise 3.2 - Network Utilities

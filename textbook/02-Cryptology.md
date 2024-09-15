@@ -298,7 +298,7 @@ Another hash algorithm attack takes advantage of hash collisions, previously dis
 > #### Step 3
 > With the key-pair and message created you are ready to digitally sign it using GPG.  The following command will output a `message.txt.sig` as a detached separate file from the original `message.txt`.  Upon enter the first command you will be prompted to enter your password in order to access the key ring.  The second command displays the contents of the signature, note it is a public key!
 > ```bash
-> gpg --output message.txt.sig --armor --detache-sig message.txt
+> gpg --output message.txt.sig --armor --detach-sig message.txt
 > cat message.txt.sig
 > ```
 > #### Step 4
