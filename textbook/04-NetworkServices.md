@@ -599,7 +599,7 @@ Another cookie method, the **RST cookie**, mitigates  attacks by validating clie
 > #### Step 4 - Trigger Attack
 > With the Kali VM spoofing traffic between the Windows and Ubuntu VMs, you are ready to observe the results of the attack.  If successful, you should observe that www.google.com now resolves to the Kali VM's IP address. From the Windows VM terminal, lookup the IP address of www.google.com 
 > ```bash
-> nslookup google.com
+> nslookup www.google.com
 > ```
 > You should observe that www.google.com resolves to the Kali VM IP address.  If not, consider the following: 
 > - Review your configurations 

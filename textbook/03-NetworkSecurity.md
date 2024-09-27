@@ -418,7 +418,8 @@ Deauth attacks can be a component of other attacks where the malicious actor att
 >#### Step 6 - Review Open Ports
 >Discover what ports are open, services listening, and network connections made using the netstat command with `-aon` options ("a" for all, "o" for timers, and "n" for numeric ).
 >`netstat -aon`
->Identify an open/listening port on the Windows device and research that service.  Describe what that service is and how it is used.
+>Identify an listening port on the Windows device and research that service.  Describe what that service is and how it is used.
+
 
 > [!exercise] Exercise 3.3 - Host and Service Discovery
 > Using your Kali VM's NMAP tool, you will discover the Windows VM on the network and scan it for open ports and services.  Make sure each VM's network settings are set to `Host-only Adpater` to ensure they can reach each other on your virtual network before you begin.
