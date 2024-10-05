@@ -8,43 +8,19 @@
         "type": "tabs",
         "children": [
           {
-            "id": "c1a2dd920546313f",
+            "id": "60aaf6a4fcfd918a",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "textbook/00-Introduction.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "4c5dbf9921a5ed35",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "textbook/05-OperatingSystemSecurity.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "18619ebe261860d9",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "textbook/02-Cryptology.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "effe0627ac0b9754",
+            "id": "7069c3bbc9242caa",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -56,12 +32,12 @@
             }
           },
           {
-            "id": "60aaf6a4fcfd918a",
+            "id": "779e7ab177457d81",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/07-SecuritySystems.md",
+                "file": "textbook/08-WebApplicationDefense.md",
                 "mode": "source",
                 "source": false
               }
@@ -134,7 +110,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "textbook/05-OperatingSystemSecurity.md",
+                "file": "textbook/06-PersistenceAndPrivilegeEscalation.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -151,7 +127,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "textbook/05-OperatingSystemSecurity.md",
+                "file": "textbook/06-PersistenceAndPrivilegeEscalation.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -174,7 +150,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "textbook/05-OperatingSystemSecurity.md"
+                "file": "textbook/06-PersistenceAndPrivilegeEscalation.md"
               }
             }
           }
@@ -195,21 +171,27 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "4c5dbf9921a5ed35",
+  "active": "7069c3bbc9242caa",
   "lastOpenFiles": [
-    "textbook/04-NetworkServices.md",
-    "textbook/02-Cryptology.md",
     "textbook/05-OperatingSystemSecurity.md",
-    "textbook/07-SecuritySystems.md",
+    "textbook/08-WebApplicationDefense.md",
+    "textbook/13-CloudSecurity.md",
+    "textbook/14-MobileSecurity.md",
+    "textbook/12-IncidentResponse.md",
+    "textbook/11-ForensicsAndMalwareAnalysis.md",
+    "textbook/10-SecurityTesting.md",
+    "textbook/09-WebApplicationAttacks.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "textbook/04-NetworkServices.md",
+    "textbook/00-Introduction.md",
+    "textbook/07-SecuritySystems.md",
     "README.md",
+    "textbook/15-BonusChapter.md",
+    "textbook/02-Cryptology.md",
     "images/06/activity_bof_gdb_make.png",
     "textbook/03-NetworkSecurity.md",
-    "textbook/10-SecurityTesting.md",
-    "textbook/08-WebApplicationDefense.md",
     "images/04/activity_dnsspoof_edge_settings.png",
     "images/04/activity_dnsspoof_control.png",
-    "textbook/12-IncidentResponse.md",
     "images/03/activity_wep_aircrack.png",
     "images/03/wifi_deauth.png",
     "images/03/activity_util_win_netstat.png",
@@ -218,11 +200,6 @@
     "images/03/activity_util_win_trace.png",
     "images/03/activity_util_kali_trace.png",
     "textbook/01-InformationSecurity.md",
-    "textbook/00-Introduction.md",
-    "textbook/14-MobileSecurity.md",
-    "textbook/13-CloudSecurity.md",
-    "textbook/11-ForensicsAndMalwareAnalysis.md",
-    "textbook/09-WebApplicationAttacks.md",
     "files/newtonanalytics-modernportfoliotheory-2.apk",
     "files/newtonanalytics-modernportfoliotheory-2-30493285-78aeb6462dbc775a70fdc6ecf4270175.apk",
     "images/android_armor.jpg.crdownload",

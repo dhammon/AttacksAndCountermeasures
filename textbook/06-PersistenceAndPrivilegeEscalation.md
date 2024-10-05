@@ -455,7 +455,6 @@ A well written program can avoid memory security issues and the vulnerabilities 
 > ```
 
 
-
 > [!exercise] Exercise 6.5 - Stack Smashing the Hidden Function
 > In this task you will exploit a stack-based buffer overflow vulnerable C program using your Kali VM in Bridge Adapter network mode.  You will install the needed tools, build the vulnerable application, discover the buffer overflow, then build an exploit that will execute the hidden function.
 > #### Step 1 - Install GDB
@@ -472,7 +471,7 @@ A well written program can avoid memory security issues and the vulnerabilities 
 > #### Step 2 - Install Peda
 > Next, install Peda after GDB is installed. The peda extension for GDB offers additional utilities.
 > ``` bash
-> git clone [https://github.com/longld/peda.git](https://github.com/longld/peda.git) ~/peda
+> git clone https://github.com/longld/peda.git ~/peda
 > echo "source ~/peda/peda.py" >> ~/.gdbinit
 > ```
 > #### Step 3 - Create the Vulnerable Binary

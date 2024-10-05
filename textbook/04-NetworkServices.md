@@ -603,7 +603,8 @@ Another cookie method, the **RST cookie**, mitigates  attacks by validating clie
 > ```
 > You should observe that www.google.com resolves to the Kali VM IP address.  If not, consider the following: 
 > - Review your configurations 
-> - Flush local DNS cache in the Windows VM with the following command: `ipconfig /flushdns` 
+> - Flush local DNS cache in the Windows VM with the following command: `ipconfig /flushdns`
+> - Sometimes Windows will resort to IPv6 for DNS resolution, consider disabling it in the Ethernet properties.
 > - Wait a few minutes and try again 
 > #### Step 5 - Decommission
 > After you have completed the lab, make sure to revert changes made to your Windows VM.  Consider restoring from a previous snapshot or manually turning the Firewall profiles on and removing the manual DNS server IP address on the Ethernet interface. 

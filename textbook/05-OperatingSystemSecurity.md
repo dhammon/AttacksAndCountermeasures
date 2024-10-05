@@ -517,7 +517,7 @@ Most anti-malware and *endpoint detection and response (EDR)* solutions hook int
 >```
 >![[../images/05/win_activity_bypass_tested.png|Testing Bypassed Defender|600]]
 >Defender didn't block the use of AmsiScanBuffer this time!  This means anything else ran in this PowerShell process won't be blocked by Defender.
-
+oi
 ## Exercises
 >[!exercise] Exercise 5.1 - Shadow Cracking
 >Crack Linux passwords using `john` in your Kali VM with Bridge Adapter network mode.  You will create a user and set their password.  Then you will prepare the hash file and use `john` to crack the hash with the `rockyou.txt` wordlist.
@@ -533,7 +533,7 @@ Most anti-malware and *endpoint detection and response (EDR)* solutions hook int
 >#### Step 2 - Prepare Password List
 >Unzip `rockyou.txt.gz` with the following command.
 >```bash
->gunzip /usr/share/wordlist/rockyou.txt.gz
+>sudo gunzip /usr/share/wordlists/rockyou.txt.gz
 >```
 >#### Step 3 - Crack the Password
 >With the `tester` user created and the `rockyou.txt` file unzipped, collect the `tester` user’s password into a hash file.
@@ -558,7 +558,7 @@ Most anti-malware and *endpoint detection and response (EDR)* solutions hook int
 > ```
 > Confirm successful installation by displaying `inspec` help menu.
 > ```bash
-> inspec -help
+> inspec --help
 > ```
 > #### Step 2 - Run Inspec
 > Run the `inspec` tool to detect baseline configuration issues.
@@ -612,12 +612,14 @@ Most anti-malware and *endpoint detection and response (EDR)* solutions hook int
 > echo “AmsiScanBuffer”
 > ```
 > #### Step 2 - Bypass Defender
-> Navigate to Rasta Mouse’s AMSI patch within GitHub.  Copy each line/block into your PowerShell terminal one at a time hitting enter in between.  You can find Rasta’s patch code in the following link. 
+> Navigate to Rasta Mouse’s AMSI patch within GitHub.  Copy each line/block into your PowerShell terminal one at a time hitting enter in between a few times.  You can find Rasta’s patch code in the following link. 
 > https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell#patching-amsi-amsiscanbuffer-by-rasta-mouse 
 > Once all lines/blocks are copied, retest to confirm that the PowerShell process is no longer hooked into Windows Defender.
 > ```powershell
 > echo “AmsiScanBuffer”
 > ```
+> >[!tip] Tip - Troubleshooting Bypass
+> >You may need to start a fresh powershell terminal.  Also, use your imagination on what else you could do to break up the commands yet still bypass AMSI.
 > #### Step 3 - Test Other Bypasses
 > Pick another bypass method from the following link and test in a new PowerShell instance.  Can you find another method that works? 
 > https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell
