@@ -224,7 +224,7 @@ The stack segment is heavily used and very dynamic as it can change constantly d
 
 ![[buffer_stack.png|Stack Frame Topology|150]]
 
-The stack's starting location has an address in memory called the *stack pointer*, at the lowest address space, and is be used to reference the stack for execution.  Above the stack pointer is the *buffer* space of the stack frame where variables are store that are used for the function during processing.  The end of the stack frame is represented as the *base pointer* which is used by the CPU to track the stack frame's ending space.  Above (higher address space) the base pointer is the *return address* which is used to notify the running program where to go next after the function's execution is complete.  
+The stack's starting location has an address in memory called the *stack pointer*, at the lowest address space, and is used to reference the stack for execution.  Above the stack pointer is the *buffer* space of the stack frame where variables are store that are used for the function during processing.  The end of the stack frame is represented as the *base pointer* which is used by the CPU to track the stack frame's ending space.  Above (higher address space) the base pointer is the *return address* which is used to notify the running program where to go next after the function's execution is complete.  
 ### Analysis Tools
 A compiled executable file includes binary data that isn't particularly useful to a human in raw form.  If you opened such a file into a text editor you would be presented with mostly random characters from all over the Unicode standard.  Fixed variables are hardcoded values that present themselves in ASCII format.  These variables can be very useful to a security researcher analyzing the program statically, or without running it.  Reviewing a binary file's fixed variables statically could reveal sensitive information such as passwords, keys, or IP addresses.
 
@@ -244,28 +244,28 @@ Conscientious programmers will ensure that the buffer memory space is allocated 
 >[!note] Note - Memory Security Issues
 >There are many security issues related to the management of memory for a program.  While we cover a *stack based buffer overflow*, there are heap-based overflows, integer overflows, and others.  Interested readers are encouraged to research and explore the depths of this area of security!
 
-A well written program can avoid memory security issues and the vulnerabilities related to them by managing commands that create and modify memory space.  However, there are also security protections a compiled program can leverage with the operating system.  The **data execution prevention (DEP)** setting can be applied at the operating system level to enforce permissions on buffer memory space to be read and write only, preventing execution.  This prevents overflow vulnerabilities to some degree by ensuring any malicious code written to the buffer space can't be executed.  But its protections are limited as it does not prevent the overflow to other areas of existing executable memory which can be used to run malicious code.  Operating systems also include an **address space layout randomization (ASLR)** security mode that ensures the memory space used by the program is different each time the program runs.  This security setting makes it more difficult for exploit developers to create a malicious payload that targets other code in memory, as they won't know where that malicious code resides because the address space is different every time the program launches.  ASLR can be bypassed using brute force techniques where the address space is found via guess and check.  The last security measure we'll cover is the **canary** method in which the operating system applies a small random value, a *canary token*, in every stack frame.  The canary token is checked before code in the frame is executed and if it does not match the program won't execute the stack.  However, this protection can also be bypassed through a technique that leverages an overflow vulnerability to collect the canary token value and include it in the final malicious payload.
+A well written program can avoid memory security issues and the vulnerabilities related to them by managing commands that create and modify memory space.  However, there are also security protections a compiled program can leverage with the operating system.  The **data execution prevention (DEP)** setting can be applied at the operating system level to enforce permissions on buffer memory space to be read and write only, preventing execution.  This prevents overflow vulnerabilities to some degree by ensuring any malicious code written to the buffer space can't be executed.  But its protections are limited as it does not prevent the overflow to other areas of existing executable memory which can be used to run malicious code.  
+
+Operating systems also include an **address space layout randomization (ASLR)** security mode that ensures the memory space used by the program is different each time the program runs.  This security setting makes it more difficult for exploit developers to create a malicious payload that targets other code in memory, as they won't know where that malicious code resides because the address space is different every time the program launches.  ASLR can be bypassed using brute force techniques where the address space is found via guess and check.  
+
+The last security measure we'll cover is the **canary** method in which the operating system applies a small random value, a *canary token*, in every stack frame.  The canary token is checked before code in the frame is executed and if it does not match the program won't execute the stack.  However, this protection can also be bypassed through a technique that leverages an overflow vulnerability to collect the canary token value and include it in the final malicious payload.
 
 > [!activity] Activity 6.5 - Stack Smashing the Hidden Function
-> I'll demonstrate a Linux binary stack based buffer overflow vulnerability and exploit in the following activity.  First, I'll create a vulnerable program written in C that fails to validate an input.  I'll disable all security settings for the sake of demonstration and compile the vulnerable binary using `gcc`.  Then, I will use GDB and the Peda plugin to analyze the binary, craft an exploit, and cause the program to execute code it was not intended to.
+> I'll demonstrate a Linux binary stack based buffer overflow vulnerability and exploit in the following activity.  First, I'll create a vulnerable program written in C that fails to validate an input.  I'll disable all security settings for the sake of demonstration and compile the vulnerable binary using `gcc`.  Then, I will use GDB and the GDB Enhanced Features (GEF) plugin to analyze the binary, craft an exploit, and cause the program to execute code it was not intended to.
 > 
-> Using the Kali VM in Bridge Adapter network mode, I start a terminal and install GDB 12.1 with the following commands.  It will take about 20 minutes to build GDB from source.  I am building this version as the APT repository version is built with Python 3.12 and is not compatible with Peda.
+> Using the Kali VM in Bridge Adapter network mode, I start a terminal and install GDB from `apt` after updating.  
 > ```bash
-> wget https://ftp.gnu.org/gnu/gdb/gdb-12.1.tar.gz
-> tar -xvzf gdb-12.1.tar.gz
-> cd gdb-12.1
-> ./configure
-> make
-> sudo make install
+>sudo apt update -y
+>sudo apt install gdb -y
 > ```
-> ![[../images/06/activity_bof_gdb_make.png|Building GDB|600]]
-> After GDB installation is complete, I clone the Peda repository and the associated Python file to the GDB configuration file.  Peda enhances GDB with features and formatting that I personally enjoy over other extensions that are available.
+> ![[../images/06/activity_bof2_gdb_install.png|Install GDB|650]]
+> 
+> After the GDB installation is complete, I install GEF using `bash` running the command from a remote repository.  GEF enhances GDB with features and formatting that I personally enjoy over other extensions that are available.
 > ```bash
-> git clone https://github.com/longld/peda.git ~/peda
-> echo "source ~/peda/peda.py" >> ~/.gdbinit
+> bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
 > ```
-> ![[buffer_activity_peda_install.png|Installing and Configuring Peda|600]]
-> With GDB and Peda installed, I'll create the vulnerable C program as the file `program.c`.  This very simple program includes two functions called `hidden` and `main`.  The main function creates a buffer space of 100 bytes and uses the `gets` utility to accept user input and renders the input from the `printf` function.  The hidden function simply displays a static message; however, there is no execution path to it from main.  This hidden function should never be run as there is no logic path to it within the program.  I place the following source code into the `program.c` file.  
+> ![[../images/06/activity_bof2_gef_install.png|GEF Installation|650]]
+> With GDB and GEF installed, I'll create the vulnerable C program as the file `program.c`.  This very simple program includes two functions called `hidden` and `main`.  The main function creates a buffer space of 100 bytes and uses the `gets` utility to accept user input and renders the input from the `printf` function.  The hidden function simply displays a static message; however, there is no execution path to it from main.  This hidden function should never be run as there is no logic path to it within the program.  I place the following source code into the `program.c` file.  
 > ```c
 > #include <stdio.h>
 > void hidden(){
@@ -305,36 +305,35 @@ A well written program can avoid memory security issues and the vulnerabilities 
 > python -c "print('A'*200)" > input.txt
 > ```
 > ![[buffer_activity_input_test.png|Creating Input File|600]]
-> To launch the program into the debugger, I run GDB with the `-q` flag that ignores the onload header and version banner while supplying GDB with the program name.  After GDB launches I am presented with the gdb-peda command line interface.
+> To launch the program into the debugger, I run GDB with the `-q` flag that ignores the onload header and version banner while supplying GDB with the program name.  After GDB launches I am presented with the `gef` command line interface.
 > ```bash
 > gdb -q ./program
 > ```
-> ![[buffer_activity_gdb_start.png|Starting Program in GDB|600]]
+> ![[../images/06/activity_bof2_gef_start.png|Starting Program in GDB|650]]
 > With GDB started I run the program and redirect the input text file with 200 "A"s into the running app.  The program loads with the content of `index.txt` and immediately segmentation faults (segfaults).
 > ```bash
 > run < input.txt
 > ```
-> ![[buffer_activity_gdb_segfault.png|Running Program in GDB with Input|600]]
+> ![[../images/06/activity_bof2_gef_200.png|Running Program in GDB with Input|650]]
 > GDB returns the register, code, and stack at the time of the segfault.  The first section of the GDB report shows me all the CPU registers and their values when the program crashed.  The 200 "A"s filled up the buffer and then wrote over the stack and base pointer (RBP/RSP) registers which caused the program to crash.
-> ![[buffer_activity_initial_registers.png|Initial Crash Registers|600]]
-> The bottom half of the report includes the code, stack, and summary sections.  The stack is filled with the letter "A" and the end of the report suggests that the program reached an address `0x401196` referenced in the index pointer (RIP).  This is the location in memory that is used as an address but is not accessible or executable by the program.
-> ![[buffer_activity_initial_stack.png|Initial Crash Stack|600]]
-> I want to target the index pointer register to eventually hijack the execution flow by inserting an address into the index pointer.  This pointer will send the execution path to code that I want to run, specifically the hidden function.  I need to identify which position of the 200 "A"s wrote into the index pointer register.  I use the Peda `pattern create` utility which makes a non-repeating string that I'll use as the input when I rerun the program.  Then, I will see the unique value written into the RIP when it crashes.  I will search the RIP crashed value in the pattern create string to identify which character position overwrites the index pointer.
+> ![[../images/06/activity_bof2_gef_registers.png|Initial Crash Registers|650]]
+> The bottom half of the report includes the code, stack, and summary sections.  The stack is filled with the letter "A" and the end of the report suggests that the program reached an address `0x401196` referenced in the index pointer (RIP) which is the `main` function's return address.  
+> ![[../images/06/activity_bof2_gef_initial_stack.png|Initial Stack Crash|650]]
+> I want to target the index pointer register to hijack the execution flow by inserting an address into the stack's buffer that will eventually overwrite the index pointer.  Once hijacked, this pointer will send the execution path of the program to anywhere of my choosing.   I know I overshot this initial attempt because the RSP was overwritten with the letter "A".  I need to identify which position of the 200 "A"s overwrote the RSP which will be known as the *offset*.  To do this, I use the `pattern create` command that comes with GEF.  It generates a non-repeating string of any length.
+> ![[../images/06/activity_bof2_pattern_create.png|Pattern Create|650]]
+> I copy the 200 character output into my clipboard, run the program and paste the pattern into the prompt.  The program crashes as expected but this time the RSP has part of the non-repeating pattern.
+> ![[../images/06/activity_bof2_pattern_run.png|Running in GEF with Pattern Input|650]]
+> ![[../images/06/activity_bof2_pattern_rsp.png|RSP Pattern Overwrite|650]]
+> I copy the RSP hex value into my clipboard which I will use with the GEF `pattern search` command to identify at what character position this string is located within the original pattern.  This lets me know that the RIP overwrite occurs at offset 120.
+> ![[../images/06/activity_bof2_offset.png|Pattern Search Offset Found|650]]
+> I craft a new input with 120 "A"s and 1 "B" to be used as the input when rerunning the program in GDB.
 > ```bash
-> pattern create 125 pattern.txt
+> python -c "print('A'*200+"B")"
 > ```
-> ![[buffer_activity_pattern.png|GDB Pattern Create|600]]
-> I run the GDB loaded program again but redirect the input `pattern.txt`.  Once again this causes the program to crash, except this time I can observe the RIP has a string value `jAA9A` which will match some part of the string from `pattern.txt`.
-> ```bash
-> run < pattern.txt
-> ```
-> ![[buffer_activity_pattern_crash.png|Crash From Pattern Input|600]]
-> Using the Peda plugin pattern tool again, I reference the index pointer value from the crash to find the character position that overwrites the index pointer, called the *offset*.  The `pattern offset` command requires the hexadecimal value of the string.  The offset command identifies that the 120th character is the start of the string segment.
-> ```bash
-> pattern offset 0x413941416a
-> ``` 
->  ![[buffer_activity_offset.png|Pattern Offset Character Position|600]]
->  To test the offset I'll craft a new input that places 120 letter "A"s and then 6 letter "B"s into a new text file using a fresh terminal (outside of GDB).  This file will be used as the input to another run command that causes a fresh crash.
+> ![[../images/06/activity_bof2_121.png|Generating 121 Character Test Payload|650]]
+> The program crashes with the 120 A's + 1 B payload.  While examining the crash I see the RIP as the 0x42 letter B character at the end.  I also see that the RIP value has a total of 6 bytes.
+> ![[../images/06/activity_bof2_rip_bytes.png|RIP 6 Bytes and Partially Overwritten|650]]
+>  I generate a new payload with 120 "A"s and 6 "B"s to confirm I am able to overwrite the RIP while leaving the RSP in tact.
 >  ```bash
 >  python -c 'print("A"*120+"BBBBBB")' > rip.txt
 >  ```
@@ -343,12 +342,13 @@ A well written program can avoid memory security issues and the vulnerabilities 
 >  ```bash
 >  run < rip.txt
 >  ```
->  ![[buffer_activity_write_b.png|Testing Index Pointer Overwrite with B|600]]
+>  ![[../images/06/activity_bof2_gef_BBBBBB.png|Testing Index Pointer Overwrite with BBBBBB|650]]
+>  ![[../images/06/activity_bof2_rip_B.png|RIP All B's|650]]
 >  The index pointer now displays `0x424242424242` which is hexadecimal for the letter "B"!  Now that I have demonstrated that I can take control of the RIP, I need to identify the location of the code that is loaded into memory I want to execute.  As the objective of this demonstration is to execute the `hidden` function that is otherwise unreachable, I need to find where that function is on the stack.  To do this I use the `p` command in GDB and supply the name of the function which returns its memory address `0x401146`.
 >  ```bash
 >  p hidden
 >  ```
->  ![[buffer_activity_func_address.png|Finding Hidden Function's Address|600]]
+>  ![[../images/06/activity_bof2_gef_hidden.png|Finding Hidden Function Address|650]]
 >  Now I have all the pieces needed to craft an exploit that hijacks the program's execution path and causes the hidden function to be executed.  My goal is to overwrite the index pointer with the address of the hidden function.  This will require me to convert that hidden function address into Little Endian 64-bit format shellcode which is `\x46\x11\x40\x00\x00\x00`.  This is the reverse order of hexadecimal values with `00` used as padding to fill the 64-bit space.  Note that each hexadecimal has `\x` preceding it.  I place 120 "A"s and then the shellcode address to the hidden function into an exploit text file from a new terminal outside of GDB.  Observe that the hexadecimal is not rendered to standard output because the values are non-ascii.
 >  ```bash
 >  python -c 'print("A"*120+"\x46\x11\x40\x00\x00\x00")' > exploit.txt
@@ -458,21 +458,15 @@ A well written program can avoid memory security issues and the vulnerabilities 
 > [!exercise] Exercise 6.5 - Stack Smashing the Hidden Function
 > In this task you will exploit a stack-based buffer overflow vulnerable C program using your Kali VM in Bridge Adapter network mode.  You will install the needed tools, build the vulnerable application, discover the buffer overflow, then build an exploit that will execute the hidden function.
 > #### Step 1 - Install GDB
-> GNU debugger (GDB) is used to debug in-memory applications and is very useful for finding and exploiting buffer overflows.  You must install GDB version 12.1 from source as the APT repository in Kali installs a version that uses Python 12 and is incompatible with Peda.  The installation will take 15-20 minutes.  
+> GNU debugger (GDB) is used to debug in-memory applications and is very useful for finding and exploiting buffer overflows.  
 > ```bash
-> wget https://ftp.gnu.org/gnu/gdb/gdb-12.1.tar.gz
-> tar -xvzf gdb-12.1.tar.gz
-> cd gdb-12.1
-> ./configure
-> make
-> sudo make install
+> sudo apt update -y
+> sudo apt install gdb -y
 > ```
-> Alternatively, you could use your Ubuntu VM or an older version of Kali (~2023).
-> #### Step 2 - Install Peda
-> Next, install Peda after GDB is installed. The peda extension for GDB offers additional utilities.
+> #### Step 2 - Install GEF
+> Next, install GEF after GDB is installed. The GEF extension for GDB offers additional utilities.
 > ``` bash
-> git clone https://github.com/longld/peda.git ~/peda
-> echo "source ~/peda/peda.py" >> ~/.gdbinit
+> bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
 > ```
 > #### Step 3 - Create the Vulnerable Binary
 > Create a C program using the following code and then compile it without any security settings.
@@ -485,10 +479,10 @@ A well written program can avoid memory security issues and the vulnerabilities 
 > void hidden(){  
 >         printf("Congrats, you found me!\n");  
 > }  
-> int main(){  
->	 char buffer[100];  
->         gets(buffer);  
->         printf("Buffer Content is : %s\n",buffer);  
+> int main(){
+> 	char buffer[100];  
+> 	gets(buffer); 
+> 	printf("Buffer Content is : %s\n",buffer);  
 > }
 > ```
 > Once the file is created, compile it using gcc.
@@ -518,15 +512,15 @@ A well written program can avoid memory security issues and the vulnerabilities 
 > run < input.txt
 > ```
 > #### Step 7 - Find the Offset
-> Create a nonrepeating pattern and run it in the program to detect which byte/character position overwrites the RIP pointer register.  While in GDB, run the following commands
-> ``` gdb
-> pattern create 125 pattern.txt
-> run < pattern.txt
+> Use GEF built-in functions to find the offset.  Generate a pattern using the following command:
+> ```gdb
+> pattern create 200
 > ```
-> The program will crash at a return address. This address, which is located in the RIP register as well as the last line of GDB output, isn’t a real address. It is in fact a segment of our pattern that was overwritten to the RIP. The RIP expects an address for a value but received our pattern text which doesn’t point to a real address so the program crashed. You can use this fake address value and lookup what offset position it is in as part of our full pattern. Make sure to replace `ADDRESS` with the value you detected. The offset may be 120 characters.  While in GDB, run the following:
-> ``` gdb
-> pattern offset ADDRESS
+> Copy the pattern and then `run` the program in GEF.  Once running, paste the pattern and hit enter.  The program should crash because RSP was overwritten with the pattern.  Find and copy the RSP hex value then search for this pattern to find the offset.
+> ```gdb
+> pattern search RSP_HEX_VALUE
 > ```
+> The result of the pattern search should be 120.
 > #### Step 8 - Verify RIP
 > Open another terminal and create a `rip.txt` file payload that is designed to overwrite the RIP with the letter “B” (\x42). Then run the program with the `rip.txt` input within GDB.  While in a terminal (not GDB), run the following to create the `rip.txt` file.
 > ```bash
