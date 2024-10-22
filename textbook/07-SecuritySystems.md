@@ -330,7 +330,7 @@ The image above illustrates an attacker making a network connection to a honeypo
 > ```bash
 > sudo apt update -y 
 > cd ~/Downloads 
-> sudo dpkg -I Nessus* 
+> sudo dpkg -i Nessus* 
 > ```
 > Start the Nessus daemon. 
 > ```bash

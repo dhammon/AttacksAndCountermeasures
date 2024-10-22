@@ -516,7 +516,7 @@ The last security measure we'll cover is the **canary** method in which the oper
 > ```gdb
 > pattern create 200
 > ```
-> Copy the pattern and then `run` the program in GEF.  Once running, paste the pattern and hit enter.  The program should crash because RSP was overwritten with the pattern.  Find and copy the RSP hex value then search for this pattern to find the offset.
+> Copy the pattern and then `run` the program in GEF.  Once running, paste the pattern and hit enter.  The program should crash because RSP was overwritten with the pattern.  Find and copy the RSP hex value then search for this pattern to find the offset.  Make sure to replace RSP_HEX_VALUE with the value found in the RSP register.
 > ```gdb
 > pattern search RSP_HEX_VALUE
 > ```

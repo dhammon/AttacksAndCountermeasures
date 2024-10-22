@@ -360,7 +360,8 @@ These captured requests can be modified and replayed through the Repeater and In
 >```
 >Change directory to vulnerable-site and run the vulnerable app as a docker container. Allow a couple minutes for the image layers to download and the applications to start.
 >```bash
->docker run -it -d -p "80:80" -v ${PWD}/app:/app --name vulnerable-site mattrayner/lamp:latest
+>docker run -it -d -p "80:80" -v ${PWD}/app:/app --name vulnerable-site mattrayner/lamp:0.8.0-1804-php7
+>
 >```
 >The container will run in the background but may need a couple minutes to fully boot. After waiting a couple minutes, run the db.sh script on the container to populate the application's database. If you receive an " `ERROR 2002 (HY000) `" it means you need to wait another minute for the container to fully boot.
 >```bash
