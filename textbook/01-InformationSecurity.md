@@ -350,7 +350,7 @@ Each chapter of this book will include lab exercises on the covered topics.  Rea
 > 3. The VirtualBox "Create Virtual Machine" wizard will launch.  On the "Virtual machine Name and Operating System" page, enter "ubuntu" in the name field and select the Ubuntu ISO image you downloaded in the previous step.  Leave the "Skip Unattended Installation" checkbox UNCHECKED and press Next.
 > 4. Within the "Unattended Guest OS Install Setup" page, change the username to your name, enter a password, and change the domain name to "lan".  Ensure the "Guest Additions" option is checked and press Next.
 > 5. In the "Hardware" page, select a "Base Memory" of 4096MB and set "Processors" to 2 CPUs (these settings can be adjusted later if more/less resources are needed).
-> 6. On the "Virtual Hard disk" page, choose the option "Disk Size" and set it to 30 GBs then press Next.
+> 6. On the "Virtual Hard disk" page, choose the option "Disk Size" and set it to 35 GBs then press Next.
 > 7. Review your settings on the "Summary" page and press "Finish" to complete the setup.
 > #### Step 2 - Install Ubuntu OS
 > 1. Observe the ubuntu VM has been configured and is running in the VirtualBox application.  Select the ubuntu entry and then the Show button to watch the installation progress.  The installation should take 20-30 minutes.
@@ -376,7 +376,7 @@ Each chapter of this book will include lab exercises on the covered topics.  Rea
 > 2. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
 > 3. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Doman Name" to lan, and check the "Guest Additions" option.  We won’t be licensing Windows so don’t worry about the Product Key and press the Next button.
 > 4. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
-> 5. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 40 GB and press Next.
+> 5. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB and press Next.
 > 6. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
 > ![[../images/01/lab_13_win_summary.png|Windows VM Summary|500]]
 > #### Step 3 - Install Windows OS

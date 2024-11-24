@@ -275,7 +275,7 @@ This is where the value of a cyber liability insurer comes into play as they mai
 >Move the downloaded botsv3 data set to "/opt/splunk/etc/apps/" and unzip the contents using gunzip and tar.
 >```bash
 >sudo mv ~/Downloads/botsv3_data_set.tgz /opt/splunk/etc/apps/ 
->sudo gunzip /opt/splunk/tec/apps/botsv3_data_set.tgz
+>sudo gunzip /opt/splunk/etc/apps/botsv3_data_set.tgz
 >sudo tar -xvf /opt/splunk/etc/apps/botsv3_data_set.tar -C /opt/splunk/etc/apps/ 
 >```
 >Restart Splunk for the upload botsv3 data set/index to become available.
@@ -316,7 +316,7 @@ This is where the value of a cyber liability insurer comes into play as they mai
 >#### Step 6 - Visualizations and Dashboards
 >In this step you will develop a radial gauge visualization to enhance our dashboard. Create a new query that counts the number of failed Windows logon attempts which could identify bruteforce attacks.
 >```SPL
->source=* EventCode=4625|   stats count as cnt 
+>index=botsv3 source=* EventCode=4625| stats count as cnt 
 >```
 >Once the query is entered, select the Visualization subtab and choose the radial gauge type.
 >
