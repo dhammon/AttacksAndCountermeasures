@@ -1,4 +1,4 @@
-# Continued Learning
+# Appendix 1 - Continued Learning
 In this appendix, I share some of the resources where interested readers can continue their exploration and learning within the cybersecurity field.  The security community has its arms wide open to anyone that has an interest in learning new things.  I have direct experience with most of the items on this list or have reasonable confidence in their quality.  It is not comprehensive and there are many more great resources out there worthy of learning from.
 ## Local Groups
 Building community and meeting new cybersecurity professionals will expose you to new ideas and opportunities.  I have found and helped others find job opportunities from local security groups.  I have also learned so much from presentations and discussions while attending meetings.  They usually have in-person monthly meetings and might have a small annual membership fees.  Often, vendors will sponsor the meeting offering swag, food, or activities while also demonstrating their product.  The following national level groups likely have a chapter near you.

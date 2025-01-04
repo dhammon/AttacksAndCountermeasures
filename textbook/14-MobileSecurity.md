@@ -296,7 +296,7 @@ Developing exploits and proofs of concepts can be a little time consuming.  Ther
 >Run qark while targeting the APK downloaded in the previous step.  Qark will decompile and analyze the APK then produce a report of findings.  Note that the name of the APK might be slightly different or you may need to `unzip` it.  Once the tool finishes, copy down the path of the report on the last output as you'll need it in a later step.
 >```bash
 >unzip -d ~/Downloads ~/Downloads/newtonanalytics.modernportfoliotheory*.zip
->sudo qark --apk ~/Downloads/newtonanalytics-modernportfoliotheory*.apk
+>sudo qark --apk ~/Downloads/newtonanalytics.modernportfoliotheory*.apk
 >```
 >#### Step 3 - Manually Analyze the App
 >With the app decompiled and analyzed, navigate to the `build/qark` directory and list the outputs.
@@ -308,7 +308,7 @@ Developing exploits and proofs of concepts can be a little time consuming.  Ther
 >```bash
 >cat AndroidManifest.xml 
 >```
->Navigate to application's source code in the `procyon/newtonanalytics/modernportfoliotheory` folder and display the `DBHelper.java` file contents.  Look through the disassembled source code and identify where the app could be vulnerable to a SQL injection.  Describe how you would mitigate SQL injection vulnerabilities in Android applications.
+>Navigate to application's source code in the `procyon/newtonanalytics/modernportfoliotheory` or `build/qark/cfr/newtonanaltyics/modernportfoliotheory/` folders and display the `DBHelper.java` file contents.  Look through the disassembled source code and identify where the app could be vulnerable to a SQL injection.  Describe how you would mitigate SQL injection vulnerabilities in Android applications.
 >#### Step 4 - Analyze Qark Report
 >Open your Kali VM's browser and navigate to the `qark` report file path (`/usr/local/lib/python3.11/dist-packages/qark-4.0.0-py3.11.egg/qark/report/report.html`).
 >
@@ -359,7 +359,7 @@ Developing exploits and proofs of concepts can be a little time consuming.  Ther
 >```
 >Observe the emulator starts the device! Wait a moment for the emulated phone to load.  The emulated phone can be used like a physical device but using the mouse and keyboard.
 >#### Step 3 - Download the APK
->See Exercise 14.2, step 1 if needed.
+>See Exercise 14.1, step 1 if needed.
 >#### Step 4 - Exploit Vulnerable Intent
 >We've already performed static analysis using the `qark` tool. Qark identified that the `AnroidManifest.xml` included an Activity (MainActivity) that did not include explicit intents and/or permissions. This means that any app can call the Modern Portfolio MainActivity through the OS intent system and launch the Activity.
 >
