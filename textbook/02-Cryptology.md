@@ -253,7 +253,6 @@ Another hash algorithm attack takes advantage of hash collisions, previously dis
 >`Cyber Chef is an awesome tool!`
 
 
-
 > [!exercise] Exercise 2.2 - Key Space
 > OpenSSL is a command line tool available in Linux systems that can perform almost any cryptographic activity you can imagine.  It comes preinstalled on Ubuntu and can be used to generate random encryption keys of a desired length.  Start your Ubuntu VM and open a terminal.  Create a random 32, 128, and 256 key using the following commands.
 > ```bash
@@ -261,6 +260,7 @@ Another hash algorithm attack takes advantage of hash collisions, previously dis
 > openssl rand -base64 128
 > openssl rand -base64 256
 > ```
+
 
 > [!exercise] Exercise 2.3 - Symmetric Encryption
 > We'll continue the use of OpenSSL on your Ubuntu VM to complete this exercise in which you will encrypt and decrypt a message using symmetric encryption.
@@ -300,6 +300,7 @@ Another hash algorithm attack takes advantage of hash collisions, previously dis
 > ```
 > Notice the difference in the digest length between MD5 and SHA-256.
 
+
 > [!exercise] Exercise 2.5 - Detached Digital Signature
 > Debian based Linux systems usually come pre-installed with GNU Privacy Guard (GPG) that offers the ability to create digital signatures (DS).  You will use your Ubuntu VM in this exercise to create a detached DS and to verify it.
 > #### Step 1
@@ -329,6 +330,7 @@ Another hash algorithm attack takes advantage of hash collisions, previously dis
 > - Are you notified that the signature is bad?  
 > - Explain what this means to the receiver of a message with an unverified or bad signature.  
 > - What are the implications?
+
 
 > [!exercise] Exercise 2.6 - Steghide
 > Let's use steganography to hide a secret message within a JPEG file using a tool called Steghide.  You will install the software, create a message and conceal it within an image file.  Afterwards, you will extract the secret from the image.  Start and login to your Kali VM to complete this exercise.
