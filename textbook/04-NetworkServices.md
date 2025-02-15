@@ -565,7 +565,7 @@ Another cookie method, the **RST cookie**, mitigates attacks by validating clien
 > ```
 > With `dsniff` installed, the `dns.txt` file created, and the network interface identified, start the `dnsspoof` server. Make sure to replace `INTERFACE` with the network interface identified in the last command. 
 > ```bash
-> sudo dnsspoof -I INTERFACE -f dns.txt
+> sudo dnsspoof -i INTERFACE -f dns.txt
 > ```
 > #### Step 2 - Configure Windows DNS Setting
 > In this step, you will modify the Windows interface DNS settings to use the Ubuntu VM.  From the Windows VM, open the Control Panel's Network Connections panel. Right-click “Ethernet” and select “Properties” to launch the interface property window. With the interface properties window opened, select “Internet Protocol Version 4 (TCP/IPv4)” and press the “Properties” button. Select the “Use the following DNS server addresses:” radio button and enter the IP address of the Ubuntu VM.  Press “Ok” and close out the windows that were opened for the network settings. 
@@ -604,7 +604,7 @@ Another cookie method, the **RST cookie**, mitigates attacks by validating clien
 > ```
 > Within the third terminal opened, launch the `dnsspoof` attack. Make sure to replace the `INTERFACE` in the command with the name of the interface identified in the previous command. 
 > ```bash
-> sudo dnsspoof -I INTERFACE -f dns.txt
+> sudo dnsspoof -i INTERFACE -f dns.txt
 > ```
 > #### Step 4 - Trigger Attack
 > With the Kali VM spoofing traffic between the Windows and Ubuntu VMs, you are ready to observe the results of the attack.  If successful, you should see that www.google.com now resolves to the Kali VM's IP address. From the Windows VM terminal, lookup the IP address of www.google.com 
