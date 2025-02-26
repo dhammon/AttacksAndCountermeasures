@@ -284,6 +284,9 @@ The last security measure we will cover is the **canary** method in which the op
 > gcc  -no-pie -fno-stack-protector -z execstack program.c -o program
 > ```
 > ![[buffer_activity_compile.png|Compiling the Vulnerable Program|600]]
+> > [!tip] Tip - Newer C Standards
+> > Modern C standards and implementations won't compile the program unless an older standard is forced to be used, such as `-std=gnu89`
+> 
 > I also want to disable ASLR protections on the operating system with the following command.  This ensures that each time our program runs, it will use the same address space.
 > ```bash
 > echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
@@ -329,7 +332,7 @@ The last security measure we will cover is the **canary** method in which the op
 > ![[../images/06/activity_bof2_offset.png|Pattern Search Offset Found|650]]
 > Next, I craft a new input with 120 "A"s and 1 "B" to be used as the input when rerunning the program in GDB.
 > ```bash
-> python -c "print('A'*200+"B")"
+> python -c 'print("A"*200+"B")'
 > ```
 > ![[../images/06/activity_bof2_121.png|Generating 121 Character Test Payload|650]]
 > The program crashes with the 120 A's + 1 B payload.  While examining the crash, I see the RIP as the 0x42 letter B character at the end.  I also see that the RIP value has a total of 6 bytes.
@@ -490,6 +493,9 @@ The last security measure we will cover is the **canary** method in which the op
 > ``` bash 
 > gcc  -no-pie -fno-stack-protector -z execstack program.c -o program
 > ```
+> >[!tip] Tip - Newer C Standards
+> Modern C standards and implementations won't compile the program unless an older standard is forced to be used, such as `-std=gnu89`
+>
 > #### Step 4 - Disable ASLR
 > Left enabled, ASLR will randomize the program’s addresses each time it is run.  You will disable this security setting for ease of demonstration.
 > ``` bash

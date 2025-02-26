@@ -455,11 +455,12 @@ Most anti-malware and *endpoint detection and response (EDR)* solutions hook int
 > ![[../images/05/win_activity_launch_defender.png|Launching Windows Defender|400]]
 > Scrolling down the Windows Security window I can see that Defender is enabled and running.
 > ![[../images/05/win_activity_av_defender_running.png|Defender Up and Running|300]]
-> To demonstrate a bypass, I need to execute commands in a running process.  I launch a PowerShell session from the search bar not as administrator.  Defender hooks into this newly created process and will monitor the memory space for malicious behavior.  I know that the Windows API function `AmsiScanBuffer` will trigger Defender to kill the command as this function is often abused by malware to bypass Defender.  To test that Defender is working, I include this string in an `echo` command and observe Defender taking action.
-> ```powershell
-> echo "AmsiScanBuffer"
+> To demonstrate a bypass, I need to execute commands in a running process.  I launch a PowerShell session from the search bar not as administrator.  Defender hooks into this newly created process and will monitor the memory space for malicious behavior.  I know that the `Invoke-Mimikatz` will trigger Defender to kill the command as this function is associated with a common hacking technique to extract NTML hashes from a Windows system.  To test that Defender is working, I include this command and observe Defender taking action.
+> ```cmd
+> powershell
+> Invoke-Mimikatz
 > ```
-> ![[../images/05/win_activity_bypass_test.png|Testing Defender|600]]
+> ![[../images/05/win_activity_bypass_test3.png|Testing Defender|600]]
 > I can see that Defender detected the string and blocked the command.  Next, I run several commands designed to replace the malicious detection result in the running process with a passing result no matter the behavior.  These bypass commands are found on S3cur3Th1sSh1t's GitHub repository Amsi-Bypass-Powershell: https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell#patching-amsi-amsiscanbuffer-by-rasta-mouse. [^2] 
 > 
 > There are several bypasses I can use, however, some of them no longer work.  I will use the Patching AMSI AmsiScanBuffer by rasta-mouse as it continues to be effective at the time of this writing.  If I copy and paste the entire script and attempt to run it in the PowerShell process, Defender will detect it and block the activity.  Therefore, I copy and paste each command one at a time to elude detection.  The first block loads the Windows API kernel library functions needed to manipulate memory space into a variable that I use in the following commands.
@@ -513,10 +514,11 @@ Most anti-malware and *endpoint detection and response (EDR)* solutions hook int
 >![[../images/05/win_activity_bypass_commands.png|Patching AmsiScanBuffer Process|600]]
 >Amsi should now be unhooked and defanged within my PowerShell process.  To test its success, I rerun the echo command that was originally blocked.
 >```powershell
->echo "AmsiScanBuffer"
+>Invoke-Mimikatz
 >```
->![[../images/05/win_activity_bypass_tested.png|Testing Bypassed Defender|600]]
->Defender did not block the use of AmsiScanBuffer this time!  This means anything else running within this PowerShell process will not be blocked by Defender.
+>![[../images/05/win_activity_bypass_tested2.png|Testing Bypassed Defender|600]]
+>Defender did not block the use of `Invoke-Mimikatz` this time!  It does error, but if you look closely, it only errors due to the command not being found (versus because antivirus blocks it).  This means anything else running within this PowerShell process will not be blocked by Defender.
+
 ## Exercises
 >[!exercise] Exercise 5.1 - Shadow Cracking
 >Crack Linux passwords using `john` in your Kali VM with Bridge Adapter network mode.  You will create a user and set their password.  Then you will prepare the hash file and use `john` to crack the hash with the `rockyou.txt` wordlist.
@@ -606,19 +608,20 @@ Most anti-malware and *endpoint detection and response (EDR)* solutions hook int
 > [!exercise] Exercise 5.4 - Bypassing Defender
 > Using your Windows VM in Bridge Adapter network mode, you will demonstrate an AMSI patch bypass.
 > #### Step 1 - Test AMSI
-> From the Windows VM, start a PowerShell terminal and prove that Windows Defender is active by running the following command.  The result of the command should result in an antivirus block.
+> From the Windows VM, start a `cmd` terminal, launch a `powershell` process, and prove that Windows Defender is active by running the following command.  The result of the command should result in an antivirus block.
 > ```powershell
-> echo “AmsiScanBuffer”
+> powershell
+> Invoke-Mimikatz
 > ```
 > #### Step 2 - Bypass Defender
 > Navigate to Rasta Mouse’s AMSI patch within GitHub.  Copy each line/block into your PowerShell terminal one at a time hitting enter in between a few times.  You can find Rasta’s patch code in the following link. 
 > https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell#patching-amsi-amsiscanbuffer-by-rasta-mouse 
 > Once all lines/blocks are copied, retest to confirm that the PowerShell process is no longer hooked into Windows Defender.
 > ```powershell
-> echo “AmsiScanBuffer”
+> Invoke-Mimikatz
 > ```
 > >[!tip] Tip - Troubleshooting Bypass
-> >You may need to start a fresh powershell terminal.  Also, use your imagination on what else you could do to break up the commands yet still bypass AMSI.
+> >Start a fresh powershell terminal.  Also, use your imagination on what else you could do to break up the commands yet still bypass AMSI.
 > #### Step 3 - Test Other Bypasses
 > Pick another bypass method from the following link and test in a new PowerShell instance.  Can you find another method that works? 
 > https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell
