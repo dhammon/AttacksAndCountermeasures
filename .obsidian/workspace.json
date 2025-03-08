@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/08-WebApplicationDefense.md",
+                "file": "textbook/09-WebApplicationAttacks.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "08-WebApplicationDefense"
+              "title": "09-WebApplicationAttacks"
             }
           }
         ]
@@ -166,6 +166,7 @@
   },
   "active": "a28e3ad0333d4da9",
   "lastOpenFiles": [
+    "textbook/08-WebApplicationDefense.md",
     "textbook/07-SecuritySystems.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/05-OperatingSystemSecurity.md",
@@ -179,7 +180,6 @@
     "images/05/win_activity_bypass_tested2.png",
     "images/05/win_activity_bypass_test3.png",
     "images/05/win_activity_bypass_test2.png",
-    "textbook/08-WebApplicationDefense.md",
     "images/08/stride2.png",
     "textbook/14-MobileSecurity.md",
     "textbook/13-CloudSecurity.md",
