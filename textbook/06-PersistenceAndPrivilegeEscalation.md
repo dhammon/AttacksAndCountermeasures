@@ -287,7 +287,7 @@ The last security measure we will cover is the **canary** method in which the op
 > ![[buffer_activity_program_source.png|Program Source Code|600]]
 > I then compile the code using the GCC compiler with application-level security settings disabled into an executable file `program`.  The compiler's output warns us that the gets function is dangerous - I will ignore that concern and exploit it soon.
 > ```bash
-> gcc  -no-pie -fno-stack-protector -z execstack program.c -o program
+> gcc -std=gnu89 -no-pie -fno-stack-protector -z execstack program.c -o program
 > ```
 > ![[buffer_activity_compile.png|Compiling the Vulnerable Program|600]]
 > > [!tip] Tip - Newer C Standards
@@ -478,6 +478,8 @@ The last security measure we will cover is the **canary** method in which the op
 > ``` bash
 > bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
 > ```
+> > [!tip] Tip - GEF Installation Fail
+> > Consider downloading and running the script manually.  
 > #### Step 3 - Create the Vulnerable Binary
 > Create a C program using the following code and then compile it without any security settings.
 > ```bash
@@ -497,7 +499,7 @@ The last security measure we will cover is the **canary** method in which the op
 > ```
 > Once the file is created, compile it using gcc.
 > ``` bash 
-> gcc  -no-pie -fno-stack-protector -z execstack program.c -o program
+> gcc -std=gnu89 -no-pie -fno-stack-protector -z execstack program.c -o program
 > ```
 > >[!tip] Tip - Newer C Standards
 > Modern C standards and implementations won't compile the program unless an older standard is forced to be used, such as `-std=gnu89`
