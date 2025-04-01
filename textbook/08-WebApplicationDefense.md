@@ -366,6 +366,8 @@ This class of tool first scans the application mapping out its structure, such a
 >The scanner starts by mapping the site, then tests for security vulnerabilities from its limited test set that includes reflected XSS and vulnerable JavaScript dependencies. [^4]   After a few minutes of running, the scan is complete.  It was able to detect a few vulnerable JavaScript dependencies!
 
 ## Exercises
+---
+
 
 >[!exercise] Exercise 8.1 - Web Server Security
 >In this task, you will install Apache web server on your Ubuntu VM using Bridge Adapter network mode and secure it with an OpenSSL self-signed cert and ModSecurity WAF.
@@ -458,6 +460,8 @@ This class of tool first scans the application mapping out its structure, such a
 >
 >Now, use a classic cross-site scripting testing payload within the URL. The Modsecurity rule will detect this malicious string and block our HTTPS request. This time, navigate to the site with the URL `https://localhost/?<script>alert('xss')</script>` and observe the Forbidden response! 
 
+
+
 > [!exercise] Exercise 8.2 - Secure Coding
 > You will run secure code tooling against the DVNA code base in this lab task using your Kali VM using Bridge Adapter network mode.
 > #### Step 1 - Install DVNA
@@ -489,7 +493,7 @@ This class of tool first scans the application mapping out its structure, such a
 > ```bash
 > snyk test https://github.com/appsecco/dvna
 > ```
-> Snyk should have several vulnerabilities of varying severity. Select one vulnerability that interests you and write a summary of what its causes and impacts.
+> Snyk should have several vulnerabilities of varying severity. Select one vulnerability that interests you and write a summary of its causes and impacts.
 > #### Step 4 - Snyk SAST Scan
 > Execute a static application security test (SAST) on the DVNA local repository using Snyk. Navigate to the `dvna` directory and run the following Snyk command. Results will appear after a few seconds of analysis.
 > ```bash
@@ -497,6 +501,8 @@ This class of tool first scans the application mapping out its structure, such a
 > snyk code test
 > ```
 > Identify another vulnerability different from the SCA scan and research its cause and impact. Write a summary of what you learned during your research.
+
+
 
 > [!exercise] Exercise 8.3 - DAST Scan
 > In this task, you will run a DVNA web application and scan it using Dastardly from your Kali VM in Bridge Adapter network mode.

@@ -394,15 +394,15 @@ These captured requests can be modified and replayed through the Repeater and In
 >This step should not be needed if Exercise 9.1 was already completed; otherwise, refer to Exercise 9.1 - Step 1 for instructions.
 >#### Step 2 - Install Vulnerable-Site
 >This step should not be needed if Exercise 9.1 was already completed; otherwise, refer to Exercise 9.1 - Step 2 for instructions.
->#### Step 2 - Enumerate Cookies
+>#### Step 3 - Enumerate Cookies
 >With the vulnerable-site running in your Kali VM, open Firefox and navigate to [http://127.0.0.1/](http://127.0.0.1/). Login as the low privileged user (username=daniel and password=Password123).
 >
 >Open the developer console (F12), select the Storage tab, Cookies (left navigation tree), and select the [http://127.0.0.1](http://127.0.0.1/) site. Observe that there is a cookie called "role" with a value of "user".
->#### Step 3 - Escalate Privileges
+>#### Step 4 - Escalate Privileges
 >With the "role" cookie identified in the developer console, double click the cookie value ("user") and replace the value with the word "administrator" then press enter.
 >
 >Reload the page with the new cookie value and navigate to the Administrator Page to confirm full access.
->#### Step 4 - Remediate Vulnerable Cookie
+>#### Step 5 - Remediate Vulnerable Cookie
 >Trusting cookie values, especially for authorization purposes, can lead to privilege escalations. A better approach would be to place authorization variables server side in sessions. Launch a bash terminal in the Kali VM and open the `index.php` file using nano. Observe that the cookie is set in line 14's `setcookie` function call.
 >```bash
 >nano ~/vulnerable-site/app/index.php
@@ -419,7 +419,11 @@ These captured requests can be modified and replayed through the Repeater and In
 >```php
 >if($_SESSION['role'] == 'administrator') {
 >```
->Launch a new Firefox instance, navigate to [http://127.0.0.1/](http://127.0.0.1/), login as the low privilege user (username=daniel and password=Password123). Inspect the cookies and confirm that the role cookie is no longer in use!
+>Open a terminal and log into the vulnerable-site using the `curl` command.
+>```bash
+>curl -I "http://127.0.0.1/?username=daniel&password=Password123&version=beta"
+>```
+>Observe that there is only one `Set-Cookie` response header for the session.
 
 
 >[!exercise] Exercise 9.3 - Cross Site Scripting (XSS)
