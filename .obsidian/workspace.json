@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/12-IncidentResponse.md",
+                "file": "textbook/13-CloudSecurity.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "12-IncidentResponse"
+              "title": "13-CloudSecurity"
             }
           }
         ]
@@ -166,6 +166,7 @@
   },
   "active": "a28e3ad0333d4da9",
   "lastOpenFiles": [
+    "textbook/12-IncidentResponse.md",
     "textbook/09-WebApplicationAttacks.md",
     "textbook/08-WebApplicationDefense.md",
     "textbook/15-AppendixLearningResources.md",
@@ -184,7 +185,6 @@
     "images/08/stride2.png",
     "textbook/14-MobileSecurity.md",
     "textbook/13-CloudSecurity.md",
-    "textbook/12-IncidentResponse.md",
     "textbook/00-Introduction.md",
     "textbook/16-AppendixCareerSearch.md",
     "README.md",
