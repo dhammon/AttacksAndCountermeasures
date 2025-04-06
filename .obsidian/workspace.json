@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/15-AppendixLearningResources.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "15-AppendixLearningResources"
+              "title": "README"
             }
           }
         ]
@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 256.5,
-    "collapsed": true
+    "width": 256.5
   },
   "right": {
     "id": "14793b94a2f895be",
@@ -166,12 +165,12 @@
   },
   "active": "f4e69dd233bef000",
   "lastOpenFiles": [
+    "textbook/15-AppendixLearningResources.md",
     "textbook/14-MobileSecurity.md",
     "textbook/13-CloudSecurity.md",
     "textbook/12-IncidentResponse.md",
     "textbook/09-WebApplicationAttacks.md",
     "textbook/08-WebApplicationDefense.md",
-    "textbook/15-AppendixLearningResources.md",
     "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/07-SecuritySystems.md",
