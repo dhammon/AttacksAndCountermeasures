@@ -340,9 +340,9 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > ```
 > sudo apt install -y --reinstall virtualbox-guest-x11
 > ```
-> ![[../images/01/lab_07_kali_update.png|Kali Terminal Update and Install]]
+> ![[../images/01/lab_07_kali_update.png|Kali Terminal Update and Install|500]]
 > 5. After the guest software is installed, select the Devices menu, Drag and Drop, and then the Bidirectional option.
-> ![[../images/01/lab_08_kali_drag_drop.png|VM Drag and Drop Setting]]
+> ![[../images/01/lab_08_kali_drag_drop.png|VM Drag and Drop Setting|500]]
 > 6. Similarly, select the Devices menu, Shared Clipboard, and select the Bidirectional setting to enable copying clipboard values between the host and VM.
 > 7. Return to the Kali terminal and reboot the VM using the following command.
 > ```
@@ -350,12 +350,13 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > ```
 > Congratulations, you have successfully set up Kali in VirtualBox!  If you have adequate disk space (2x the recommended minimum) then you may consider taking a snapshot of the fresh installation in case you ever want/need to start with a clean install.
 
+
 >[!exercise] Exercise 1.3 - Install Ubuntu Virtual Machine
 > 
 > We will use an Ubuntu VM throughout the course as a victim, server, or to illustrate secure configurations.  Ubuntu is another Debian distribution maintained by Conical and is one of the most popular Linux operating systems.  You will download an ISO image and install the system using the unattended installation feature.  Once completed, we will configure the VM to share resources with the host.
-> #### Step 1 - Download and Setup Ubuntu VM
+> #### Step 1 - Download and Set Up Ubuntu VM
 > 1. Navigate to https://releases.ubuntu.com/22.04/ and download the Ubuntu version 22.0.4 image.
-> ![[../images/01/ubuntu22_download.png|Ubuntu Download Page]]
+> ![[../images/01/ubuntu22_download.png|Ubuntu Download Page|500]]
 > 2. With the ISO for Ubuntu fully downloaded (~10-20 minutes depending on internet speeds), navigate to the running VirtualBox application and select the “New” button.
 > 3. The VirtualBox "Create Virtual Machine" wizard will launch.  On the "Virtual machine Name and Operating System" page, enter "ubuntu" in the name field and select the Ubuntu ISO image you downloaded in the previous step.  Leave the "Skip Unattended Installation" checkbox UNCHECKED and press Next.
 > 4. Within the "Unattended Guest OS Install Setup" page, change the username to your name, enter a password, and change the domain name to "lan".  Ensure the "Guest Additions" option is checked and press Next.
@@ -364,10 +365,10 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > 7. Review your settings on the "Summary" page and press "Finish" to complete the setup.
 > #### Step 2 - Install Ubuntu OS
 > 1. Observe the ubuntu VM has been configured and is running in the VirtualBox application.  Select the ubuntu entry and then the Show button to watch the installation progress.  The installation should take 20-30 minutes.
-> ![[../images/01/lab_10_ubuntu_install.png|Ubuntu OS Auto Installation]]
+> ![[../images/01/lab_10_ubuntu_install.png|Ubuntu OS Auto Installation|500]]
 > 2. Once installation is complete the VM will reboot to the login screen.  Login with the user account you setup in step 4.
-> #### Step 3 - Setup Ubuntu OS
-> 1. Like Kali, set up the shared clipboard and drag and drop VM settings.  Select Devices, Shared Clipboard, and choose Bidirectional.  Then select Devices, Drag and Drop, and choose Bidirectional.
+> #### Step 3 - Set Up Ubuntu OS
+> 3. Like Kali, set up the shared clipboard and drag and drop VM settings.  Select Devices, Shared Clipboard, and choose Bidirectional.  Then select Devices, Drag and Drop, and choose Bidirectional.
 > Congratulations, you have successfully installed the Ubuntu VM on VirtualBox! If you have adequate disk space (2x the recommended minimum) then you may consider taking a snapshot of the fresh installation in case you ever want/need to start with a clean installation.
 
 
@@ -381,20 +382,20 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > 4. On the "Choose which media to use" page of the wizard, use the recommended options and select ISO file.
 > ![[../images/01/lab_12_win_iso.png|Media Creation Tool ISO Selection|400]]
 > 5. Select the location to save the ISO and the download will begin.  Select Finish once complete (no need to burn to DVD) and the download process should begin.  The download may take 10 to 20 minutes depending on your internet connection.
-> #### Step 2 - Setup the Windows VM
-> 1. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
-> 2. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
-> 3. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Doman Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key; press the Next button.
-> 4. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
-> 5. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
-> 6. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
+> #### Step 2 - Set Up the Windows VM
+> 6. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
+> 7. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
+> 8. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Doman Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key; press the Next button.
+> 9. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
+> 10. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
+> 11. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
 > ![[../images/01/lab_13_win_summary.png|Windows VM Summary|500]]
 > #### Step 3 - Install Windows OS
 > 1. Windows should take 20-30 minutes to install and can be monitored by selecting Show in VirtualBox on the running windows VM.
-> ![[../images/01/lab_14_win_install.png|Windows VM Installation]]
-> #### Step 4 - Setup Windows OS
-> 1. After the installation is complete, you will be automatically logged into the VM to the Windows desktop.  You may have to adjust the VirtualBox View settings and/or the Windows display settings for the best experience.  If your window does not show the file menu, try using VirtualBox shortcut keys to display (in Windows right CTRL + Home button). 
-> 2. Like Kali and Ubuntu VMs, set up the shared clipboard and drag and drop VM settings. Select Devices, Shared Clipboard, and choose Bidirectional. Then select Devices, Drag and Drop, and choose Bidirectional.
+> ![[../images/01/lab_14_win_install.png|Windows VM Installation|500]]
+> #### Step 4 - Set Up Windows OS
+> 2. After the installation is complete, you will be automatically logged into the VM to the Windows desktop.  You may have to adjust the VirtualBox View settings and/or the Windows display settings for the best experience.  If your window does not show the file menu, try using VirtualBox shortcut keys to display (in Windows right CTRL + Home button). 
+> 3. Like Kali and Ubuntu VMs, set up the shared clipboard and drag and drop VM settings. Select Devices, Shared Clipboard, and choose Bidirectional. Then select Devices, Drag and Drop, and choose Bidirectional.
 > 
 > Congratulations, you have successfully installed Windows in VirtualBox!  If you have adequate disk space (2x the recommended minimum) then you may consider taking a snapshot of the fresh installation in case you ever want/need to start from a clean installation.
 

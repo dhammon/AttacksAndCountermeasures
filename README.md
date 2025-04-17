@@ -9,4 +9,3 @@ Git branches are used to organize drafts of this textbook.  Branch naming syntax
 - key and important terms at the end of each chapter
 - conclusion paragraph at the end of each chapter
 - table of contents page
-- Acknowledgments

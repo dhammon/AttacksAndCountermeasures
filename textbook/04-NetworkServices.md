@@ -446,7 +446,7 @@ TCP does not use encryption, leaving all its wrapper information exposed as plai
 >Immediately, I can observe that the server accepts the connection and displays the client's incoming message.  The output also shows the client port 34502 from which the connection originated.
 >![[../images/04/activity_rst_connection.png|Incomming Connection from Client|600]]
 >The client and server terminal Netcat connection simulates a typical TCP communication channel.  This connection will be the target of my attack.  As the attacker, I have a Wireshark packet capture running on the loopback interface which collected the client server connection.  Within Wireshark, I select the last TCP ACK packet and expand the TCP header to identify the `Sequence Number (raw)` value 2032347291 which I will use to send a RST and disrupt the client - server connection.
->![[../images/04/activity_rst_sequence_number.png|Sequence Number (raw) Identified in Wireshark]]
+>![[../images/04/activity_rst_sequence_number.png|Sequence Number (raw) Identified in Wireshark|500]]
 >I will use the tool Netwox to run this attack in a new terminal.  Netwox is not preinstalled in Kali, so I install it using the following command.
 >```bash
 >sudo apt update -y

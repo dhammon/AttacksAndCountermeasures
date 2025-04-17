@@ -64,3 +64,39 @@ img {
  .markdown-source-view.mod-cm6 .cm-content > * {
         margin: auto auto !important;
 }
+
+
+/* TOS */
+p.toc-entry {
+  margin: 1px;
+  padding: 1px;
+}
+
+.toc-entry {
+  display: flex;
+  align-items: center;
+}
+
+.toc-title {
+  white-space: nowrap;
+}
+
+.toc-dots {
+  flex: 1;
+  border-bottom: 1px dotted #888;
+  margin: 0 0.5em;
+}
+
+.toc-page {
+  white-space: nowrap;
+}
+
+/* Additional indent for sub sections */
+.toc-entry.subsection {
+  margin-left: 20px;  /* Adjust indent as needed */
+}
+
+/* For deeper levels, you can add additional rules */
+.toc-entry.subsection-2 {
+  margin-left: 40px;
+}

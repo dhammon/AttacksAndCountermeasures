@@ -178,23 +178,23 @@ Wireshark is a free tool that empowers users to capture and analyze packets on a
 >Let's explore the Wireshark interface using the Kali VM.  To start Wireshark, I'll launch a terminal and enter the command `sudo wireshark`.
 >![[../images/03/wireshark_start.png|Starting Wireshark]]
 >To start capturing packets, select the `eth0` network interface and then the "blue fin" icon in the upper left corner of the screen.
->![[../images/03/wireshark_capture.png|Start Packet Capture]]
+>![[../images/03/wireshark_capture.png|Start Packet Capture|500]]
 >Almost immediately we begin seeing packet entries in the top primary pane.  We can stop the capture at any time by pressing the red square next to the capture button in the upper left corner.  The primary pane lists each captured packet in a table with the first column displaying the relative capture order, time, source IP or MAC, destination IP or MAC, the protocol and general packet info.  The bottom left pane displays a structured object of a selected packet, and the bottom right pane shows the hexadecimal format of the packet.
->![[../images/03/wireshark_packets.png|Packets Captured]]
+>![[../images/03/wireshark_packets.png|Packets Captured|500]]
 >I find that adding the source and destination ports as columns to the main pane is useful.  To alter the displayed columns, right-click the column header, select `Column Preferences` from the context menu.
 >![[../images/03/wireshark_col_prefs.png|Wireshark Column Preferences|300]]
 > With the column preferences opened, push the "+" add button at the bottom of the window and double click `Number`.  Select Destination Port from the drop-down menu then double click the title of the added row and enter `DstPort`.  Repeat these steps and add another column for the Source Port.  Next, drag and drop the newly created columns next to their respective columns that hold the address space.  Your Preferences window should look like the one below once complete.  Press OK to complete the changes.
-> ![[../images/03/wireshark_add_col.png|Wireshark Add Columns]]
+> ![[../images/03/wireshark_add_col.png|Wireshark Add Columns|500]]
 > Observe that the main pane now shows the source and destination ports for each packet!  Next, I open the web browser within the VM and navigate to `http://google.com`.  Afterwards, I apply the `http` filter in Wireshark to only display HTTP packets that have been captured.
-> ![[../images/03/wireshark_filter.png|Filtering HTTP Packets]]
+> ![[../images/03/wireshark_filter.png|Filtering HTTP Packets|500]]
 > Wireshark can display domain names instead of the IP address which will help us identify which of these packets are related to the Google domain.  To enable this setting, go to Edit and Preferences to launch the preference window.  Then select `Name Resolution` from the left navigation menu and check the `Resolve network (IP) addresses` option.  Press OK to apply the setting.
-> ![[../images/03/wireshark_resolve.png|Wireshark Name Resolution]]
+> ![[../images/03/wireshark_resolve.png|Wireshark Name Resolution|500]]
 > Notice that many of the IP addresses displayed in the main pane now display domain names instead of IP addresses!  The first packets do not look related to Google.  Scrolling down reveals several Google related packets.  To open the *stream*, or related packets, select the first packet and right click to open the context menu.  Select `Follow` and then `HTTP Stream` to open the stream.
-> ![[../images/03/wireshark_follow.png|Follow Stream Feature]]
+> ![[../images/03/wireshark_follow.png|Follow Stream Feature|500]]
 > The stream window opens and displays the request (red text) and the response (blue text) and any subsequent related packets. 
-> ![[../images/03/wireshark_stream.png|HTTP Stream]]
+> ![[../images/03/wireshark_stream.png|HTTP Stream|500]]
 > I close the stream and delete the `http` filter then press enter to display all captured packets.  Another excellent feature of Wireshark is the statistics reporting.  These reports can be helpful to get a general idea of the types of packets that were captured and to potentially identify any unusual protocols or connections that are made.  Select the `Statistics` menu and then choose `Conversations` to open the report.  Press the `Name Resolution` option on the left menu and then choose the `IPv4` tab and observe the statistics from our connection to google.com.
-> ![[../images/03/wireshark_endpoints.png|Wireshark Statistics Endpoint Report]]
+> ![[../images/03/wireshark_endpoints.png|Wireshark Statistics Endpoint Report|500]]
 > There are many other useful features of Wireshark.  We will revisit the tool again later in the textbook during the Malware Analysis section where we will carve files from packet captures.
 > 
 ### Network Utilities

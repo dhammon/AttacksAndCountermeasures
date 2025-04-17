@@ -1,5 +1,7 @@
 # Introduction 
-The Attacks and Countermeasures textbook prescribes hands-on learning through practical lab work that can be accomplished on most laptop or desktop computers.  Each chapter is designed around these labs based on common cybersecurity subdisciplines.  Some of these subdiscipline topics cover multiple chapters and not all cybersecurity disciplines are included in this textbook.  The chapters introduce the fundamentals of the cybersecurity subdiscipline, alongside activities and exercises to practice the topic.  Upon reading this textbook and performing exercises, the reader will have a strong introduction and understanding on how cybersecurity affects organizations and technologies.  Readers will develop research and critical thinking skills that support applying cybersecurity principles to new or existing technologies.  It is the hope that many will be inspired to work in cybersecurity or enhance their information technology careers by applying security principles to their respective jobs.  
+The Attacks and Countermeasures textbook prescribes hands-on learning through practical lab work that can be accomplished on most laptop or desktop computers.  Each chapter is designed around these labs based on common cybersecurity subdisciplines.  Some of these subdiscipline topics cover multiple chapters and not all cybersecurity disciplines are included in this textbook.  The chapters introduce the fundamentals of the cybersecurity subdiscipline, alongside activities and exercises to practice the topic.  
+
+Upon reading this textbook and performing exercises, the reader will have a strong introduction and understanding on how cybersecurity affects organizations and technologies.  Readers will develop research and critical thinking skills that support applying cybersecurity principles to new or existing technologies.  It is the hope that many will be inspired to work in cybersecurity or enhance their information technology careers by applying security principles to their respective jobs.  
 
 ## Prerequisites 
 To get the most out of this book, readers should have a desire to learn about cybersecurity.  The success of security researchers often requires a deep understanding of an underlying technology and the challenge of assumptions.  Therefore, individuals seeking to learn cybersecurity must be ready to understand the fundamentals of the technology. 
@@ -130,3 +132,13 @@ Mobile applications increase, or extend, the attack surface of organizations as 
 
 ## Acknowledgments 
 All the chapter images were generated using Dall-E from [https://www.bing.com/images/create](https://www.bing.com/images/create).
+
+A big thank you to some very special people:
+- My wife and children, for the continuous support.
+- My mother, for helping me edit this textbook.
+- My students, for the many years of inspiration and curiosity.
+- Paul Paulsson, for mentorship and friendship.
+- Jason Lukitsch, for the patience and mentorship during my early security career.
+- Mike Gross, for the support and encouragement to teach.
+- Ippsec, for the countless hours of amazing videos.
+- Professor Ahmadi, for opening my world to programming. 
