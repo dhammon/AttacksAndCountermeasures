@@ -1,12 +1,12 @@
 # Chapter 8 - Web Application Defense
 ![](../images/08/web_defense.jpg)
 
-The connections between networks over the past several decades have given rise to the internet.  However, the internet's popularity grew substantially in the late 90's due to the rise of the *hypertext transfer protocol (HTTP)* and website technologies.  Many people came to understand the internet as a collection of web pages; however, informed individuals know that the internet offers much more.  Early websites often only offered a static brochure of information with little interaction from users.  As popularity grew, so did the demand and expectation of dynamic features, which eventually carved the way to *web applications*.  These sites provide users with a rich experience comprised of dynamically generated pages and user inputs while at the same time increasing the security risks.  In this chapter, we will explore web application fundamentals and basic security architectures used with modern domains.  We will also learn how organizations ensure the secure development of web technologies in their *software development lifecycles (SDLC)*.
-
 **Objectives**
 1. Understand the basic architecture of web applications and supporting systems.
 2. Harden web application servers with encryption and web application firewalls (WAF).
 3. Describe the secure development of modern web applications.
+
+The connections between networks over the past several decades have given rise to the internet.  However, the internet's popularity grew substantially in the late 90's due to the rise of the *hypertext transfer protocol (HTTP)* and website technologies.  Many people came to understand the internet as a collection of web pages; however, informed individuals know that the internet offers much more.  Early websites often only offered a static brochure of information with little interaction from users.  As popularity grew, so did the demand and expectation of dynamic features, which eventually carved the way to *web applications*.  These sites provide users with a rich experience comprised of dynamically generated pages and user inputs while at the same time increasing the security risks.  In this chapter, we will explore web application fundamentals and basic security architectures used with modern domains.  We will also learn how organizations ensure the secure development of web technologies in their *software development lifecycles (SDLC)*.
 ## Web Application Fundamentals
 The first major section of this chapter will offer the reader a brief working overview of web architecture and design.  It will also cover some of the common development strategies and technologies in use by organizations.
 ### Web Architecture
@@ -20,7 +20,7 @@ As part of the web server's processing of client requests, it reaches out to the
 
 A downside to dynamically generated page architecture is that it requires heavy processing and rendering of pages by the web server.  A lot of server resources are wasted generating the same pages over and over again with only some data content differing between each generation.  It also requires that the single server maintain the frontend and backend logic of the application.  Instead of having a unique dynamically generated file for each page or file, some modern systems use a **single page application (SPA)** architecture in which a single frontend application is downloaded to the client.  The web server is then free of generating pages and instead handles the logic to generate data to send to the client.  The client receives the data and updates the SPA presented to the user.
 
-![[../images/08/spa.png|Single Page Application Architecture|350]]
+![[../images/08/spa.png|Single Page Application Architecture|300]]
 
 The SPA architecture illustrated above demonstrates how the frontend application is downloaded to the client (1 & 2).  The client then requests data from the web server (3) that uses the information stored in the database (4) to generate and deliver a response (5 & 6).  The data returned to the client is then injected into the frontend SPA originally requested by the client.  
 
@@ -33,7 +33,7 @@ Backend web application systems, sometimes referred to as *services or microserv
 
 The following diagram builds off the basic client and web server model shared earlier in which an SPA client makes an HTTP request to an API endpoint on a web server.  The web server responds with a JSON object that includes key value pairs of data that is processed by the SPA to give the user a unique experience. 
 
-![[../images/08/api.png|API Interaction with SPA|450]]
+![[../images/08/api.png|API Interaction with SPA|350]]
 
 In this image, the data returned from the server is the name of the user and an empty response for the car variable.  The SPA parses this data and uses the name field to render the text "Welcome John!" and display the no car selected icon.  The delivery of this small JSON file is less resource intensive than the web server having to process and generate the entire page as with dynamically generated pages.
 ### Engineering Processes
@@ -112,7 +112,7 @@ A ModSecurity rule syntax starts with the label "SecRule" that informs the WAF o
 >```
 >![[../images/08/server_activity_start_apache.png|Starting the Web Server Daemon|600]]
 >Everything looks to be in working order, so I open Firefox and navigate to http://localhost/ and observe that the default Apache page is served.  Notice that this page is served over HTTP and not HTTPS, therefore it is not using TLS encryption.
->![[../images/08/server_activity_http.png|Apache Default Web Page Over HTTP|500]]
+>![[../images/08/server_activity_http.png|Apache Default Web Page Over HTTP|400]]
 >In order to set up TLS encryption on my Apache web server, I must make some quick configurations.  I use the `a2enmod` command to enable the SSL module.
 >```bash
 >a2enmod ssl
@@ -149,11 +149,11 @@ A ModSecurity rule syntax starts with the label "SecRule" that informs the WAF o
 >systemctl restart apache2
 >systemctl status apache2
 >```
->![[../images/08/server_activity_apache_restart.png|Restarting Apache With SSL|600]]
+>![[../images/08/server_activity_apache_restart.png|Restarting Apache With SSL|500]]
 >With Apache configured with SSL and restarted, I open Firefox and navigate to the default web page using TLS via  https://localhost.  However, this time I am presented with a security warning related to the certificate.
->![[../images/08/server_activity_warning.png|SSL Self-Signed Certificate Warning|500]]
+>![[../images/08/server_activity_warning.png|SSL Self-Signed Certificate Warning|375]]
 >I receive this warning because browsers do not trust self-signed certificates by default, as they could have been created by anyone instead of a trusted CA.  While I could accept the risk and bypass this warning, it would be better to demonstrate how to get a browser to trust the certificate through importing my generated CA into Firefox.  I press the hamburger menu (three stack horizontal lines icon) in the upper right corner of the browser and select Settings.  While on the settings page, I search for the certificate and press the "View Certificates.." button which launches the Certificate Manager window.
->![[../images/08/server_activity_cert_settings.png|Searching For Certificate Settings|500]]
+>![[../images/08/server_activity_cert_settings.png|Searching For Certificate Settings|400]]
 >The Certificate Manager Authorities tab lists all of the trusted CAs that came preinstalled with Firefox.  To add my generated CA, I select the Authorities tab and press the Import button at the bottom of the Certificate Manager window to launch the file manager window.
 >![[../images/08/server_activity_cert_manager.png|Certificate Manager Authorities Tab|500]]
 >I navigate to Other Locations on the left navigation bar and select the "Computer" button.  Then I scroll down and select the `root-ca.crt` file that I created using `openssl`.  Adding this file instructs Firefox to trust any certificate generated by my CA.  By importing my CA, the browser warning message should not be presented the next time I visit https://localhost.
@@ -195,23 +195,28 @@ The participants of a threat model will vary by the project and organization tea
 
 The DFD consists of the elements *external entity* (rectangle), *process* (circle), *data store* (double sided rectangle), and *data flow* (directional arrows).  The following diagram shows each of these elements in which data flows from an entity towards a process.  A process could trigger another process or put information into a data store.  A process could also pull data from a data store and return it to another process or entity, and so on.  Each element would be labeled with the respective name of the item that will be used as reference points for discussions.  
 
-![[../images/08/dfd.png|Blank Data Flow Diagram Used in Threat Modeling|300]]
+![[../images/08/dfd.png|Blank Data Flow Diagram Used in Threat Modeling|400]]
 
 > [!tip] Tip - Data Flow Diagram Size
 > The level of detail and size of a DFD can become massive.  It is important for the initiator of the threat model to define the scope of the exercise and ensure that elements are not overly generalized or broken down into undue detail.  My rule of thumb for a threat model DFD is that it should comfortably fit onto one normal size computer screen and still be legible.  If you have to pan around to see parts of the DFD or squint your eyes and move close to the monitor, then the threat model/DFD scope is probably too wide and consideration should be taken to break it up into additional models.
 
 After all the elements are mapped onto a DFD, the threat modeling group analyzes each element for ways it could be attacked.  This can be conducted one element at a time to ensure thorough completion, or it can be performed ad hoc.  There are a few techniques or models that can be used that have been thoroughly documented and available through internet resources.  I would leave it to the reader to research other threat model methodologies in addition to the **STRIDE method** that I discuss here.  STRIDE, which stands for *spoofing*, *tampering*, *repudiation*, *information disclosure*, *denial of service*, and *privilege escalation* is used as a template to apply to elements.  Threat model participants evaluate each element against STRIDE to tease out how it is affected and what could be done to mitigate its risks.  Under this model's context, not every element would be subject to each component of STRIDE.  For example, it is unlikely that an external entity such as a user, could be *tampered*.  The following table suggests which element applies with each component of STRIDE.
 
-![[../images/08/stride2.png|STRIDE By DFD Element|600]]
+![[../images/08/stride2.png|STRIDE By DFD Element|750]]
 
 
 >[!activity] Activity 8.2 - Threat Model
 >Consider the following DFD for an authentication process of a basic web application and conduct a threat model using the STRIDE components as a guide.  I will give you the first one as an example: the risk of the user being spoofed by an attacker can be mitigated by requiring a password to prove the user's identity during login.  There are maybe another 25 risks given the number of elements and applicable STRIDE components.
 >
->![[../images/08/dfd_login.png|DFD For Web Authentication|350]]
+>![[../images/08/dfd_login.png|DFD For Web Authentication|400]]
 
 ### OWASP Top 10 Risks
-The *Open Web Application Security Project (OWASP)* is a nonprofit organization that supports the creation of web application security projects, tools, and standards.  One such project is the **OWASP Top 10** which lists the most common risks to web applications.[^1]  The list is updated every few years with new items being added, old items being removed, and existing items being reordered or updated.  At the time of this writing, the 2021 version is the current version that includes the following risks in order of frequency:
+The *Open Web Application Security Project (OWASP)* is a nonprofit organization that supports the creation of web application security projects, tools, and standards.  One such project is the **OWASP Top 10** which lists the most common risks to web applications.[^1]  The list is updated every few years with new items being added, old items being removed, and existing items being reordered or updated.  
+
+>[!info] Info - OWASP Application Security Verification Standard (ASVS)
+>Another awesome resource from OWASP is their ASVS project which offers a detailed security framework for assessing web applications. [^2]  It enumerates hundreds of standards organized by control objective and provides levels of maturity and *common weakness enumeration (CWE)* references.  Driven by community developers, the ASVS can be used as an audit tool to assess the security posture of a web application, its systems, and development processes.
+
+At the time of this writing, the 2021 version is the current version that includes the following risks in order of frequency:
 
 1. **Broken Access Control** - Unauthorized access to software and its data
 2. **Cryptographic Failures** - Exposes sensitive data
@@ -225,9 +230,6 @@ The *Open Web Application Security Project (OWASP)* is a nonprofit organization 
 10. **Server-Side Request Forgery** - Server sends URL requests to unexpected destinations
 
 This list is beneficial to developers and security professionals as it defines the risks modern web applications face.  It provides a risk model to teams when assessing their applications and known findings.  Most web application penetration test findings will reference or tie a finding back to the OWASP Top 10 list to support the rationale of the issue.  Developers should study these common risks and how they could be realized in their applications.  For instance, each of the items on the list comes with generalized examples and mitigations which serves as a basis for additional research.
-
->[!info] Info - OWASP Application Security Verification Standard (ASVS)
->Another awesome resource from OWASP is their ASVS project which offers a detailed security framework for assessing web applications. [^2]  It enumerates hundreds of standards organized by control objective and provides levels of maturity and *common weakness enumeration (CWE)* references.  Driven by community developers, the ASVS can be used as an audit tool to assess the security posture of a web application, its systems, and development processes.
 ### Software Composition Analysis (SCA)
 Software is often built using third party libraries which contain packages of code that provide some extended functionality.  These packages are abstractions of what would otherwise be a complex undertaking to code independently.  The package is centered around a specific task or activity and can be thought of as a building block used to streamline the development effort because a developer will not have to build all needed functionality from scratch.  Each popular language has a *library manager* that also serves as a *repository* of all packages, such as NodeJS's *node package manager (NPM)* and Python's *pip installs packages (PIP)*.  Developers can download any published package from the repository and then use its functions within their own project.  Similarly, just about anyone can create a new package and upload it to the repository for others to use.  Packages can also be referred to as a *dependency* to a project since the package is needed for the application to function.  
 
@@ -277,16 +279,16 @@ SAST tools vary in support for languages with some only supporting a specific de
 >The next step is to acquire the Snyk CLI which is free to use but requires me to authenticate to their web site.  Creating a new account is very easy but requires a GitHub account.  Because I already have a GitHub account, I use it to register and login to Snyk.  If you are following along with this activity and do not have a GitHub account, I recommend that you set one up now (both GitHub and Snyk are free to register and use).  Creating a GitHub account can be done by navigating to https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home and entering your email address, username, and password.
 >
 >With the GitHub account set up, I navigate to Snyk's login page https://app.snyk.io/login/ and press the GitHub button to login.
->![[../images/08/snyk_activity_snyk_login.png|Snyk Login Page|600]]
+>![[../images/08/snyk_activity_snyk_login.png|Snyk Login Page|500]]
 >After entering in my GitHub username, password, and authentication token sent to my email, I am presented with the Snyk web console.
->![[../images/08/snyk_activity_snyk_page.png|Logged In Snyk Home Page|600]]
+>![[../images/08/snyk_activity_snyk_page.png|Logged In Snyk Home Page|500]]
 >After I have logged into Snyk, I download the Snyk command line interface (CLI) tool from the terminal.  I make the tool executable and then move it into the binary folder so I can use it from any folder while in the terminal.
 >```bash
 >wget https://static.snyk.io/cli/latest/snyk-linux
 >chmod +x snyk-linux
 >sudo mv snyk-linux /usr/local/bin/snyk
 >```
->![[../images/08/snyk_activity_download.png|Installing Snyk in Kali VM|600]]
+>![[../images/08/snyk_activity_download.png|Installing Snyk in Kali VM|500]]
 >The Snyk CLI requires authentication before I can use it.  I have already logged into the Snyk website so that when I trigger the CLI tool authentication, I am presented with an authorization button.  If I were not logged into Snyk already, I would have to first login before hitting the authorize button.  I start the authentication sequence by first running the Snyk authentication command.
 >```bash
 >snyk auth
@@ -300,8 +302,8 @@ SAST tools vary in support for languages with some only supporting a specific de
 >```bash
 >snyk test https://github.com/appsecco/dvna
 >```
->![[../images/08/snyk_activity_sca_start.png|Beginning of SCA Scan Results|600]]
->![[../images/08/snyk_activity_sca_end.png|End of SCA Scan Results|600]]
+>![[../images/08/snyk_activity_sca_start.png|Beginning of SCA Scan Results|500]]
+>![[../images/08/snyk_activity_sca_end.png|End of SCA Scan Results|500]]
 >The scan downloads the `package.json` file, which contains all the packages built into DVNA, and scans each package version against the vulnerability database.  The SCA scan found 49 paths to vulnerable packages ranging from low to critical severities!  You may recall as part of the security vulnerability disclosure process that the maintainer of the code will release a security patch to cure the security vulnerability.  Therefore, most of these SCA vulnerabilities could likely be mitigated by updating the versions of the packages being used by DVNA.
 >
 >Next I run a SAST scan against DVNA's source code that was cloned locally.  I change the directory of my terminal to `dvna` and then run a Snyk code test.
@@ -309,8 +311,8 @@ SAST tools vary in support for languages with some only supporting a specific de
 >cd dvna
 >snyk code test
 >```
->![[../images/08/snyk_activity_sast_start.png|Beginning of Snyk SAST Scan Results|600]]
->![[../images/08/snyk_activity_sast_end.png|End of Snyk SAST Scan Results|600]]
+>![[../images/08/snyk_activity_sast_start.png|Beginning of Snyk SAST Scan Results|500]]
+>![[../images/08/snyk_activity_sast_end.png|End of Snyk SAST Scan Results|500]]
 >Another 37 vulnerabilities were found in the source code with five of them rated High.  Mitigations to these vulnerabilities are not as easy as SCA in which a package version usually has to be updated.  SAST finding remediation requires more knowledge of how the application functions, as the fix should not break the functionality of the application.  Therefore, each finding has to be manually triaged and repaired using techniques unique to the class of vulnerability.  In the next chapter we will fix the source code of a few web application vulnerabilities.
 
 ### Dynamic Application Security Testing (DAST)
@@ -351,17 +353,17 @@ This class of tool first scans the application mapping out its structure, such a
 >```
 >![[../images/08/dast_activity_dvna_status.png|Listing Running Docker Containers|600]]
 >Launching Firefox and navigating to localhost port 9090 greets me with a DVNA login page!
->![[../images/08/dast_activity_dvna_login.png|DVNA Login Page on Localhost Port 9090|600]]
+>![[../images/08/dast_activity_dvna_login.png|DVNA Login Page on Localhost Port 9090|500]]
 >With DVNA running, I am ready to launch the Dastardly DAST scan against it.  Dastardly is a limited free tool maintained by PortSwigger.  It scans for only a few types of vulnerabilities and cannot be configured to use credentials to login into the DVNA application.  There are other scanners that can be used to perform authenticated scans, such as OWASP's ZAP if you are interested in exploring DAST tooling further.  Before I set up and run the scanner, I need to know the IP address of the host using the IP command.  I see that it is 192.168.4.167 and that there is now a docker0 interface.  This Docker interface is a virtual interface used between the host (Kali) machine and the Docker containers.
 >```bash
 >ip a
 >```
->![[../images/08/dast_activity_ip.png|Kali IP Address on Ethernet Interface|600]]
+>![[../images/08/dast_activity_ip.png|Kali IP Address on Ethernet Interface|500]]
 >I will run Dastardly against the DVNA container using another Docker container.  The following command will download and run the Dastardly image from the public repository.  I instruct Docker to run as my current user and pass the present working directory as a shared folder to the running Dastardly container.  I feed the image the target URL using the host IP address on port 9090 where the DVNA application is reachable while specifying an output file that can be used to revisit the results of the scan.
 >```bash
 >docker run --user $(id -u) --rm -v $(pwd):/dastardly -e DASTARDLY_TARGET_URL=http://192.168.4.167:9090/ -e DASTARDLY_OUTPUT_FILE=/dastardly/dastardly-report.xml public.ecr.aws/portswigger/dastardly:latest
 >```
->![[../images/08/dast_activity_start_result.png|Running Dastardly As Container Against DVNA|600]]
+>![[../images/08/dast_activity_start_result.png|Running Dastardly As Container Against DVNA|500]]
 >![[../images/08/dast_activity_scan_end.png|Dastardly Output Vulnerable JavaScript Findings|600]]
 >The scanner starts by mapping the site, then tests for security vulnerabilities from its limited test set that includes reflected XSS and vulnerable JavaScript dependencies. [^4]   After a few minutes of running, the scan is complete.  It was able to detect a few vulnerable JavaScript dependencies!
 

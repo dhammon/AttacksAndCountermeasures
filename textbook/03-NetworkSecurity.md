@@ -1,14 +1,14 @@
 # Chapter 3 - Network Security
 ![](../images/03/globe_internet_connections.jpg)
 
-Technologies that connect computer systems into networks have increased the capabilities and complexities of software by several orders of magnitude.  They have given rise to the internet and an ever-growing range of network services and web applications.  Governments, organizations, and individuals all rely on network systems to conduct commerce, business, and communication.  The complexity of network systems increases the attack surface and security risks.  This chapter will cover basic networking concepts and lay the foundation for network security principles.  While it is assumed the reader knows some basic networking, I will review general networking technologies and concepts.  I will then introduce some of the technologies and practices used to secure networks.  Not all network security concepts could be covered in one chapter; however, the reader will become familiar with the basics of network security and simultaneously learn how to approach other network related technologies and systems.
-
 **Objectives**
 1. Refresh knowledge on computer networking topics. 
 2. Establish network security fundamental theory, threats, and approaches. 
 3. Conduct host and service discovery through scanning utilities.
 4. Analyze network packets using Wireshark.
 5. Crack the password of a wireless WEP network.
+
+Technologies that connect computer systems into networks have increased the capabilities and complexities of software by several orders of magnitude.  They have given rise to the internet and an ever-growing range of network services and web applications.  Governments, organizations, and individuals all rely on network systems to conduct commerce, business, and communication.  The complexity of network systems increases the attack surface and security risks.  This chapter will cover basic networking concepts and lay the foundation for network security principles.  While it is assumed the reader knows some basic networking, I will review general networking technologies and concepts.  I will then introduce some of the technologies and practices used to secure networks.  Not all network security concepts could be covered in one chapter; however, the reader will become familiar with the basics of network security and simultaneously learn how to approach other network related technologies and systems.
 ## Network Basics
 In the first section of this chapter, I will introduce common networking topics and technologies.  If you are comfortable with networking, this section may be a nice refresher.  However, I will not cover all networking concepts, nor will I go into any deep dives on a particular subject.  The goal of this section is to ensure the reader is equipped with the foundational knowledge needed before tackling network security concepts.
 ### Client/Server Model
@@ -180,9 +180,9 @@ Wireshark is a free tool that empowers users to capture and analyze packets on a
 >To start capturing packets, select the `eth0` network interface and then the "blue fin" icon in the upper left corner of the screen.
 >![[../images/03/wireshark_capture.png|Start Packet Capture|500]]
 >Almost immediately we begin seeing packet entries in the top primary pane.  We can stop the capture at any time by pressing the red square next to the capture button in the upper left corner.  The primary pane lists each captured packet in a table with the first column displaying the relative capture order, time, source IP or MAC, destination IP or MAC, the protocol and general packet info.  The bottom left pane displays a structured object of a selected packet, and the bottom right pane shows the hexadecimal format of the packet.
->![[../images/03/wireshark_packets.png|Packets Captured|500]]
+>![[../images/03/wireshark_packets.png|Packets Captured|700]]
 >I find that adding the source and destination ports as columns to the main pane is useful.  To alter the displayed columns, right-click the column header, select `Column Preferences` from the context menu.
->![[../images/03/wireshark_col_prefs.png|Wireshark Column Preferences|300]]
+>![[../images/03/wireshark_col_prefs.png|Wireshark Column Preferences|400]]
 > With the column preferences opened, push the "+" add button at the bottom of the window and double click `Number`.  Select Destination Port from the drop-down menu then double click the title of the added row and enter `DstPort`.  Repeat these steps and add another column for the Source Port.  Next, drag and drop the newly created columns next to their respective columns that hold the address space.  Your Preferences window should look like the one below once complete.  Press OK to complete the changes.
 > ![[../images/03/wireshark_add_col.png|Wireshark Add Columns|500]]
 > Observe that the main pane now shows the source and destination ports for each packet!  Next, I open the web browser within the VM and navigate to `http://google.com`.  Afterwards, I apply the `http` filter in Wireshark to only display HTTP packets that have been captured.
@@ -215,7 +215,7 @@ Troubleshooting network issues is a common task for many technology professional
 >To demonstrate that the Kali and Windows VM can connect with each other, I can use a basic connectivity test using the `ping` utility that will send a message over the ICMP protocol.  From the Kali VM, I run `ping` with a count (`-c`) of four packets targeting the Windows IP address.
 >![[../images/03/activity_util_kali_ping_fail.png|Failing to Ping Windows|600]]
 >The result is 100% packet loss indicating that Kali was not able to reach the Windows VM or that the Windows VM ignored the ping requests.  By default, Windows blocks incoming ICMP requests through its native host firewall.  To allow the Windows VM to accept ping requests and to respond to them, I must enable the respective firewall rules within the Windows VM.  I do this by launching the "Windows Defender Firewall with Advanced Security" application and selecting "Inbound Rules".  In the main pane with all the rules listed, I find the "File and Printer Sharing (Echo Request - ICMPv4-In)" rules and activate each of them by right-clicking and selecting "Enable".
->![[../images/03/exercise_utilities_firewall.png|Windows Firewall ICMP Rules]]
+>![[../images/03/exercise_utilities_firewall.png|Windows Firewall ICMP Rules|600]]
 >After the rules are enabled, I jump back to the Kali VM and rerun the `ping` command that failed.  This time all pings receive responses!
 >![[../images/03/activity_util_kali_ping_success.png|Success Windows Ping From Kali|600]]
 >Likewise, I can `ping` the Kali VM from the Windows VM using a simpler command without the count option since the Windows version defaults to four packets.
@@ -285,9 +285,9 @@ Once connected to a device's opened port, additional traffic can be exchanged th
 > In this activity I will configure both Kali and Windows VMs with the `Host-only Adapter` with the name `VirtualBox Host-Only Ethernet Adapter` network setting.  Before starting them, I will ensure they are on the same network and are disconnected from the internet.  The Windows VM's host firewall will be disabled which will expose all of its open ports to the network which will mimic a server on the network.  Once the machines and network are prepared, I will conduct a ping sweep from the Kali machine to discover the IP address of the Windows VM.  With this IP address in hand, I will run various host specific scans that identify more information about the Windows target.
 > 
 > First, I start the Windows VM with the `Host-only Adapter` network setting.  Once started and logged in, I launch `Windows Defender Firewall with Advanced Security` from the search bar.
-> ![[../images/03/nmap_win_firewall_open.png|Launching Windows Defender Firewall|600]]
+> ![[../images/03/nmap_win_firewall_open.png|Launching Windows Defender Firewall|500]]
 > With the Windows Defender Firewall with Advanced Security app launched, I press the "Windows Defender Firewall Properties" that is at the bottom of the Overview section in the main pane which launches the properties of the firewall.
-> ![[../images/03/nmap_win_firewall_properties.png|Windows Defender Firewall Status|600]]
+> ![[../images/03/nmap_win_firewall_properties.png|Windows Defender Firewall Status|500]]
 > The Windows host firewall has three sets of configurations, or *profiles*, depending on the type of network the machine resides.  The Domain profile is for Windows networks managed by a Domain Controller, the Private profile for trusted networks, and the Public profile for untrusted networks.  Each of the firewall profile configurations can be viewed using the respective tabs in the properties window.  As I want to demonstrate open network ports in this activity, I disable the firewall for each profile by selecting the "Firewall state" drop-down and choosing "Off" as shown in the following screenshot.  Then I'll press Ok to apply the settings.
 > ![[../images/03/nmap_profile_off.png|Firewall Profile Setting Off|400]]
 > With the firewall disabled, I launch a command prompt by entering `cmd` in the search bar.  I then identify the Windows VM IP address using `ipconfig` which is found to be 192.168.56.253.  We can derive that the CIDR range for the subnet is 192.168.56.0/24 from the Subnet Mask result of this command's output.

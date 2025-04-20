@@ -1,14 +1,13 @@
 # Chapter 12 - Incident Response
 ![](soc.jpg)
 
-Information and cyber security can be summarized as the preventing, detecting, and responding to vulnerabilities and threats.  With the exception of the last chapter, much of this textbook has focused on the vulnerability side of infosec, whereas vulnerabilities in their most general form provide the opportunity for threats to succeed.  This chapter will focus on how organizations prepare, identify and react to threats.  It is the second part of the detection and response section that expands on the previous Forensics and Malware Analysis chapter.  Readers will learn about the systems used to aggregate data and how threats are found within networks and systems.  We will also cover administrative efforts of organizations that plan for security incidents.
-
 **Objectives**
 1. Understand the role and procedures of a security operations center (SOC).
 2. Install and configure a security information and event manager (SIEM) to detect threats across an environment using Splunk.
 3. Learn the major components and processes of an incident response plan.
 4. Understand the role of Threat Hunting and how it identifies security incidents in a network.
 
+Information and cyber security can be summarized as the preventing, detecting, and responding to vulnerabilities and threats.  With the exception of the last chapter, much of this textbook has focused on the vulnerability side of infosec, whereas vulnerabilities in their most general form provide the opportunity for threats to succeed.  This chapter will focus on how organizations prepare, identify and react to threats.  It is the second part of the detection and response section that expands on the previous Forensics and Malware Analysis chapter.  Readers will learn about the systems used to aggregate data and how threats are found within networks and systems.  We will also cover administrative efforts of organizations that plan for security incidents.
 ## Security Information and Event Manager (SIEM)
 Most medium to large organizations will invest in a system that aggregates logs from systems in their network.  A **security information and event management (SIEM)** solution enable analysts to search and filter system logs to identify events that occurred.  For instance, Windows Desktop logs fed into a SIEM will include logon events where an analyst can quickly and remotely identify who attempted logons on that system.  Using these log events, the SIEM is also capable of using saved advanced queries that can be configured to notify analysts when a pattern of events is detected.  Expanding on the previous example, an alert can be established within the SIEM that notifies analysts when a device has 5 consecutive failed logon attempts within a 1-minute window.  Such an alert could signal a brute force attack against a device or user account.  As you might have gathered, SIEMs are powerful and complex systems that enrich security teams *threat monitoring* within an environment.  
 
@@ -62,28 +61,28 @@ Data sent to the database is stored and used by the SIEM's web application.  Mos
 > ```bash
 > sudo /opt/splunk/bin/splunk start
 > ```
-> ![[../images/12/splunk_activity_start.png|Startng Splunk|600]]
-> ![[../images/12/splunk_activity_config.png|Accepting License and Creating User|600]]
+> ![[../images/12/splunk_activity_start.png|Startng Splunk|500]]
+> ![[../images/12/splunk_activity_config.png|Accepting License and Creating User|500]]
 > The installation completes in a few seconds and then returns me to the command prompt with a message to access Splunk over http://154-ubuntu:8000, the name of my virtual machine.
-> ![[../images/12/splunk_activity_install_complete.png|Splunk Installation Complete|600]]
+> ![[../images/12/splunk_activity_install_complete.png|Splunk Installation Complete|500]]
 > I then open the browser in my VM and navigate to http://154-ubuntu:8000, although I could also have used http://127.0.0.1:8000.  I'm presented with a login page where I enter my username and password I set during the installation of the software.
-> ![[../images/12/splunk_activity_login.png|Local Splunk Instance Login Page|600]]
+> ![[../images/12/splunk_activity_login.png|Local Splunk Instance Login Page|400]]
 > Splunk isn't very useful without data, so the next step is to populate the system with various data sources.  An organization would configure systems with agents and connections to continuously feed data into Splunk.  Because this is just a demonstration, I will be using a prepared test data set published on Splunk's GitHub page.  I navigate to https://github.com/splunk/botsv3 and download the BOTSV3 Dataset which is a curated set of logs used in Splunk's Boss of the SOC capture the flag challenge.
-> ![[../images/12/splunk_activity_bots_download.png|BOTSV3 Download Page|600]]
+> ![[../images/12/splunk_activity_bots_download.png|BOTSV3 Download Page|500]]
 > After the download completes, which takes a few minutes, I move the `.tgz` file from the downloads folder into the `/opt/splunk/etc/apps/` directory.  Then I unzip the download using gunzip and unarchive the unzipped file using `tar`.
 > ```bash
 > sudo mv ~/Downloads/botsv3_data_set.tgz /opt/splunk/etc/apps/
 > sudo gunzip /opt/splunk/etc/apps/botsv3_data_set.tgz
 > sudo tar -xvf /opt/splunk/etc/apps/botsv3_data_set.tar -C /opt/splunk/etc/apps/
 > ```
-> ![[../images/12/splunk_activity_extract_bots.png|Extracting BOTSV3 Dataset Into Splunk|600]]
+> ![[../images/12/splunk_activity_extract_bots.png|Extracting BOTSV3 Dataset Into Splunk|500]]
 > A restart of Splunk is required for the dataset to be recognized in the console.
 > ```bash
 > sudo /opt/splunk/bin/splunk restart
 > ```
-> ![[../images/12/splunk_activity_restart.png|Restarting Splunk|600]]
+> ![[../images/12/splunk_activity_restart.png|Restarting Splunk|500]]
 > Once restarted, I navigate back to the app (http://154-ubuntu:8000), press the Apps dropdown on the top navigation bar and select "Search & Reporting".
-> ![[../images/12/splunk_activity_search_view.png|Splunk Search View|400]]
+> ![[../images/12/splunk_activity_search_view.png|Splunk Search View|350]]
 > 
 > Afterwards, I enter the query/SPL `index=botsv3` into the search bar and change the time scope to "All Time" since this dataset is on the older side.  Millions of events are eventually loaded after a few minutes!
 > ![[../images/12/splunk_activity_init_search.png|Intial SPL Search Over All Time|600]]
@@ -105,26 +104,21 @@ There are also open-source and free SIEM solutions available that require on pre
 Most SIEMs offer a range of capabilities that are fairly consistent regardless of the solution selected.  But you must ensure in advance that the solution has all the features you expect before purchasing it.  Common features include the ability to collect large amounts of data and query it efficiently.  Saving queries, which can then be used as the logic for alerts and notifications increases the benefits of a SIEM.  Ideally, these alerts can be marked with risk priority or severity ratings that will organize analyst workloads by focusing on the most important events first.  Many modern SIEM solutions offer some type of scripting and built-in or custom automations to respond to incidents called *security orchestration, automation, and response (SOAR)*.  Usually SOAR modules are written in Python, or some other scripting language, which performs some task.  For example, a user account compromise incident requires that the user's account be disabled and active sessions terminated - having a button next to the incident that performs these tasks on Active Directory can save crucial time.  
 
 >[!activity] Activity 12.2 - Splunk Investigation
->Once a SIEM is up and running, with data being regularly imported, SOC analysts and incident responders use the tool to identify and investigate system breaches.  In the last activity, I demonstrated the installation and ingestion of the BOTSV3 data set.  In this activity, I will continue where I left off and illustrate a simple investigation and how to use SPL to query datasets.
->
-> With all 2 million events matched in the botsv3 index, I scroll down to the Fields navigation on the left pane just below the timeline.  Splunk will index every record by field and summarize each field's count statistic while providing a quick link to filter just those events.  I select "host" which lists all the hosts on the network and chose the "matar" option to filter only the events related to this host.
-> ![[../images/12/splunk_activity_host_field.png|Host Field Navigation|600]]
+>Once a SIEM is up and running, with data being regularly imported, SOC analysts and incident responders use the tool to identify and investigate system breaches.  In the last activity, I demonstrated the installation and ingestion of the BOTSV3 data set.  In this activity, I will continue where I left off and illustrate a simple investigation and how to use SPL to query datasets. With all 2 million events matched in the botsv3 index, I scroll down to the Fields navigation on the left pane just below the timeline.  Splunk will index every record by field and summarize each field's count statistic while providing a quick link to filter just those events.  I select "host" which lists all the hosts on the network and chose the "matar" option to filter only the events related to this host.
+> ![[../images/12/splunk_activity_host_field.png|Host Field Navigation|550]]
 > Once selected, I observe that the search field has been updated with a new SPL `host=matar`.  SPL is updated using the GUI; however, a much richer experience is to write your own SPL to include operators and logic to filter and derive information from the available data.  I append `| stats count by source` to the SPL and hit enter.  This query pipes all filtered matar results to the SPL command stats where all sources are counted and displayed in the Statistics tab in the results section.
 > ```SPL
 > index=botsv3 host=matar | stats count by source
 > ```
 > ![[../images/12/splunk_activity_stats.png|Using Pipes and Commands in SPL|600]]
 > This view helps me understand the types and volume of records related to the host.  Scrolling through the stats summaries, I find events for `stream:smtp`.  SMTP, a protocol used for email, can be interesting so I select the entry and press View events to update the SPL and show all SMTP events on the host.
-> ![[../images/12/splunk_activity_smtp_filter.png|SMTP Search|400]]
+> ![[../images/12/splunk_activity_smtp_filter.png|SMTP Search|300]]
 > The events pane is populated with SMTP events for the matar host.  Looking at the first record, I observe an odd subject line of a sent email "Fw: All your datas belong to us".
-> ![[../images/12/splunk_activity_email_1.png|Email Forward Discovery|600]]
+> ![[../images/12/splunk_activity_email_1.png|Email Forward Discovery|500]]
 > Perhaps this user of the matar host is a victim of ransomware and this is a ransom note being forwarded.  I am curious if any other emails have a similar subject line.  The act of finding data and searching elsewhere for similar artefacts is called *pivoting*.  While still using the botsv3 index, I query `subject:"All your datas*"`.  The star symbol is a wildcard, which means any other characters.  
-> ![[../images/12/splunk_activity_subject_search.png|Subject Line Pivot Search|600]]
+> ![[../images/12/splunk_activity_subject_search.png|Subject Line Pivot Search|500]]
 > Looks like there are two hits for this subject line with the second event being the original email with a src_ip address of 104.47.34.50 - perhaps this is the attacker's IP!
-> ![[../images/12/splunk_activity_srcip.png|Attacker IP Address Identified|500]]
-> 
-> 
-> 
+> ![[../images/12/splunk_activity_srcip.png|Attacker IP Address Identified|400]]
 
 SIEMs usually have reporting and dashboard features powered by the query system.  A dashboard is useful to analysts and their management as it enables them to focus their attention on the types of risks that matter most.  Deriving reports from the SIEM is typically important to SOC managers to identify security and performance trends of the operation.  They can be used to justify the investment in the SIEM by clearly describing the number of malicious events detected, for example.
 
@@ -139,22 +133,22 @@ SIEMs usually have reporting and dashboard features powered by the query system.
 >I won't want to retype this SPL each time I need the data.  Fortunately, Splunk has a Save feature available above the SPL field bar.  Another feature is the ability to turn a query result into a report also using the Save feature.  Pressing the Save As dropdown reveals the Report option, which I select and Title the report "Top 10 Hosts" with the Time Range Picker set to Yes before hitting Save.
 >![[../images/12/splunk_activity_report.png|Creating a Report From SPL|450]]
 >After hitting Save, I am presented with an option to View the report.  Pressing View opens the report page with my SPL data.  Anytime I want to get the latest top 10 hosts, I only have to open up this report using the Reports link in the top header.  Premium editions of Splunk can also email reports on a schedule, which will be outside the scope of this activity.
->![[../images/12/splunk_activity_report_view.png|Viewing Splunk Report|650]]
+>![[../images/12/splunk_activity_report_view.png|Viewing Splunk Report|600]]
 >It is fairly common to create and deliver reports to stakeholders using Splunk.  Another common feature is the use of visualization gadgets and dashboards.  From a SOC analyst's point of view, having a quick reference to identify a security problem in the network promptly is highly desirable.  I can craft an SPL that will identify failed login attempts on Windows systems that could be an indicator of a brute force attack.  Windows event 4625 is the standard event for failed logins which will be a key source of data for my query.
 >```SPL
 >index=botsv3 source=* EventCode=4625 | stats count as cnt
 >```
->![[../images/12/splunk_activity_failed_login.png|Failed Login SPL|450]]
+>![[../images/12/splunk_activity_failed_login.png|Failed Login SPL|350]]
 >The SPL yields a count of 5 failed logins presented in the Statistics tab.  The result of a query can be used in a visualization that can display the data in a more meaningful way.  For example, I can create a visualization that will help gauge if the value is low, normal, or concerning.  Clicking the Visualization tab, I select the radial gauge type.
->![[../images/12/splunk_activity_visualization.png|Visualization Radial Gauge Selection|350]]
+>![[../images/12/splunk_activity_visualization.png|Visualization Radial Gauge Selection|300]]
 >With the radial gauge selected, I can format it to distinguish low, moderate, and concerning levels of failed logins.  I choose the Format tab, Color Ranges from the left menu, and then the Manual subtab to enter ranges zero to five as green, five to ten as yellow, and ten to twenty as red.
 >![[../images/12/splunk_activity_radial_settings.png|Radial Setting Configuration|400]]
->This gauge would look great in a dashboard that I can visit anytime I want to quickly reference the security standing of logins on the network.  A dashboard is meant to be regularly monitored and could even be used as a constant display in an office like a SOC for everyone to quickly view.  To get this gauge into a dashboard, I choose the Save As dropdown and select New Dashboard.
->![[../images/12/splunk_activity_dashboard_create.png|Saving Gauge Into New Dashboard|600]]
+>This gauge would look great in a dashboard that can quickly reference the security standing of logins on the network.  A dashboard is meant to be regularly monitored and could even be used as a constant display in an office like a SOC for everyone to quickly view.  I choose the Save As dropdown and select New Dashboard.
+>![[../images/12/splunk_activity_dashboard_create.png|Saving Gauge Into New Dashboard|500]]
 >Pressing New Dashboard creates a popup window to configure the new dashboard's initial settings.  I enter "Monitoring" for the Dashboard Title and choose "Classic Dashboard" before pressing Save to Dashboard and then View Dashboard.
->![[../images/12/splunk_activity_config_dash.png|Initial Dashboard Settings|400]]
+>![[../images/12/splunk_activity_config_dash.png|Initial Dashboard Settings|300]]
 >The initial dashboard display is off to a great start, but it needs more context using the title and sub headers.  I press the Edit button in the upper right corner and name the section "Brute Force" and the widget "Failed Windows Logons", then hit Save.  The final dashboard looks much clearer!
->![[../images/12/splunk_activity_final_dash.png|Final Dashboard|650]]
+>![[../images/12/splunk_activity_final_dash.png|Final Dashboard|550]]
 >I can add new visualizations, sections and change the format of the dashboard to meet my security monitoring needs.  Using the Dashboards tab in the top menu will let me navigate back to any of my dashboards at will.
 ## Threat Hunting
 So far, we have explored how a SOC analyst would use a SIEM to alert and investigate potential security incidents based off feeds of system events.  The SOC analyst reacts to detections by responding to alerts in an effort to ensure the security of networks and systems.  However, another approach to security, while leveraging the power of the SIEM, is **threat hunting** that proactively searches for potential cyber threats.  The role of a threat hunter, who typically works in the SOC and uses the SIEM, can be a dedicated individual, team, or a shared role.  Many SOCs rotate personnel between roles to keep team members engaged and challenged.

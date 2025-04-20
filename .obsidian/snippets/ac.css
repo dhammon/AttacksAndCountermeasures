@@ -83,8 +83,9 @@ p.toc-entry {
 
 .toc-dots {
   flex: 1;
-  border-bottom: 1px dotted #888;
+  border-bottom: 1px solid #888;
   margin: 0 0.5em;
+  padding-top: 12px;
 }
 
 .toc-page {

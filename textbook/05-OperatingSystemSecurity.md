@@ -1,13 +1,13 @@
 # Chapter 5 - Operating System Security
 ![](../images/05/windows_linux.jpg)
 
-Modern operating systems (OS) have built-in security measures to ensure that stored and processed information is secure for authorized users.  Administrators and object owners can determine who and what level of access accounts have on the device.  Operating systems also have features which impact security and are worthy of consideration.  These features can be abused and enable an attacker to meet their impact objectives.  Learning how these features work will support the next chapter's focus as we explore persistence and privilege escalation techniques.
-
 **Objectives**
 1. Gain an understanding of Linux file, user, service, and logging systems.
 2. Conduct system hardening and benchmarking activities using `Inspec`.
 3. Learn the file, user, service, and logging systems in Windows.
 4. Perform Windows Defender antivirus bypass.
+
+Modern operating systems (OS) have built-in security measures to ensure that stored and processed information is secure for authorized users.  Administrators and object owners can determine who and what level of access accounts have on the device.  Operating systems also have features which impact security and are worthy of consideration.  These features can be abused and enable an attacker to meet their impact objectives.  Learning how these features work will support the next chapter's focus as we explore persistence and privilege escalation techniques.
 ## Linux
 In this section, we will study the basic Linux file, authorization, user, and password systems available to administrators.  It will also explore how the operating system manages running applications, task scheduling, and logging systems which hold significant security value.
 ### File System
@@ -24,9 +24,6 @@ chown daniel:dev example.txt
 ```
 ### Authorization System
 In the previous section, we explored the ext4 file structure and suggested every file has an owner and group.  Expanding on this basis, every file can have *read (r)*, *write (w)*, and *execute (x)* permissions expressed for the owner, group, and everything else known as *others*.  Owners are the creator or the assigned account of the file.  Any account on the Linux device can be assigned to one or more groups and a group can be assigned permissions to files.  The last set is the others category, which applies to any other account on the system that is not the owner or the assigned group.
-
->[!note] Note - Self Group
->Each time an account or user is created, a corresponding default group using the account name is also created.  If an account `daniel` is created, a group named `daniel` is also created and the user is automatically assigned to their like-named group.
 
 The **permission set** for any file can be displayed using the `ls -l` command.  The first 10 characters block is dedicated to identifying permissions for each object.  The first character in the block is used to identify if the object is a directory and has the values `d` for directory or `-` indicating a file.  The next three characters of the block identify permissions for the user.  The second set of three characters are used to define the permissions for the assigned group.  The last set of three characters evidence the permissions for the others category.  The third and fourth column in the list command output shows the owner and the object's group.  The figure below illustrates the owner `daniel` and the group `dev` on the `example.txt` file.  It shows that `daniel` has read/write, `dev` has read, and everyone else (others) have read permission.
 
@@ -63,6 +60,9 @@ The first `chmod` command sets the user and group of `example.txt` to read, writ
 > Setting read, write, and execute for all users and groups on a system is considered an insecure practice.  Many Linux systems will highlight the file and change the font color to red to warn of the setting while listing directories.
 
 Imagine a scenario in which we want to grant others the ability to execute a file as the file's owner.  For this case, there is a special permission called the *setuid bit* that can allow an executable file to be run as the file's owner.  The *setgid bit* can also be used to allow a file to be run as the assigned group.  In the case of the file, the object is modified using `chmod` and the **set user ID (SUID)** is configured with the symbolic notation execute bit `s` for the user permission set.  Such a file might have a permission set like `rws` instead of `rwx`.  Similarly, the **set group ID (SGID)** is configured in a similar fashion, but an `s` is used on the group portion of the permission set.  In either case, this allows the executable file to be as the owner or group by anyone on the system without giving them ownership of the object.  SUIDs and SGIDs files can be helpful to Linux administrators when elevated access is needed for a specific executable.  We will explore how SUID/SGIDs can be abused to achieve privilege escalation in the next chapter.
+
+>[!note] Note - Self Group
+>Each time an account or user is created, a corresponding default group using the account name is also created.  If an account `daniel` is created, a group named `daniel` is also created and the user is automatically assigned to their like-named group.
 ### User System
 Linux users are created and modified by a system administrator using the `useradd` and `usermod` commands.  Users are usually assigned a folder of the same name under the `/home` directory where they are the default owners.  As mentioned earlier, they are also assigned into a group of the same username, but they can also be added to other groups.  You might recall that in activities from earlier chapters we demonstrated adding a user to the `sudo` group using the `usermod` command.  Users have many special features within the Linux operating system.
 
@@ -135,19 +135,19 @@ Anytime an executable or command is run on a Linux system, at least one new proc
 > ```bash
 > ps auxwf
 > ```
-> ![[../images/05/linux_activity_proc_ps.png|Running Process Tree]]
+> ![[../images/05/linux_activity_proc_ps.png|Running Process Tree|500]]
 > The `ps` command displays my running `watch` command with a PID 4610.  The command shows that the process is a child process of a `bash` command since it is running in a terminal.  I could stop the running `watch` command within its window using `CTRL+C` but I can also end the process with the following `kill` command.
 > ```bash
 > kill -9 4610
 > ```
-> ![[../images/05/linux_activity_proc_kill.png|Kill Running Process|600]]
+> ![[../images/05/linux_activity_proc_kill.png|Kill Running Process|500]]
 > Once the `kill` command completes, the terminal where the watch command was running returns to bash with a "Killed" message.
-> ![[../images/05/linux_activity_proc_killed.png|Killed Process Result|600]]
+> ![[../images/05/linux_activity_proc_killed.png|Killed Process Result|500]]
 > Another useful tool is the `top` command which will display all running processes.
 > ```bash
 > top
 > ```
-> ![[../images/05/linux_activity_proc_top.png|Running Top Command|600]]
+> ![[../images/05/linux_activity_proc_top.png|Running Top Command|500]]
 > The `top` command refreshes every few seconds and describes the system resources in use as well as an ordered list of processes.  This list can be sorted and rearranged but is outside the scope of this activity.
 
 Processes and their memory space have several security implications.  The data loaded into process memory may be manipulated to cause buffer overflows that can cause arbitrary code execution.  Processes can also have their memory space hollowed out to hide malicious code that masquerades as a normal process making malware more challenging to identify.
@@ -169,17 +169,17 @@ Processes, or applications that continuously run in the background of the operat
 >```bash
 >systemctl --type=service
 >```
->![[../images/05/linux_activity_systemctl.png|Systemctl List of Services]]
+>![[../images/05/linux_activity_systemctl.png|Systemctl List of Services|650]]
 >I see that our Avahi is one of the services listed here.  It shows a status of loaded, active, and running.  I can explore the service status and logs using the `systemctl` command as well.
 >```bash
 >systemctl status avahi-daemon
 >```
->![[../images/05/linux_activity_avahi_service_status.png|Systemctl Status of Avahi Service|600]]
+>![[../images/05/linux_activity_avahi_service_status.png|Systemctl Status of Avahi Service|450]]
 >Of note is the loaded path of the service.  This path references the file of the Avahi service which can be examined further using the `cat` command.  I pipe the output of the `cat` command to `grep` and filter out any comments in the file for sake of brevity.
 >```bash
 >cat /lib/systemd/system/avahi-daemon.service | grep -v '#'
 >```
->![[../images/05/linux_activity_avahi_service_file.png|Avahi Service File|600]]
+>![[../images/05/linux_activity_avahi_service_file.png|Avahi Service File|450]]
 >This file represents the configuration of the service.  All that is needed to create, or modify, a service is a file like this one in the `systemd` directory.  Of particular interest is the `ExecStart` value which shows the path to a system binary called `avahi-daemon`.  This binary program is running in the background for the service.
 
 Should an attacker gain direct or indirect control of the service through the program in its executable path, they would hijack the service.  Some services require elevated permissions to run effectively and if vulnerable to hijacking, could allow an attacker to escalate their privileges.  Another abuse is to use the native system to establish persistence, which will be covered in the next chapter.  Such exploits could be feasible if the executable is modifiable by the attacker's account.  The attack can also be accomplished indirectly should the service executable use other executables that are in the attacker's control.  One last common misconfiguration is to grant service file modification permissions to unneeded parties which could allow abuse that hijacks the service.
@@ -244,19 +244,19 @@ The following list, in no particular order, details common hardening activities:
 >  ```bash
 >  wget https://packages.chef.io/files/stable/inspec/4.18.114/ubuntu/20.04/inspec_4.18.114-1_amd64.deb
 >  ```
->  ![[../images/05/linux_activity_inspec_download.png|Download Inspec DEB File|600]]
+>  ![[../images/05/linux_activity_inspec_download.png|Download Inspec DEB File|500]]
 >  Once downloaded, I initiate the installation using the `dpkg` command.
 >  ```bash
 >  sudo dpkg -i inspec_4.18.114-1_amd64.deb
 >  ```
->  ![[../images/05/linux_activity_inspec_install.png|Installing Inspec|600]]
+>  ![[../images/05/linux_activity_inspec_install.png|Installing Inspec|450]]
 >  After a few seconds, the software is installed and is ready to be used.  `Inspec` must be fed a compliance ruleset which is used to audit the security of the system.  I will use Dev-sec's linux-baseline ruleset in this demonstration.  The following command executes the linux-baseline while accepting the standard license terms from Chef.
 >  ```bash
 >  inspec exec https://github.com/dev-sec/linux-baseline --chef-license accept
 >  ```
->  ![[../images/05/linux_activity_inspec_scan.png|Inspec Linux-Baseline Scan Result|600]]
+>  ![[../images/05/linux_activity_inspec_scan.png|Inspec Linux-Baseline Scan Result|450]]
 >  After about a minute of scanning, `inspec` returns a list of results.  As shown in the screenshot above, green rules with a checkmark indicate a rule that has passed with the secure respective setting.  The rules are collected into groups, called controls, with the naming syntax `os-##`.  The first rule in control os-02 reads "File /etc/shadow is expected to exist" suggesting that the shadow file is expected on the system.  If the shadow file did not exist, we could expect this particular rule to fail, which would then display in red with an "x" instead of a checkmark.  Scrolling down the report, I can observe some failed rules as shown below.
->  ![[../images/05/linux_activity_inspec_fail.png|Inspec Failed Rules|600]]
+>  ![[../images/05/linux_activity_inspec_fail.png|Inspec Failed Rules|450]]
 >  The section os-05 has some passed and failed rules.  When a rule fails, `inspec` informs us why it failed and offers the setting needed to pass the rule.  The first failed rule `login.defs UMASK is expected to include "027"` fails with the comment `expected "022" to include "027"`.  Do not worry if you do not know what `login.defs` is or what the UMASK setting is used for, that is the purpose of Google!  System administrators would take these rule violations and research how to correct them before applying the changes needed.  Once they have been applied, `inspec` should be re-run to confirm the solution applied worked.  Many times, a solution does not fix the issue and additional efforts are needed, so re-testing is an important step in any vulnerability or misconfiguration management system.
 >  
 >  The very end of the report provides us with summary statistics of the number of rule run, skipped, passed, and failed.  These summary statistics are beneficial as they can be compared between systems to identify which systems have the most violations or security risk.  Administrators can then concentrate their efforts on those systems with the most risk having the biggest positive impact on security.
@@ -267,7 +267,7 @@ This section is organized in a similar fashion as the Linux section.  It covers 
 Microsoft has created several file systems over the years supported by various Windows versions.  The most common and current system is the **new technology file system (NTFS)**, which is used on the Windows virtual machine throughout this textbook.  NTFS supports several features and security enhancements over previous file systems, like increased capacity as well as discretionary access control.  The system supports volumes of up to 16 exabytes and usually requires around 400 megabytes of space to track the drive's capacity and files on it.
 
 Windows operating systems using NTFS create several folders to store system and user files.  During installation of Windows, a volume is created and mounted with a drive letter under which standard folders are created, and files are kept.  The image below outlines some of the more interesting folders from a security perspective, though many additional folders and subfolders are not included here.
-![[../images/05/win_folders.png|Common Windows Folders|500]]
+![[../images/05/win_folders.png|Common Windows Folders|450]]
 
 Starting after the root directory and on the left side of the diagram is the `Program Files` directory which contains 32 and 64-bit programs available to the operating system and users.  Similarly, the next folder, `Program Files (x86)` keeps 32-bit programs only.  The separation of folders reflects a long-standing history of Microsoft supporting backwards capabilities.  Administrators and security professionals are often interested in the applications that are installed on systems, as every application could expose additional risk to the device; as they could contain vulnerabilities and misconfigurations.  The `ProgramData` folder is hidden from view by default within the File Explorer program.  It includes data and files used by the applications installed on the operating system.
 
@@ -342,13 +342,13 @@ LM, NTLM, and Kerberos all provide the ability for networked Windows systems to 
 > ```
 > ![[../images/05/win_activity_sam_dump.png|Dumping SAM and SYSTEM to C Drive|600]]
 > Because I have bi-directional drag and drop setup between my host and the Windows VM, I copy the `sam` and `system` files from the Windows VM to my host computer.
-> ![[../images/05/win_activity_sam_copy.png|Copy SAM/SYSTEM Files to Host|500]]
+> ![[../images/05/win_activity_sam_copy.png|Copy SAM/SYSTEM Files to Host|450]]
 > Next, I start the Kali VM and drag and drop the `sam` and `system` files from my host computer to the Kali VM desktop.  There are many ways in which an attacker can exfiltrate data.  I could have accomplished the file transfer by creating an SMB or FTP service, uploaded the file to a cloud service, encoded the files and copy and pasted them over, or one of several other ways.
-> ![[../images/05/win_activity_sam_kali_drop.png|Copy SAM/SYSTEM Onto Kali Desktop|400]]With the `sam` and `system` files in the Kali system, I extract the NTLM hashed passwords using the `impacket` secret dump command.  I open a terminal from the desktop where the files are stored and point the `-sam` and `-system` options of `impacket-secretsdump` to the files.  I also specify that this is a capture on the local system but `impacket` can also be used remotely.
+> ![[../images/05/win_activity_sam_kali_drop.png|Copy SAM/SYSTEM Onto Kali Desktop|350]]With the `sam` and `system` files in the Kali system, I extract the NTLM hashed passwords using the `impacket` secret dump command.  I open a terminal from the desktop where the files are stored and point the `-sam` and `-system` options of `impacket-secretsdump` to the files.  I also specify that this is a capture on the local system but `impacket` can also be used remotely.
 > ```bash
 > impacket-secretsdump -sam sam -system system LOCAL
 > ```
-> ![[../images/05/win_activity_sam_impacket.png|Impacket Secrets Dump Output]]
+> ![[../images/05/win_activity_sam_impacket.png|Impacket Secrets Dump Output|675]]
 > The dump is successful and outputs a list of principals, their user id, LM, and NTLM hashes (in that order).  I see our target `tester` user is the last entry with the user id of 1001 and the NTLM hash value `58a478135a93ac3bf058a5ea0e8fdb71`.  I copy this value and paste it into a `hash.txt` file that will be used as an input for the `hashcat` tool.
 > ```bash
 > echo "58a478135a93ac3bf058a5ea0e8fdb71" > hash.txt
@@ -360,7 +360,7 @@ LM, NTLM, and Kerberos all provide the ability for networked Windows systems to 
 > ```
 > ![[../images/05/win_activity_sam_hashcat_start.png|Starting Hashcat to Crack NTLM Hash|600]]
 > `Hashcat` starts but will take a few moments to crack the password.  Once completed, the tool displays the cracked password!
-> ![[../images/05/win_activity_sam_cracked.png|Cracked NTLM Hash with Hashcat|600]]
+> ![[../images/05/win_activity_sam_cracked.png|Cracked NTLM Hash with Hashcat|500]]
 
 ### Processes
 Like Linux, when an executable is run in Windows a user process is created and assigned a PID.  These PIDs can be nested into a tree-like structure and can be analyzed through the GUI or command line.
@@ -454,9 +454,7 @@ However, the ability to bypass these early anti-malware solutions required only 
 Most anti-malware and *endpoint detection and response (EDR)* solutions hook into the memory space of every process that is started on the device.  This allows the solution to monitor process activities and report back to the solution for handling.  If the hook reports malicious patterns, the solution kills the running process ending the malware before it has had a chance to cause impact.  However, when a user launches an application, the executable code is put into the *userland* memory space along with the anti-malware hook.  The userland memory space is in the complete control of the user that started the process - allowing them, or the malware, to read and write to that memory space.  With this background, malware can unhook the anti-malware solution from the memory space it is running in which bypasses the security control.  Instead of unhooking, the malware can also return true negative result back to the solution regardless of the process memory space's behavior.
 
 > [!activity] Activity 5.14 - Bypassing Defender
-> I will demonstrate how to bypass Windows Defender using the Windows VM in a PowerShell session.  After starting the machine, I search for Virus & Threat Protection to launch the Defender settings.
-> ![[../images/05/win_activity_launch_defender.png|Launching Windows Defender|400]]
-> Scrolling down the Windows Security window I can see that Defender is enabled and running.
+> I will demonstrate how to bypass Windows Defender using the Windows VM in a PowerShell session.  After starting the machine, I search for Virus & Threat Protection to launch the Defender settings.  Scrolling down the Windows Security window I can see that Defender is enabled and running.
 > ![[../images/05/win_activity_av_defender_running.png|Defender Up and Running|300]]
 > To demonstrate a bypass, I need to execute commands in a running process.  I launch a PowerShell session from the search bar not as administrator.  Defender hooks into this newly created process and will monitor the memory space for malicious behavior.  I know that the `Invoke-Mimikatz` will trigger Defender to kill the command as this function is associated with a common hacking technique to extract NTML hashes from a Windows system.  To test that Defender is working, I include this command and observe Defender taking action.
 > ```cmd

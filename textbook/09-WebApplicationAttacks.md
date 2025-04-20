@@ -1,14 +1,14 @@
 # Chapter 9 - Web Application Attacks
 ![](web_attacks.jpg)
 
-Web applications are often made accessible to the internet so anyone can access them.  Doing so opens these sites up to anonymous attacks from anywhere in the world.  This chapter will focus on the risks web applications face and some common attack techniques and vulnerability classifications.  Several of the activities and exercises used throughout the chapter use a vulnerable by design web application run within a local environment.  Other activities explore the attack surface of exposed web applications from an internet attacker's perspective.  Using this vulnerable application, we will explore how to identify, exploit, and treat a few of the most common web application vulnerabilities.
-
 **Objectives**
 1. Explain the risks associated with web applications and how they can be tested.
 2. Demonstrate passive and active reconnaissance and discovery techniques of web applications.
 3. Conduct a directory busting attack against a victim web application using Gobuster.
 4. Understand how web applications manage sessions and escalate privileges of a vulnerable application.
 5. Perform cross site scripting and SQL injection attacks and remediate their vulnerabilities.
+
+Web applications are often made accessible to the internet so anyone can access them.  Doing so opens these sites up to anonymous attacks from anywhere in the world.  This chapter will focus on the risks web applications face and some common attack techniques and vulnerability classifications.  Several of the activities and exercises used throughout the chapter use a vulnerable by design web application run within a local environment.  Other activities explore the attack surface of exposed web applications from an internet attacker's perspective.  Using this vulnerable application, we will explore how to identify, exploit, and treat a few of the most common web application vulnerabilities.
 ## Web Security Risks
 In order to secure a web application, it is important to understand the impacts resulting from a security breach.  Without this, many web application stakeholders such as developers, system administrators or business managers might not take the treatment of web application security risks seriously.  If the risks are not well understood, or worse yet fully dismissed, then the likelihood and impact of realizing those risks increases dramatically.  Every web application's impact will vary depending on the organization, the type of data that is processed, and many other factors we could imagine.
 
@@ -22,9 +22,9 @@ We might imagine that an untreated web application vulnerability could lead to t
 
 In the previous Web Application Defense chapter, we introduced the OWASP Top 10, which is a list of generalized and common web application risks.  The list outlines broad categories of risk and its supporting documentation describes examples of web application vulnerabilities associated with that risk.  It is a useful reference to categorize and prioritize the types of issues a web application has, but it does not provide a comprehensive mapping or description of all the vulnerabilities applications to which it could be exposed.  For example, number three on the 2021 OWASP Top 10 list is *injection*, which goes on to describe common injection attacks such as SQL and OS commands. [^1]  But there are many other injection attacks not mentioned that would be valuable to web application defenders.
 
-The MITRE project, *Common Weakness Enumeration (CWE)*, attempts to aggregate and correlate software vulnerabilities into a classification scheme in much richer detail than the generalized format OWASP Top 10 provides us.  The CWE library, which can be browsed at https://cwe.mitre.org/, is currently comprised of nearly one thousand weaknesses across software and hardware.  Each weakness is tracked using a unique ID with the syntax `CWE-##` and a title.  For example, CWE-77 `Improper Neutralization of Special Elements used in a command ('Command Injection')` screenshot is below. [^2]  
+![[../images/09/cwe_command_injection.png|CWE Command Injection Page|600]]
 
-![[../images/09/cwe_command_injection.png|CWE Command Injection Page]]
+The MITRE project, *Common Weakness Enumeration (CWE)*, attempts to aggregate and correlate software vulnerabilities into a classification scheme in much richer detail than the generalized format OWASP Top 10 provides us.  The CWE library, which can be browsed at https://cwe.mitre.org/, is currently comprised of nearly one thousand weaknesses across software and hardware.  Each weakness is tracked using a unique ID with the syntax `CWE-##` and a title.  For example, CWE-77 `Improper Neutralization of Special Elements used in a command ('Command Injection')` screenshot is below. [^2]  
 
 OWASP Top 10 maintainers attribute CWEs with each of the listed top 10 risk categories.  Within each CWE entry are verbose descriptions, other related CWEs and categories, technical impacts, detailed examples with code snippets, real world vulnerabilities discovered, and mitigation strategies to cure the weakness.  Security professionals in this space, such as Application Security Engineers or Web Application Penetration Testers, often reference the CWEs related to discovered vulnerabilities.  Referencing CWEs supports identified issues and streamlines conversations with other stakeholders such as managers or developers.  But the security professional wouldn't use the CWE database as a means to systematically test an application as it is not organized in a manner that is conducive to efficient testing.
 
@@ -62,10 +62,10 @@ Combining the thoroughness of crawlers, powerful search indexes, and use of adva
 > [!activity] Activity 9.2 - Google Dorks
 > We explored the Exploit Database website in the Security Systems chapter as it contains a library of exploit code for known vulnerabilities.  This site also contains a crowdsourced library of Google dorks named the *Google Hacking Database (GHDB)*. [^5]   This database is constantly being added to and currently contains nearly ten thousand entries.  Conveniently, it has a search feature to narrow down what we could target.  I can identify several dorks related to searching for backups of SQL databases, as demonstrated in the following screenshot. 
 > 
-> ![[../images/09/dork_activity_dorks.png|GHDB Search for SQL Backup Dorks]]
+> ![[../images/09/dork_activity_dorks.png|GHDB Search for SQL Backup Dorks|550]]
 > 
 > The 9th dork on the list looks interesting to me as it is dynamic using "or" operators and a wide range of SQL backup related keywords.  Jumping to a fresh browser, I search the dork and find several interesting websites indexed by Google.  I took the liberty of redacting some of the specific details of the first entry.
-> ![[../images/09/dork_activity_search.png|Google Dork Results for SQL Backup Files|500]]
+> ![[../images/09/dork_activity_search.png|Google Dork Results for SQL Backup Files|450]]
 > I select the first page that is returned, and I am presented with a small list of zipped SQL files that are a few years old.
 > ![[../images/09/dork_activity_dbs.png|List of SQL Backups|400]]
 > Downloading and opening the first SQL backup file, I can see a table called customers that includes columns like email, date of birth, password, API token, phone number, bank name, account number, and other less interesting information.
@@ -88,7 +88,7 @@ Once an attacker has a target domain, they can use search engines to discover ot
 site:yahoo.com
 ```
 
-![[../images/09/yahoo_search.png|Google Dork Yahoo Site]]
+![[../images/09/yahoo_search.png|Google Dork Yahoo Site|750]]
 
 The first couple of results show `login.yahoo.com` and `fr.yahoo.com` subdomains, and then there are some 109 million additional pages.  As I am trying to compile a list of all the subdomains Yahoo has, I note these first two and then exclude them from my subsequent queries using the minus character.
 
@@ -96,7 +96,7 @@ The first couple of results show `login.yahoo.com` and `fr.yahoo.com` subdomains
 site:yahoo.com -site:login.yahoo.com -site:fr.yahoo.com
 ```
 
-![[../images/09/yahoo_subdomains.png|Refining Dork to Exclude Select Subdomains]]
+![[../images/09/yahoo_subdomains.png|Refining Dork to Exclude Select Subdomains|650]]
 
 The next two subdomains are `shopping.yahoo.com` and `finance.yahoo.com` and the total results are now about 86 million.  Not bad eliminating 23 million records!  I add shopping and finance to my growing list of discovered subdomains for Yahoo and repeat the process until I have exhausted all Google results.  You might be thinking that this task could be automated, and you would be right!  Check out the `Sublist3r` tool by aboul3la on GitHub. [^6]   This open-source tool, written in Python, scrapes search engines for a given domain and returns a list of subdomains.  Be aware that, as Google is quite good at detecting and thwarting automated scans such as these by placing CAPTCHAs in responses.
 
@@ -105,7 +105,7 @@ The next two subdomains are `shopping.yahoo.com` and `finance.yahoo.com` and the
 
 There are other methods to discover subdomains on a target.  One of my favorite sites is `crt.sh` which gathers TLS certificate information on domains and compiles it into a searchable online database.  Due to *certificate transparency*, the certificate may list all subdomains that the certificate is valid for.  This listing can be collected as yet another source to compile a list of domain targets.  The following screenshot is taken from crt.sh after querying for "google.com".  It returns a long list of Google subdomains!
 
-![[../images/09/crt_sh.png|Crt.sh Query for Google Subdomains]]
+![[../images/09/crt_sh.png|Crt.sh Query for Google Subdomains|500]]
 
 ## Web Attacks
 Many types of web application attacks that can lead to the compromise of accounts, systems, and data have been identified by the security community.  Successful exploitation of web vulnerabilities could even serve as the beachhead from where additional attacks against a network are waged.  This section will not cover all categories of web application attacks, but will instead cover a few common vulnerabilities, their exploitation, and how to mitigate them.
@@ -305,30 +305,30 @@ This vulnerable line of code takes GET parameters and concatenates them into a q
 > You could have guessed that the Vulnerable Site application we have been demonstrating within this chapter is vulnerable to SQL injection attacks.  As explained above, we can leverage the vulnerability to log into the system without credentials.  But we can also use the vulnerability to extract all the data in the database.  Furthermore, the attack could be automated using a tool called `SQLMap` that will be demonstrated on my Kali VM.
 > 
 > Starting the Kali VM, Vulnerable Site application, and navigating to http://127.0.0.1/, I am once again presented with the login screen of my application.  If I provide invalid credentials I receive a friendly error message.
-> ![[../images/09/sqli_activity_error.png|Bad Credentials Error Message]]
+> ![[../images/09/sqli_activity_error.png|Bad Credentials Error Message|600]]
 > Iterating on the SQLi vulnerability, I return to the login screen and provide `lol' OR 1=1-- -` as the username or password.  Hitting submit sends me to the authenticated Welcome Page!
 > ![[../images/09/activity_sqli_welcome.png|SQLi Exploit Login|600]]
 > I can expand this attack by dumping the entire database.  While this can be accomplished manually, it is much more efficient to use `SQLMap` to automate the task.  Kali has `SQLMap` installed by default, so I only need to point the tool at the vulnerable page to begin attacking it.  `SQLMap` will test every parameter with several injection tests and identify all the ways the application is vulnerable to SQLi.  I use the batch option to answer yes to any of `SQLMap`'s questions.
 > ```bash
 > sqlmap -u ' http://127.0.0.1/?username=lol&password=lol&version=beta' --batch
 > ```
-> ![[../images/09/sqli_activity_initial_map.png|Initial SQLMap Scan of Index Page|600]]
+> ![[../images/09/sqli_activity_initial_map.png|Initial SQLMap Scan of Index Page|550]]
 > After a few moments, `SQLMap` finds that the username parameter is vulnerable to time-based blind SQL injection and the backend DBMS is MySQL.
-> ![[../images/09/sqli_activity_timebased.png|SQLMap Initial Results|600]]
+> ![[../images/09/sqli_activity_timebased.png|SQLMap Initial Results|550]]
 > I rerun the same `SQLMap` command using the `--dbs` option to identify what databases are within this MySQL DBMS.  `SQLMap` picks up where it left off and automatically uses the time-based blind injection vulnerability to extract the database names.  The time-based method is very slow as `SQLMap` has to guess each letter of every database name one at a time.  If the application responds slowly, it indicates whether the guessed letter is correct or not and then continues guessing the next letter until all database names are uncovered.
 > ```bash
 > sqlmap -u ' http://127.0.0.1/?username=lol&password=lol&version=beta' --batch --dbs
 > ```
-> ![[../images/09/sqli_activity_dbs.png|Dumping Databases Using SQLMap|600]]
+> ![[../images/09/sqli_activity_dbs.png|Dumping Databases Using SQLMap|550]]
 > After a few minutes, all database names are presented.  The schema, `mysql`, and `sys` databases are default databases used by MySQL to organize databases.  The `information_schema` database has a table where all the databases and tables are listed, which is what `SQLMap` uses to find the database names.  I see a database named company that looks interesting.
-> ![[../images/09/sqli_activity_dbs_results.png|Discovered Databases by SQLMap|600]]
+> ![[../images/09/sqli_activity_dbs_results.png|Discovered Databases by SQLMap|500]]
 > To explore the tables within the company database I specify `-D company` and the `--dump` option.
 > ```bash
 > sqlmap -u ' http://127.0.0.1/?username=lol&password=lol&version=beta' --batch -D company --dump
 > ```
-> ![[../images/09/sqli_activity_tables.png|Dumping Table Names From Company Database|600]]
+> ![[../images/09/sqli_activity_tables.png|Dumping Table Names From Company Database|550]]
 > After a few minutes of SQL injections, SQLMap dumps the contents of the tables in the company database that includes usernames and passwords for all the accounts!
-> ![[../images/09/sqli_activity_user_dump.png|Users Table Dumped By SQLMap|600]]
+> ![[../images/09/sqli_activity_user_dump.png|Users Table Dumped By SQLMap|550]]
 
 The SQLi vulnerabilities can be mitigated by using input validation techniques covered in the XSS section of this chapter.  However, it is not advisable to rely on input validation as sometimes the data needing to be passed into the RDMBS will require the use of valid SQL syntax.  Instead, queries should be crafted by web applications in a safe manner to ensure that user input will not be executed as part of the query.  The standard method of doing so is through *prepared statements*, which replace concatenated strings with question marks, while encoded variable values replace them while processing requests.  Major web programming languages have this functionality built-in, so developers are encouraged to use it rather than over relying on input validation.
 ### Web Proxy Tooling
@@ -336,16 +336,14 @@ The ability to capture inbound and outbound web traffic to inspect, modify and f
 
 The most popular tools are PortSwigger's Burp Suite and OWASP's ZAP.  Burp Suite's community edition has many free features such as intercept, automations like brute forcing, and repeater, which allows for the quick resending of requests.  Burp Suite's Pro edition costs around $400 per year and removes built in throttles, includes a fantastic DAST scanner, web spider, and other features.  ZAP has these features all for free, but the interface is less appealing, at least in my opinion.  
 
+> [!tip] Tip - Free Web Application Security Labs
+> Another service PortSwigger provides is their Academy, which has over one hundred free web application penetration testing labs that include a wide array of vulnerability classes spanning various difficulties.  The Academy even tracks your progress and is gamified with a leaderboard.  Readers interested in resources to practice their web application security skills should invest time in PortSwigger's Academy.  See https://portswigger.net/web-security for details.
+
 Kali Linux has Burp Suite and ZAP preinstalled and can be launched from the applications menu.  Once the tool is started you can launch the built-in Chromium based browser *Burp browser* that already has the TLS certificate imported and is configured to run through the proxy tool.  Navigate to Target (tab), Site Map (sub tab) and press the Open Browser (button) to start a browser instance.  Opening a web site in the Burp browser starts capturing traffic that is logged and can be later analyzed.  The image below shows Burp browser on the right and the Burp Suite interface on the left.  The Burp Suite window displays captured requests and response in the bottom panes. 
 
 ![[../images/09/burp_proxy.png|BurpSuite Intercepting Traffic]]
 
 These captured requests can be modified and replayed through the Repeater and Intruder features.  There are numerous features worth exploring on how to use Burp, along with a robust community that extends its capabilities through downloadable add-on extensions from the marketplace.  Anyone doing web application security testing is likely using a web proxy, such as ZAP or Burp, as they are very powerful tools that enrich the testing experience.
-
-
-> [!tip] Tip - Free Web Application Security Labs
-> Another service PortSwigger provides is their Academy, which has over one hundred free web application penetration testing labs that include a wide array of vulnerability classes spanning various difficulties.  The Academy even tracks your progress and is gamified with a leaderboard.  Readers interested in resources to practice their web application security skills should invest time in PortSwigger's Academy.  See https://portswigger.net/web-security for details.
-
 ## Exercises
 
 >[!exercise] Exercise 9.1 - Directory Busting

@@ -1,13 +1,13 @@
 # Chapter 13 - Cloud Security
 ![](../images/13/cloud_security.jpg)
 
-Some organizations maintain data centers and on-premises server rooms with racks of network and computing equipment that powers their organization; however, more and more companies are moving to cloud services to support operations and streamline technical staff needed to run information technology.  The past decade has seen increasing amounts of information technology moved to the cloud in an array of services.  This rise in cloud investment has generated many new cloud offerings and services that could increase productivity for organizations.  These services represent abstractions of core technology topics such as compute, networking, and applications.  As such, many of the traditional information security risks still translate into the cloud while new tools, techniques and procedures have been developed to break the security of cloud tenants.  Within this chapter, you will learn the fundamentals of cloud technologies and how they are used by organizations.  From there, you will discover the ways in which an organization can protect and defend cloud environments from the methods used by attackers.
-
 **Objectives**
 1. Explain how organizations use the cloud and the services they offer.
 2. Create and configure an AWS cloud account with users of various permission levels.
 3. Understand the basic AWS security services and how to harden AWS accounts using CSPM.
 4. Distinguish between traditional network and system attacks and methods for attacking cloud services.
+
+Some organizations maintain data centers and on-premises server rooms with racks of network and computing equipment that powers their organization; however, more and more companies are moving to cloud services to support operations and streamline technical staff needed to run information technology.  The past decade has seen increasing amounts of information technology moved to the cloud in an array of services.  This rise in cloud investment has generated many new cloud offerings and services that could increase productivity for organizations.  These services represent abstractions of core technology topics such as compute, networking, and applications.  As such, many of the traditional information security risks still translate into the cloud while new tools, techniques and procedures have been developed to break the security of cloud tenants.  Within this chapter, you will learn the fundamentals of cloud technologies and how they are used by organizations.  From there, you will discover the ways in which an organization can protect and defend cloud environments from the methods used by attackers.
 ## Cloud Overview
 Before we begin studying the attacks and countermeasures of the cloud, it's important to understand what the cloud is and how organizations use it.  The cloud is a generalized term that can be thought of as "someone else's computer."  Instead of an organization buying, installing, and configuring network and server equipment on racks in a server room or data center, they outsource that effort to a third-party cloud provider.  This enables the business and its technology specialists to focus on their competitive advantages and less on the maintenance of physical infrastructure.  The following section will introduce the reader to the cloud models, characteristics of cloud use cases, the types of service models available in the marketplace, and some of the most popular cloud providers.
 ### Cloud Models
@@ -71,7 +71,7 @@ The cloud is divided into two conceptual planes called *control plane* and the *
 
 Maintaining access control of an AWS environment is crucial for its security.  All AWS accounts come with a *root* user that has all permissions over the account.  The root user must be protected at all costs as the loss of this principal means the loss of the entire AWS account.  AWS offers the *identity and access management (IAM)* service to create and manage users as well as their permissions.  Access can be administered through a control plane where IAM user accounts are created, much like any other system.  Policies with permissions can then be applied to the IAM account to give them capability to use the AWS account.
 
->[!activity] Activity 13.1 - Create and Setup AWS Account
+>[!activity] Activity 13.1 - Create and Set Up AWS Account
 >Setting up an AWS account is relatively effortless, but the service isn't free, or at least not for more than modest usage.  Therefore, AWS requires that new accounts provide a credit card when signing up to charge accrued monthly costs.  There is no way to cap or limit this, so you must be very careful not to leave an account exposed or expensive services running.  If an attacker obtains IAM user or root account credentials, they could run up large costs for which the owner of the account is responsible.  In this activity, I will demonstrate how to set up an AWS account, create an IAM user, and configure multifactor authentication for both the IAM and root users.
 >
 >From my host computer, I navigate to https://aws.amazon.com/ and press the "Create an AWS account" button in the top right corner.  This prompts me to enter an email address and account name before requesting an email verification.
@@ -93,17 +93,17 @@ Maintaining access control of an AWS environment is crucial for its security.  A
 >The security settings for the logged in user allow us to set credentials, changes passwords, and set up multi-factor authentication (MFA) devices.  Because the root account is so important and internet accessible, I want to set up MFA to mitigate the risks of losing the account to an attacker guessing the root password and the potential impacts that could cause.  I scroll down to the "Multi-factor authentication (MFA)" section and press the "Assign MFA device" button.
 >![[../images/13/aws_activity_mfa_start.png|Root Account MFA Setup|600]]
 >AWS prompts me to enter an MFA device name and MFA device.  I already have an authenticator app installed on my smart phone that I use for MFA.  Some great choices are the Google or Microsoft Authenticators apps available for free in the app stores.  I enter a name, select Authenticator app, and press the Next button.
->![[../images/13/aws_activity_mfa_selection.png|MFA Device Selection|600]]
+>![[../images/13/aws_activity_mfa_selection.png|MFA Device Selection|500]]
 >Pressing the "Show QR code" link in the second sub-step reveals a QR code.  With my phone's  authenticator app launched, I press the new account option which opens the camera feature on my phone.  Next, I point my phone's camera to the QR code on the AWS page which instantly creates the account in my authenticator app.  I enter the first 6-digit code into the "MFA code 1" field of the AWS console page, wait 30 seconds for a new code to be generated, and then enter the second (new) code into the MFA code 2 field of the AWS console page.  Then I press the "Add MFA" button to complete the MFA device setup.
->![[../images/13/aws_activity_mfa_config.png|MFA Configuration|600]]
+>![[../images/13/aws_activity_mfa_config.png|MFA Configuration|500]]
 >It's a bad practice to use the AWS root account for normal use.  It should be used rarely to limit the opportunity of being compromised.  A better practice is to create a new IAM account with administrator capabilities for privileged actions.  It would be awful if the admin account is compromised, but not nearly as bad as if the root account was!  In order to create the IAM account, I must open the IAM service by searching for "iam" in the top search bar.
 >![[../images/13/aws_activity_iam_search.png|IAM Service Search|600]]
 >The launched IAM service can be navigated using the options tree on the left pane.  To create a new user, I select the "Users" link and the "Create user" button on the page in the right pane.
->![[../images/13/aws_activity_create_user.png|IAM Service User Page|500]]
+>![[../images/13/aws_activity_create_user.png|IAM Service User Page|450]]
 >Within the create user page, I enter my name in the "User name" field, check the box "Provide user access to the AWS Management Console" to allow web GUI access, and select the "I want to create an IAM user" option.  Then I enter a strong and high entropy password that is not used for any other account or system and unselect the "Users must create a new password at next sign-in" checkbox.  Finally, I press the "Next" button to continue the account creation process.
->![[../images/13/aws_activity_create_user 1.png|Create User Settings|600]]
+>![[../images/13/aws_activity_create_user 1.png|Create User Settings|700]]
 >The next page in the wizard is used to configure the user privileges.  While I could create custom policies with any combination of permissions, AWS comes with managed policies for common use cases.  This includes the "AdministratorAccess" policy which grants all permissions to all services.  I select the "Attach policies directly" option and mark the "AdministratorAccess" policy checkbox before pressing the "Next" button to continue the account creation.
->![[../images/13/aws_activity_policy.png|IAM User Policy Selection|600]]
+>![[../images/13/aws_activity_policy.png|IAM User Policy Selection|700]]
 >The last page summarizes all the configurations that I review and confirm are correct, then press the "Create user" button to create the IAM admin user account.  The account is created successfully, and I am navigated to the final step "Retrieve password" in the wizard.  This page includes a "Console sign-in URL" link which has the AWS account number embedded within it as a subdomain.  I write this number down as it is needed when logging in from the main AWS login page - otherwise, I would have to log in as the root user and find the account number anytime I wanted to log in as the new IAM user.
 >
 >The new administrator user I just created needs MFA, but the only way to set it is to log in as the admin user.  My next step is to log out of the root user account and then log in using the link in the previous step with my username and password.  Just like I did for the root user, I navigate to the "Security credentials" of the logged in admin user and set the MFA device.
@@ -229,7 +229,7 @@ While we just covered how malicious actors could gain entry to cloud environment
 
 There are many of these privilege escalation techniques due to sensitive permission sets that have been explored in detail by Rhino Security Labs.  This team has developed a tool for detecting misconfigured policies that allow for privileged escalation called Pacu.  They have also published their research describing each vector and the conditions needed to escalate AWS permissions within a blog post AWS IAM Privilege Escalation - Methods and Mitigations (https://rhinosecuritylabs.com/aws/aws-privilege-escalation-methods-mitigation/).  I highly recommend you check out Rhino and their awesome research!
 
-![[../images/13/rhino_privesc.png|Rhino Security Labs - Privesc Methods Research]]
+![[../images/13/rhino_privesc.png|Rhino Security Labs - Privesc Methods Research|750]]
 
 ## Exercises
 

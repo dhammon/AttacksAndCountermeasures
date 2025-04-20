@@ -2,12 +2,12 @@
 
 ![](../images/04/ethernet_shield.jpg)
 
-There are many types of network technologies consisting of solutions, services, and protocols that are of security interest.  In this chapter, you will understand a handful of these technologies by learning how they work and their security implications.  We will explore how to secure them and the ways in which they can be attacked.  The goal of this chapter, like so many others in this textbook, is to construct a model when approaching technologies by first learning how they work and then how they can be broken.  This chapter will specifically cover address resolution protocol, dynamic host configuration protocol, domain naming system, and the transmission control protocol.  Each topic is mutually exclusive but follows the same layout of explaining the basics, attack vectors, and how to protect them.
-
 **Objectives**
 1. Understand common network protocols and technologies.
 2. Explain basic defense for network technologies.
 3. Conduct attacks against DNS, DHCP, ARP, and TCP.
+
+There are many types of network technologies consisting of solutions, services, and protocols that are of security interest.  In this chapter, you will understand a handful of these technologies by learning how they work and their security implications.  We will explore how to secure them and the ways in which they can be attacked.  The goal of this chapter, like so many others in this textbook, is to construct a model when approaching technologies by first learning how they work and then how they can be broken.  This chapter will specifically cover address resolution protocol, dynamic host configuration protocol, domain naming system, and the transmission control protocol.  Each topic is mutually exclusive but follows the same layout of explaining the basics, attack vectors, and how to protect them.
 ## Address Resolution Protocol
 The last chapter introduced IP and MAC addresses while describing how they are used in networks through layers 2 and 3 of the OSI model.  These addresses are critical for computer communications across networks using network equipment like NICs, switches, and routers.  As previously described, each NIC is given a MAC address burned in at the factory.  Good behaving networked devices keep their MAC address static, meaning they never change.  But these addresses do not scale well across the internet as they lack the organization the IP address system provides.  Therefore, the internet relies on IP addresses to route traffic to and from sources and destinations.  A solution is needed that can resolve or map IP addresses to MAC addresses and ensure packets traverse networks effectively.  This solution is called **address resolution protocol (ARP)** and enables computers and switches to send packets among each other.  Within the network, each device maintains a dynamic inventory of MAC addresses for IP address ranges.
 ### ARP Protocol
@@ -121,18 +121,18 @@ The figure above captures the poisoning of devices on a network by a malicious a
 > sudo su -
 > arpspoof -i eth0 -t 10.0.2.1 10.0.2.7
 > ```
-> ![[../images/04/activity_arp_poison_gateway.png|Kali ARP Poisoning Gateway|600]]
+> ![[../images/04/activity_arp_poison_gateway.png|Kali ARP Poisoning Gateway|500]]
 > Kali now has two open terminals each running `arpspoof` trying to poison the ARP tables of the gateway and the victim.  Once they are both adequately poisoned, they will send traffic to the Kali machine and Kali will forward the packets to the intended destination.  At this point, I can observe the intercepted traffic using a `tcpdump` packet capture.  I configure `tcpdump` to use the default snapshot length by using the `-s 0` option and filter the traffic to include http traffic only.  I also use the `-vvv` for "very very verbose" output.  `Tcpdump` will be ran within a fresh terminal, the third terminal instance, in the Kali machine as root.
 > ```bash
 > sudo su -
 > tcpdump -i eth0 -s 0 'tcp port http' -vvv
 > ```
-> ![[../images/04/activity_arp_capture.png|Kali Tcpdump HTTP Packet Capture|600]]
+> ![[../images/04/activity_arp_capture.png|Kali Tcpdump HTTP Packet Capture|500]]
 > Any HTTP packets from the victim should now appear in my `tcpdump` packet capture running in Kali.  I can now demonstrate packet sniffing by invoking an HTTP request from the victim Ubuntu machine.  Switching back to the Ubuntu machine, I make a HTTP request to "example.com" with password as a GET parameter by using the `wget` utility.  I also output the text to a temporary test file.
 > ```bash
 > wget http://www.example.com/?password=SuperSecret -O /tmp/test
 > ```
-> ![[../images/04/activity_victim_http_req.png|Ubuntu HTTP Request|600]]
+> ![[../images/04/activity_victim_http_req.png|Ubuntu HTTP Request|500]]
 > I can see that the request to "example.com" succeeded without any noticeable delay or issue while on the Ubuntu VM.  Jumping back to the Kali machine, I can see HTTP traffic was captured in the `tcpdump` output.  Scrolling up through the logs, I see both the request and the response from "example.com", which includes the victim's password in the GET request!
 > ![[../images/04/activity_arp_password_captured.png|Kali Captured HTTP Packets|600]]
 ### Securing ARP
@@ -187,13 +187,13 @@ Relying on a single authoritative server could impose availability risks with a 
 >dig +short NS google.com
 >dig axfr google.com @ns3.google.com
 >```
->![[../images/04/dig_google.png|Attempted Google Zone Transfer With Dig|600]]
+>![[../images/04/dig_google.png|Attempted Google Zone Transfer With Dig|500]]
 >Unfortunately, the transfer failed, likely because the Ubuntu VM's public IP address is excluded from Google's allow list.  To demonstrate what a zone transfer looks like, I can use the "zonetransfer.me" domain using the same commands.
 >```bash
 >dig +short NS zonetransfer.me
 >dig axfr zonetransfer.me @nsztm1.digi.ninja
 >```
->![[../images/04/zone_transfer_me.png|Successful Zone Transfer|600]]
+>![[../images/04/zone_transfer_me.png|Successful Zone Transfer|500]]
 >The zone transfer succeeded and displayed all the records of the domain!  This could be useful information for an attacker while performing reconnaissance looking for weak targets.
 ### DNS Threats
 There are at least a few threats that must be considered when designing a secure DNS system.  Should the system become unavailable, it could result in clients not being able to resolve the domain names needed to access an organization's internet services.  A *denial of service (DoS)* attack in which an attacker causes the DNS servers to be offline, is an example of such a risk.  One option to mitigate DNS DoS attacks is by using an upstream network performance provider such as NetScout.  This mitigates the risk by requiring DNS queries to be passed through proxies that inspect traffic and discard malicious requests before reaching authoritative servers.   
@@ -238,42 +238,41 @@ To accomplish **DNS tunneling exfiltration**, an attacker segments a file into s
 >nslookup www.google.com
 >echo "142.250.189.164 www.google.com" > dns.txt
 >```
->![[../images/04/dns_spoof_dnstxt.png|Setting Up DNS Record|600]]
+>![[../images/04/dns_spoof_dnstxt.png|Setting Up DNS Record|475]]
 >Using the `ip` command, I identify the interface that the DNS server will run on.  Then, I start `dnsspoof` to serve the `dns.txt` records on that interface.  `Dnsspoof` is not a reliable DNS server application and is only being used here as it is easier than setting up a real DNS server.
 >```bash
 >ip a
 >sudo dnsspoof -i enp0s3 -f dns.txt
 >```
->![[../images/04/dns_spoof_dns_server.png|DNS Server Running on Ubuntu|600]]
+>![[../images/04/dns_spoof_dns_server.png|DNS Server Running on Ubuntu|475]]
 >With the DNS server running and ready to resolve web.google.com, I switch to the Windows VM and configure the DNS resolver setting with the Ubuntu IP address.  I search for "View network connections" in the search bar and open the Control panel.
->
->![[../images/04/activity_dnsspoof_control.png|Opening Network Connections|600]]
+>![[../images/04/activity_dnsspoof_control.png|Opening Network Connections|375]]
 >The "Network Connections" window is opened and displays the network interfaces.  I right-click the Ethernet entry and select "Properties" from the context menu options.
->![[../images/04/dns_spoof_ethernet_properties.png|Ethernet Properties|350]]
+>![[../images/04/dns_spoof_ethernet_properties.png|Ethernet Properties|250]]
 >Within the Ethernet Properties window, I select the "Internet Protocol Version 4" option and press the "Properties" button.
->![[../images/04/dns_spoof_ip_settings.png|IPv4 Properties|350]]
+>![[../images/04/dns_spoof_ip_settings.png|IPv4 Properties|250]]
 >Finally, I select the "Use the following DNS server addresses" radio button and enter the IP address of my Ubuntu VM.  You might recall that the Ubuntu IP address was observed earlier in this activity.
->![[../images/04/dns_spoof_win_dns_ip.png|Windows DNS Configuration to Ubuntu|350]]
+>![[../images/04/dns_spoof_win_dns_ip.png|Windows DNS Configuration to Ubuntu|250]]
 >With the Ubuntu DNS server configured on the Windows VM, I open the browser and navigate to www.google.com and observe that the page loads.  
 >![[../images/04/dns_spoof_google_loads.png|Windows Google Load Success|300]]
 >I then open a command prompt and run an `nslookup` to www.google.com to confirm that the IP address resolves to the address set in the dns.txt file on the Ubuntu DNS server.
 >```bash
 >nslookup www.google.com
 >```
->![[../images/04/dns_spoof_win_google_nslookup.png|Windows Google Nslookup Resolution|600]]
+>![[../images/04/dns_spoof_win_google_nslookup.png|Windows Google Nslookup Resolution|500]]
 >
 >I also need to allowlist Google to be loaded within Edge without TLS.  Returning to Edge in the Windows VM, I navigate to `edge://settings/content/insecureContent` and then add `www.google.com` to the allow section.  This will simplify the attack for demonstration purposes, but know that an attacker could set up a HTTPS server with a certificate by doing a few extra steps.
 >
->![[../images/04/activity_dnsspoof_edge_settings.png|Allow Insecure Google|600]]
+>![[../images/04/activity_dnsspoof_edge_settings.png|Allow Insecure Google|500]]
 >
 >Next, I check the Ubuntu `dnsspoof` logs and see several entries in which the server is responding to the Window VM requests!
->![[../images/04/dns_spoof_ubuntu_valid_logs.png|Ubuntu DNS Spoof Valid Logs|600]]
+>![[../images/04/dns_spoof_ubuntu_valid_logs.png|Ubuntu DNS Spoof Valid Logs|450]]
 >With the Windows and Ubuntu systems running in a healthy state and able to resolve the www.google.com domain correctly, I can prepare the attack.  I start by installing `dsniff` on the Kali machine after running an update.  My system was already up to date and `dsniff` was previously installed.
 >```bash
 >sudo apt update -y
 >sudo apt install dsniff -y
 >```
->![[../images/04/dns_spoof_kali_dsniff_install.png|Kali Install Dsniff|600]]
+>![[../images/04/dns_spoof_kali_dsniff_install.png|Kali Install Dsniff|500]]
 >Next, I set up a web file and serve it using a Python simple HTTP server.  This will serve as my malicious site that will target the victim.
 >```bash
 >mkdir /tmp/www
@@ -315,7 +314,7 @@ As previously discussed, NICs have their MAC addresses burned in during the manu
 ### DORA
 When a device joins the network, it will not have an IP address until one is negotiated with the DHCP server.  In a process called *discover*, one of the first actions a new device performs is broadcast a message (or packet).  This broadcast message inquires who the DHCP server is to all other devices on the network.  The DHCP server will respond to the discover request with an *offer* message that includes an IP address for the new device to use.  The new device considers this offer, and if appropriate, sends a *request* message to the DHCP server asking to use the offered IP.  The DHCP server gets this request and adds an entry in the DHCP IP assignment table with the device's MAC, IP and expiration.  Afterwards, the DHCP server sends the final *acknowledge* message to the new device so it can register the IP address in its network stack.  The entire process of discover, offer, request, and acknowledge is referred to as **DORA**. 
 
-![[../images/04/dhcp_dora.png|DHCP DORA Traffic|400]]
+![[../images/04/dhcp_dora.png|DHCP DORA Traffic|300]]
 
 The figure above demonstrates the order and directionality of the DORA communications between a server and client.  Healthy network devices that receive discover requests simply ignore them.  But any network device could respond by claiming they are the DHCP server.
 ### DCHP Release
@@ -329,11 +328,11 @@ Another threat to network security is the hijacking of the DHCP server.  This h
 ### DHCP Attacks
 In the previous DHCP Risks section, a DoS threat was described which impacts the availability of the DHCP service on a network.  One DHCP DoS attack that we will explore in detail involves exploiting how the DHCP service natively works.  A **DHCP starvation** attack attempts to exhaust the available IP addresses for a network by consuming the entire range of available addresses.  The attacker repeatedly sends requests to the DHCP server for addresses until the entire range is used.  This blocks existing devices from renewing and new devices from procuring an address.  Eventually, all devices lose their IP addresses through expirations effectively shutting out everyone from the network.  The following diagram illustrates a DHCP starvation attack by an attacker blocking a new client.
 
-![[../images/04/dhcp_starvation.png|DHCP Starvation Attack|300]]
+![[../images/04/dhcp_starvation.png|DHCP Starvation Attack|250]]
 
 Another interesting DHCP attack is a **DHCP spoofing** attack that has the goal of assigning an attacker-controlled device as the network's default gateway.  If the attacker can get the DHCP server and clients to assign and use the attacker's IP as the gateway, the attacker can inspect and manipulate all traffic within the network.  This attack works because the attacker acts as the DHCP server and responds to DHCP requests on the network before the real DHCP server has a chance.  As suggested in the figure below, DHCP responses include the default gateway address that would be defined by the attacker.  The victim then sends their outbound traffic to the attacker instead of the network's gateway!
 
-![[../images/04/dhcp_spoofing.png|DHCP Spoofing Attack|300]]
+![[../images/04/dhcp_spoofing.png|DHCP Spoofing Attack|250]]
 
 >[!activity] Activity 4.5 - DHCP Spoofing Attack
 >I'll demonstrate a DHCP spoofing attack using Ettercap, which provides a nice GUI to perform and to manage several networking attacks.  The Windows VM will act as my victim and I'll launch the attack from the Kali VM, both using the `Bridge Adapter` network modes.
@@ -342,19 +341,19 @@ Another interesting DHCP attack is a **DHCP spoofing** attack that has the goal 
 > ```bash
 > ipconfig
 > ```
-> ![[../images/04/dhcp_activity_win_net.png|Windows VM Network Settings|600]]
+> ![[../images/04/dhcp_activity_win_net.png|Windows VM Network Settings|500]]
 > Switching to the Kali machine, I run similar commands and confirm that it is on the same network as the Windows VM (192.168.4.0/24).
 > ```bash
 > ip a
 > ```
-> ![[../images/04/dhcp_activity_kali_net.png|Kali VM Network Settings|600]]
+> ![[../images/04/dhcp_activity_kali_net.png|Kali VM Network Settings|500]]
 > While still on the Kali machine, I launch Ettercap as root using `sudo` and with the `-G` option to use the GUI.
 > ```bash
 > sudo ettercap -G
 > ```
-> ![[../images/04/dhcp_activity_ettercap.png|Ettercap GUI Homescreen]]
+> ![[../images/04/dhcp_activity_ettercap.png|Ettercap GUI Homescreen|500]]
 > The first step is to start Ettercap's sniffing utility on the interface from the network our victim is on, which is eth0.  Sniffing is started by pressing the checkmark button in the upper right corner of the application next to the ellipsis button.
-> ![[../images/04/dhcp_activity_sniffing.png|Ettercap Sniffing Mode]]
+> ![[../images/04/dhcp_activity_sniffing.png|Ettercap Sniffing Mode|600]]
 > Once sniffing is initiated, the log pane appears at the bottom of the screen detailing the configuration and confirmation that Ettercap has started sniffing traffic.  Soon we will start seeing logs of packets being captured!  A few new buttons appear at the top of the Ettercap application including a menu represented by a globe next to where the sniffing/checkmark button was.  I can stop the network sniffing by pressing the stop button in the upper left corner.  However, I leave sniffing enabled during this attack.  To configure the attack, I press the globe icon and then DHCP Spoofing.
 > ![[../images/04/dhcp_activity_globe.png|Ettercap Attack Menu Options|350]]
 > After pressing the DHCP spoofing option of the menu, a dialog box pops up needing information for the attack.  I enter the victim Windows IP address in the "IP range", the network's subnet mask, and I put the IP address of Kali in the DNS server field.  These settings will instruct Ettercap to target the Windows machine and poison its network settings to think the Kali machine is the DNS server.
@@ -569,7 +568,7 @@ Another less common cookie method, the **RST cookie**, mitigates attacks by vali
 > ```
 > #### Step 2 - Configure Windows DNS Setting
 > In this step, you will modify the Windows interface DNS settings to use the Ubuntu VM.  From the Windows VM, open the Control Panel's Network Connections panel. Right-click “Ethernet” and select “Properties” to launch the interface property window. With the interface properties window opened, select “Internet Protocol Version 4 (TCP/IPv4)” and press the “Properties” button. Select the “Use the following DNS server addresses:” radio button and enter the IP address of the Ubuntu VM.  Press “Ok” and close out the windows that were opened for the network settings. 
-> ![[../images/04/dns_win_settings.png|Windows DNS Configuration]]
+> ![[../images/04/dns_win_settings.png|Windows DNS Configuration|500]]
 > You should see log activity in the Ubuntu `dnsspoof` terminal when running the following command from a Windows command prompt. 
 > ```bash
 > nslookup google.com
@@ -664,12 +663,11 @@ Another less common cookie method, the **RST cookie**, mitigates attacks by vali
 > sudo su -
 > nc -nvlp 8000
 > ```
-> Launch another terminal and establish a connection to the server just created.  Once connected, type your name and observe the server's standard output in the server terminal.
+> Launch another terminal and establish a connection to the server just created.  Once connected, type your name and observe the server's standard output in the server terminal.  Observe the open TCP connection port in the server window.  This port number will be needed in the next steps.
 > ```bash
 > nc 127.0.0.1 8000
 > YOUR_NAME
 > ```
-> Observe the open TCP connection port in the server window.  This port number will be needed in the next steps.
 > #### Step 4 - Observe the Sequence Number
 > Return to Wireshark and select the last ACK packet.  Find the packet’s raw Sequence Number (should be about 10 digits).  Find your sequence number as it will be needed in the following steps.
 > #### Step 5 - Launch the Reset Attack

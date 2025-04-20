@@ -2,12 +2,12 @@
 
 ![](../images/02/cryptology.jpg)
 
-One of the fundamental tenents of protecting data is encryption.  The use of encryption originated from the need to protect military plans hundreds of years ago.  The goal of encryption is to protect information from those not authorized to view it.  Using encryption assumes that the information will end up in the hands of those unauthorized parties. The encrypted information is unreadable to those without a key to decrypt it.  This chapter covers the basics of cryptology and its practical use.
-
 **Objectives**
 1. Review the fundamentals of cryptography;
 2. Demonstrate usage of cryptography within information technology;
 3. Understand cryptographic attacks and countermeasures.
+
+One of the fundamental tenents of protecting data is encryption.  The use of encryption originated from the need to protect military plans hundreds of years ago.  The goal of encryption is to protect information from those not authorized to view it.  Using encryption assumes that the information will end up in the hands of those unauthorized parties. The encrypted information is unreadable to those without a key to decrypt it.  This chapter covers the basics of cryptology and its practical use.
 ## About Cryptology
 Long ago, Julius Caesar commanded an army engaged in battle.  He and his generals would communicate with their geographically disbursed troops via messengers carrying battle plans.  The enemy understood this method of communication and would capture messengers and their battle plans to gain tactical advantage.  Caesar countered these interceptions by encrypting the battle plans, should they fall into the hands of the enemy.  Thus, encryption has its roots as a military tool that protected sensitive information from unauthorized parties. 
 
@@ -47,7 +47,7 @@ It is important to clarify that **encoding** is different from encryption.  How
 
 The *American Standard Code for Information Interchange (ASCII)* encoding format has 128 unique characters with which you are likely familiar.  The following table lists the character (Char), decimal and hexadecimal formats.  
 
-![[../images/02/ascii.png|ASCII Table of Characters (source Wikimedia Commons)]]
+![[../images/02/ascii.png|ASCII Table of Characters (source Wikimedia Commons)|700]]
 
 The *decimal* format is a base 10, numbers 0-9, representation and each character is displayed by a numeric value.  Similarly, the *hexadecimal* format is base 16, 0-9 and A-F, totaling 16 characters, where a combination of 16 characters can represent all characters.  Using the above table, the character "$" shows as the decimal value 36 and the hexadecimal value 24.  There are many other encoding schemes that use the base method for encoding data.  Another very common encoding scheme is *base 64*, in which 64 characters are used in chunks of four and padded with the equal sign "=".  Base 64 characters include 0-9, a-z, A-Z, and special characters "/", "=" and "+".  Base 64 encoding is commonly used in HTTP because it does not include HTTP special characters like "?" and "&" that have explicit meaning in the HTTP protocol.  It is ideal for transmitting data without causing errors in the HTTP protocol, unlike other encoding schemes that may use characters interpreted by HTTP.
 
@@ -65,7 +65,7 @@ Each encoding type has a recognizable pattern which you should memorize to quick
 
 > [!activity] Activity 2.1 - CyberChef
 > CyberChef, https://gchq.github.io/CyberChef/, is the encoding and encrypting Swiss army knife of the internet and is available as an online web application or a command line interface (CLI) tool.  It enables users to transform values quickly and dynamically and to support several dozen encoding and encryption schemes with multiple configurations.  The left most pane, *Operations*, has a list of formats that can be dragged into the middle pane, *Recipe*.  The input value is entered into the upper right pane, *Input* and the output value is displayed on the bottom right pane, *Output*.  You can use multiple layers of formats to produce the final output.  The left pane options are written in the context as "to" or "from".  The logic used starts with the input value and is converted "to" or "from".  The following screenshot shows CyberChef in action by encoding "Hello World!" to hexadecimal format.
-> ![[../images/02/cyberchef_activity.png|CyberChef Hello World Example]]
+> ![[../images/02/cyberchef_activity.png|CyberChef Hello World Example|600]]
 > 
 
 Understanding encoding has many practical uses.  For instance, while performing a bitwise operation, one researcher recently discovered how to find the AWS account number from an AWS Access Key ID by removing metadata, decoding the ID using base 32, then decoding the hex values to ASCII. [^2]
@@ -136,13 +136,13 @@ To recap, symmetric encryption uses one secret key while asymmetric encryption u
 >We can use OpenSSL on Ubuntu to encrypt messages using asymmetric encryption too!  After creating a public and private key pair using OpenSSL, a message can be encrypted using the public key and then decrypted using the private key.
 >
 >I create a 1024-bit private key into a file named `private.pem` and display the result.  Notice the key's header and footer and that the content is encoded in base 64.
->![[../images/02/asymmetric_activity_private_key.png|Private Key Generation]]
+>![[../images/02/asymmetric_activity_private_key.png|Private Key Generation|550]]
 >Next, I create a public key into a file named `public.pem` that pairs with the private key.  This public key will be used to encrypt messages.
->![[../images/02/asymmetric_activity_public_key.png|Public Key Generation]]
+>![[../images/02/asymmetric_activity_public_key.png|Public Key Generation|600]]
 >With the key pair generated, I create a message in a file called `plain.txt` and encrypt it using the public key, which is available in a new file named `plain.txt.enc`.  The contents of `plain.txt.enc` are not legible!
->![[../images/02/asymmetric_activity_encrypt.png|Asymmetric Message Encryption]]
+>![[../images/02/asymmetric_activity_encrypt.png|Asymmetric Message Encryption|600]]
 >Finally, we can use the `private.pem` key to decrypt the message and display its content "hello world"!
->![[../images/02/asymmetric_activity_decrypt.png|Asymmetric Message Decryption]]
+>![[../images/02/asymmetric_activity_decrypt.png|Asymmetric Message Decryption|600]]
 ## Hash Algorithms
 So called *one-way functions*, a **hash algorithm** takes an input and generates a cryptographic output value.  This fixed character length value will consistently produce the same value given the same input.  Good hash algorithms will create a vastly different hash output, or *digest*, with even the smallest change to the given input.  Speed is also an indication of a good hash algorithm as it makes it more practical to use.  Unlike typical encryption, hash algorithms are irreversible and do not have a mathematical way to turn the hash value back into plaintext value - there is no way to "unscramble the egg."  The diagram below demonstrates the general process of inputting a message into a hash function and yielding a hash value as an output.
 
@@ -156,33 +156,33 @@ There are many cryptographic hash algorithms available for use.  While we will 
 
 >[!activity] Activity 2.5 - Digest Verification
 >Let's demonstrate the use of MD5 hash to prove the integrity of a message.  Using an Ubuntu VM, I open the terminal and echo a message into a file named `message.txt`.
->![[../images/02/activity_01_message.png|Create Message]]
+>![[../images/02/activity_01_message.png|Create Message|600]]
 >We can use the md5sum utility to determine the MD5 hash digest of a message.  The command outputs a 32-character value.  We could re-run this message on any computer and get the exact same result.
->![[../images/02/activity_01_hash.png|MD5 Hash of Message.txt]]
+>![[../images/02/activity_01_hash.png|MD5 Hash of Message.txt|600]]
 >Now, I replace the `message.txt` file with a slightly different message and recalculate the digest.  Notice the value is materially different from the original!
->![[../images/02/activity_01_rehash.png|Change Message and Rehash]]
+>![[../images/02/activity_01_rehash.png|Change Message and Rehash|600]]
 ## Encryption Authentication
 Encryption can be used to authenticate a sender or receiver of data, even data that is in plaintext!  Such cryptographic authentication methods also have the added benefit of ensuring the integrity of the data.  In the following section, we will explore how a receiver of a message can authenticate the sender through *message authentication code (MAC)* symmetric keys.  Similarly, this same task can be accomplished using asymmetric keys via a *digital signature*.  Both methods leave the message in plaintext, so it does not provide confidentiality or privacy attributes.
 ### Message Authentication Code
 A bidirectional conversation between two parties can use **Message Authentication Code (MAC)**, sometimes referred to as *authentication tag* or *keyed hash*, to ensure the integrity and authenticity of one another.  MAC provides assurance that the sender and receiver were the creators of the sent messages, as they both share a secret key combined with a message that is hashed to validate authenticity of communications.  If the message is altered in any way, even by one bit, the hash digest will not match, and the respective party will know that the message had been altered.  The MAC is a short piece of information that is constructed from a hash function, such as *hash-based message authentication code (HMAC)* or block ciphers like *Galois/Counter Mode (GCM)*, and sent along with the plaintext message as a file.  To demonstrate this, the following diagram shows a sender creating a MAC with a secret key and sending the message and MAC to a receiver that also has the secret key.  The Receiver uses the secret key to inspect the attached MAC, confirm the message's integrity, and authenticate the sender.
 
-![[../images/02/mac_diagram.png|MAC Sending and Receiving|600]]
+![[../images/02/mac_diagram.png|MAC Sending and Receiving|500]]
 
 ### Digital Signatures
 A **Digital Signature (DS)** can be used when the need arises to verify a message with parties that do not have a shared private key.  Like MACs, DSs also provide authentication, integrity, and nonrepudiation benefits between the parties.  The DS has the advantage of sending the message along with a public key so that any receiver of the message can use the public key to verify the message and sender.  However, this use case only allows for the validation by a single direction of communication from the sender to the receiver and is limited by the receiver's ability to respond with a DS in kind.  DS can be *attached* or *detached*, meaning they can be embedded as part of the message (attached) or the signature can be its own separate file (detached).  In this diagram, the sender (on the right), creates a digital signature using a private key and sends the DS with a corresponding public key to the receiver (on the left).  The receiver uses the public key attached to the message to verify the signature.
 
-![[../images/02/ds_diagram.png|Digital Signature Sending and Receiving|600]]
+![[../images/02/ds_diagram.png|Digital Signature Sending and Receiving|500]]
 
 
 > [!activity] Activity 2.6 - Detached Digital Signature
 > Let's demonstrate a detached digital signature.  I will use the `gpg` command preinstalled on the Ubuntu VM to generate a key.  Each key stored on the system's key ring requires a name, email address, and password.
-> ![[../images/02/lab_ds_gen_key.png|GPG Key Generation]]
+> ![[../images/02/lab_ds_gen_key.png|GPG Key Generation|550]]
 > Next, I create some content and store it in a file called `message.txt`.  This is the message that I will use to create a digital signature using the key I just created.
-> ![[../images/02/lab_ds_message.png|Create Message to Sign]]
+> ![[../images/02/lab_ds_message.png|Create Message to Sign|600]]
 > Using `gpg` again, I create a detached signature in an output file called `message.txt.sig`.   This signature file would typically be sent along with the message so the recipient can verify the message's authenticity and integrity. 
-> ![[../images/02/lab_ds_signature.png|Detached DS Creation]]
+> ![[../images/02/lab_ds_signature.png|Detached DS Creation|600]]
 > The `gpg` utility with the `--verify` option checks that a signature corresponds with a message as demonstrated in the following command.  If the message were altered in any way, the verify check would fail with a "Bad signature" message.
-> ![[../images/02/lab_ds_verify.png|GPG Verify DS and Message]]
+> ![[../images/02/lab_ds_verify.png|GPG Verify DS and Message|600]]
 ## Steganography
 Many centuries ago, a Greek historian wrote about a technique previously used to inconspicuously send a secret message.  A message was tattooed onto the messenger's shaved head and then their hair was allowed to grow back, concealing the tattooed message.  When the messenger arrived at their destination, their head was shaved and the message read.  The technique of hiding in plain sight to avoid detection is known as **steganography**.  A message can be smuggled in various media, including audio and image files.  
 

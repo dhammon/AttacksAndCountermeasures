@@ -1,12 +1,12 @@
 # Mobile Application Security
 ![](../images/14/android_armor.jpg)
 
-Prior to artificial intelligence, web 3.0, and cloud technology trends, mobile applications were all the rage.  For many years it seemed that every organization was rushing to develop and offer a mobile application to their users.  During this surge of enthusiasm, many applications were developed that exposed security risks and new attack vectors against organization systems.  Mobile applications have persisted as a useful mechanism to connect individuals to existing and new organizations.  New organizations leverage the mobile ecosystem to launch businesses solely dependent on smart phone and tablet users.  Today, Apple and Android are the major systems that support mobile application development with the extreme majority of market share.  While both companies approach mobile applications differently, we will focus on the Android system in this chapter due to its relative ease to analyze.  Apple's walled garden architecture makes it more challenging to analyze mobile applications, usually requiring a MacOS with which not everyone may have access.  This chapter will describe the Android system and application basics and then walk the reader through the attacks and counter measures related to Android mobile applications.
-
 **Objectives**
 1. Describe Android application fundamentals and operating components.
 2. Understand the security features and risks of Android applications.
 3. Conduct basic static and dynamic analysis of Android applications using Qark and Android Studio.
+
+Prior to artificial intelligence, web 3.0, and cloud technology trends, mobile applications were all the rage.  For many years it seemed that every organization was rushing to develop and offer a mobile application to their users.  During this surge of enthusiasm, many applications were developed that exposed security risks and new attack vectors against organization systems.  Mobile applications have persisted as a useful mechanism to connect individuals to existing and new organizations.  New organizations leverage the mobile ecosystem to launch businesses solely dependent on smart phone and tablet users.  Today, Apple and Android are the major systems that support mobile application development with the extreme majority of market share.  While both companies approach mobile applications differently, we will focus on the Android system in this chapter due to its relative ease to analyze.  Apple's walled garden architecture makes it more challenging to analyze mobile applications, usually requiring a MacOS with which not everyone may have access.  This chapter will describe the Android system and application basics and then walk the reader through the attacks and counter measures related to Android mobile applications.
 ## Android Application Basics
 Understanding the development and operation of Android applications is important before discussing their security.  Application developers can choose to develop applications using Java, Kotlin, or C++ languages.  The source code is then compiled using the Android software development kit (SDK) into an Android package file with the extension `.apk`. [^1]  This portable file contains all the data, resources, and compiled code to run an application on an Android operating system.  The applications are signed digitally with a developer-maintained certificate before being uploaded to Google Play using a registered developer account.  Once in the store, they can be downloaded and installed by any internet user.
 
@@ -19,9 +19,9 @@ Applications running on an Android system, such as a smart phone or tablet, are 
 
 Each app running in a sandbox is also granted least privileges by default.  Application developers have the ability to loosen permission controls on their application to allow various sources to interact with its components.  If mishandled, these less restrictive permissions could open up the application to security vulnerabilities.  Applications can also use other operating system APIs to utilize hardware components, such as contact lists or the camera.  Android ensures that these permissions are explicitly granted by the user when installing the app or during runtime for the more dangerous permissions.  You may have seen this as a pop-up message during app installations which gives the user the ability to allow or deny application permissions.
 
-![[../images/14/app_runtime.png|Android Application Runtime Environment|550]]
+The graphic below attempts to illustrate some of the previous points.  There are three applications titled A, B, and C (light blue boxes) running within sandboxes on top of the operating system (bottom grey bar).  The operating system maintains each of the application's permissions describing what the application is allowed to access.  In this table, on the bottom left of the graphic, App C has permissions to the camera, which is also depicted using a camera icon within the app on the right.  The operating system also maintains databases, like SQLite, the file system, application users and manages running processes.  As we will learn in the following section, each application has components that can be invoked using *intents*.  
 
-The graphic above attempts to illustrate some of the previous points.  There are three applications titled A, B, and C (light blue boxes) running within sandboxes on top of the operating system (bottom grey bar).  The operating system maintains each of the application's permissions describing what the application is allowed to access.  In this table, on the bottom left of the graphic, App C has permissions to the camera, which is also depicted using a camera icon within the app on the right.  The operating system also maintains databases, like SQLite, the file system, application users and manages running processes.  As we will learn in the following section, each application has components that can be invoked using *intents*.  
+![[../images/14/app_runtime.png|Android Application Runtime Environment|550]]
 
 Each application's access to these components is established during development.  They restrict an application's ability to interact with other applications as shown between App A and App B's blocked arrow.  In this example, App B attempts to directly interact with App A, but is unable to do so because of sandboxing and missing permissions.  Applications can also allow interactions with other apps, as shown between App B and App C.  Here, App B interacts with the Activities component of App C through the intents system illustrated with green arrows.
 ### Components of Android Applications
@@ -176,19 +176,19 @@ There are several tools that can assist in the extraction of an application's so
 >cd build/qark/cfr/newtonanalytics/modernportfoliotheory/
 >ls
 >```
->![[../images/14/static_activity_path.png|Listing Decompiled Files|600]]
+>![[../images/14/static_activity_path.png|Listing Decompiled Files|500]]
 >That hardcoded HTTP URL was found in the `Run.java` file on line 95.  Displaying the file using `cat` and scrolling through its content, I can see the FQDN endpoint!
 >```bash
 >cat Run.java
 >```
->![[../images/14/static_activity_url.png|FQDN Manually Found|600]]
+>![[../images/14/static_activity_url.png|FQDN Manually Found|500]]
 >Looks like the application is concatenating several parameters and rendering the page results in a WebView.  There might be a server-side request forgery (SSRF) or another type of path manipulation vulnerability here which would require dynamic testing.  Above the FQDN, I also spot some database references, so this application is likely using the native SQLite database.
 >
 >It is also worth exploring the application's manifest file content for more context on the components being used by the application and to potentially spot any over permissive settings.  The `AndroidManifest.xml` file can be found in the `build/qark` folder listed here.
 >```bash
 >cd ~/qark/build/qark
 >```
->![[../images/14/static_activity_list.png|Listing Application Files|600]]
+>![[../images/14/static_activity_list.png|Listing Application Files|500]]
 >I dump the contents of the manifest file to the terminal's standard output using cat and explore it further.  I find that the output includes a few activities as well as information about the application's version.
 >```bash
 >cat AndroidManifest.xml
@@ -204,7 +204,7 @@ These tools will enable the researcher to load the acquired APK into a virtual e
 >Android Studio offers developers an integrated development environment with device emulators and built-in debugging tools.  In this activity, I will setup Android Studio on my Windows host and dynamically analyze the application using the Android debugger ADB.
 >
 >From my Windows host, I open a browser, navigate to https://developer.android.com/studio, and press the "Download Android Studio" button.  It is about 1GB in size and takes a few minutes to complete.
->![[../images/14/dynamic_activity_download.png|Downloading Android Studio Installer|600]]
+>![[../images/14/dynamic_activity_download.png|Downloading Android Studio Installer|550]]
 >Once the download is completed, I open my Downloads folder and double click on the Android Studio executable to start the installation.  The installer requires administrative permissions causing the UAC prompt to launch.  I accept the UAC and then press Next to begin the installation.
 >![[../images/14/dynamic_activity_setup.png|Starting the Installation of Android Studio|400]]
 >The setup wizard walks me through the installation where I make sure to select the components "Android Studio" and the "Android Virtual Device".  I accept the default installation location and any other default recommendations.  Once finished, Android Studio launches and presents me with the "Welcome to Android Studio" view.
@@ -215,13 +215,13 @@ These tools will enable the researcher to load the acquired APK into a virtual e
 >I'll be using the virtual device Pixel 3a with API 34 for dynamic analysis.  Options to set up a virtual device are found under the More Actions dropdown menu in the main pane of the Welcome to Android Studio screen under the "Virtual Device Manager" option.
 >![[../images/14/dynamic_activity_vdm.png|Selecting Virtual Device Manager|500]]
 >The Device Manager window lists all devices that are ready to be emulated.  To add a new device, I press the "Create Device" button in the top left corner of the window.  I choose the Pixel 3a hardware and press Next.
->![[../images/14/dynamic_activity_hardware.png|Selecting Hardware|600]]
+>![[../images/14/dynamic_activity_hardware.png|Selecting Hardware|650]]
 >Then I select the API 34 image that will be installed on the virtual device and press the download icon.  The API is about 1GB in size and takes some time to download and install.  
 >![[../images/14/dynamic_activity_image.png|Selecting Image|600]]
 >The interaction also requires me to accept the license agreement, but eventually installs the related SDK.
 >![[../images/14/dynamic_activity_sdk_install.png|SDK Installation|600]]
 >Once the API and SDK are downloaded and installed, I return back to the Android Virtual Device wizard and name the AVD `Pixel 3a API 34` before finishing the setup of the device.
->![[../images/14/dynamic_activity_avd_finish.png|Complete AVD Setup|600]]
+>![[../images/14/dynamic_activity_avd_finish.png|Complete AVD Setup|550]]
 >Now that Android Studio and the SDK are installed, along with setting up an AVD, I am ready to launch the emulator.  From my Windows host I open a command prompt and navigate to the SDK's emulator folder.
 >```cmd
 >cd AppData\Local\Android\Sdk\emulator

@@ -2,8 +2,6 @@
 
 ![](../images/01/lock.png)
 
-Organizations typically handle sensitive information that would cause harm if accessed or manipulated by an unauthorized third party.  The operations, services, and products of these organizations often depend on computerized systems.  If such systems were degraded or unavailable the organization would be materially harmed.  These risks drive the field of information security (infosec) as organizations need the ability to operate without data or system compromise.  Infosec should not be confused with cybersecurity, which one could argue supersedes infosec, where digital systems are protected regardless of the information they process.  In this chapter, we explore how organizations approach managing information security at an administrative level.  The reader will be introduced to models, frameworks, and definitions that provide a sound foundation when discussing security with other professionals.  
-
 **Objectives**
 1. Explain the CIA triad and how it is used;
 2. Identify common definitions associated with information security;
@@ -13,6 +11,8 @@ Organizations typically handle sensitive information that would cause harm if ac
 6. Explore business continuity and disaster recovery processes;
 7. Understand identity access management processes and control models; and
 8. Prepare a virtual environment to be used in future labs.
+
+Organizations typically handle sensitive information that would cause harm if accessed or manipulated by an unauthorized third party.  The operations, services, and products of these organizations often depend on computerized systems.  If such systems were degraded or unavailable the organization would be materially harmed.  These risks drive the field of information security (infosec) as organizations need the ability to operate without data or system compromise.  Infosec should not be confused with cybersecurity, which one could argue supersedes infosec, where digital systems are protected regardless of the information they process.  In this chapter, we explore how organizations approach managing information security at an administrative level.  The reader will be introduced to models, frameworks, and definitions that provide a sound foundation when discussing security with other professionals.  
 ## Introduction
 You probably have some instinctive ideas about information security.  Perhaps you have had a social media account compromised by using a weak password, or maybe you have participated in mandatory security awareness training at work.  Regardless, you might imagine scenarios where an attacker could gain access to data.  Take a moment and consider the following scenario:
 
@@ -270,7 +270,7 @@ There are several architectures to map entities with permissions and control acc
 ![[../images/01/acl.png|Azure ACL|500]]
 The ACL is managed by the object's owner, who can assign which service principals can perform actions on the object.  This type of ACL where the owner of the object administers control is known as a **discretionary access control list (DACL)**.  There are other variants of access control to consider, such as **mandatory access control (MAC)** in which another system maintains what users can access data and systems under different data classifications.  Each entity is assigned a *clearance level* and information systems are labeled with a *data classification*.  When an entity requests data from the system, the clearance level and the classification label are checked against a control list to allow or block the request.
 
-![[../images/01/mac.png|Mandatory Access Control|600]]
+![[../images/01/mac.png|Mandatory Access Control|550]]
 
 An information system with thousands of service principals and millions of objects would become unmanageable.  Easing the burden of administering access promotes a more secure environment as it can streamline access decisions making a system less complicated.  One strategy to organize access is through **role-based access control (RBAC)** in which system administrators can create roles of permission sets.  Once the role is created and permissions assigned, the administrator adds users to the role who inherit the permissions.  This simplifies reviews of permissions much easier, as similar user groups will have consistent permissions assigned.
 ### Managing IAM
@@ -356,7 +356,6 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > We will use an Ubuntu VM throughout the course as a victim, server, or to illustrate secure configurations.  Ubuntu is another Debian distribution maintained by Conical and is one of the most popular Linux operating systems.  You will download an ISO image and install the system using the unattended installation feature.  Once completed, we will configure the VM to share resources with the host.
 > #### Step 1 - Download and Set Up Ubuntu VM
 > 1. Navigate to https://releases.ubuntu.com/22.04/ and download the Ubuntu version 22.0.4 image.
-> ![[../images/01/ubuntu22_download.png|Ubuntu Download Page|500]]
 > 2. With the ISO for Ubuntu fully downloaded (~10-20 minutes depending on internet speeds), navigate to the running VirtualBox application and select the “New” button.
 > 3. The VirtualBox "Create Virtual Machine" wizard will launch.  On the "Virtual machine Name and Operating System" page, enter "ubuntu" in the name field and select the Ubuntu ISO image you downloaded in the previous step.  Leave the "Skip Unattended Installation" checkbox UNCHECKED and press Next.
 > 4. Within the "Unattended Guest OS Install Setup" page, change the username to your name, enter a password, and change the domain name to "lan".  Ensure the "Guest Additions" option is checked and press Next.
@@ -365,7 +364,7 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > 7. Review your settings on the "Summary" page and press "Finish" to complete the setup.
 > #### Step 2 - Install Ubuntu OS
 > 1. Observe the ubuntu VM has been configured and is running in the VirtualBox application.  Select the ubuntu entry and then the Show button to watch the installation progress.  The installation should take 20-30 minutes.
-> ![[../images/01/lab_10_ubuntu_install.png|Ubuntu OS Auto Installation|500]]
+> ![[../images/01/lab_10_ubuntu_install.png|Ubuntu OS Auto Installation|450]]
 > 2. Once installation is complete the VM will reboot to the login screen.  Login with the user account you setup in step 4.
 > #### Step 3 - Set Up Ubuntu OS
 > 3. Like Kali, set up the shared clipboard and drag and drop VM settings.  Select Devices, Shared Clipboard, and choose Bidirectional.  Then select Devices, Drag and Drop, and choose Bidirectional.
@@ -376,11 +375,11 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > The last VM we will be using in our lab environment is a Windows 10 machine.  Like Ubuntu, it will act as a victim, server, or be used to demonstrate secure configurations.  You will install an evaluation version so there is no need to purchase a license.  To obtain the ISO, you will download the Windows installation media tool to your host machine, configure the desired ISO, and download it.  You will then create a VM using this ISO and use the unattended installation feature.  After installation we will set up the ability to share resources between the host and the VM.
 > #### Step 1 - Download the Windows ISO
 > 1. Navigate to https://www.microsoft.com/en-us/software-download/windows10 and press the "Download Now" button under the "Create Windows 10 installation media" section.
-> ![[../images/01/lab_11_win_download.png|Download Media Creation Tool|500]]
+> ![[../images/01/lab_11_win_download.png|Download Media Creation Tool|450]]
 > 2. Open the Downloads folder and run the Media Creation Tool executable which will launch the "Windows 10 Setup" wizard in a new window.
 > 3. Within the "Windows 10 Setup" window, accept the licensing and choose “Create installation media (USB flash drive, DVD, or ISO file) for another PC” option.
 > 4. On the "Choose which media to use" page of the wizard, use the recommended options and select ISO file.
-> ![[../images/01/lab_12_win_iso.png|Media Creation Tool ISO Selection|400]]
+> ![[../images/01/lab_12_win_iso.png|Media Creation Tool ISO Selection|300]]
 > 5. Select the location to save the ISO and the download will begin.  Select Finish once complete (no need to burn to DVD) and the download process should begin.  The download may take 10 to 20 minutes depending on your internet connection.
 > #### Step 2 - Set Up the Windows VM
 > 6. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.

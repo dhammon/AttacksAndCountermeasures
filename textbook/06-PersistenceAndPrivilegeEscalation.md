@@ -1,13 +1,13 @@
 # Chapter 6 - Persistence and Privilege Escalation
 ![](endpoint_hacked.jpg)
 
-The previous chapter covered several features of Windows and Linux operating systems that have a security impact.  Some of those features promote security while other features are utilities that could be abused by malicious actors.  In this chapter, we will cover some common threat actor techniques conducted after initial compromise.  This will include how attackers gain further access to an already compromised system and how they maintain their access over time.  The last section of the chapter focuses on application memory issues which can be abused to gain initial access onto a system or to increase an attacker's permissions on a compromised system.
-
 **Objectives**
 1. Understand the post exploitation activities performed by actors after initial compromise.
 2. Demonstrate persistence techniques in Windows and Linux operating systems.
 3. Conduct privilege escalation methods within compromised systems.
 4. Identify buffer overflow vulnerabilities and craft exploits to hijack an application's execution flow.
+
+The previous chapter covered several features of Windows and Linux operating systems that have a security impact.  Some of those features promote security while other features are utilities that could be abused by malicious actors.  In this chapter, we will cover some common threat actor techniques conducted after initial compromise.  This will include how attackers gain further access to an already compromised system and how they maintain their access over time.  The last section of the chapter focuses on application memory issues which can be abused to gain initial access onto a system or to increase an attacker's permissions on a compromised system.
 ## Post-Exploitation
 An attacker gaining access to a system is only the first milestone of their illicit behavior.  There are several ways in which an attacker gains initial access that will be covered later in this textbook.  One such technique might be a phishing email sent to a potential victim that includes a malware attachment.  An attacker could gain remote access to a system in which a victim downloads and runs malware delivered by a phishing email.
 
@@ -84,15 +84,15 @@ Privilege escalation vulnerabilities can be found within the Windows *kernel*, w
 
 Selecting that exploit link provides us with the source code and further references.  Often these exploits will include instructions on how to compile and use them.  It seems that for this exploit we are on our own to figure out its compilation and use.
 
-![[exploit_db_code.png|Kernel Exploit Code from ExploitDB]]
+![[exploit_db_code.png|Kernel Exploit Code from ExploitDB|750]]
 
 Actually, all of the exploits from this website are already included on the Kali VM.  They are searchable by using the `searchsploit` command followed by a query term, as shown in the following image.
 
-![[exploitdb_searchsploit.png|Searchsploit Windows Query|600]]
+![[exploitdb_searchsploit.png|Searchsploit Windows Query|500]]
 
 After identifying a target exploit using `searchsploit`, you can copy it and use it as needed.  Here we find the same C program demonstrated on the ExploitDB website a few screenshots ago.
 
-![[exploitdb_searchsploit_copy.png|Searchsploit Copy of Kernel Exploit|600]]
+![[exploitdb_searchsploit_copy.png|Searchsploit Copy of Kernel Exploit|500]]
 
 > [!info] Info - Windows Privilege Escalations Resource
 > There are many kernel privilege escalation exploits, but they are not the only method of escalation, as there can be misconfigurations on a system as well.  These misconfigurations leave the system vulnerable to privilege escalation and other attack phases.  Another of my favorite security websites is Carlos Polop's Hacktricks book, which includes an extensive list of viable attacks.  https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation
@@ -119,17 +119,17 @@ A Windows service could be hijacked if it includes an *unquoted service path*.  
 >net user
 >net localgroup administrators
 >```
->![[win_privesc_net_user.png|Confirming Low Privileged User Tester Exists|600]]
+>![[win_privesc_net_user.png|Confirming Low Privileged User Tester Exists|500]]
 >My `daniel` user is a member of the local administrator group but `tester` is not.  I log out of the `daniel` account and then login as the `tester` user.  Then I open a command prompt (non-admin), as the attacker who compromised the `tester` user, and update the vulnerable service with a new command.  This malicious command adds the `tester` user to the local administrators group.
 >```cmd
 >sc config vulnerable binpath= "net localgroup administrators tester /add"
 >```
->![[win_privesc_update_service.png|Updating Vulnerable Service With Malicious Command|600]]
+>![[win_privesc_update_service.png|Updating Vulnerable Service With Malicious Command|500]]
 >The service has been updated with my new command.  Once the service is restarted, such as during a reboot, the `tester` user should be made an administrator.  The service can do this because it runs as the SYSTEM and can run any valid command.  If I tried adding the `tester` user to the admin group with just that `net localgroup` command, I would receive a permission denied error.  I can force the service to start by running the following command.
 >```cmd
 >sc start vulnerable
 >```
->![[win_privesc_start_service.png|Starting Windows Vulnerable Service|600]]
+>![[win_privesc_start_service.png|Starting Windows Vulnerable Service|500]]
 >Notice the `StartService` failure message?  This is because the command provided as a binary path is not a valid binary.  But the command should have still run regardless of the failure message.  To confirm, I re-run the `net localgroup` command and see that the `tester` user is now a member of the local administrator group!
 >```cmd
 >net localgroup administrators
@@ -153,7 +153,7 @@ Several demonstrations throughout this book use the `sudo` command to elevate pe
 
 In the Operating System Security chapter, we examined what SUID executables are and how they work to provide users permissions to run executables as a file's owner.  Similar to the `sudo` abuses to escalate privileges, SUIDs can be abused by an attacker to escalate privileges.  One of my favorite websites that lists `sudo` and SUID privilege escalation abuses is GTFOBins.  It maintains a curated list of many native Linux binaries and known ways they can be abused.  The following image shows how the `base64` command can be abused to escalate privileges if it is configured to use SUID or `sudo`. [^4]
 
-![[gtfobins.png|Base64 Page From GTFOBins Website]]
+![[gtfobins.png|Base64 Page From GTFOBins Website|800]]
 
 
 > [!activity] Activity 6.4 - Linux SUID Privilege Escalation
@@ -218,7 +218,7 @@ A system's CPU can only process a small amount of data, or instructions, at a ti
 
 Programs are initialized into memory within a block space which is separated into the *stack*, *heap*, *data*, and *text* segments.  The following illustration shows the order of the segments with the lowest (first) segment used for text and the highest segment used for the stack segment.  The space between the stack and heap segments can be dynamically adjusted as needed by either segment of the program.
 
-![[buffer_mem_layout.png|Memory Layout Segment Order|150]]
+![[buffer_mem_layout.png|Memory Layout Segment Order|175]]
 
 You can think of the block of memory as an empty cup.  Water (data) fills the cup (block) from the bottom to the top.  The stack segment holds data that will be processed by program functions.  Other data used by the program is stored within the heap segment.  Global variables are located in the data segment while all the program's code is within the text segment.  Memory address space is represented as a 4-byte or 8-byte hexadecimal value in 32-bit or 64-bit architecture systems, respectively.  As one byte includes two hexadecimal digits, an example address for a 32-bit system would look something like `0x012A341C`. 
 
@@ -478,8 +478,6 @@ The last security measure we will cover is the **canary** method in which the op
 > ``` bash
 > bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
 > ```
-> > [!tip] Tip - GEF Installation Fail
-> > Consider downloading and running the script manually.  
 > #### Step 3 - Create the Vulnerable Binary
 > Create a C program using the following code and then compile it without any security settings.
 > ```bash
@@ -497,12 +495,10 @@ The last security measure we will cover is the **canary** method in which the op
 > 	printf("Buffer Content is : %s\n",buffer);  
 > }
 > ```
-> Once the file is created, compile it using gcc.
+> Once the file is created, compile it using gcc.  Modern C standards won't compile the program unless an older standard is forced to be used, such as `-std=gnu89`.
 > ``` bash 
 > gcc -std=gnu89 -no-pie -fno-stack-protector -z execstack program.c -o program
 > ```
-> >[!tip] Tip - Newer C Standards
-> Modern C standards and implementations won't compile the program unless an older standard is forced to be used, such as `-std=gnu89`
 >
 > #### Step 4 - Disable ASLR
 > Left enabled, ASLR will randomize the program’s addresses each time it is run.  You will disable this security setting for ease of demonstration.

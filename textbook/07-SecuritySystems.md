@@ -1,13 +1,12 @@
 # Chapter 7 - Security Systems
 ![](../images/07/security_patch.jpg)
 
-There are preventative and detective controls that security professionals can implement to protect the security of computer systems and networks.  Tooling often accompanies a control, where some technology or software is used to achieve a secure outcome.  The aim of some security solutions is to prevent the compromise of systems whereas other solutions attempt to detect when a compromise occurs.  This chapter starts with an overview of statistics by leading cybersecurity research groups that analyze industry trends on how organizations get compromised.  We will cover tooling and processes that focus on software vulnerabilities as well as the susceptibility of end users as these are the common system compromise vectors.  We will also cover insiders that purposefully or inadvertently breach the security of data and systems.  In addition, this chapter will explore a couple of common technologies that are used to detect network intrusions.  While we will not cover all the security systems available to professionals, readers will gain a firm understanding of the capabilities and goals this class of tooling offers.
-
 **Objectives**
 1. Explain how the vulnerability ecosystem works from discovery to remediation.
 2. Understand the role of security training to prevent initial access by threat actors.
 3. Demonstrate the use of threat detection systems commonly used in organizations.
 
+There are preventative and detective controls that security professionals can implement to protect the security of computer systems and networks.  Tooling often accompanies a control, where some technology or software is used to achieve a secure outcome.  The aim of some security solutions is to prevent the compromise of systems whereas other solutions attempt to detect when a compromise occurs.  This chapter starts with an overview of statistics by leading cybersecurity research groups that analyze industry trends on how organizations get compromised.  We will cover tooling and processes that focus on software vulnerabilities as well as the susceptibility of end users as these are the common system compromise vectors.  We will also cover insiders that purposefully or inadvertently breach the security of data and systems.  In addition, this chapter will explore a couple of common technologies that are used to detect network intrusions.  While we will not cover all the security systems available to professionals, readers will gain a firm understanding of the capabilities and goals this class of tooling offers.
 ## Industry Statistics
 The impact to an organization that experiences a data breach can be highly destructive.  Depending on the threat actor and their level of success in the compromise, the organization could lose its ability to conduct business, lose its intellectual property and data, and damage its reputation, among many other risks.  Mature organizations will ensure to focus on security in order to prevent or minimize the realization of these risks.
 
@@ -15,9 +14,9 @@ In the Information Security chapter, we explored the attacker lifecycle, which u
 
 There are a handful of large organizations that have a vantage point on the security of the internet.  For example, Verizon is a large internet service provider as it provides millions of devices internet access through their cellular networks.  This company takes security very seriously and has invested in the creation of security research that analyzes the types of breaches and malicious traffic patterns across their services.  From these experiences and data, they draw insights and statistics and publish their findings within an annual breach report.  But Verizon is not the only such company to provide this kind of research and reporting.  Many large cybersecurity companies, such as those that conduct incident investigations, leverage their cases and data to create similar reports that compare attacker methodologies that are used over time.  CrowdStrike is a highly reputable and offers high quality products and services that detect and respond to security threats in real time.
 
-Studying these reports provides the industry with valuable insights on where an organization could focus their security efforts and investments.  The 2023 Verizon Data Breach Investigations Report (DBIR) includes many insightful statistics of the modern threat landscape.  For instance, they found that 83% of data breaches involved external actors - which implies that 17% were caused by internal actors.  Such a high proportion of external actors makes sense; however, if all an organization's efforts focused only on external threats, they would miss a material vector of security risk.  Further in the report, Verizon produces statistics on the causes of data breaches that include 49% Credentials, 12% Phishing, and 5% Exploits. [^1]  
-
 ![[../images/07/verizon_2023_dbir.png|Verizon 2023 DBIR - Summary of Findings|450]]
+
+Studying these reports provides the industry with valuable insights on where an organization could focus their security efforts and investments.  The 2023 Verizon Data Breach Investigations Report (DBIR) includes many insightful statistics of the modern threat landscape.  For instance, they found that 83% of data breaches involved external actors - which implies that 17% were caused by internal actors.  Such a high proportion of external actors makes sense; however, if all an organization's efforts focused only on external threats, they would miss a material vector of security risk.  Further in the report, Verizon produces statistics on the causes of data breaches that include 49% Credentials, 12% Phishing, and 5% Exploits. [^1]  
 
 The image above from the DBIR illustrates the summary findings from its 2023 report.  It can provide the basis of a roadmap for an organization on how to think about and approach the prevention of data breaches.  Using these statistics, an organization may determine that the need for good password hygiene, strong authentication systems, email protections, and vulnerability management solutions can reduce the probability of common data breaches.  There is a lot of data produced by companies like Verizon and CrowdStrike that will not always reflect where an organization should invest security resources.  Not all concerned organizations have the same threat profile, so it is important to consider the context of a business's operations and other data sources before fully investing in a security vector solution.
 ## Vulnerability Management
@@ -134,11 +133,11 @@ Vulnerability management scanning tools, such as Nessus, download the NVD databa
 > 
 > Eventually, the scan finishes and displays results per host by severity and volume.
 > 
-> ![[../images/07/vuln_activity_host_results.png|Vulnerabilities by Severity and Host]]
+> ![[../images/07/vuln_activity_host_results.png|Vulnerabilities by Severity and Host|675]]
 > 
 > Selecting one of the hosts will list its vulnerabilities that were identified by the scan.  Selecting one of the vulnerabilities will reveal additional information on the issue including remediation guidelines.
 > 
-> ![[../images/07/vuln_activity_finding.png|High Severity Result For 10.0.2.15]]
+> ![[../images/07/vuln_activity_finding.png|High Severity Result For 10.0.2.15|675]]
 
 ## Email Architecture
 As we learned from Verizon's DBIR, phishing emails and human interactions are material factors in relation to system and data breaches at organizations.  It is therefore worth understanding how email works, the risks it imposes, and how to secure it to best mitigate the threats faced by organizations.  Let us first begin with the basics of email system architecture.
@@ -223,7 +222,7 @@ Each rule must include a header and option section.  The header is the first lin
 >cd ~/Downloads
 >unzip 2016-04-16-traffic-analysis-exercise.pcap.zip
 >```
->![[../images/07/snort_activity_unzip.png|Unzipping PCAP|600]]
+>![[../images/07/snort_activity_unzip.png|Unzipping PCAP|500]]
 >This PCAP includes case information surrounding a phishing site with a spoofed PayPal credentials form.  The indicators of attack include the IP address 91.194.91.203 on port 80 and the page includes the keyword "paypal".  With this information I create a Snort detection rule that can be used to detect network traffic reaching the malicious site.  The following command adds the custom rule to the local rules file in the Snort configuration.
 >```bash
 >sudo su -
@@ -231,14 +230,14 @@ Each rule must include a header and option section.  The header is the first lin
 >exit
 >```
 >
->![[../images/07/snort_activity_custom_rule.png|Creating Custom Snort Rule|600]]
+>![[../images/07/snort_activity_custom_rule.png|Creating Custom Snort Rule|550]]
 >
 >With the rule in place, I scan the PCAP file using Snort.  The following command uses the default configuration file, reads the PCAP file to the console, and has the options `-q` which removes the banner, `-K` enables logging mode, and `-A` that enables alert mode.
 >```bash
 >sudo snort -c /etc/snort/snort.conf -r 2016-04-16-traffic-analysis-exercise.pcap -q -k none -A console
 >```
 >
->![[../images/07/snort_activity_scan.png|Scanning PCAP With Snort|600]]
+>![[../images/07/snort_activity_scan.png|Scanning PCAP With Snort|400]]
 >
 >Snort alerts on several items, but notably it alerts on the PayPal phishing from the rule created earlier!
 
@@ -276,21 +275,21 @@ The image above illustrates an attacker making a network connection to a honeypo
 > ```bash
 > sudo apt install python3-pip -y
 > ```
-> ![[../images/07/honey_activity_pip_install.png|Installing Python3 PIP|600]]
+> ![[../images/07/honey_activity_pip_install.png|Installing Python3 PIP|500]]
 > Once Pip is installed, I install the honeypots Python module with the following command.  Several supporting dependencies are installed alongside the honeypots module.
 > ```bash
 > sudo apt install python3-pip -y
 > pip3 install honeypots
 > ```
 > 
-> ![[../images/07/honey_activity_install.png|Installing Honeypots Module|600]]
+> ![[../images/07/honey_activity_install.png|Installing Honeypots Module|500]]
 > 
 > I also check the IP address of the Ubuntu VM to use later in the attack.  I can see my IP address is 192.168.4.169.
 > ```bash
 > ip a
 > ```
 > 
-> ![[../images/07/honey_activity_ip.png|Ubuntu IP Address Check|600]]
+> ![[../images/07/honey_activity_ip.png|Ubuntu IP Address Check|500]]
 > 
 > The final step to set up the MySQL honeypot is to run Python specifying the honeypots module with the setup option that targets the MySQL service and port, as shown in the following command.  The command's output displays the service settings and suggests that everything looks good.
 > ```bash
