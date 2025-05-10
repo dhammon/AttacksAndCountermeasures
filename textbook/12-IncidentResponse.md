@@ -245,7 +245,7 @@ This is where the value of a cyber liability insurer comes into play as they mai
 >[!exercise] Exercise 12.1 - SIEM Setup
 >In this task, you will install Splunk on your Ubuntu VM, import event data, and build queries, reports, and dashboards to analyze events.
 >#### Step 1 - Install Splunk Enterprise
->Using your Ubuntu VM in Bridge Adapter network mode, launch a browser and navigate to [https://www.splunk.com/en_us/download/splunk-enterprise.html](https://www.splunk.com/en_us/download/splunk-enterprise.html) and fill out the Create Account form with you CSUS email address.
+>Using your Ubuntu VM in Bridge Adapter network mode, launch a browser and navigate to [https://www.splunk.com/en_us/download/splunk-enterprise.html](https://www.splunk.com/en_us/download/splunk-enterprise.html) and fill out the Create Account form with your (.edu) email address.
 >
 >Upon login, you should reach the download page [https://www.splunk.com/en_us/download/splunk-enterprise.html?locale=en_us](https://www.splunk.com/en_us/download/splunk-enterprise.html?locale=en_us) .  Select Linux and download the ".deb" installer.
 >

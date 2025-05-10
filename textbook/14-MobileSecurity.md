@@ -297,7 +297,7 @@ They also serve as a great tool for testing vulnerability mitigations as they ca
 >```
 >Install the requirements and run the qark setup.  Note that there may be some errors during the installation, which could be okay.
 >```bash
->sudo pip install -r requirements.txt 
+>pip install -r requirements.txt 
 >sudo python setup.py install
 >```
 >Run qark while targeting the APK downloaded in the previous step.  Qark will decompile and analyze the APK, then produce a report of findings.  Note that the name of the APK might be slightly different or you may need to `unzip` it.  Once the tool finishes, copy down the path of the report on the last output as you'll need it in a later step.
