@@ -1,6 +1,8 @@
 <span class="chapter-banner">Chapter 8</span>
 # Web Application Defense
-![](../images/08/web_defense.jpg)
+<div class="image-crop">
+  <img src="../images/08/web_defense.jpg">
+</div>
 
 **Objectives**
 1. Understand the basic architecture of web applications and supporting systems.

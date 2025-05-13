@@ -1,7 +1,9 @@
 <span class="chapter-banner">Chapter 4</span>
 # Network Services
 
-![](../images/04/ethernet_shield.jpg)
+<div class="image-crop">
+  <img src="../images/04/ethernet_shield.jpg">
+</div>
 
 **Objectives**
 1. Understand common network protocols and technologies.

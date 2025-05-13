@@ -1,6 +1,8 @@
 <span class="chapter-banner">Chapter 7</span>
 # Security Systems
-![](../images/07/security_patch.jpg)
+<div class="image-crop">
+  <img src="../images/07/security_patch.jpg">
+</div>
 
 **Objectives**
 1. Explain how the vulnerability ecosystem works from discovery to remediation.

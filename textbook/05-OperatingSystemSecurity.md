@@ -1,6 +1,8 @@
 <span class="chapter-banner">Chapter 5</span>
 # Operating System Security
-![](../images/05/windows_linux.jpg)
+<div class="image-crop">
+  <img src="../images/05/windows_linux.jpg">
+</div>
 
 **Objectives**
 1. Gain an understanding of Linux file, user, service, and logging systems.

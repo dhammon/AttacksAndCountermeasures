@@ -172,7 +172,7 @@ span.chapter-banner {
   background-color: var(--header-color);
   padding: 8px 100px 8px 40px;
   border-radius: 4px 4px 90px 4px;
-  margin-top: 1.5em;
+  //margin-top: 1.5em;
   margin-bottom: 0.1em;
   //border-radius: 4px;
   color: white;
@@ -271,6 +271,30 @@ span.chapter-banner {
   line-height: 1.5em;
   text-align: center;
   border-radius: 50%;
+}
+
+
+/* Container with cropping window */
+.image-crop {
+  width: 100%;       /* desired visible width */
+  height: 625px;      /* desired visible height */
+  overflow: hidden;
+  position: relative;
+  //border: 0px solid #ccc; /* optional border */
+  border-radius: 4px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Force the embedded image to be positionable and scaled */
+.image-crop img {
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  position: absolute;
+  top: -75px;  /* shift image upward to show desired section */
+  //left: -25px;  /* shift image leftward */
 }
 
 

@@ -1,6 +1,8 @@
 <span class="chapter-banner">Chapter 13</span>
 # Cloud Security
-![](../images/13/cloud_security.jpg)
+<div class="image-crop">
+  <img src="../images/13/cloud_security.jpg">
+</div>
 
 **Objectives**
 1. Explain how organizations use the cloud and the services they offer.

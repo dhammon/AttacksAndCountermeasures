@@ -513,7 +513,7 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > 60. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
 > 61. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
 > 62. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
-> ![[../images/01/lab_13_win_summary.png|Windows VM Summary|500]]
+> ![[../images/01/lab_13_win_summary.png|Windows VM Summary|350]]
 > #### Step 3 - Install Windows OS
 > 63. Windows should take 20-30 minutes to install and can be monitored by selecting Show in VirtualBox on the running windows VM.
 > ![[../images/01/lab_14_win_install.png|Windows VM Installation|500]]

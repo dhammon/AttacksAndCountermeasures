@@ -1,6 +1,8 @@
 <span class="chapter-banner">Chapter 14</span>
 # Mobile Application Security
-![](../images/14/android_armor.jpg)
+<div class="image-crop">
+  <img src="../images/14/android_armor.jpg">
+</div>
 
 **Objectives**
 1. Describe Android application fundamentals and operating components.

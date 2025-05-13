@@ -1,6 +1,8 @@
 <span class="chapter-banner">Chapter 10</span>
 # Security Testing
-![](../images/10/security_tools.jpg)
+<div class="image-crop">
+  <img src="../images/10/security_tools.jpg">
+</div>
 
 **Objective**
 1. Describe the types and scopes of security testing processes.

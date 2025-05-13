@@ -1,6 +1,8 @@
 <span class="chapter-banner">Chapter 9</span>
 # Web Application Attacks
-![](web_attacks.jpg)
+<div class="image-crop">
+  <img src="../images/09/web_attacks.jpg">
+</div>
 
 **Objectives**
 1. Explain the risks associated with web applications and how they can be tested.

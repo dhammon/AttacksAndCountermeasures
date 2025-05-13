@@ -1,6 +1,8 @@
 <span class="chapter-banner">Chapter 6</span>
 # Persistence and Privilege Escalation
-![](endpoint_hacked.jpg)
+<div class="image-crop">
+  <img src="../images/06/endpoint_hacked.jpg">
+</div>
 
 **Objectives**
 1. Understand the post exploitation activities performed by actors after initial compromise.

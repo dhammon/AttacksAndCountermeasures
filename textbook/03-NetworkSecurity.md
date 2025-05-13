@@ -1,6 +1,9 @@
 <span class="chapter-banner">Chapter 3</span>
 # Network Security
-![](../images/03/globe_internet_connections.jpg)
+
+<div class="image-crop">
+  <img src="../images/03/globe_internet_connections.jpg">
+</div>
 
 **Objectives**
 1. Refresh knowledge on computer networking topics. 

@@ -1,6 +1,8 @@
 <span class="chapter-banner">Chapter 12</span>
 # Incident Response
-![](soc.jpg)
+<div class="image-crop">
+  <img src="../images/12/soc.jpg">
+</div>
 
 **Objectives**
 1. Understand the role and procedures of a security operations center (SOC).
