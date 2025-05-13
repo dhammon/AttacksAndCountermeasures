@@ -17,7 +17,7 @@
   <span class="toc-page">1</span>
 </p>
 <p class="toc-entry">
-  <span class="toc-title">Digital Textbook Copy and Support FIles</span>
+  <span class="toc-title">Digital Textbook Copy and Support Files</span>
   <span class="toc-dots"></span>
   <span class="toc-page">2</span>
 </p>
