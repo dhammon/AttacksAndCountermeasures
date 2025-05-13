@@ -1,4 +1,5 @@
-# Chapter 2 - Cryptology
+<span class="chapter-banner">Chapter 2</span>
+# Cryptology
 
 ![](../images/02/cryptology.jpg)
 

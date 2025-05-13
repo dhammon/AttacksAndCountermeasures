@@ -1,4 +1,5 @@
-# Chapter 7 - Security Systems
+<span class="chapter-banner">Chapter 7</span>
+# Security Systems
 ![](../images/07/security_patch.jpg)
 
 **Objectives**

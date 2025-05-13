@@ -1,4 +1,5 @@
-# Chapter 4 - Network Services
+<span class="chapter-banner">Chapter 4</span>
+# Network Services
 
 ![](../images/04/ethernet_shield.jpg)
 

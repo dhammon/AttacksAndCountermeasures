@@ -1,4 +1,5 @@
-# Chapter 12 - Incident Response
+<span class="chapter-banner">Chapter 12</span>
+# Incident Response
 ![](soc.jpg)
 
 **Objectives**

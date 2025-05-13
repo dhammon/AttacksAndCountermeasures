@@ -1,4 +1,5 @@
-# Chapter 6 - Persistence and Privilege Escalation
+<span class="chapter-banner">Chapter 6</span>
+# Persistence and Privilege Escalation
 ![](endpoint_hacked.jpg)
 
 **Objectives**

@@ -22,11 +22,6 @@
   <span class="toc-page">2</span>
 </p>
 <p class="toc-entry">
-  <span class="toc-title">Copyright</span>
-  <span class="toc-dots"></span>
-  <span class="toc-page">2</span>
-</p>
-<p class="toc-entry">
   <span class="toc-title">How to Use this book</span>
   <span class="toc-dots"></span>
   <span class="toc-page">2</span>
@@ -40,11 +35,6 @@
   <span class="toc-title">Chapter Summaries</span>
   <span class="toc-dots"></span>
   <span class="toc-page">3</span>
-</p>
-<p class="toc-entry">
-  <span class="toc-title">Acknowledgments</span>
-  <span class="toc-dots"></span>
-  <span class="toc-page">6</span>
 </p>
 
 ## Chapter 1 - Information Security

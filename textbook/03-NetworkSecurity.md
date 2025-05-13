@@ -1,4 +1,5 @@
-# Chapter 3 - Network Security
+<span class="chapter-banner">Chapter 3</span>
+# Network Security
 ![](../images/03/globe_internet_connections.jpg)
 
 **Objectives**

@@ -1,4 +1,5 @@
-# Chapter 9 - Web Application Attacks
+<span class="chapter-banner">Chapter 9</span>
+# Web Application Attacks
 ![](web_attacks.jpg)
 
 **Objectives**

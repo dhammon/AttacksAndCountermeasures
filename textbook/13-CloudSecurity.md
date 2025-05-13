@@ -1,4 +1,5 @@
-# Chapter 13 - Cloud Security
+<span class="chapter-banner">Chapter 13</span>
+# Cloud Security
 ![](../images/13/cloud_security.jpg)
 
 **Objectives**

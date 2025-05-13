@@ -1,4 +1,5 @@
-# Chapter 10 - Security Testing
+<span class="chapter-banner">Chapter 10</span>
+# Security Testing
 ![](../images/10/security_tools.jpg)
 
 **Objective**

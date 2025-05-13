@@ -1,4 +1,5 @@
-# Chapter 5 - Operating System Security
+<span class="chapter-banner">Chapter 5</span>
+# Operating System Security
 ![](../images/05/windows_linux.jpg)
 
 **Objectives**

@@ -1,4 +1,5 @@
-# Chapter 8 - Web Application Defense
+<span class="chapter-banner">Chapter 8</span>
+# Web Application Defense
 ![](../images/08/web_defense.jpg)
 
 **Objectives**
