@@ -415,7 +415,7 @@ The image above illustrates an attacker making a network connection to a honeypo
 >```
 >Observe that everything is running correctly and the terminal is standing by for connections. If any connections are made, they will be logged in the standard output. 
 >#### Step 3 - Attack the MySQL Port
->From your Kali VM, launch a terminal and make a connection to your Ubutntu VM using the mysql client. Make sure to replace the <UBUNTU_IP> with the IP address of the Ubuntu VM. 
+>From your Kali VM, launch a terminal and make a connection to your Ubuntu VM using the mysql client. Make sure to replace the <UBUNTU_IP> with the IP address of the Ubuntu VM. 
 >```bash
 >mysql -h <UBUNTU_IP> -u test -ptest 
 >```
