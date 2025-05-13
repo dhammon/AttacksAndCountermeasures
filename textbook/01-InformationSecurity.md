@@ -501,28 +501,25 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > ![[../images/01/lab_12_win_iso.png|Media Creation Tool ISO Selection|400]]
 > 50. Select the location to save the ISO and the download will begin.  Select Finish once complete (no need to burn to DVD) and the download process should begin.  The download may take 10 to 20 minutes depending on your internet connection.
 > #### Step 2 - Set Up the Windows VM
-<<<<<<< HEAD
 > 51. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
 > 52. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
-> 53. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Doman Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key; press the Next button.
+> 53. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Domain Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key; press the Next button.
 > 54. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
 > 55. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
 > 56. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
-=======
-> 6. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
-> 7. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
-> 8. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Domain Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key; press the Next button.
-> 9. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
-> 10. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
-> 11. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
->>>>>>> 19bf91c8788f01db2e0482760c6d9daf87ffc5c1
+> 57. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
+> 58. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
+> 59. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Domain Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key; press the Next button.
+> 60. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
+> 61. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
+> 62. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
 > ![[../images/01/lab_13_win_summary.png|Windows VM Summary|500]]
 > #### Step 3 - Install Windows OS
-> 57. Windows should take 20-30 minutes to install and can be monitored by selecting Show in VirtualBox on the running windows VM.
+> 63. Windows should take 20-30 minutes to install and can be monitored by selecting Show in VirtualBox on the running windows VM.
 > ![[../images/01/lab_14_win_install.png|Windows VM Installation|500]]
 > #### Step 4 - Set Up Windows OS
-> 58. After the installation is complete, you will be automatically logged into the VM to the Windows desktop.  You may have to adjust the VirtualBox View settings and/or the Windows display settings for the best experience.  If your window does not show the file menu, try using VirtualBox shortcut keys to display (in Windows right CTRL + Home button). 
-> 59. Like Kali and Ubuntu VMs, set up the shared clipboard and drag and drop VM settings. Select Devices, Shared Clipboard, and choose Bidirectional. Then select Devices, Drag and Drop, and choose Bidirectional.
+> 64. After the installation is complete, you will be automatically logged into the VM to the Windows desktop.  You may have to adjust the VirtualBox View settings and/or the Windows display settings for the best experience.  If your window does not show the file menu, try using VirtualBox shortcut keys to display (in Windows right CTRL + Home button). 
+> 65. Like Kali and Ubuntu VMs, set up the shared clipboard and drag and drop VM settings. Select Devices, Shared Clipboard, and choose Bidirectional. Then select Devices, Drag and Drop, and choose Bidirectional.
 > 
 > Congratulations, you have successfully installed Windows in VirtualBox!  If you have adequate disk space (2x the recommended minimum) then you may consider taking a snapshot of the fresh installation in case you ever want/need to start from a clean installation.
 
