@@ -13,7 +13,7 @@ Building community and meeting new cybersecurity professionals will expose you t
 ## Learning Sites
 If you enjoyed the practical labs throughout the textbook, you may find the following free online resources of particular interest.  Each has online labs and community support for practicing technical security concepts in a fun and interactive manner.  These free resources will dramatically improve your technical skills and expose you to tools and techniques used in trade craft.
 
-**Hack the Box (HTB)** - Provides trainings, games, and capture-the-flag style boot-to-root boxes to for learning and practice.  https://www.hackthebox.com
+**Hack the Box (HTB)** - Provides trainings, games, and capture-the-flag style boot-to-root boxes for learning and practice.  https://www.hackthebox.com
 
 **Try Hack Me (THM)** - Similar to HTB, but a more beginner friendly approach.  They cover many security topics and have a nice library of challenges and boxes from which to learn.  https://tryhackme.com
 
