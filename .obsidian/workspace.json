@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/07-SecuritySystems.md",
+                "file": "textbook/01-InformationSecurity.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "07-SecuritySystems"
+              "title": "01-InformationSecurity"
             }
           }
         ],
@@ -180,6 +180,7 @@
   },
   "active": "88fb94bf175f40d1",
   "lastOpenFiles": [
+    "textbook/07-SecuritySystems.md",
     "textbook/copyright.md",
     "textbook/00-Introduction.md",
     "textbook/01-InformationSecurity.md",
@@ -193,7 +194,6 @@
     "textbook/10-SecurityTesting.md",
     "textbook/09-WebApplicationAttacks.md",
     "textbook/08-WebApplicationDefense.md",
-    "textbook/07-SecuritySystems.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/05-OperatingSystemSecurity.md",
     "textbook/04-NetworkServices.md",
