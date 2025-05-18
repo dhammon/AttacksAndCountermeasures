@@ -62,10 +62,12 @@ The first `chmod` command sets the user and group of `example.txt` to read, writ
 > [!warning] Warning - Octal 777 Permission Set
 > Setting read, write, and execute for all users and groups on a system is considered an insecure practice.  Many Linux systems will highlight the file and change the font color to red to warn of the setting while listing directories.
 
-Imagine a scenario in which we want to grant others the ability to execute a file as the file's owner.  For this case, there is a special permission called the *setuid bit* that can allow an executable file to be run as the file's owner.  The *setgid bit* can also be used to allow a file to be run as the assigned group.  In the case of the file, the object is modified using `chmod` and the **set user ID (SUID)** is configured with the symbolic notation execute bit `s` for the user permission set.  Such a file might have a permission set like `rws` instead of `rwx`.  Similarly, the **set group ID (SGID)** is configured in a similar fashion, but an `s` is used on the group portion of the permission set.  In either case, this allows the executable file to be as the owner or group by anyone on the system without giving them ownership of the object.  SUIDs and SGIDs files can be helpful to Linux administrators when elevated access is needed for a specific executable.  We will explore how SUID/SGIDs can be abused to achieve privilege escalation in the next chapter.
+Imagine a scenario in which we want to grant others the ability to execute a file as the file's owner.  For this case, there is a special permission called the *setuid bit* that can allow an executable file to be run as the file's owner.  The *setgid bit* can also be used to allow a file to be run as the assigned group.  In the case of the file, the object is modified using `chmod` and the **set user ID (SUID)** is configured with the symbolic notation execute bit `s` for the user permission set.  Such a file might have a permission set like `rws` instead of `rwx`.  
 
 >[!note] Note - Self Group
 >Each time an account or user is created, a corresponding default group using the account name is also created.  If an account `daniel` is created, a group named `daniel` is also created and the user is automatically assigned to their like-named group.
+
+Similarly, the **set group ID (SGID)** is configured in a similar fashion, but an `s` is used on the group portion of the permission set.  In either case, this allows the executable file to be as the owner or group by anyone on the system without giving them ownership of the object.  SUIDs and SGIDs files can be helpful to Linux administrators when elevated access is needed for a specific executable.  We will explore how SUID/SGIDs can be abused to achieve privilege escalation in the next chapter.
 ### User System
 Linux users are created and modified by a system administrator using the `useradd` and `usermod` commands.  Users are usually assigned a folder of the same name under the `/home` directory where they are the default owners.  As mentioned earlier, they are also assigned into a group of the same username, but they can also be added to other groups.  You might recall that in activities from earlier chapters we demonstrated adding a user to the `sudo` group using the `usermod` command.  Users have many special features within the Linux operating system.
 
@@ -172,17 +174,17 @@ Processes, or applications that continuously run in the background of the operat
 >```bash
 >systemctl --type=service
 >```
->![[../images/05/linux_activity_systemctl.png|Systemctl List of Services|650]]
+>![[../images/05/linux_activity_systemctl.png|Systemctl List of Services|700]]
 >I see that our Avahi is one of the services listed here.  It shows a status of loaded, active, and running.  I can explore the service status and logs using the `systemctl` command as well.
 >```bash
 >systemctl status avahi-daemon
 >```
->![[../images/05/linux_activity_avahi_service_status.png|Systemctl Status of Avahi Service|450]]
+>![[../images/05/linux_activity_avahi_service_status.png|Systemctl Status of Avahi Service|500]]
 >Of note is the loaded path of the service.  This path references the file of the Avahi service which can be examined further using the `cat` command.  I pipe the output of the `cat` command to `grep` and filter out any comments in the file for sake of brevity.
 >```bash
 >cat /lib/systemd/system/avahi-daemon.service | grep -v '#'
 >```
->![[../images/05/linux_activity_avahi_service_file.png|Avahi Service File|450]]
+>![[../images/05/linux_activity_avahi_service_file.png|Avahi Service File|500]]
 >This file represents the configuration of the service.  All that is needed to create, or modify, a service is a file like this one in the `systemd` directory.  Of particular interest is the `ExecStart` value which shows the path to a system binary called `avahi-daemon`.  This binary program is running in the background for the service.
 
 Should an attacker gain direct or indirect control of the service through the program in its executable path, they would hijack the service.  Some services require elevated permissions to run effectively and if vulnerable to hijacking, could allow an attacker to escalate their privileges.  Another abuse is to use the native system to establish persistence, which will be covered in the next chapter.  Such exploits could be feasible if the executable is modifiable by the attacker's account.  The attack can also be accomplished indirectly should the service executable use other executables that are in the attacker's control.  One last common misconfiguration is to grant service file modification permissions to unneeded parties which could allow abuse that hijacks the service.
@@ -207,8 +209,8 @@ The **cron** Linux system is used to schedule jobs, called a *cron job*, which i
 > ```
 > ls -la /etc/cron*
 > ```
-> ![[../images/05/linux_activity_cron_list.png|Cron Folder List|600]]
 > The logs for cron activity are found within the `/var/spool/cron/crontabs` file but it is only accessible by root.  This log file is helpful when diagnosing or troubleshooting cron activity on a system.
+> ![[../images/05/linux_activity_cron_list.png|Cron Folder List|600]]
 
 Similar to services, cron job executables can be hijacked by attackers using the same methods.  It is important to ensure the executable that is used in a cron job is secured from modification by unauthorized parties.
 ### Logging
@@ -232,6 +234,9 @@ The format and contents of logs can vary, but they usually include common inform
 ### Hardening
 Linux systems can be exposed to security risks through insecure software and system misconfigurations.  Beyond the vulnerabilities a system might have, it can also be ill-equipped to handle security threats.  **Hardening** a system is the act of ensuring the prevention and detection of security threats by identifying settings that make the system less secure.  Administrators can then mitigate the risk by updating the system with appropriate settings.  The act of hardening a system reduces the likelihood and impact of security threats and is a standard practice for individuals serious about keeping systems secure. 
 
+  <br>
+  
+
 The following list, in no particular order, details common hardening activities:
 - **Patch Management** - Code maintainers of operating systems and applications make periodic updates to their technologies to improve features, performance, and security vulnerabilities.  The availability of software and its current versions can be maintained centrally within repositories such as the *advanced package tool (apt)*.  Updating software can eliminate known vulnerabilities; however, implementing a system to automate the installation of security updates improves the security posture of a system.
 - **Logging** - As discussed in this chapter's Logging section, enabling logs is a good security practice as it benefits the monitoring and auditing of security events.  Ensuring that logs are enabled, and ideally centralized into another system, strengthens the overall security of a system. 
@@ -239,6 +244,9 @@ The following list, in no particular order, details common hardening activities:
 - **Removing Applications** - Popularized with the term *bloatware*, removing unneeded or unnecessary software also can reduce security vulnerabilities.  We should acknowledge the fact that all software has vulnerabilities whether they are known or not, so removing unneeded software will reduce the total amount of vulnerabilities.
 - **Access Management** - System administrators are usually responsible for the creation, maintenance, and removal of accounts on a system.  The user and authorization systems discussed earlier in this chapter cover the importance and the security benefits of these systems.  Removing unneeded accounts and reducing permissions to least privilege are great security practices to reduce opportunities for abuse.  Administrators should conduct regular audits of these systems to ensure that tight security is maintained.
 - **Secure Configurations** - Reputable software providers usually provide guidance to administrators by securely deploying and maintaining their software.  Ideally, only services with well tested configurations are deployed onto systems and then are regularly monitored for misconfigurations.  Administrators should ensure that other security systems on the device are also enabled and configured correctly, such as host firewalls and application control software like app armor.
+
+  <br>
+  
 
 > [!activity] Activity 5.6 - Linux Baseline Hardening
 > There are several tools and standards that can be used to regularly test or audit the security posture of operating systems.  These standards are usually referred to as *baselines* and are collections of rules for a particular system.  Chef, a popular automation tool and framework, created the tool `inspec` which comes with a set of baselines that can be used to audit the security settings of a system.  In the following activity, I will demonstrate the use of `inspec` against the Ubuntu system to identify misconfigurations and security weaknesses.
@@ -300,13 +308,13 @@ These permissions are usually enough for most circumstances; however, NTFS offer
 > Using the Windows VM, I will run File Explorer to review permissions on files within the `System32` folder.  This folder contains a `crypt32.dll` file which offers Windows API cryptographic functions and will be the target of my NTFS permissions review.
 > 
 > After navigating to the `System32` folder that stores `crypt32.dll` file, I right-click the file and select the Properties option from the context menu.
-> ![[../images/05/win_activity_ntfs_properties.png|Crypt32.dll File Properties|600]]
+> ![[../images/05/win_activity_ntfs_properties.png|Crypt32.dll File Properties|500]]
 > This launches the file's properties menu where general information about the file can be observed.  I select the Security tab which reveals the basic NTFS permissions set on the file.  Principals are listed under the "Group or user names" section.  Selecting a principal displays their basic NTFS permissions within the table at the bottom of the window.  The ALL APPLICATION PACKAGES principal has the Read & execute and the Read permissions assigned, as indicated by the check mark.
 > ![[../images/05/win_activity_crypt_security_settings.png|Crypt32.dll Security Settings|350]]
 > I select the Users group and then the Advanced button to display the advanced NTFS permission associated with all users on the system.  Because the Users group does not own this file, any changes to it requires Administrator permissions.  The file's advanced NTFS permissions can be altered by pressing the Change permissions button at the bottom of the window.
-> ![[../images/05/win_activity_crypt32_adv.png|Crypt32 Advanced NTFS Permissions]]
+> ![[../images/05/win_activity_crypt32_adv.png|Crypt32 Advanced NTFS Permissions|650]]
 > Selecting the Users principal and then the View button displays the basic NTFS permissions but also offers the advanced permissions link in the upper right corner.  Selecting it reveals the advanced permission settings of the file which could offer more granular control over the file.
-> ![[../images/05/win_activity_crypt32_adv_perms.png|Crypt32 Advanced Permissions for Users|600]]
+> ![[../images/05/win_activity_crypt32_adv_perms.png|Crypt32 Advanced Permissions for Users|550]]
 ### User System
 A Windows operating system supports accounts that can be used to limit permissions to files.  There are a few types of accounts worth exploring as they can influence the security of a system.  A *user*, or *local* account, is associated with a human and has an interactive logon.  This means that the user has a username and password used to access the system and files.  Similar to Linux, there are non-human accounts meant for the use of systems or applications and are often referred to as *service accounts* or *service principals*.  In either case, the account is created on the system and can only be used on that system.
 
@@ -351,17 +359,17 @@ LM, NTLM, and Kerberos all provide the ability for networked Windows systems to 
 > ```bash
 > impacket-secretsdump -sam sam -system system LOCAL
 > ```
-> ![[../images/05/win_activity_sam_impacket.png|Impacket Secrets Dump Output|675]]
+> ![[../images/05/win_activity_sam_impacket.png|Impacket Secrets Dump Output|600]]
 > The dump is successful and outputs a list of principals, their user id, LM, and NTLM hashes (in that order).  I see our target `tester` user is the last entry with the user id of 1001 and the NTLM hash value `58a478135a93ac3bf058a5ea0e8fdb71`.  I copy this value and paste it into a `hash.txt` file that will be used as an input for the `hashcat` tool.
 > ```bash
 > echo "58a478135a93ac3bf058a5ea0e8fdb71" > hash.txt
 > ```
-> ![[../images/05/win_activity_sam_hash.png|Creating Hash File|600]]
+> ![[../images/05/win_activity_sam_hash.png|Creating Hash File|500]]
 > The last step is an attempt to crack the hashed password using `hashcat` and the `rockyou.txt` dictionary password list.  You may recall we used `rockyou.txt` in an activity earlier in this chapter.  `Hashcat` comes with several modes that configure the hash algorithm to use.  Mode 1000 is specific to NTLM hashes.  A full list of available modes can be found in the manual pages or online.
 > ```bash
 > hashcat -m 1000 hash.txt /usr/share/wordlists/rockyou.txt
 > ```
-> ![[../images/05/win_activity_sam_hashcat_start.png|Starting Hashcat to Crack NTLM Hash|600]]
+> ![[../images/05/win_activity_sam_hashcat_start.png|Starting Hashcat to Crack NTLM Hash|500]]
 > `Hashcat` starts but will take a few moments to crack the password.  Once completed, the tool displays the cracked password!
 > ![[../images/05/win_activity_sam_cracked.png|Cracked NTLM Hash with Hashcat|500]]
 
@@ -372,14 +380,14 @@ Like Linux, when an executable is run in Windows a user process is created and a
 > In the Windows VM, I view all running processes by starting the task manager application in the search bar.
 > ![[../images/05/win_activity_processes_task_launch.png|Launching Windows Task Manager|400]]
 > Once the `Task Manager` is launched, I press the More Details button in the lower left corner of the window to display all the running processes.  The manager lists each process and their resource consumption, similar to the `top` command in Linux.
-> ![[../images/05/win_activity_processes_list.png|Task Manager List|550]]
+> ![[../images/05/win_activity_processes_list.png|Task Manager List|450]]
 > I select the first process, `Task Manager`, right-click and select the Properties option in the context menu which launches the information window for the process.
-> ![[../images/05/win_activity_processes_properties.png|Taskmgr Properties Window|350]]
+> ![[../images/05/win_activity_processes_properties.png|Taskmgr Properties Window|300]]
 > The properties window shows the executable's location associated with the process alongside other general information.  Similar information about processes can be reviewed from the command prompt using the `tasklist` command.  I open a command prompt and run the `tasklist` program to list the running processes.
 > ```cmd
 > tasklist
 > ```
-> ![[../images/05/win_activity_processes_tasklist.png|Process List Using Tasklist|600]]
+> ![[../images/05/win_activity_processes_tasklist.png|Process List Using Tasklist|500]]
 ### Services
 Windows maintains services much like Linux services and daemons.  These services running under a user or system context can be viewed, started, and stopped through the built-in `Services` application or via the command line using the `sc` command.
 
@@ -389,17 +397,17 @@ Windows maintains services much like Linux services and daemons.  These services
 >The `Services` app lists all services configured on the system alongside characteristics like the service's status and how the service is started.  I have selected the first running service which displays the service's description on the left pane.  I can control the service here by starting or stopping it using the provided links in the left pane. 
 >![[../images/05/win_activity_service_list.png|Windows Service List]]
 >Similar to the `Task Manager` app, if I right-click the service and select the Properties option in the context menu, the Properties window will be launched.  This window includes details about the program that is running, such as the path to the executable and any command options or flags.
->![[../images/05/win_activity_service_properties.png|Service Properties|400]]
+>![[../images/05/win_activity_service_properties.png|Service Properties|350]]
 >This same information, along with the administrative capabilities, can be reviewed using the command line and the `sc` program.  I start a command line window and use the `query` option to list all the services on the system.
 >```cmd
 >sc query
 >```
->![[../images/05/win_activity_service_query.png|Querying Services Via Command Prompt|600]]
+>![[../images/05/win_activity_service_query.png|Querying Services Via Command Prompt|500]]
 >A thorough list of services and their states are displayed.  Just like the `Services` GUI app, the Appinfo service is the first running service to be displayed.  I can get more information about the service using the `sc` command with the `qc` option specifying the service name.
 >```cmd
 >sc qc Appinfo
 >```
->![[../images/05/win_activity_service_info.png|Appinfo Detail Using SC|600]]
+>![[../images/05/win_activity_service_info.png|Appinfo Detail Using SC|500]]
 >The command provides additional information that we previously found in the properties window of the Service app.  This information includes the executable path under the key `BINARY_PATH_NAME`.  The service can be stopped, started, or modified using the `sc` command, as we will see in the next chapter.
 
 ### Task Scheduler
@@ -407,7 +415,7 @@ Remember the coverage of cron in the Linux section of this chapter?  Windows has
 
 > [!activity] Activity 5.11 - Windows Task Scheduler
 > The `Task Scheduler` can be launched using the Windows search bar.  Once launched and the Task Scheduler Library is selected on the left navigation pane tree, a list of tasks is displayed in the main pane.  The first job on the list is automatically selected and its details appear in the bottom pane.  The Triggers tab offers a range of schedules and events that will cause the task to launch.  Creating new tasks is as easy as pressing the Create Task button on the right pane and following the wizard.
-> ![[../images/05/win_activity_task_scheduler.png|Windows Task Scheduler]]
+> ![[../images/05/win_activity_task_scheduler.png|Windows Task Scheduler|650]]
 ### Logging
 Windows logs events for applications, system, and security contexts are accessible using the `Event Viewer` built-in application.  These logs are essential when troubleshooting system issues and for security monitoring.  Each entry in the logs includes event descriptions, timestamps, and the associated accounts.  For Windows systems, event types have been cataloged and indexed using standardized numbers.  These numbers can be used as reference points when searching for specific log types.  `Event Viewer` empowers administrators to create searches and filters related to the logs they are interested in analyzing.
 
@@ -523,6 +531,43 @@ Most anti-malware and *endpoint detection and response (EDR)* solutions hook int
 >![[../images/05/win_activity_bypass_tested2.png|Testing Bypassed Defender|600]]
 >Defender did not block the use of `Invoke-Mimikatz` this time!  It does error, but if you look closely, it only errors due to the command not being found (versus because antivirus blocks it).  This means anything else running within this PowerShell process will not be blocked by Defender.
 
+## Summary
+This chapter begins by exploring Linux’s foundational security mechanisms including the file system ext4, ownership and POSIX permissions (SUID/SGID), and user and group management.  It continues by showing how processes, daemons, cron jobs, and system logs both enable functionality and introduce potential attack vectors.  We examine how passwords are securely hashed in `/etc/shadow`, how processes inherit user contexts, and how services and scheduled jobs can be targeted by attackers.  The chapter then parallels these concepts in Windows, covering NTFS structures and ACLs, account types (local, service, and online), the SAM database and LSASS, and Windows services, task scheduling, and event logging.  Finally, we outline hardening best practices such as patch management, logging, disabling unnecessary services, access management, secure configurations, and endpoint defenses that strengthen both Linux and Windows systems.  These topics describe interesting operating system features from a security perspective, many of which will be explored and abused in the following chapter.
+
+>[!terms] Key Terms
+>**Cron** - The Linux scheduling system for running binaries or scripts on schedules or custom events defined in user and system crontab files.
+>
+>**Data Encryption Standard (DES)** - A symmetric‐key block cipher that operates on 64-bit blocks with a 56-bit key and was repurposed by LAN Manager for hash computation.
+>
+>**End of Life (EOL) or End of Support (EOS)** - The point at which a software version no longer receives updates or security patches from its maintainer.
+>
+>**Extension Version 4 (ext4)** - The fourth extended Linux file system featuring journaling, large volume support, and nested directory structures.
+>
+>**Hardening** - The process of identifying insecure settings and applying configuration, patching, and removal of unneeded services to reduce a system’s attack surface.
+>
+>**Kerberos** - A network authentication protocol using symmetric cryptography and a central Key Distribution Center (KDC) to issue and validate tickets for secure service access.
+>
+>**LAN Manager (LM)** - A deprecated Windows authentication hash algorithm based on DES that uppercases, pads, and splits 14-character passwords into two 7-byte blocks.
+>
+>**New Technology File System (NTFS)** - The Windows file system offering journaling, discretionary access controls, and support for large volumes and metadata.
+>
+>**New Technology LAN Manager (NTLM)** - A challenge-response authentication protocol based on MD4 that succeeded LM while retaining backward compatibility.
+>
+>**Permission Set** - The combination of read, write, and execute bits assigned separately to the owner, group, and others for any file or directory.
+>
+>**Processes** - Executable instances loaded into memory and assigned unique process IDs (PIDs) that inherit the permissions of the user context under which they run.
+>
+>**Salt** - A random unique string added to a password before hashing to ensure identical passwords produce different hashes and slow cracking attempts.
+>
+>**Security Accounts Manager (SAM)** - The encrypted Windows database file that stores NTLM hash values for local accounts and is accessible only by the SYSTEM user.
+>
+>**Services** - Configured background executables or daemons that run under specified user contexts.
+>
+>**Set Group ID (SGID)** - A special permission bit that causes an executable to run with the privileges of its assigned group.
+>
+>**Set User ID (SUID)** - A special permission bit that causes an executable to run with the privileges of its file owner.
+>
+>**Windows Defender** - The built-in Windows anti‐malware solution that hooks into process memory to monitor, block, and optionally remove malicious activities.
 ## Exercises
 >[!exercise] Exercise 5.1 - Shadow Cracking
 >Crack Linux passwords using `john` in your Kali VM with Bridge Adapter network mode.  You will create a user and set their password.  Then you will prepare the hash file and use `john` to crack the hash with the `rockyou.txt` wordlist.
@@ -624,13 +669,10 @@ Most anti-malware and *endpoint detection and response (EDR)* solutions hook int
 > ```powershell
 > Invoke-Mimikatz
 > ```
-> >[!tip] Tip - Troubleshooting Bypass
-> >Start a fresh powershell terminal.  Also, use your imagination on what else you could do to break up the commands yet still bypass AMSI.
+> >Tip - *Start a fresh powershell terminal.  Also, use your imagination on what else you could do to break up the commands yet still bypass AMSI.*
 > #### Step 3 - Test Other Bypasses
 > Pick another bypass method from the following link and test in a new PowerShell instance.  Can you find another method that works? 
 > https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell
-
-
 
 [^1]: VirusTotal - File; February 2024; https://www.virustotal.com/gui/file/31eb1de7e840a342fd468e558e5ab627bcb4c542a8fe01aec4d5ba01d539a0fc
 [^2]: Amsi-Bypass-Powershell; GitHub S3cur3Th1sSh1t; February 2024; https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell#patching-amsi-amsiscanbuffer-by-rasta-mouse

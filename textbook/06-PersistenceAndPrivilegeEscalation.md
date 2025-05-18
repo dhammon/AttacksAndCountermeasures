@@ -27,10 +27,10 @@ The following sections focus on persistence and privilege escalation techniques 
 ### Windows Persistence 
 Attackers aiming to maintain system access on a Windows system could leverage several native operating system features.  Often the attacker will create a malicious script or executable that will be periodically run from the victim's device.  This malware will establish a network connection to an attacker control server that will grant them remote access to the victim's machine.  Should the victim restart their device, the malicious persistence mechanism will re-run and re-establish the connection for the attacker to use.  Such malicious programs can be executed using services and startup tasks or other Windows features such as registry startup tasks covered in the previous chapter.
 
+In some cases, the attacker will have network access to the system over remote management protocols or tools, such as *virtual network computing (VNC)*, *remote desktop protocol (RDP)* or *secure shell (SSH)*.  This could include cloud-based solutions as well, such as software provided by AnyDesk, TeamViewer, or GoToMyPC.  If the attacker has the victim's username, password, and network access, they can leverage these tools and protocols to regain access to the system.  However, the attacker might not have the user's password regardless of their initial access exploitation as these attacks might only provide the attacker with a connection as the victim account.  
+
 > [!info] Info - Windows Persistence Techniques Resource
 > Many other Windows persistence techniques are covered within the InternalAllTheThings GitHub book maintained by swisskyrepo.  https://swisskyrepo.github.io/InternalAllTheThings/redteam/persistence/windows-persistence/
-
-In some cases, the attacker will have network access to the system over remote management protocols or tools, such as *virtual network computing (VNC)*, *remote desktop protocol (RDP)* or *secure shell (SSH)*.  This could include cloud-based solutions as well, such as software provided by AnyDesk, TeamViewer, or GoToMyPC.  If the attacker has the victim's username, password, and network access, they can leverage these tools and protocols to regain access to the system.  However, the attacker might not have the user's password regardless of their initial access exploitation as these attacks might only provide the attacker with a connection as the victim account.  
 
 The attacker could reset the user's password, but the next time the user attempts to login they will likely be alerted that their security has been compromised.  To avoid this, an attacker may create a new user account that can be used at any time.  The username for this new malicious account will likely be something that is easily missed by an observer, such as a generic name like "eric" or "desktop-user".  Even craftier usernames that hide the malicious use of the new account might reference a software that is used by the organization or system like "slack-agent" or "discord-service".  Unsuspecting system users may see these accounts and dismiss that they are malicious.  You would not expect the attacker to name the malicious account something obvious like "backdoor-hacker" would you?
 
@@ -43,7 +43,7 @@ The attacker could reset the user's password, but the next time the user attempt
 > ```
 > ![[win_persistence_reg_command.png|Adding Key to Registry Run|600]]
 > The operation is completed successfully.  To test it, I reboot the Windows VM and witness the calculator app automatically launching at login!  This simulates re-establishing a connection if a malicious binary was running instead of the harmless calculator app.
-> ![[win_persistence_calc_launch.png|Calculator Runs at Login|300]]
+> ![[win_persistence_calc_launch.png|Calculator Runs at Login|200]]
 > I inspect the registry by opening the Registry Editor application as administrator from the Windows search bar and accepting any UAC prompt.  Upon launching, I navigate to the Run key under the current user hive and find the persistence key `NotEvil`.
 > 
 > ```txt
@@ -65,7 +65,7 @@ Attackers can leverage similar persistence techniques that were just covered wit
 >echo "@reboot date > /home/daniel/Desktop/cron.txt " | crontab 2> /dev/null
 >crontab -l
 >```
->![[linux_persistence_crontab.png|Applying Cronjob Persistence Example|600]]
+>![[linux_persistence_crontab.png|Applying Cronjob Persistence Example|500]]
 >Once applied I reboot the VM and login as the user.  Upon login, I can see that the cron.txt file was created and now exists on the desktop!  While this document is not exactly scary, you can imagine it replaced with a binary or script that would reach back to an attacker's server and establish a remote terminal session on the device.
 >![[linux_persistence_cron_success.png|Cronjob Executed Creating Text File|300]]
 >Because I do not want this file to be created each time I reboot, I remove the cronjob with the following command and delete the cron.txt file.
@@ -73,17 +73,17 @@ Attackers can leverage similar persistence techniques that were just covered wit
 >echo "" | crontab 2> /dev/null
 >crontab -l
 >```
->![[linux_persistence_removed.png|Cronjob Persistence Removed|600]]
+>![[linux_persistence_removed.png|Cronjob Persistence Removed|500]]
 
 ### Windows Privilege Escalation
 Another task an attacker seeks to achieve after initial access is to elevate their permissions to an administrator level.  Doing so allows the attacker to have full system access in which they can pillage the device's data, disable security solutions, delete logs, and anything else they desire.  Certainly, if an attacker is able to compromise an elevated user's password, then they would already be running in a privileged user context.  In a previous activity, I demonstrated how to extract NTLM hashes from the SAM database and crack passwords using the John the Ripper tool.  However, accessing the SAM and SYSTEM databases required elevated access which provides a challenge to an attacker with only low privileged user access.  Sometimes a Windows system could have misconfigurations or vulnerabilities that can be leveraged by an attacker to gain access to areas of the system restricted to administrators.
 
-> [!story] Story - HiveNightmare
-> In 2021, a vulnerability CVE-2021-36934 known as HiveNightmare and SeriousSAM was disclosed by security researchers.  In this vulnerability, the Windows *volume shadow copy service (VSS)* was found to be making copies of sensitive SAM and SYSTEM files with global read access.  If an attacker gained access to the device as a low privileged user, they could dump hashed passwords and attempt offline cracking or perform pass-the-hash attacks.  These files include the local administrator hashed passwords which could easily lead to privilege escalation.
-
 Privilege escalation vulnerabilities can be found within the Windows *kernel*, which is the core of the operating system that interfaces with all connected hardware.  The kernel runs with SYSTEM permissions and all users interface with it during normal use of the operating system.  Vulnerabilities in the kernel can often result in privilege escalation because of how the kernel handles system calls, memory management, and user input.  Such vulnerabilities may have exploits created that are accessible on the clear web, such as on GitHub or on ExploitDB.  A quick search on ExploitDB for Windows shows several available exploits including a recent-kernel based privilege escalation for Windows 11 22h2. [^1]
 
-![[exploit_db.png|ExploitDB Windows Search]]
+![[exploit_db.png|ExploitDB Windows Search|750]]
+
+> [!story] Story - HiveNightmare
+> In 2021, a vulnerability CVE-2021-36934 known as HiveNightmare and SeriousSAM was disclosed by security researchers.  In this vulnerability, the Windows *volume shadow copy service (VSS)* was found to be making copies of sensitive SAM and SYSTEM files with global read access.  If an attacker gained access to the device as a low privileged user, they could dump hashed passwords and attempt offline cracking or perform pass-the-hash attacks.  These files include the local administrator hashed passwords which could easily lead to privilege escalation.
 
 Selecting that exploit link provides us with the source code and further references.  Often these exploits will include instructions on how to compile and use them.  It seems that for this exploit we are on our own to figure out its compilation and use.
 
@@ -268,13 +268,13 @@ The last security measure we will cover is the **canary** method in which the op
 >sudo apt update -y
 >sudo apt install gdb -y
 > ```
-> ![[../images/06/activity_bof2_gdb_install.png|Install GDB|650]]
+> ![[../images/06/activity_bof2_gdb_install.png|Install GDB|700]]
 > 
 > After the GDB installation is complete, I install GEF using `bash` running the command from a remote repository.  GEF enhances GDB with features and formatting that I personally enjoy over other extensions that are available.
 > ```bash
 > bash -c "$(curl -fsSL https://gef.blah.cat/sh)"
 > ```
-> ![[../images/06/activity_bof2_gef_install.png|GEF Installation|650]]
+> ![[../images/06/activity_bof2_gef_install.png|GEF Installation|700]]
 > With GDB and GEF installed, my next step is to create a vulnerable program written in C in a file named `program.c`.  This simple program includes two functions called `hidden` and `main`.  The main function creates a buffer space of 100 bytes and uses the `gets` utility to accept user input and renders the input from the `printf` function.  The hidden function simply displays a static message; however, there is no execution path to it from main.  This hidden function should never be run as there is no path to it within the program.
 > ```c
 > #include <stdio.h>
@@ -306,18 +306,18 @@ The last security measure we will cover is the **canary** method in which the op
 > ./program
 > lol
 > ```
-> ![[buffer_activity_baseline_input.png|Running Program With Non-Malicious Input|600]]
+> ![[buffer_activity_baseline_input.png|Running Program With Non-Malicious Input|500]]
 > I run the program again, but this time I supply it with around 150 letter "A"s.  This time the program returns a segmentation fault which means it likely found a return address in memory that it could resolve, so the program crashes.  This demonstrates how buffer overflows are identified, as a well-behaving program would fail gracefully.
 > ```
 > ./program
 > AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 > ```
-> ![[buffer_activity_segfault.png|Identifying the Buffer Overflow|600]]
+> ![[buffer_activity_segfault.png|Identifying the Buffer Overflow|500]]
 > Now that an overflow vulnerability has been detected, I can examine how to hijack the execution flow of the program using the GDB debugger.  Before I start the application in the debugger, I create an `input.txt` file that has 200 letter "A"s using Python.
 > ```bash
 > python -c "print('A'*200)" > input.txt
 > ```
-> ![[buffer_activity_input_test.png|Creating Input File|600]]
+> ![[buffer_activity_input_test.png|Creating Input File|500]]
 > To launch the program into the debugger, I run GDB with the `-q` flag that ignores the onload header and version banner while supplying GDB with the program name.  After GDB launches, I am presented with the `gef` command line interface.
 > ```bash
 > gdb -q ./program
@@ -331,26 +331,26 @@ The last security measure we will cover is the **canary** method in which the op
 > GDB returns the register, code, and stack at the time of the segfault.  The first section of the GDB report shows me all the CPU registers and their values when the program crashed.  The 200 "A"s filled up the buffer and then wrote over the stack and base pointer (RBP/RSP) registers that caused the program to crash.
 > ![[../images/06/activity_bof2_gef_registers.png|Initial Crash Registers|650]]
 > The bottom half of the report includes the code, stack, and summary sections.  The stack is filled with the letter "A" and the end of the report suggests that the program reached an address `0x401196` referenced in the instruction pointer (RIP), the `main` function's return address.  
-> ![[../images/06/activity_bof2_gef_initial_stack.png|Initial Stack Crash|650]]
+> ![[../images/06/activity_bof2_gef_initial_stack.png|Initial Stack Crash|700]]
 > I want to target the instruction pointer register to hijack the execution flow by inserting an address into the stack's buffer that will eventually overwrite the instruction pointer.  Once hijacked, this pointer will send the execution path of the program to anywhere of my choosing.   I know I overshot this initial attempt because the RSP was overwritten with the letter "A".  I need to identify which position of the 200 "A"s overwrote the RSP, which will be known as the *offset*.  To do this, I use the `pattern create` command that comes with GEF.  It generates a non-repeating string of any length.
-> ![[../images/06/activity_bof2_pattern_create.png|Pattern Create|650]]
+> ![[../images/06/activity_bof2_pattern_create.png|Pattern Create|700]]
 > I copy the 200-character output into my clipboard, run the program and paste the pattern into the prompt.  The program crashes as expected, but this time the RSP has part of the non-repeating pattern.
 > ![[../images/06/activity_bof2_pattern_run.png|Running in GEF with Pattern Input|650]]
-> ![[../images/06/activity_bof2_pattern_rsp.png|RSP Pattern Overwrite|650]]
+> ![[../images/06/activity_bof2_pattern_rsp.png|RSP Pattern Overwrite|750]]
 > I then copy the RSP hex value into my clipboard that I will use with the GEF `pattern search` command to identify at what character position this string is located within the original pattern.  This lets me know that the RIP overwrite occurs at offset 120.
-> ![[../images/06/activity_bof2_offset.png|Pattern Search Offset Found|650]]
+> ![[../images/06/activity_bof2_offset.png|Pattern Search Offset Found|700]]
 > Next, I craft a new input with 120 "A"s and 1 "B" to be used as the input when rerunning the program in GDB.
 > ```bash
 > python -c 'print("A"*200+"B")'
 > ```
-> ![[../images/06/activity_bof2_121.png|Generating 121 Character Test Payload|650]]
+> ![[../images/06/activity_bof2_121.png|Generating 121 Character Test Payload|700]]
 > The program crashes with the 120 A's + 1 B payload.  While examining the crash, I see the RIP as the 0x42 letter B character at the end.  I also see that the RIP value has a total of 6 bytes.
 > ![[../images/06/activity_bof2_rip_bytes.png|RIP 6 Bytes and Partially Overwritten|650]]
 >  I generate a new payload with 120 "A"s and 6 "B"s to confirm I can overwrite the RIP while leaving the RSP intact.
 >  ```bash
 >  python -c 'print("A"*120+"BBBBBB")' > rip.txt
 >  ```
->  ![[buffer_activity_rip_test.png|Crafting Index Pointer Offset Test Input|600]]
+>  ![[buffer_activity_rip_test.png|Crafting Index Pointer Offset Test Input|500]]
 >  Running the new input should cause the program to crash, except this time the instruction pointer should be overwritten with just the letter "B".  Once confirmed, I can swap out that position in the input with another memory address where I want the program to execute.
 >  ```bash
 >  run < rip.txt
@@ -373,7 +373,40 @@ The last security measure we will cover is the **canary** method in which the op
 >  ```
 >  ![[buffer_activity_exploited.png|Program Exploited|600]]Huzzah!
 
-# Exercises
+## Summary
+In this chapter, we examined the common techniques threat actors employ after initial compromise - beginning with persistence mechanisms on Windows and Linux, through abusing services, startup tasks, cron jobs, hidden user accounts, file‐execution hooks, and MOTD or shell‐init script abuse.  Attackers perform this activity to ensure they can regain access after the initial access vector is remediated.  We then explored privilege escalation methods including misconfigured services (like unquoted service paths), credential extraction, kernel exploits, and built-in elevation tools such as `sudo` and SUID binaries.  We learned attackers perform this activity to continue or expand the impact of the compromise.  In the last topic of this chapter, we analyzed application memory concepts (stack, heap, data/text segments, registers, endianness) and memory related buffer overflow vulnerabilities, as well as their operating system-level mitigations (DEP, ASLR, and stack canaries).
+
+>[!terms] Key Terms
+>**Address Space Layout Randomization (ASLR)** - An operating system-level security mechanism that randomizes the base addresses of a program’s memory regions on each launch to mitigate the reliable targeting of code or data in memory.
+>
+>**Assembly Language** - A low-level human-readable notation of machine code where each mnemonic directly maps to a CPU instruction and its operands.
+>
+>**Buffer Overflow (BoF)** - A memory corruption vulnerability that occurs when input data exceeds a buffer’s allocated space, overwriting adjacent memory and allowing an attacker to alter a program's control flow.
+>
+>**Canary** - A buffer overflow prevention mechanism consisting of a randomly generated value inserted by the compiler or runtime between local variables and control data on the stack that is checked before function returns. 
+>
+>**Data Execution Prevention (DEP)** - An operating system-level protection that marks certain memory regions as non-executable, preventing injected code in data buffers from running.
+>
+>**Debugger** - A runtime analysis tool that lets you load or attach to a process, set breakpoints, inspect and modify CPU registers and memory, and step through instructions to observe program behavior.
+>
+>**Decompilers** - Tools that translate compiled binaries back into high-level source code approximations, facilitating static analysis of program logic when original source is unavailable.
+>
+>**Disassembler** - A utility that converts raw binary code into human-readable assembly instructions, allowing an analyst to reverse-engineer program behavior at the instruction level.
+>
+>**Endianness** - The convention for ordering bytes in memory, where Big Endian stores the most significant byte at the lowest address and Little Endian stores it at the highest.
+>
+>**Persistence** - Techniques used by attackers to maintain or regain access to a compromised system, such as malicious services, startup tasks, or cron jobs.
+>
+>**Pillage** - The process of enumerating a compromised host to locate sensitive data, credentials, and secrets that facilitate further exploitation.
+>
+>**Pivot** - The act of leveraging a compromised system as a steppingstone to reach and attack other systems within the same or connected networks.
+>
+>**Post Exploitation** - The set of activities performed after initial compromise, such as persistence, reconnaissance, privilege escalation, and lateral movement, to achieve an attacker’s objectives.
+>
+>**Privilege Escalation (Privesc)** - The act of increasing a user or process’s permission level on a system through vulnerabilities or misconfigurations to gain higher-level access.
+>
+>**Registers** - Small, ultra-fast storage locations embedded in the CPU used for holding instructions, addresses, and data being processed at any given moment.
+## Exercises
 
 > [!exercise] Exercise 6.1 - Windows Persistence with Registry
 > Using the Windows VM in Bridge Adapter network mode, you will add a Run Registry Key to launch the calculator app as a placeholder for malware.
