@@ -371,8 +371,6 @@ This class of tool first scans the application mapping out its structure, such a
 >The scanner starts by mapping the site, then tests for security vulnerabilities from its limited test set that includes reflected XSS and vulnerable JavaScript dependencies. [^4]   After a few minutes of running, the scan is complete.  It was able to detect a few vulnerable JavaScript dependencies!
 
 ## Exercises
----
-
 
 >[!exercise] Exercise 8.1 - Web Server Security
 >In this task, you will install Apache web server on your Ubuntu VM using Bridge Adapter network mode and secure it with an OpenSSL self-signed cert and ModSecurity WAF.
