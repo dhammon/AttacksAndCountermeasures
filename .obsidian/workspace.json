@@ -27,24 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/07-SecuritySystems.md",
+                "file": "textbook/08-WebApplicationDefense.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "07-SecuritySystems"
-            }
-          },
-          {
-            "id": "3c39b04c5c0a647d",
-            "type": "leaf",
-            "state": {
-              "type": "image",
-              "state": {
-                "file": "images/07/snort_activity_install.png"
-              },
-              "icon": "lucide-image",
-              "title": "snort_activity_install"
+              "title": "08-WebApplicationDefense"
             }
           }
         ],
@@ -190,11 +178,11 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0222551eff2d37c8",
+  "active": "88fb94bf175f40d1",
   "lastOpenFiles": [
+    "textbook/07-SecuritySystems.md",
     "images/07/snort_activity_install_2.png",
     "images/07/snort_activity_install.png",
-    "textbook/07-SecuritySystems.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/00-Introduction.md",
     "textbook/15-AppendixLearningResources.md",
@@ -224,7 +212,6 @@
     "textbook/16-AppendixCareerSearch.md",
     "images/06/activity_bof2_rip_B.png",
     "images/06/activity_bof2_rip_bytes.png",
-    "images/06/activity_bof2_121.png",
     "files/newtonanalytics-modernportfoliotheory-2.apk",
     "files/newtonanalytics-modernportfoliotheory-2-30493285-78aeb6462dbc775a70fdc6ecf4270175.apk",
     "images/android_armor.jpg.crdownload",
