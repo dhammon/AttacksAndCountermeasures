@@ -27,12 +27,24 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/09-WebApplicationAttacks.md",
+                "file": "textbook/10-SecurityTesting.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "09-WebApplicationAttacks"
+              "title": "10-SecurityTesting"
+            }
+          },
+          {
+            "id": "cf1cb835b68e74ac",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "images/10/rev_activity_files.png"
+              },
+              "icon": "lucide-image",
+              "title": "rev_activity_files"
             }
           }
         ],
@@ -180,6 +192,12 @@
   },
   "active": "88fb94bf175f40d1",
   "lastOpenFiles": [
+    "textbook/toc.md",
+    "textbook/10-SecurityTesting.md",
+    "images/10/rev_activity_files_3.png",
+    "images/10/rev_activity_files.png",
+    "images/10/rev_activity_files_2.png",
+    "textbook/09-WebApplicationAttacks.md",
     "textbook/08-WebApplicationDefense.md",
     "textbook/07-SecuritySystems.md",
     "images/07/snort_activity_install_2.png",
@@ -191,8 +209,6 @@
     "textbook/13-CloudSecurity.md",
     "textbook/12-IncidentResponse.md",
     "textbook/11-ForensicsAndMalwareAnalysis.md",
-    "textbook/10-SecurityTesting.md",
-    "textbook/09-WebApplicationAttacks.md",
     "textbook/05-OperatingSystemSecurity.md",
     "textbook/01-InformationSecurity.md",
     "textbook/02-Cryptology.md",
@@ -201,17 +217,13 @@
     "images/04/dns_spoof_ubuntu_dsniff_2.png",
     "images/04/dns_spoof_ubuntu_dsniff.png",
     "textbook/copyright.md",
-    "textbook/toc.md",
     "textbook/acknowledgments.md",
     "textbook/cover.md",
     "README.md",
     "images/05/win_activity_bypass_tested2.png",
     "images/05/win_activity_bypass_test3.png",
     "images/05/win_activity_bypass_test2.png",
-    "images/08/stride2.png",
     "textbook/16-AppendixCareerSearch.md",
-    "images/06/activity_bof2_rip_B.png",
-    "images/06/activity_bof2_rip_bytes.png",
     "files/newtonanalytics-modernportfoliotheory-2.apk",
     "files/newtonanalytics-modernportfoliotheory-2-30493285-78aeb6462dbc775a70fdc6ecf4270175.apk",
     "images/android_armor.jpg.crdownload",
