@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/08-WebApplicationDefense.md",
+                "file": "textbook/09-WebApplicationAttacks.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "08-WebApplicationDefense"
+              "title": "09-WebApplicationAttacks"
             }
           }
         ],
@@ -180,6 +180,7 @@
   },
   "active": "88fb94bf175f40d1",
   "lastOpenFiles": [
+    "textbook/08-WebApplicationDefense.md",
     "textbook/07-SecuritySystems.md",
     "images/07/snort_activity_install_2.png",
     "images/07/snort_activity_install.png",
@@ -192,7 +193,6 @@
     "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/10-SecurityTesting.md",
     "textbook/09-WebApplicationAttacks.md",
-    "textbook/08-WebApplicationDefense.md",
     "textbook/05-OperatingSystemSecurity.md",
     "textbook/01-InformationSecurity.md",
     "textbook/02-Cryptology.md",

