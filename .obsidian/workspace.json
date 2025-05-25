@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/11-ForensicsAndMalwareAnalysis.md",
+                "file": "textbook/12-IncidentResponse.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "11-ForensicsAndMalwareAnalysis"
+              "title": "12-IncidentResponse"
             }
           }
         ],
@@ -180,6 +180,9 @@
   },
   "active": "88fb94bf175f40d1",
   "lastOpenFiles": [
+    "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "textbook/12-IncidentResponse.md",
+    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/10-SecurityTesting.md",
     "textbook/toc.md",
     "images/10/rev_activity_files_3.png",
@@ -190,13 +193,10 @@
     "textbook/07-SecuritySystems.md",
     "images/07/snort_activity_install_2.png",
     "images/07/snort_activity_install.png",
-    "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/00-Introduction.md",
     "textbook/15-AppendixLearningResources.md",
     "textbook/14-MobileSecurity.md",
     "textbook/13-CloudSecurity.md",
-    "textbook/12-IncidentResponse.md",
-    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/05-OperatingSystemSecurity.md",
     "textbook/01-InformationSecurity.md",
     "textbook/02-Cryptology.md",
