@@ -27,24 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/10-SecurityTesting.md",
+                "file": "textbook/11-ForensicsAndMalwareAnalysis.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "10-SecurityTesting"
-            }
-          },
-          {
-            "id": "cf1cb835b68e74ac",
-            "type": "leaf",
-            "state": {
-              "type": "image",
-              "state": {
-                "file": "images/10/rev_activity_files.png"
-              },
-              "icon": "lucide-image",
-              "title": "rev_activity_files"
+              "title": "11-ForensicsAndMalwareAnalysis"
             }
           }
         ],
@@ -192,8 +180,8 @@
   },
   "active": "88fb94bf175f40d1",
   "lastOpenFiles": [
-    "textbook/toc.md",
     "textbook/10-SecurityTesting.md",
+    "textbook/toc.md",
     "images/10/rev_activity_files_3.png",
     "images/10/rev_activity_files.png",
     "images/10/rev_activity_files_2.png",
