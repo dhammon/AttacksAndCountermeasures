@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/12-IncidentResponse.md",
+                "file": "textbook/13-CloudSecurity.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "12-IncidentResponse"
+              "title": "13-CloudSecurity"
             }
           }
         ],
@@ -180,8 +180,8 @@
   },
   "active": "88fb94bf175f40d1",
   "lastOpenFiles": [
-    "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/12-IncidentResponse.md",
+    "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/10-SecurityTesting.md",
     "textbook/toc.md",
