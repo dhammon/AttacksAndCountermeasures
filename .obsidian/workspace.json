@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/13-CloudSecurity.md",
+                "file": "textbook/toc.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "13-CloudSecurity"
+              "title": "toc"
             }
           }
         ],
@@ -180,8 +180,13 @@
   },
   "active": "88fb94bf175f40d1",
   "lastOpenFiles": [
-    "textbook/12-IncidentResponse.md",
+    "textbook/copyright.md",
+    "textbook/15-AppendixLearningResources.md",
+    "textbook/14-MobileSecurity.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "textbook/05-OperatingSystemSecurity.md",
+    "textbook/13-CloudSecurity.md",
+    "textbook/12-IncidentResponse.md",
     "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/10-SecurityTesting.md",
     "textbook/toc.md",
@@ -194,17 +199,12 @@
     "images/07/snort_activity_install_2.png",
     "images/07/snort_activity_install.png",
     "textbook/00-Introduction.md",
-    "textbook/15-AppendixLearningResources.md",
-    "textbook/14-MobileSecurity.md",
-    "textbook/13-CloudSecurity.md",
-    "textbook/05-OperatingSystemSecurity.md",
     "textbook/01-InformationSecurity.md",
     "textbook/02-Cryptology.md",
     "textbook/03-NetworkSecurity.md",
     "textbook/04-NetworkServices.md",
     "images/04/dns_spoof_ubuntu_dsniff_2.png",
     "images/04/dns_spoof_ubuntu_dsniff.png",
-    "textbook/copyright.md",
     "textbook/acknowledgments.md",
     "textbook/cover.md",
     "README.md",

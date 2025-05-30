@@ -6,6 +6,7 @@ All the chapter images were generated using Dall-E from [https://www.bing.com/im
 A big thank you to some very special people:
 - My wife and children, for the continuous support.
 - My mother, for helping me edit this textbook.
+- My father, for the inspiration and confidence to succeed.
 - My students, for the many years of inspiration and curiosity.
 - Paul Paulsson, for mentorship and friendship.
 - Jason Lukitsch, for the patience and mentorship during my early security career.

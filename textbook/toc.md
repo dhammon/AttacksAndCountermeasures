@@ -14,7 +14,7 @@
 <p class="toc-entry">
   <span class="toc-title">Ethics</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">1</span>
+  <span class="toc-page">2</span>
 </p>
 <p class="toc-entry">
   <span class="toc-title">Digital Textbook Copy and Support Files</span>
@@ -34,7 +34,7 @@
 <p class="toc-entry">
   <span class="toc-title">Chapter Summaries</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">3</span>
+  <span class="toc-page">4</span>
 </p>
 
 ## Chapter 1 - Information Security
@@ -51,7 +51,7 @@
 <p class="toc-entry">
   <span class="toc-title">Definitions</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">8</span>
+  <span class="toc-page">9</span>
 </p>
 <p class="toc-entry">
   <span class="toc-title">Threat Actors</span>
@@ -61,7 +61,7 @@
 <p class="toc-entry">
   <span class="toc-title">MITRE ATT&CK</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">9</span>
+  <span class="toc-page">10</span>
 </p>
 <p class="toc-entry">
   <span class="toc-title">Cyber Kill Chain</span>
@@ -71,12 +71,12 @@
 <p class="toc-entry">
   <span class="toc-title">Governance, Risk, and Compliance (GRC)</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">10</span>
+  <span class="toc-page">11</span>
 </p>
 <p class="toc-entry">
-  <span class="toc-title">Goverance</span>
+  <span class="toc-title">Governance</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">10</span>
+  <span class="toc-page">11</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Roles and Responsibilities</span>
@@ -91,22 +91,22 @@
 <p class="toc-entry subsection">
   <span class="toc-title">Culture and Defense in Depth</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">12</span>
+  <span class="toc-page">13</span>
 </p>
 <p class="toc-entry">
   <span class="toc-title">Risk</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">13</span>
+  <span class="toc-page">14</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Qualitative Risk Management</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">13</span>
+  <span class="toc-page">14</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Basic Quantitative Risk Management</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">14</span>
+  <span class="toc-page">15</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Advanced Quantitative Risk Management</span>
@@ -116,22 +116,22 @@
 <p class="toc-entry subsection">
   <span class="toc-title">Security Control Types</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">15</span>
+  <span class="toc-page">16</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Security Control Effect</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">15</span>
+  <span class="toc-page">16</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Risk Mitigation Considerations</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">16</span>
+  <span class="toc-page">17</span>
 </p>
 <p class="toc-entry ">
   <span class="toc-title">Compliance</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">16</span>
+  <span class="toc-page">17</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Laws and Regulations</span>
@@ -141,92 +141,97 @@
 <p class="toc-entry subsection">
   <span class="toc-title">Frameworks and Guidelines</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">17</span>
+  <span class="toc-page">18</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Audit</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">18</span>
+  <span class="toc-page">19</span>
 </p>
 <p class="toc-entry">
   <span class="toc-title">Business Continuity Planning and Disaster Recovery</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">19</span>
+  <span class="toc-page">20</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Risk Assessment</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">19</span>
+  <span class="toc-page">20</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Business Impact Assessment</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">20</span>
+  <span class="toc-page">21</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Measures</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">20</span>
+  <span class="toc-page">21</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">BCP/DR Plan</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">21</span>
+  <span class="toc-page">22</span>
 </p>
 <p class="toc-entry">
   <span class="toc-title">Data Classification</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">21</span>
+  <span class="toc-page">22</span>
 </p>
 <p class="toc-entry">
   <span class="toc-title">Identity Access Management</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">22</span>
+  <span class="toc-page">23</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Identity and Factors</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">22</span>
+  <span class="toc-page">23</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Permissions</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">22</span>
+  <span class="toc-page">24</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Access Control</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">23</span>
+  <span class="toc-page">24</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Managing IAM</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">24</span>
+  <span class="toc-page">25</span>
+</p>
+<p class="toc-entry">
+  <span class="toc-title">Summary</span>
+  <span class="toc-dots"></span>
+  <span class="toc-page">26</span>
 </p>
 <p class="toc-entry">
   <span class="toc-title">Exercises</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">24</span>
+  <span class="toc-page">28</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Install VirtualBox</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">24</span>
+  <span class="toc-page">29</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Install Kali Virtual Machine</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">25</span>
+  <span class="toc-page">30</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Install Ubuntu Virtual Machine</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">29</span>
+  <span class="toc-page">33</span>
 </p>
 <p class="toc-entry subsection">
   <span class="toc-title">Install Windows Virtual Machine</span>
   <span class="toc-dots"></span>
-  <span class="toc-page">30</span>
+  <span class="toc-page">35</span>
 </p>
 
 ## Chapter 2 - Cryptology

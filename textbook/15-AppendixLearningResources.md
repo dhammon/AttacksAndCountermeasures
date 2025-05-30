@@ -19,6 +19,10 @@ If you enjoyed the practical labs throughout the textbook, you may find the foll
 **Try Hack Me (THM)** - Similar to HTB, but a more beginner friendly approach.  They cover many security topics and have a nice library of challenges and boxes from which to learn.  https://tryhackme.com
 
 **PortSwigger Academy** - The free online academy focuses on web application vulnerabilities and attacks through the use of the Burp Suite proxy tool.  Fun and awesome!  https://portswigger.net
+
+  <br>
+
+
 ## YouTube
 YouTube is a great resource of write-ups, tutorials, and demonstrations presented by a long list of talented people.  The following is a list of some of the highest quality and interesting channels to which I subscribe.
 
@@ -42,6 +46,10 @@ YouTube is a great resource of write-ups, tutorials, and demonstrations presente
 
 >[!tip] Tip - 2x speed
 >Watching videos at 2x the speed enables you to consume twice as much content.  It takes a little getting used to, but worth it.
+
+  <br>
+
+
 ## Podcasts
 I try to maximize my time and listen to podcasts on commutes, walks, or doing other light-focused activities.  Here are the security related podcasts I listen to on a regular basis.
 
