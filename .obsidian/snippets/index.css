@@ -1,0 +1,101 @@
+/*─────────────────────────────────────────────────────────────────────────────
+  Two-Column Glossary Using <p> Entries
+  • Only affects <div class="glossary-columns"> in Preview.
+  • Each <p> is one “Word — Page” entry.
+  • No bullets, just clean line breaks.
+─────────────────────────────────────────────────────────────────────────────*/
+.glossary-columns {
+  column-count: 3;            /* Split content into 2 vertical columns */
+  column-gap: 2em;            /* Space between the columns */
+  margin-bottom: 1.5em;       /* Space below this block before next heading */
+  font-size: 0.75em;          /* Slightly smaller text (optional) */
+  /* Prevent odd hyphenation if you see words breaking mid-line */
+  -webkit-column-break-inside: avoid; 
+  -moz-column-break-inside: avoid;
+  column-break-inside: avoid;
+}
+
+/* Each <p> is one entry: “Word — Page” */
+.glossary-columns p {
+  margin: 0 0 0.4em 0;        /* Top=0, Right=0, Bottom=0.4em, Left=0 */
+  break-inside: avoid-column; /* Prevent a single <p> from splitting between columns */
+  line-height: 1.3em;         /* A bit of extra line-height for readability */
+  /* ─── Hanging indent: if the text wraps, indent subsequent lines ─── */
+  padding-left: 1.2em;        /* Create a left “buffer” (adjust as needed) */
+  text-indent: -1.2em;        /* Pull the first line back to flush left */
+  break-inside: avoid-column; /* Don’t split one <p> across columns */
+}
+
+/* Make the <strong> inside each <p> stand out */
+.glossary-columns p strong {
+  //color: var(--header-color);  /* Use your theme’s accent color for the word */
+  //font-weight: bold;          /* Ensure it’s bold */
+}
+
+
+
+
+
+
+
+
+/*─────────────────────────────────────────────────────────────────────────────
+  print-table.css (updated)
+  • Applies directly to ALL <table> and <tr> in the preview when printing.
+  • Uses !important to override any conflicting rules.
+  • Ensures a table moves in its entirety to the next page if it doesn’t fit.
+  • Repeats <thead> on each page.
+─────────────────────────────────────────────────────────────────────────────*/
+@media print {
+  /*────────────────────────────────────────────────────────────────────────────
+    1) Let the .glossary-columns container split naturally if it runs out of page.
+       Remove any “avoid” rules so it doesn’t force itself onto the next page.
+  ────────────────────────────────────────────────────────────────────────────*/
+  .glossary-columns {
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    -webkit-column-break-inside: auto !important;
+    /* You can still keep your 3‐column layout in print. */
+    column-count: 3 !important;
+    column-gap: 2em !important;
+  }
+
+  /*────────────────────────────────────────────────────────────────────────────
+    2) Keep each <p> (“Word — Page”) together—don’t split one entry mid‐line,
+       but allow the block to span pages on whole‐entry boundaries.
+  ────────────────────────────────────────────────────────────────────────────*/
+  .glossary-columns p {
+    /* Don’t break one <p> between columns or pages: */
+    page-break-inside: avoid !important;
+    break-inside: avoid-column !important;
+    -webkit-column-break-inside: avoid !important;
+
+    /* (Optional) Preserve your existing spacing/styling for <p> entries: */
+    margin: 0 0 0.4em 0 !important;
+    line-height: 1.3em !important;
+    padding-left: 1.2em !important;   /* if you’re still using hanging‐indent */
+    text-indent: -1.2em !important;   /* (adjust to match your on‐screen CSS) */
+  }
+
+  /*────────────────────────────────────────────────────────────────────────────
+    3) If you still want a border or background on the block, re‐declare it here:
+       (Uncomment and tweak as desired—this is purely optional.)
+  ────────────────────────────────────────────────────────────────────────────*/
+  /*
+  .glossary-columns {
+    padding: 0.5em !important;
+    background-color: var(--background-modifier-hover) !important;
+    border: 1px solid var(--background-modifier-border) !important;
+    border-radius: 4px !important;
+  }
+  */
+
+  /*────────────────────────────────────────────────────────────────────────────
+    4) Reset any extra margins/padding in the Preview area so our rules “take over”
+  ────────────────────────────────────────────────────────────────────────────*/
+  .markdown-preview-view,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}

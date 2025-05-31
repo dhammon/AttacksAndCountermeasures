@@ -1,0 +1,1231 @@
+23 NYCRR 500
+AAA
+Access Control List
+Access Keys
+Acknowledge
+ACL
+Acquisition Phase
+Actions on Objectives
+Active Directory
+Active Reconnaissance
+ADB
+Address Resolution Protocol
+Address Space Layout Randomization
+Advanced Analytics
+Advanced Encryption Standard
+AES
+Agent
+Agentless
+ALE
+alert fatigue
+Algorithm
+Allowlisting
+Amazon Inspector
+Android Debug Bridge
+AndroidManifest.xml
+Android package file
+Android SDK
+Annual Loss Expectancy
+Annual Rate of Occurrence
+Anti-Analysis
+Anti-Forensics
+anti-malware
+anti-virus
+AnyDesk
+Apache
+APFS
+API
+APK
+app armor
+AppData
+Apple File System
+Application Layer
+application programming interface
+Application Security Verification Standard
+Application Server
+ARO
+ARP
+ARP Cache
+ARP Poisoning
+ARP Probe
+ARP Request
+ARP Response
+ARP Spoofing
+ARP Table
+Artifacts
+ASCII Encoding
+ASLR
+Assembly Language
+Asset Value
+ASVS
+Authentication, Authorization, and Accounting
+authentication server
+Authentication Tag
+authoritative server
+Autopsy
+Auxiliary Module
+Availability
+Availability Zones
+AWS
+AWS Certificate Manager
+AWS CLI
+AWS IAM Privilege Escalation
+AWS Privilege Escalation Tool
+Background Section
+Base64 Encoding
+baseline
+Base Pointer
+Bash
+Basic Service Set
+Basic Service Set Identifier
+BCP
+BEC
+Behavior-Based Detection
+BIA
+Big Endian
+binaries
+Bind Shell
+Birthday Attack
+Blacklisting
+black market
+bloatware
+Block Ciphers
+Blocklisting
+Blue Team
+Bootkit
+Botnet
+BOTSV3 dataset
+Bound service
+Bound Service
+Bourne Shell
+BreachDirectory
+broadcast
+Broadcast Receivers
+Broken Access Control
+brute force
+Brute-Force Attack
+Brute Force Attacks
+BSS
+BSSID
+buffer overflow
+Bug Bounty Programs
+Burp Browser
+Burp Suite
+Business Continuity Planning
+Business Email Compromise
+Business Impact Assessment
+C2
+CA
+cache
+California Consumer Privacy Act
+Callee-Saved Register
+Call tree
+Canary
+Canary Tokens
+Cascading Style Sheets
+Case Management Software
+CBC
+CCPA
+Center for Internet Security
+Certificate
+Certificate Authority
+Certificate Revocation List
+Chain of Custody
+Chef
+child process
+chmod
+Chosen-Plaintext Attack
+chown
+CIA Triad
+CI/CD
+CIDR
+Cipher Block Chaining
+Cipher Mode
+Ciphertext
+Ciphertext-Only Attack
+CIS
+CISA Known Exploited Vulnerabilities Catalog
+Cisco
+Classless Inter-Domain Routing
+CLI
+Client
+Client-server model
+Cloudflare
+Cloud Pentests
+Cloud Security Alliance
+Cloud Security Posture Management
+CloudTrail
+Cluster
+CN
+CNA
+Cobalt Strike
+Code Injection
+Collaboration Server
+Colocation Data Center
+Command and Control
+Command & Control
+Command Injection
+Command Line Interface
+Common Name
+Common Vulnerabilities and Exposures
+Common Vulnerability Scoring System
+Common Weakness Enumeration
+Community Cloud Model
+Confidentiality
+Console
+Container
+Containment
+Content Provider
+Content Resolver
+Continuous Integration/Continuous Delivery or Deployment
+Control
+Control Flow
+Control Plane
+Cookie
+cookie-based session
+Cookie jar
+Covenant
+CrackStation
+Creates, reads, updates, or deletes
+Credential Security
+CRL
+Cron
+cron job
+Cron Jobs
+crontab
+Cross-site Scripting
+crt.sh
+CRUD
+Cryptanalysis
+Cryptography
+Cryptology
+Cryptominer
+CSA
+CSPM
+CSS
+CVE
+CVE Numbering Authority
+CVSS
+CWE
+Cyber Kill Chain
+Cycode Security
+DACL
+daemon
+DAI
+Darik’s Boot and Nuke
+Darknet
+Dashboard
+DAST
+Data Acquisition
+Database server
+Database Server
+Data Classification
+Data Encryption Standard
+Data Execution Prevention
+Data flow
+Dataflow
+Data Flow Diagram
+Data Link Layer
+Data Loss Prevention
+Data Plane
+.data Section
+Data Storage
+Data store
+DBAN
+dd
+DDoS
+dd utility
+deauth
+Deauthentication (Deauth) Attack
+Debugger
+Deceptive Security
+Decompiler
+Decompiling
+decoy
+Decryption
+Deep Packet Inspection
+Defense in Depth
+Delivery
+Demilitarized Zone
+Denial of Service
+DEP
+Dependency management
+DES
+Detailed Findings
+Detection and Analysis
+DevOps
+DFD
+DHCP
+DHCP
+DHCP Lease
+DHCP Server
+DHCP Snooping
+DHCP Spoofing
+DHCP Starvation
+dictionary
+Differential Attack
+Diffie–Hellman
+Digital Forensics
+Digital Investigator
+Digital Signature
+directory
+Directory Busting
+Disassembler
+Disaster Recovery
+Discover
+Discretionary Access Control
+Discretionary Access Control List
+Disk-to-Disk Collection
+Disk-to-Image Collection
+Distributed Denial of Service
+DKIM
+DLL
+DLP
+DMARC
+dmesg
+DMZ
+DNS
+DNSdumpster
+DNS Flood
+DNS Flood Attack
+DNS Logs
+DNS Records
+DNS Resolution
+DNS Resolver
+DNSSEC
+DNS Tunneling Exfiltration
+Docker
+Document Object Model
+DOM
+domain administrators
+Domain Admin Privileges
+Domain Based Message Authentication Reporting and Conformance
+domain controllers
+Domain Keys Identified Mail
+Domain Name System
+Domain Object Model
+DOM‐based XSS
+DORA
+DoS
+DPI
+DR
+drop box
+Dropper
+Drozer
+DS
+DVNA
+Dynamic Application Security Testing
+Dynamic ARP Inspection
+Dynamic Entry
+Dynamic Host Configuration Protocol
+dynamic link library
+EC2
+ECB
+ECDHE
+Economies of Scale
+EDR
+Egress Port Filtering
+Elastic Compute Cloud
+Elasticity
+Elasticsearch
+Electronic Code Book
+Elliptic Curve Diffie-Hellman Ephemeral
+email security gateway
+Emulator
+Encapsulate/Decapsulate
+Encoder Module
+Encoding
+Encrypted channels
+Encryption
+Endianness
+End of Life
+End of Support
+Endpoint
+endpoint detection and response
+Endpoints
+Engagement Letter
+Enum
+Enumeration
+EOL
+EOS
+Ephemeral Ports
+Eradication
+Error protections
+ESS
+EternalBlue
+Ethernet Collision
+Evasion Module
+event
+Event Viewer
+Evil Twin Attack
+Executive Summary
+Exploit
+Exploitation
+Exploit Database
+Exploit-DB
+ExploitDB
+Exploit Market
+Exploit Module
+Exposure Factor
+ext4
+EXT4
+Extended Service Set
+Extensible Markup Language
+External entity
+External Storage
+External Testing
+Factor
+false negatives
+false positives
+Family Educational Rights and Privacy Act
+FAT
+Federal Financial Institutions Examination Council
+Federal Information Security Management Act
+Federal Risk and Authorization Management Program
+FedRAMP
+FERPA
+FFIEC
+file
+File Allocation Table
+File Header Signature
+Fileless Malware
+FileProvider
+file system
+Firewall
+Firewall Ruleset
+Firewalls
+FISMA
+Forensic Copy
+Forensics Lab
+Fourth Extended File System
+FQDN
+Fragmentation
+Frame
+Frame Relay
+Framework
+Frequency Analysis
+FTK Imager
+FTP Server
+Full Control
+Fully Qualified Domain Name
+Functional testing
+Galois/Counter Mode
+Gateway
+Gateway Filtering
+GCM
+GDB
+GDPR
+General Data Protection Regulation
+Generic Routing Encapsulation (GRE) Tunnel
+GHDB
+Ghidra
+Git
+Git History
+GitHub
+GLBA
+Gobuster
+golden ticket
+Google Dork
+Google Hacking Database
+Google Play
+GoToMyPC
+GPO
+Gramm-Leach-Bliley Act
+GRE
+grey market
+group
+group policy objects
+GTFOBins
+GuardDuty
+HackTricks
+Hardening
+hardware devices
+Hash Algorithm
+Hash-Based Message Authentication Code
+Health Insurance Portability and Accountability Act
+Heap Segment
+Hexadecimal
+Hexadecimal Encoding
+HIDS
+High Entropy
+HIPAA
+hive
+HiveNightmare
+HKEY_CURRENT_CONFIG
+HKEY_LOCAL_MACHINE
+HKEY_USERS
+HMAC
+home directory
+Home Network Gateway
+Honeypot
+Host-based Intrusion Detection System
+Host-based security
+host firewalls
+hosts file
+HTML
+HTTP
+HTTP headers
+HTTP methods
+HttpOnly attribute
+HTTP parameters
+HTTPS
+HTTP traffic monitoring
+Hub
+Hybrid Cloud Model
+Hybrid Network
+Hypertext Markup Language
+Hypertext Transfer Protocol
+Hypothesis Driven
+IaaS
+IaC
+IAM
+IAM Group
+IAM Role
+IAM User
+IBSS
+IDE
+Identification and Authentication Failures
+Identity
+Identity and Access Management
+Identity-Based Policies
+IDS
+IDS/IPS
+IEEE 802.11
+IIS
+IMAP
+Immunity Debugger
+Imperva
+Implicit Intent
+Incident responder
+Incident response
+Incident Response Plan
+Incident response services
+Incident response team
+Independent BSS
+Indexes
+Indicator of Compromise
+Indicators of Attack
+Indicators of Compromise
+Information disclosure
+Infrastructure as a Service
+Infrastructure as Code
+Infrastructure Basic Service Set
+Infrastructure BSS
+Ingestor
+In-House Testing
+INI files
+Initial Access
+Initial Access Broker
+Initialization Vector
+Injection
+Injection flaws
+inline architecture
+Input Validation
+Insecure Design
+InSpec
+Installation
+Integrated Development Environment
+Integration testing
+Integrity
+Intent filters
+Intents
+Intermediate CA
+Internal Testing
+International Organization for Standardization (ISO) 27001
+Internet Information Services
+Internet Message Access Protocol
+Internet Protocol Version 4
+Intruder
+Intrusion Detection System
+Intrusion Prevention System
+Investigation Phase
+Investigation Process
+IoA
+IoC
+IP Address
+IPS
+IPv4
+IRT
+ISO 27001
+IV
+Jamming Attack
+Java
+JavaScript
+JavaScript Object Notation
+JobScheduler
+JobService
+John the Ripper
+JSON
+Kali VM
+KB
+KDC
+Kerberos
+Key
+key distribution center
+Key Management Service
+Key Stream
+Kibana
+KMS
+knowledge base
+Known IoC/IoAs
+Known-Plaintext Attack
+Kotlin
+LAMP
+LAN
+LAN Manager
+Lateral Movement
+Laws
+Layer 2
+Layer 3
+Layer 4
+Layered Topology
+Lazarus
+Learning Management System
+Lease Expiration
+Least Privilege Principle
+Least Significant Bit
+libraries
+LinkedIn
+Linux User Isolation
+Little Endian
+Live Acquisition
+Living Off the Land Binaries
+LM
+LMS
+Load Balancer
+Loader
+local account
+Local Area Network
+Local Cache Poisoning
+Local Hosts File Poisoning
+local security authority subsystem service
+log files
+Logical Acquisition
+logrotate
+Logstash
+LOLBINS
+LSASS
+LSB
+MAC
+MAC Address
+MAC Filtering
+Machine Code
+MAC Spoofing
+Magic Bytes
+Mail Exchange
+Mail Server
+Mail Transfer Agent
+Malicious DNS Server
+Malicious Software
+Malware
+Managed security service providers
+Mandatory Access Control
+Manifest File
+Man in the Middle
+Master Service Agreement
+Maximum Tolerable Downtime
+MD5 Message-Digest Algorithm
+Media
+Media Access Control
+Memory Address
+Memory Forensics
+memory hollowing
+memory hook
+Mesh Topology
+Message Authentication Code
+Message of the Day
+metadata
+Metasploit
+Metasploit Listener
+Meterpreter
+MFA
+Midpoint Device
+misconfigurations
+MiTM
+MITRE ATT&CK
+MITRE ATT&CK Framework
+Modem
+Modern Portfolio Theory
+Mode_WORLD_READABLE
+Mode_WORLD_WRITABLE
+Modify
+ModSecurity
+MOTD
+mounted drives
+MSA
+Msfvenom
+MSSP
+MTA
+MTD
+Multi-factor Authentication
+Multifactor Authentication
+MX
+MySQL
+nameserver
+NAT
+National Institute of Standards and Technology (NIST) 800-53
+National Vulnerability Database
+Native Security
+Need to Know Principle
+Nessus
+nested folders
+NetScout
+Network Adapter
+Network Address Translation
+Network Analysis
+Network Interface Card
+Network Layer
+Network Rack
+Network Security
+Network Segmentation
+Network Socket
+New Technology File System
+New Technology LAN Manager
+New York State Department of Financial Services Cybersecurity Regulation
+Next Generation Firewall
+Next Generation (Next Gen) Firewall
+Nginx
+NIC
+NIST
+NIST 800-53
+Nmap
+NodeJS
+Node Package Manager
+Nonce
+Nonrepudiation
+NPM
+NTFS
+NTLM
+NTLM Hash
+NVD
+NX
+octal notation
+Offer
+OllyDbg
+online account
+On-Premise Infrastructure
+Open Systems Interconnection (OSI) Model
+Open Worldwide Application Security Project
+Opportunity Cost
+optional files
+Organization Unique Identifier
+organization units
+OSForensics
+OSI
+OSI Model
+OSINT
+OSSEC
+OU
+OUI
+Output Encoding
+Outsourced Testing
+OWASP
+OWASP Top 10
+OWASP Web Security Testing Guide
+owner
+P2P
+PaaS
+Packer
+Packet
+Packet Capture
+Packet Fragmentation
+Packet Inspection
+Packet Reassembly
+Packet Sniffing
+Pacu
+parent PID
+partition
+Passive Reconnaissance
+Pass-the-Hash
+pass the ticket
+Password Spraying
+Password Stuffing
+patch
+Patch Tuesday
+Path Traversal
+Pay-as-you-go model
+Payload
+Payload Module
+Payment Card Industry Data Security Standards
+Payment endpoints
+PBAC
+PCI/DSS
+PE
+PEASS-ng
+Peer-to-Peer
+Penetration Testing
+Pentest
+Permission Flags
+Permissions
+Permission Set
+persistence
+Personally Identifiable Information
+PEStudio
+PGP
+Phishing
+phishing attacks
+phishing site
+PhoneSploit
+Physical Layer
+Physical Penetration Test
+Physical Security
+PID
+PII
+Pillage
+PIP
+Pivot
+Pivoting
+PKI
+Plaintext
+Platform as a Service
+Playbooks
+Play Store
+POC
+Policies
+Policy-Based Access Control
+POP
+Port
+Portable Executable
+Port and Protocol Mismatch Detection
+Port Binding
+Port Binding Table
+Port Scanning
+port security
+PortSwigger
+PortSwigger’s Academy
+Post Exploitation
+Postgres
+Post-incident Recovery
+Post Module
+Post Office Protocol
+PPID
+Preferred Installer Program
+Preparation
+Preparation Phase
+Prepared Statements
+Presentation Layer
+Pretty Good Privacy
+Principal
+Principle of Least Privilege
+Private Cloud
+privilege escalation
+Procedures
+Process
+Processes
+Process Isolation
+Process Monitor
+Program Files
+proof of concept
+Proprietary Forensic Format
+Protocols
+Protocol Stack
+Proxy
+Public Cloud Model
+Public Disclosure
+Public-Key Exchange
+Public Key Infrastructure
+Publicly Exposed Bucket
+Pull method
+Purple Teaming
+Push method
+QARK
+Qualitative Risk
+Quantitative Risk
+Quick Android Review Kit
+RaaS
+RAID Systems
+rainbow
+RAM Dump
+Ransomware as a Service
+RAT
+Raw Format
+RBAC
+RCE
+RDBMS
+RDP
+RDS
+Reactive debugging
+read
+Read
+Read & Execute
+Reconnaissance
+Recovery Point Objective
+Recovery Time Objective
+Red Team
+Reflected XSS
+Regions
+Registers
+Registrar
+registry
+Registry
+registry editor
+RegShot
+regular expressions
+Regulations
+Relational Database Management Systems
+Relational Database Service
+Release Packet
+Remote Access Trojan
+Remote Access Tunnel
+Remote Access VPN
+Remote Cache Poisoning
+Remote Code Execution
+Remote Code Loading
+Remote Desktop Protocol
+Remote Shells
+Repeater
+Report
+Reporting
+Reporting Phase
+Repudiation
+Reputation Lists
+Reques
+Reset
+Resolver
+Resource
+Resource-Based Policies
+Responsible Disclosure
+Retention period
+Return Address
+Reverse Engineering
+Reverse Proxy
+Reverse Shell
+Rhino Security Labs
+Ring Topology
+RIP/EIP
+Risk
+Risk Assessments
+Risk Matrix
+Rivest-Shamir-Adleman
+Rogue Access Point
+Role-Based Access Control
+Root CA
+root directory
+root server
+Root User
+Router
+Router ACLs
+RPO
+RSA
+RSP/ESP
+RST Cookie
+RST Packet
+RTO
+Ruby on Rails
+Runtime Permission Model
+S3
+S3 Buckets
+SaaS
+Salt
+SAM
+SAM Database
+SameSite attribute
+Sandbox
+Sandbox Environment
+Sanitization
+Sarbanes-Oxley Act
+SAST
+SAST category
+SBOM
+SCA
+Scanning Tools
+Scope
+Scoped Storage
+ScoutSuite
+SDLC
+Search Processing Language
+Searchsploit
+Secrets scanner
+Secure attribute
+Secure Hashing Algorithm
+Secure Shell
+Security Accounts Manager
+security appliances
+Security Audits
+Security Awareness Training
+Security event
+Security Group
+Security incident
+Security information and event management
+Security Information and Event Management
+Security Logging and Monitoring Failures
+Security Misconfiguration
+Security Misconfigurations
+Security operations center
+Security orchestration, automation, and response
+Security Researchers
+Security Sandbox
+Security testing
+SelectionArgs
+Self-signed certificate
+Self XSS
+Semantic
+Sender Policy Framework
+Separation of concerns
+Sequence Number
+Server
+Server-Side Request Forgery
+Service
+service account
+Service Organization Control Type 2
+service principal
+Services
+service server
+Service Set Identifier
+Services or microservices
+Session
+Session Hijacking
+Session Identifier
+Session Key
+Session Layer
+Set‐Cookie header
+setgid bit
+Set Group ID
+setuid bit
+Set User ID
+SGID
+SHA
+SHA-1
+SHA-2
+SHA-256
+SHA-512
+Shadow Brokers
+shared resources
+Shell
+Shellcode
+Shodan
+Side-Channel Attack
+Side Loading
+SIEM
+SIEM Engineer
+Signal Jamming
+signature-based
+Signature-Based Detection
+silver ticket
+Simple Mail Transfer Protocol
+Simple Queue Service
+Simple Storage Service
+Simulated Phishing
+Single Loss Expectancy
+Single Page Application
+Sink
+Site-to-Site Tunnel
+Site-to-Site VPN
+Slack Space
+SLE
+Smali
+SMB
+SMTP
+Snyk
+SOAR
+SOC
+SOC 2
+SOC Analyst
+Software and Data Integrity Failures
+Software Application Security Testing
+Software as a Service
+Software Bill of Materials
+software bugs
+Software Composition Analysis
+Software development lifecycles
+Software testing
+Source
+SOX
+SPA
+Sparse Acquisition
+SPF
+SPL
+Splunk
+Splunk Enterprise Security
+spoofed email
+Spoofing
+SQL
+SQLi
+SQL Injection
+SQLite Database
+SQS
+SSH
+SSH Service
+SSID
+SSID Broadcast
+Stack Canary
+Stack Frame
+Stack Pointer
+Stack Segment
+Staged Payload
+Stageless Payload
+Stager
+Standard
+Started Service
+Star Topology
+Stateful Inspection
+Stateless Inspection
+State Table
+Static
+Static Acquisition
+Static Entry
+Static Hash Detection
+Steganography
+Stored XSS
+Stream Ciphers
+STRIDE
+Structural
+Structured Query Language
+Sublist3r
+Subnet
+Subnet Mask
+sudo
+Sudoers File
+SUID
+SUID Executable
+Sunk Cost
+Supply Chain Attack
+Switch
+symbolic notation
+SYN Cookie
+Syslog
+System32
+system account
+System Administrator
+system binaries
+SysWOW64
+Tampering
+tap architecture
+Tapjacking
+Task Scheduler
+TCP
+TCP Backlog
+tcpdump
+TCP/IP Suite
+TCP Reset Attack
+TCP Segment
+TCP SYN Flood Attack
+TCP Three-Way Handshake
+TeamViewer
+Technology or web stack
+Telnet
+temporary files
+Terminal
+Terraform
+Testing for Command Injection
+Text-based resources
+Text Segment
+TGS
+TGT
+Third‐party cookies
+Third-Party Testing Firm
+Threat
+Threat Actors
+Threat Hunter
+Threat intelligence
+Threat modeling
+Threat monitoring
+Ticket Granting Server
+Ticket Granting Ticket
+Time to Live
+TLD
+TLS
+TLS offloading
+TLS Termination
+Top Level Domain
+TOR
+Traffic Monitoring
+Traffic Segmentation
+Trail
+Transitive dependency
+Transmission Control Protocol
+Transport Layer
+Transport Layer Security
+Tree Topology
+Trojan
+TruffleHog
+TTL
+TUN/TAP Interface
+type 1
+type 2
+UDP
+UDP Datagram
+UDP Datagram Model
+unauthenticated remote code execution
+Underlying Linux Kernel Protections
+unhashed
+Unit testing
+Unquoted Service Path
+URL filtering
+User Datagram Protocol
+userland
+Users folder
+UTF-8
+Validation
+variable data
+VCS
+Version Control Systems
+Virtualization
+Virtual Local Area Network
+Virtual Machine
+Virtual Network Computing
+Virtual Private Cloud
+Virtual Private Network
+VLAN
+VLAN Trunking
+VM
+VNC
+Volume Shadow Copy Service
+VPC
+VPC Flow Logs
+VPN
+VSS
+Vulnerabilities
+Vulnerability
+Vulnerability Assessment
+Vulnerability Management
+Vulnerable and Outdated Components
+WAF
+WAN
+WannaCry
+Wappalyzer
+Wazuh
+Weaponization
+Web Application Firewall
+Web applications
+Web Application Security Testing
+Web crawler
+Web Proxy Tools
+Web Server
+WebView
+Whitelisting
+Wide Area Network
+Wi-Fi
+Wildcard
+Windows Defender
+Windows Event
+Windows folder
+Windows Kernel
+Windows Registry
+Windows Remote Manager
+Windows Server Update Services
+WinExec
+WinRM
+Wireless LAN
+Wireshark
+Wireshark Capture
+WLAN
+write
+Write
+Write Blocker
+WSTG
+WSUS
+x64dbg
+XML
+XML layouts
+XSS
+Yara
+Yara Rule
+Yara Ruleset
+ZAP
+zero-day vulnerability
+Zone
+zone transfers
+zsh
+Z Shell
+
