@@ -1,7 +1,9 @@
-# Chapter 3 - Network Security
-![](../images/03/globe_internet_connections.jpg)
+<span class="chapter-banner">Chapter 3</span>
+# Network Security
 
-Technologies that connect computer systems into networks have increased the capabilities and complexities of software by several orders of magnitude.  They have given rise to the internet and an ever-growing range of network services and web applications.  Governments, organizations, and individuals all rely on network systems to conduct commerce, business, and communication.  The complexity of network systems increases the attack surface and security risks.  This chapter will cover basic networking concepts and lay the foundation for network security principles.  While it is assumed the reader knows some basic networking, I will review general networking technologies and concepts.  I will then introduce some of the technologies and practices used to secure networks.  Not all network security concepts could be covered in one chapter; however, the reader will become familiar with the basics of network security and simultaneously learn how to approach other network related technologies and systems.
+<div class="image-crop">
+  <img src="../images/03/globe_internet_connections.jpg">
+</div>
 
 **Objectives**
 1. Refresh knowledge on computer networking topics. 
@@ -9,6 +11,8 @@ Technologies that connect computer systems into networks have increased the capa
 3. Conduct host and service discovery through scanning utilities.
 4. Analyze network packets using Wireshark.
 5. Crack the password of a wireless WEP network.
+
+Technologies that connect computer systems into networks have increased the capabilities and complexities of software by several orders of magnitude.  They have given rise to the internet and an ever-growing range of network services and web applications.  Governments, organizations, and individuals all rely on network systems to conduct commerce, business, and communication.  The complexity of network systems increases the attack surface and security risks.  This chapter will cover basic networking concepts and lay the foundation for network security principles.  While it is assumed the reader knows some basic networking, I will review general networking technologies and concepts.  I will then introduce some of the technologies and practices used to secure networks.  Not all network security concepts could be covered in one chapter; however, the reader will become familiar with the basics of network security and simultaneously learn how to approach other network related technologies and systems.
 ## Network Basics
 In the first section of this chapter, I will introduce common networking topics and technologies.  If you are comfortable with networking, this section may be a nice refresher.  However, I will not cover all networking concepts, nor will I go into any deep dives on a particular subject.  The goal of this section is to ensure the reader is equipped with the foundational knowledge needed before tackling network security concepts.
 ### Client/Server Model
@@ -84,6 +88,12 @@ The ability to see an address and instantly know if it is a public or private IP
 
 > [!note] Note - IPv6 
 > While we will not be covering IP version 6 (*IPv6*), it is worth at least a mention in this chapter.  IPv6 solves the same networking goals as IPv4 but provides a far greater number of unique addresses.  It also consolidates and streamlines several networking features and services.  As of the writing of this text, IPv4 is much more popular in use in the United States, so IPv4 remains the focus of this chapter.  However, IPv6 has its own security implications and is a great topic to research further.
+
+  <br>  
+  <br>
+  
+
+
 ### Subnetting
 As discussed earlier, the IPv4 address space is divided into prefix, subnet, and host sections.  The prefix and subnet sections are usually combined and referred to as the network section of an IP address.  The prefix will identify the network's class, while the subnet indicates which network is associated with the IP address.  The final octet of the IP address is assigned to a specific host on that network.  No two devices on the same network should share the same IP address; otherwise, network issues will occur.  Using the IP address `192.168.1.5` as an example, the first two octets with the value of `192.168` is the prefix and identifies this is a private IP address.  The third octet with the value of `1` is the subnet.  The fourth and last octet is the host and has a value of `5`.  We can conclude that the host is in the `1` subnet of a private network.
 
@@ -123,8 +133,6 @@ Networked devices communicate with each other via **protocols** that are predete
 
 Before a computer engages another computer via network transmissions, it must first determine which device it wants to engage.  The requesting computer identifies the IP address of the system it is targeting.  But IP address alone is not enough to establish a communication, and the requesting device must also identify to which **port** to connect.  A port is represented by a number between 0 and 65535.  The port numbers 0-1023 are associated with well-known services, port numbers 1024-49151 are registered for specific purposes, and the port range 49152-65535 are used as ephemeral ports such as those used for outbound requests during NAT.
 
-These ephemeral ports are used by a requestor making an outbound connection so it can keep track of requests it makes and have an avenue to receive responses.  If an IP address is like the address to a house, ports are like the windows and doors of the house.  If a computer has an open port, it usually means it has a program running as a **service** that is configured to respond to connections to that port.  For example, port 80 is commonly used with the *hypertext transmission protocol (HTTP)* and a webserver listens for incoming connections to its port 80 to serve web pages.
-
 > [!tip] Tip - Common Services and Ports
 > There are many common ports and services a proficient security professional should know by memory.  For example, one should know which port is commonly associated with *file transfer protocol (FTP)* and which service is commonly associated with port 22.  Consider committing the following table to memory:
 > 
@@ -137,6 +145,8 @@ These ephemeral ports are used by a requestor making an outbound connection so i
 > | 53 | Domain Name System (DNS) | | 3306 | MySQL |
 > | 80 | Hypertext transfer Protocol (HTTP) | | 3389 | Remote Desktop Protocol (RDP) |
 > | 88 | Kerberos | |5432 | PostgreSQL |
+
+These ephemeral ports are used by a requestor making an outbound connection so it can keep track of requests it makes and have an avenue to receive responses.  If an IP address is like the address to a house, ports are like the windows and doors of the house.  If a computer has an open port, it usually means it has a program running as a **service** that is configured to respond to connections to that port.  For example, port 80 is commonly used with the *hypertext transmission protocol (HTTP)* and a webserver listens for incoming connections to its port 80 to serve web pages.
 
 Ports could be open without a listening service and services can listen to closed ports - in either case, communication over these ports fails.  This is an important concept to consider while troubleshooting networks.  The client/server model requires that the components of ports, services and protocols all work together to deliver information.  If any one of these components fails, the transfer of information will not occur and will result in some type of network error.
 
@@ -176,25 +186,25 @@ Wireshark is a free tool that empowers users to capture and analyze packets on a
 
 >[!activity] Activity 3.1 - Wireshark
 >Let's explore the Wireshark interface using the Kali VM.  To start Wireshark, I'll launch a terminal and enter the command `sudo wireshark`.
->![[../images/03/wireshark_start.png|Starting Wireshark]]
+>![[../images/03/wireshark_start.png|Starting Wireshark|600]]
 >To start capturing packets, select the `eth0` network interface and then the "blue fin" icon in the upper left corner of the screen.
->![[../images/03/wireshark_capture.png|Start Packet Capture]]
+>![[../images/03/wireshark_capture.png|Start Packet Capture|500]]
 >Almost immediately we begin seeing packet entries in the top primary pane.  We can stop the capture at any time by pressing the red square next to the capture button in the upper left corner.  The primary pane lists each captured packet in a table with the first column displaying the relative capture order, time, source IP or MAC, destination IP or MAC, the protocol and general packet info.  The bottom left pane displays a structured object of a selected packet, and the bottom right pane shows the hexadecimal format of the packet.
->![[../images/03/wireshark_packets.png|Packets Captured]]
+>![[../images/03/wireshark_packets.png|Packets Captured|700]]
 >I find that adding the source and destination ports as columns to the main pane is useful.  To alter the displayed columns, right-click the column header, select `Column Preferences` from the context menu.
->![[../images/03/wireshark_col_prefs.png|Wireshark Column Preferences|300]]
+>![[../images/03/wireshark_col_prefs.png|Wireshark Column Preferences|400]]
 > With the column preferences opened, push the "+" add button at the bottom of the window and double click `Number`.  Select Destination Port from the drop-down menu then double click the title of the added row and enter `DstPort`.  Repeat these steps and add another column for the Source Port.  Next, drag and drop the newly created columns next to their respective columns that hold the address space.  Your Preferences window should look like the one below once complete.  Press OK to complete the changes.
-> ![[../images/03/wireshark_add_col.png|Wireshark Add Columns]]
+> ![[../images/03/wireshark_add_col.png|Wireshark Add Columns|500]]
 > Observe that the main pane now shows the source and destination ports for each packet!  Next, I open the web browser within the VM and navigate to `http://google.com`.  Afterwards, I apply the `http` filter in Wireshark to only display HTTP packets that have been captured.
-> ![[../images/03/wireshark_filter.png|Filtering HTTP Packets]]
+> ![[../images/03/wireshark_filter.png|Filtering HTTP Packets|500]]
 > Wireshark can display domain names instead of the IP address which will help us identify which of these packets are related to the Google domain.  To enable this setting, go to Edit and Preferences to launch the preference window.  Then select `Name Resolution` from the left navigation menu and check the `Resolve network (IP) addresses` option.  Press OK to apply the setting.
-> ![[../images/03/wireshark_resolve.png|Wireshark Name Resolution]]
+> ![[../images/03/wireshark_resolve.png|Wireshark Name Resolution|500]]
 > Notice that many of the IP addresses displayed in the main pane now display domain names instead of IP addresses!  The first packets do not look related to Google.  Scrolling down reveals several Google related packets.  To open the *stream*, or related packets, select the first packet and right click to open the context menu.  Select `Follow` and then `HTTP Stream` to open the stream.
-> ![[../images/03/wireshark_follow.png|Follow Stream Feature]]
+> ![[../images/03/wireshark_follow.png|Follow Stream Feature|600]]
 > The stream window opens and displays the request (red text) and the response (blue text) and any subsequent related packets. 
-> ![[../images/03/wireshark_stream.png|HTTP Stream]]
+> ![[../images/03/wireshark_stream.png|HTTP Stream|600]]
 > I close the stream and delete the `http` filter then press enter to display all captured packets.  Another excellent feature of Wireshark is the statistics reporting.  These reports can be helpful to get a general idea of the types of packets that were captured and to potentially identify any unusual protocols or connections that are made.  Select the `Statistics` menu and then choose `Conversations` to open the report.  Press the `Name Resolution` option on the left menu and then choose the `IPv4` tab and observe the statistics from our connection to google.com.
-> ![[../images/03/wireshark_endpoints.png|Wireshark Statistics Endpoint Report]]
+> ![[../images/03/wireshark_endpoints.png|Wireshark Statistics Endpoint Report|500]]
 > There are many other useful features of Wireshark.  We will revisit the tool again later in the textbook during the Malware Analysis section where we will carve files from packet captures.
 > 
 ### Network Utilities
@@ -215,23 +225,23 @@ Troubleshooting network issues is a common task for many technology professional
 >To demonstrate that the Kali and Windows VM can connect with each other, I can use a basic connectivity test using the `ping` utility that will send a message over the ICMP protocol.  From the Kali VM, I run `ping` with a count (`-c`) of four packets targeting the Windows IP address.
 >![[../images/03/activity_util_kali_ping_fail.png|Failing to Ping Windows|600]]
 >The result is 100% packet loss indicating that Kali was not able to reach the Windows VM or that the Windows VM ignored the ping requests.  By default, Windows blocks incoming ICMP requests through its native host firewall.  To allow the Windows VM to accept ping requests and to respond to them, I must enable the respective firewall rules within the Windows VM.  I do this by launching the "Windows Defender Firewall with Advanced Security" application and selecting "Inbound Rules".  In the main pane with all the rules listed, I find the "File and Printer Sharing (Echo Request - ICMPv4-In)" rules and activate each of them by right-clicking and selecting "Enable".
->![[../images/03/exercise_utilities_firewall.png|Windows Firewall ICMP Rules]]
+>![[../images/03/exercise_utilities_firewall.png|Windows Firewall ICMP Rules|500]]
 >After the rules are enabled, I jump back to the Kali VM and rerun the `ping` command that failed.  This time all pings receive responses!
->![[../images/03/activity_util_kali_ping_success.png|Success Windows Ping From Kali|600]]
+>![[../images/03/activity_util_kali_ping_success.png|Success Windows Ping From Kali|500]]
 >Likewise, I can `ping` the Kali VM from the Windows VM using a simpler command without the count option since the Windows version defaults to four packets.
->![[../images/03/activity_util_win_ping.png|Windows Pings Kali|600]]
+>![[../images/03/activity_util_win_ping.png|Windows Pings Kali|500]]
 >Notice that each reply from the Kali VM has a *time to live (TTL)* of 64, whereas the reply from the Windows VM had a TTL of 128.  Linux machines usually respond with a TTL around 64 and Windows around 128, making the ping utility a useful resource to blindly identify operating system types across a network.
 >
 >The ability to trace the various devices that sit between your machine and a target can help to identify where a network connection may be failing.  For example, suppose my Kali VM could not connect to Google's website.  I could run a `traceroute` that may reveal where packets are failing to find Google's servers.
->![[../images/03/activity_util_kali_trace.png|Trace Route to Google|600]]
+>![[../images/03/activity_util_kali_trace.png|Trace Route to Google|500]]
 >This command tracing the route to Google succeeded and I can see that there were 14 devices, or hops, between my Kali VM and Google's web server.  The trace route utility sends an initial packet with a TTL of 1 and waits for the response back from the next node.  The node, which is my router in the above case, sees that the TTL has expired and responds to the request with its network information.  Trace route then increments the TTL by one, to two, and sends another request eventually reaching the next node behind the first identified node where the second node responds with its network information.  This continues until the destination is reached.
 >
 >Windows has a similar utility that can be used through the `tracert` command as demonstrated below.
->![[../images/03/activity_win_trace_complete.png|Windows Trace Route|600]]
+>![[../images/03/activity_win_trace_complete.png|Windows Trace Route|500]]
 >While we will cover DNS in the next chapter, it is important to know how to identify IP addresses from domain names.  Both Linux and Windows have an `nslookup` utility that will resolve the IP address for a given domain.  From the Kali VM, I can identify the Google domain's IP addresses by running the following command.
->![[../images/03/actvity_util_kali_nslookup.png|Google Domain IP Lookup|600]]
+>![[../images/03/actvity_util_kali_nslookup.png|Google Domain IP Lookup|500]]
 >I can see that `google.com` resolves to the IPv4 address `142.250.191.46` and that the DNS resolve is my home router at IP address `192.168.1.1`.  The last network utility I will cover here is `netstat` which can be used to identify a device's network connections and listening ports.  Within the Windows VM, I run the command with the `-aon` options to display all the listening and connected sockets, their process IDs (PID), address and port numbers.
->![[../images/03/activity_util_win_netstat.png|Windows Netstat Result|600]]
+>![[../images/03/activity_util_win_netstat.png|Windows Netstat Result|500]]
 >The results include all the listening ports on the Windows VM such as 135, 445, and several others.  The netstat command is helpful when troubleshooting a client/server failure as the server must have a port open and listening on the interface to allow a connection to be made.  I can also see where this VM has established HTTPS connections with public IP addresses over port 443.  This can be helpful when inspecting a device's network behavior during malware analysis.
 ## Network Security
 With the basics of networking now covered, we can begin to explore network security.  Network defenders must understand how computer networks function and the ways they can be attacked to ensure they stay secure.  Let's consider Cisco's definition of network security since they currently hold the largest market share of network equipment.
@@ -245,7 +255,7 @@ Network security risks coincide with the CIA Triad introduced in chapter one.  
 ### Network Segmentation
 An effective way to limit exposures to internal networks is by separating a network into smaller networks called **network segmentation**.  This can be accomplished by using routers to define LANs.  For example, a router with four NICs where one of the NICS is used for a WAN connection and the other three are used for different LANs.  Managed routers and switches can support *virtual local area networks (VLANS)* which logically separate devices onto separate networks.  Consider the following network that is segmented into three separate networks.
 
-![[../images/03/segmentation.png|Network Segmentation|450]]
+![[../images/03/segmentation.png|Network Segmentation|350]]
 
 The router or a firewall separates the traffic between the networks.  The router would block packets if a device in the office network attempted to make a connection to a device in the development network.  Packets could be allowed to travel between these networks if the router/firewall has a corresponding rule.  Secure networks apply a "deny all" rule that blocks all traffic to and from the network.  Network administrators then apply "allow" rules for specific and proven use cases, such as a development device needing access to an office printer.  Limiting access between networks ensures that if a network were compromised, the attacker would not be able to easily access other and possibly more critical networks.  For example, assume a development device is compromised due to a developer inadvertently installing a malicious plugin in their *integrated development environment (IDE)*.  This compromised device would not be able to connect to the office network where there could be sensitive customer data.
 
@@ -282,12 +292,10 @@ Once connected to a device's opened port, additional traffic can be exchanged th
 > [!activity] Activity - NMAP
 > There are several free and reputable tools that empower host and service discovery on the network.  The popular Netcat and NMAP tools work very well and are rich in features.  Many newer network tools, such as Masscan, have additional features and properties, such as being much faster!  Let's explore some of NMAP's host and service discovery capabilities.
 > 
-> In this activity I will configure both Kali and Windows VMs with the `Host-only Adapter` with the name `VirtualBox Host-Only Ethernet Adapter` network setting.  Before starting them, I will ensure they are on the same network and are disconnected from the internet.  The Windows VM's host firewall will be disabled which will expose all of its open ports to the network which will mimic a server on the network.  Once the machines and network are prepared, I will conduct a ping sweep from the Kali machine to discover the IP address of the Windows VM.  With this IP address in hand, I will run various host specific scans that identify more information about the Windows target.
-> 
-> First, I start the Windows VM with the `Host-only Adapter` network setting.  Once started and logged in, I launch `Windows Defender Firewall with Advanced Security` from the search bar.
-> ![[../images/03/nmap_win_firewall_open.png|Launching Windows Defender Firewall|600]]
-> With the Windows Defender Firewall with Advanced Security app launched, I press the "Windows Defender Firewall Properties" that is at the bottom of the Overview section in the main pane which launches the properties of the firewall.
-> ![[../images/03/nmap_win_firewall_properties.png|Windows Defender Firewall Status|600]]
+> In this activity I will configure both Kali and Windows VMs with the `Host-only Adapter` with the name `VirtualBox Host-Only Ethernet Adapter` network setting.  The Windows VM's host firewall will be disabled which will expose all of its open ports to the network which will mimic a server on the network.  Once the machines and network are prepared, I will conduct a ping sweep from the Kali machine to discover the IP address of the Windows VM.  With this IP address in hand, I will run various host specific scans that identify more information about the Windows target.
+> ![[../images/03/nmap_win_firewall_open.png|Launching Windows Defender Firewall|400]]
+> First, I start the Windows VM with the `Host-only Adapter` network setting.  Once started and logged in, I launch `Windows Defender Firewall with Advanced Security` from the search bar.  With the Windows Defender Firewall with Advanced Security app launched, I press the "Windows Defender Firewall Properties" that is at the bottom of the Overview section in the main pane which launches the properties of the firewall.
+> ![[../images/03/nmap_win_firewall_properties.png|Windows Defender Firewall Status|500]]
 > The Windows host firewall has three sets of configurations, or *profiles*, depending on the type of network the machine resides.  The Domain profile is for Windows networks managed by a Domain Controller, the Private profile for trusted networks, and the Public profile for untrusted networks.  Each of the firewall profile configurations can be viewed using the respective tabs in the properties window.  As I want to demonstrate open network ports in this activity, I disable the firewall for each profile by selecting the "Firewall state" drop-down and choosing "Off" as shown in the following screenshot.  Then I'll press Ok to apply the settings.
 > ![[../images/03/nmap_profile_off.png|Firewall Profile Setting Off|400]]
 > With the firewall disabled, I launch a command prompt by entering `cmd` in the search bar.  I then identify the Windows VM IP address using `ipconfig` which is found to be 192.168.56.253.  We can derive that the CIDR range for the subnet is 192.168.56.0/24 from the Subnet Mask result of this command's output.
@@ -316,7 +324,7 @@ Once connected to a device's opened port, additional traffic can be exchanged th
 
 ## Wireless
 The development of **Wi-Fi**, sometimes referred to as *Wireless Fidelity*, expanded networks beyond the confines of physical connection enabling networks to be formed over radio signals.  It is convenient for devices to connect to networks without Ethernet cables.  WIFI promotes the use of mobile devices and offers greater flexibility and communication within office environments.  For instance, companies use WIFI to enable operations and introduce mobile technologies like laptops, tables, and smart phones.
-![[../images/03/wifi_network.png|Basic Wireless LAN Network|400]]
+![[../images/03/wifi_network.png|Basic Wireless LAN Network|350]]
 
 The IEEE 802.11 standards are the basis for **wireless LAN (WLAN)** networking that connects devices wirelessly to a *wireless router* or *access point*.  A wireless router establishes new networks and routes traffic without cables.  The access point has a wired connection to the network's switch and router and bridges the existing network.  These WLANs can be part of the existing LAN or create a new LAN depending on the configuration.  The figure above illustrates a simple network of wireless devices connected to a physical LAN through an access point.  
 
@@ -353,47 +361,132 @@ Other types of protections wireless network administrators can deploy include MA
 ### Wi-Fi Attacks
 The threat of a man in the middle (MitM) attack is prominent in a wireless network and is mostly mitigated through good encryption.  However, if the encryption is broken or implemented poorly, it opens the network to the attacker.  There are other techniques an attacker can use to intercept a victim's traffic.  A classic example of this is the **evil twin** attack in which the malicious actor sets up a wireless access point with a similarly named SSID to trick victims to connect to them.
 
-![[../images/03/wifi_evil_twin.png|Evil Twin Attack|300]]
+![[../images/03/wifi_evil_twin.png|Evil Twin Attack|325]]
 
 In the **evil twin attack** illustrated above, the attacker sets up a wireless router they control with a name like the existing network.  Notice the slight name change using the number zero in place of the letter "o".  The attacker could name the SSID something just as enticing like "FreeWi-Fi" and they may get connections in a crowded coffee shop.  If the attacker controls the router, they can decrypt any transmissions from victims and forward traffic to its intended destination while manipulating packets without the victim's knowledge.
 
 Organizations must also concern themselves with **rogue access points** where an attacker, or an unwitting employee, connects a wireless router to the physical network.  Once connected to the physical network, the wireless router is given an IP address and devices can connect to the network wirelessly.
 
-![[../images/03/wifi_rouge.png|Rogue Access Points|300]]
+![[../images/03/wifi_rouge.png|Rogue Access Points|350]]
 
 Not only can rogue access points cause network routing issues, but they extend the network beyond the confines of the physical network.  It can enable an attacker to reach the otherwise unreachable network providing remote access to wage additional attacks.  Good network security, like MAC filtering or port security, could prevent this attack.
 
-Access to the wireless network can be jammed using radio emitting devices designed to cancel or disrupt the radio wave lengths preventing any user from connecting or maintaining connections.  Such jamming devices are available on Amazon for as little as $100.  Another wireless denial of service (DoS) attack is to simply boot a victim off the wireless network using the native *deauthentication (deauth)* request.  This **deauth attack** leverages the 802.11 standard to notify the access point that the device is disconnecting.  An attacker only needs be connected to the same wireless network and know the MAC address of the victim to repeatedly send deauth requests that boot the victim from the network.
-
 ![[../images/03/wifi_deauth.png|Deauth Attack on Wireless Network|400]]
+
+Access to the wireless network can be jammed using radio emitting devices designed to cancel or disrupt the radio wave lengths preventing any user from connecting or maintaining connections.  Such jamming devices are available on Amazon for as little as $100.  Another wireless denial of service (DoS) attack is to simply boot a victim off the wireless network using the native *deauthentication (deauth)* request.  This **deauth attack** leverages the 802.11 standard to notify the access point that the device is disconnecting.  An attacker only needs be connected to the same wireless network and know the MAC address of the victim to repeatedly send deauth requests that boot the victim from the network.
 
 Deauth attacks can be a component of other attacks where the malicious actor attempts to record a victim's key exchange with a wireless router.  The attacker will boot the victim off the network while having a wireless packet capture running.  When the victim attempts to reconnect to the wireless router, they must perform a key exchange to set up a secure connection.  The attacker collects the key exchange packets that can then be used to perform cryptanalysis or offline dictionary attacks.  This type of attack is what makes WPA insecure as the TKIP protocol is vulnerable to cracking.
 
 ![[../images/03/wifi_key_exchange.png|Wi-Fi Key Exchange Packet Capture|250]]
 
->[!activity] Activity 3.4 - WiFi WEP Cracking
+>[!activity] Activity 3.4 - Wi-Fi WEP Cracking
 >The wired equivalent privacy (WEP) standard is insecure as it repeats a short 24-bit initialization vector (IV) every 5k packets which is used to encrypt the traffic.  An attacker that captures several thousand packets has a high likelihood of cracking the encryption key used in WEP.  Once cracked, the key can be used to decrypt other packets that are captured allowing for the inspection and manipulation of WiFi traffic between the victim and the access point.  I'll demonstrate the security weakness of WEP using Aircrack to brute-force the IV from captured traffic.
 >
 >Capturing WiFi packets only requires a wireless NIC and for this demonstration I'll start by uploading the `kansascityWEP.pcap` (source accredited to edX) file to my Kali VM to simulate the output of the packet capturing process.  Kali already has the Aircrack tool installed which can be passed a PCAP file for the key brute forcing process.  After copying the PCAP to the VM's desktop, I open a terminal and begin the cracking process.
 >```
 >aircrack-ng ./Desktop/kansascityWEP.pcap
 >```
->![[../images/03/activity_wep_aircrack.png|Cracking PCAP with Aircrack|600]]
+>![[../images/03/activity_wep_aircrack.png|Cracking PCAP with Aircrack|500]]
 >Aircrack analyzes the file and identifies the WiFi networks and their traffic statistics.  After just a moment, the tool cracks the WEP key and returns the hexadecimal value `1F:1F:1F:1F:1F`.
->![[../images/03/activity_wep_cracked.png|Cracked WEP Key|600]]
+>![[../images/03/activity_wep_cracked.png|Cracked WEP Key|500]]
 >With the key in hand, I open the PCAP within Wireshark by launching it through the Kali application menu.  Once launched, I navigate to the File menu, select the Open option, and choose the `kansascityWEP.pcap` file that was uploaded to the desktop.  The file has 802.11 protocol data encrypted, as illustrated below.
 >![[../images/03/activity_wep_packets_enc.png|Encrypted WEP Packets]]
 >To view the packets in a decrypted state, I must add the encryption key that was recovered using Aircrack.  To do this, I first enable the Wireless Toolbar that is under the View menu of Wireshark.
 >![[../images/03/activity_wep_toolbar.png|Enable Wireless Toolbar in Wireshark|500]]
 >Enabling the toolbar adds an additional row to our tool menu just above the packet listing pane in Wireshark.  To the right of the bar is a new button labeled `802.11 Preferences`.
->![[../images/03/activity_wep_pref.png|802.11 Preferences Button on Toolbar|600]]
+>![[../images/03/activity_wep_pref.png|802.11 Preferences Button on Toolbar|500]]
 >Pressing the button opens the Preferences menu and auto-navigates to the IEEE 802.11 settings.  To configure Wireshark with the WEP key, I select the `Enable decryption` checkbox and then press the Edit button next to the "Decryption keys" label.
->![[../images/03/activity_wep_enable.png|802.11 Settings|600]]
+>![[../images/03/activity_wep_enable.png|802.11 Settings|500]]
 >After pressing the Edit button, the WEP and WPA Decryption Keys window pops up.  I press the `+` button to add a new key selecting WEP for key type and I enter `1F:1F:1F:1F:1F` for the key value.
->![[../images/03/activity_wep_key.png|Entering WEP Key Settings in Wireshark|500]]
+>![[../images/03/activity_wep_key.png|Entering WEP Key Settings in Wireshark|350]]
 >Once the key settings are in place, I press OK to close the WEP and WPA Decryption Keys window and then OK again to close the Preference window.  As soon as the Preference window is closed, Wireshark updates and decrypts all the packets.  I can now see each packet in plaintext which reveals several ARP packets!
 >![[../images/03/activity_wep_decrypted.png|Decrypted WEP Packets|600]]
 
+## Summary
+Building on networking fundamentals, this chapter describes the principles and practices for securing networks. We reviewed the OSI model and how it addresses packet creation, routing, and protocols (ARP, IP, NAT). We examined access controls (ACL, RBAC), perimeter defenses through firewalls (stateless, stateful, next gen), VPN architectures, and segmentation techniques like VLANs and DMZs to limit lateral movement. Finally, we explored wireless security standards and active threats such as evil-twin and deauthentication attacks, reinforcing that effective network security combines layered controls, strong encryption, and vigilant monitoring.
+
+>[!terms] Key Terms
+>**Basic Service Set (BSS)** - A wireless LAN configuration in which one access point or router defines a single network under a given SSID.
+>
+>**Basic Service Set Identifier (BSSID)** - The unique MAC address of an individual access point that distinguishes it within a BSS.
+>
+>**Bus** - A network topology in which all devices share a single communication backbone, making every device’s traffic visible to all others.
+>
+>**Classless Inter-Domain Routing (CIDR)** - A notation that specifies an IPv4 network and its mask using a “/n” suffix to indicate the number of bits in the network prefix.
+>
+>**Client** - The system or application that initiates a request for data or services from a server.
+>
+>**Deauthentication (Deauth) Attack** - A wireless denial-of-service method that repeatedly sends forged deauth frames to force a device off a Wi-Fi network.
+>
+>**Encapsulate/Decapsulate** - The process by which each OSI layer adds (“encapsulate”) or removes (“decapsulate”) its header and trailer as a message passes down or up the stack.
+>
+>**Evil Twin Attack** - An attack in which a malicious actor intercepts network traffic by setting up a rogue access point with a similar SSID to trick users into connecting to it.
+>
+>**Extended Service Set (ESS)** - A wireless network composed of multiple BSSs under the same SSID, allowing seamless roaming between access points.
+>
+>**Network Firewall** - A network security device that filters or inspects traffic based on configurable rules to enforce an organization’s network security policy.
+>
+>**Host Discovery** - The technique of identifying active devices on a network by listening for broadcasts or sending probes like pings and ARP requests.
+>
+>**Hybrid** - A network topology that combines two or more basic patterns (such as star and tree) to leverage their respective advantages.
+>
+>**Independent BSS (IBSS)** - A peer-to-peer wireless network formed directly between devices without an intervening access point.
+>
+>**Infrastructure Basic Service Set** - A wireless LAN in which client devices connect through a single access point that bridges them to the wired network.
+>
+>**Internet Protocol Version 4 (IPv4)** - The 32-bit addressing scheme used to uniquely identify and route packets between hosts on interconnected networks.
+>
+>**Media Access Control (MAC)** - A 48-bit hardware address burned into every network interface used by switches and ARP to deliver frames on a LAN.
+>
+>**Mesh** - A network topology in which each device connects directly to every other device, providing multiple redundant paths at the cost of complex scaling.
+>
+>**Network Address Translation (NAT)** - A routing function that rewrites private LAN IP addresses to a public WAN address and back to enable internet connectivity with a single public IP.
+>
+>**Network Segmentation** - The practice of dividing a larger network into smaller, isolated zones to limit traffic flows and reduce exposure in the event of a security breach.
+>
+>**Next Generation (Next Gen) Firewall** - Firewalls that extend beyond packet filtering to include deep packet inspection, TLS termination, identity-based rules, and IDS/IPS capabilities.
+>
+>**Open Systems Interconnection (OSI)** - A seven-layer conceptual framework that standardizes how data is transmitted and processed across network devices.
+>
+>**Organization Unique Identifier (OUI)** - The first 24 bits of a MAC address that identify the device manufacturer.
+>
+>**Packet** - A network layer data unit consisting of a segment plus an IP header that routes data between source and destination addresses.
+>
+>**Peer-to-Peer (P2P)** - A network model where devices communicate directly with each other without an intermediary switch or router.
+>
+>**Port** - A 16-bit numeric identifier on a host that, together with an IP address, directs network traffic to the correct application or service.
+>
+>**Port Scanning** - The process of probing a host for open ports to identify services listening on those endpoints.
+>
+>**Protocols** - The predefined rules and message formats that govern how data is exchanged between networked devices.
+>
+>**Ring** - A topology where each device connects to two neighbors in a circular chain, requiring every node to relay traffic around the loop.
+>
+>**Rogue Access Point** - An unauthorized wireless access point connected to a network that can grant unsanctioned entry.
+>
+>**Server** - The system or application that listens on one or more ports and responds to client requests for data or services.
+>
+>**Service** - A software process bound to a port number that provides specific network functionality, such as HTTP or SSH.
+>
+>**Service Set Identifier (SSID)** - The human-readable name broadcast by an access point to identify its wireless network.
+>
+>**Star** - A network topology in which all devices connect directly to a central hub or switch, simplifying management and failure isolation.
+>
+>**Stateful Inspection** - Firewall operation that tracks the state of active connections and makes filtering decisions based on session context.
+>
+>**Stateless Inspection** - Basic packet filtering in which each packet is examined against rules independently of any connection state.
+>
+>**TCP/IP** - The Internet Protocol Suite that underlies modern networking, encompassing both the Internet and transport layers.
+>
+>**Transmission Control Protocol (TCP)** - A connection-oriented transport protocol that establishes reliability through a three-way handshake and retransmission.
+>
+>**Tree** - A hierarchical network topology that extends a star pattern by connecting multiple central nodes in a branching, expandable structure.
+>
+>**User Datagram Protocol (UDP)** - A connectionless transport protocol that sends datagrams without guaranteed delivery or ordering.
+>
+>**Wi-Fi** - The family of IEEE 802.11 standards that enable wireless LAN connectivity over 2.4 GHz, 5 GHz, and 6 GHz bands.
+>
+>**Wireless LAN (WLAN)** - A local area network in which devices connect wirelessly through access points instead of Ethernet cables.
 ## Exercises
 
 > [!exercise] Exercise 3.1 - Wireshark Packet Capture
@@ -403,6 +496,7 @@ Deauth attacks can be a component of other attacks where the malicious actor att
 > ```
 > sudo wireshark
 > ```
+> This will launch the Wireshark user interface where you can configure the collection of network packets.
 > #### Step 2 - Capture Packets
 > With Wireshark launched, select the primary network interface (example eth0) and start a packet capture using the "blue fin" button in the upper left corner of the application.  Observe that packets start to collect in the main pane of the application.
 > #### Step 3 - Analyze Traffic
@@ -427,7 +521,7 @@ Deauth attacks can be a component of other attacks where the malicious actor att
 >```
 >#### Step 2 - Modify Windows Firewall
 >Launch the “Windows Defender Firewall with Advanced Security” application and select “Inbound Rules”.  In the main pane with all rules listed, find the “File and Printer Sharing (Echo Request – ICMPv4-In)” rules.  Right-click the rule and “Enable” each of them.
->![[../images/03/exercise_utilities_firewall.png|Windows Firewall ICMP Rules]]
+>![[../images/03/exercise_utilities_firewall.png|Windows Firewall ICMP Rules|400]]
 >#### Step 3 - Ping the VMs
 >A basic connectivity test is to use the ICMP protocol to validate that packets can reach targets using the ping tool.  From the Kali VM’s terminal, ping the Windows VM using the following ping command with count (`-c`) of 4 packets.  Remember to replace `<WIN_IP>` with the IP address of the Windows VM.  If successful, you will see successful packet responses.
 >```

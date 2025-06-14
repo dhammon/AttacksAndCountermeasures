@@ -1,13 +1,16 @@
-# Chapter 2 - Cryptology
+<span class="chapter-banner">Chapter 2</span>
+# Cryptology
 
-![](../images/02/cryptology.jpg)
-
-One of the fundamental tenents of protecting data is encryption.  The use of encryption originated from the need to protect military plans hundreds of years ago.  The goal of encryption is to protect information from those not authorized to view it.  Using encryption assumes that the information will end up in the hands of those unauthorized parties. The encrypted information is unreadable to those without a key to decrypt it.  This chapter covers the basics of cryptology and its practical use.
+<div class="image-crop">
+  <img src="../images/02/cryptology.jpg" alt="Cryptology">
+</div>
 
 **Objectives**
 1. Review the fundamentals of cryptography;
 2. Demonstrate usage of cryptography within information technology;
 3. Understand cryptographic attacks and countermeasures.
+
+One of the fundamental tenents of protecting data is encryption.  The use of encryption originated from the need to protect military plans hundreds of years ago.  The goal of encryption is to protect information from those not authorized to view it.  Using encryption assumes that the information will end up in the hands of those unauthorized parties. The encrypted information is unreadable to those without a key to decrypt it.  This chapter covers the basics of cryptology and its practical use.
 ## About Cryptology
 Long ago, Julius Caesar commanded an army engaged in battle.  He and his generals would communicate with their geographically disbursed troops via messengers carrying battle plans.  The enemy understood this method of communication and would capture messengers and their battle plans to gain tactical advantage.  Caesar countered these interceptions by encrypting the battle plans, should they fall into the hands of the enemy.  Thus, encryption has its roots as a military tool that protected sensitive information from unauthorized parties. 
 
@@ -47,7 +50,7 @@ It is important to clarify that **encoding** is different from encryption.  How
 
 The *American Standard Code for Information Interchange (ASCII)* encoding format has 128 unique characters with which you are likely familiar.  The following table lists the character (Char), decimal and hexadecimal formats.  
 
-![[../images/02/ascii.png|ASCII Table of Characters (source Wikimedia Commons)]]
+![[../images/02/ascii.png|ASCII Table of Characters (source Wikimedia Commons)|700]]
 
 The *decimal* format is a base 10, numbers 0-9, representation and each character is displayed by a numeric value.  Similarly, the *hexadecimal* format is base 16, 0-9 and A-F, totaling 16 characters, where a combination of 16 characters can represent all characters.  Using the above table, the character "$" shows as the decimal value 36 and the hexadecimal value 24.  There are many other encoding schemes that use the base method for encoding data.  Another very common encoding scheme is *base 64*, in which 64 characters are used in chunks of four and padded with the equal sign "=".  Base 64 characters include 0-9, a-z, A-Z, and special characters "/", "=" and "+".  Base 64 encoding is commonly used in HTTP because it does not include HTTP special characters like "?" and "&" that have explicit meaning in the HTTP protocol.  It is ideal for transmitting data without causing errors in the HTTP protocol, unlike other encoding schemes that may use characters interpreted by HTTP.
 
@@ -64,9 +67,9 @@ Each encoding type has a recognizable pattern which you should memorize to quick
 
 
 > [!activity] Activity 2.1 - CyberChef
-> CyberChef, https://gchq.github.io/CyberChef/, is the encoding and encrypting Swiss army knife of the internet and is available as an online web application or a command line interface (CLI) tool.  It enables users to transform values quickly and dynamically and to support several dozen encoding and encryption schemes with multiple configurations.  The left most pane, *Operations*, has a list of formats that can be dragged into the middle pane, *Recipe*.  The input value is entered into the upper right pane, *Input* and the output value is displayed on the bottom right pane, *Output*.  You can use multiple layers of formats to produce the final output.  The left pane options are written in the context as "to" or "from".  The logic used starts with the input value and is converted "to" or "from".  The following screenshot shows CyberChef in action by encoding "Hello World!" to hexadecimal format.
-> ![[../images/02/cyberchef_activity.png|CyberChef Hello World Example]]
-> 
+> ![[../images/02/cyberchef_activity.png|CyberChef Hello World Example|600]]
+> CyberChef, https://gchq.github.io/CyberChef/, is the encoding and encrypting Swiss army knife of the internet and is available as an online web application or a command line interface (CLI) tool.  It enables users to transform values quickly and dynamically and to support several dozen encoding and encryption schemes with multiple configurations.  The left most pane, *Operations*, has a list of formats that can be dragged into the middle pane, *Recipe*.  The input value is entered into the upper right pane, *Input* and the output value is displayed on the bottom right pane, *Output*.  You can use multiple layers of formats to produce the final output.  The left pane options are written in the context as "to" or "from".  The logic used starts with the input value and is converted "to" or "from".  The screenshot above shows CyberChef in action by encoding "Hello World!" to hexadecimal format.
+ 
 
 Understanding encoding has many practical uses.  For instance, while performing a bitwise operation, one researcher recently discovered how to find the AWS account number from an AWS Access Key ID by removing metadata, decoding the ID using base 32, then decoding the hex values to ASCII. [^2]
 ## Ciphers
@@ -78,9 +81,9 @@ A common block cipher starts with an *initialization vector (IV)*, which is a ra
 
 The stream cipher uses a key and a *use only once (nonce)* value to create a key stream that is XOR'd with the plaintext input to produce the ciphertext.  This process is performed continuously bit by bit until the entire data stream has been processed.  The diagram below attempts to illustrate the process of a general stream cipher.
 
-![[../images/02/stream_cipher.png|Stream Cipher Diagram|400]]
-
 Both cipher types are also used to support decrypting ciphertext into plaintext by using a similar algorithm and the same key that produced the ciphertext.  In the decryption operation of the algorithm, the ciphertext and key are used as the input and the output of the algorithm is the original plaintext. 
+
+![[../images/02/stream_cipher.png|Stream Cipher Diagram|400]]
 ## Cipher Modes
 Block ciphers have various *modes* that have attributes that define how encryption is applied, such as by informing the size of blocks.  These modes of operation are algorithms that the cipher uses to encrypt data.  They detail how the cipher encrypts or decrypts each block, such as by using an initialization vector (IV) in CBC described earlier in the chapter.  Cipher modes differ in block size, how they are padded (blocks that do not meet the size are filled with the pad), and how they encrypt each block of data.  The following modes are some of the most common, but there are several other modes that are not being covered in this chapter.  You may be tempted to always select the most secure mode; however, there are tradeoffs such as speed, between each mode type that may need to be considered.  
 
@@ -88,7 +91,7 @@ The **Electronic Code Book (ECB)** mode is an older mode that was previously wid
 
 > [!warning] Warning - ECB Insecurity
 > Because each block is encrypted individually using the same key, it lacks diffusion, and patterns emerge in the ciphertext that could enable cryptanalysis and decipher parts or all of an encrypted file.  The most famous visual example of this is the encryption of the Linux Penguin using ECB. [^3]  The image on the left is the unencrypted version of the file.  The middle image is encrypted using ECB and the last image is encrypted using a modern encryption mode.  Can you spot the issue with using ECB?
-> ![[../images/02/ecb_encryption.png|Linux Penguin Encrypted using ECB (source Wikipedia)]]
+> ![[../images/02/ecb_encryption.png|Linux Penguin Encrypted using ECB (source Wikipedia)|300]]
 > Obviously, the middle image encrypted using ECB is easily discernable and good encryption should result in the data being unrecognizable.  Remember this image the next time you are tempted to use ECB to encrypt data and avoid using an insecure cipher mode!
 
 Another older cipher mode, **Cipher Block Chaining (CBC)**, is very popular and commonly found in use by information systems.  It is secure enough and encrypts blocks of data using an initialization vector and XOR'ing (inversing) the encrypted blocks to be used to encrypt the next block.  The block cipher diagram referenced in the Cipher section of this chapter is an example of how this algorithm operates.  Modern information systems using block ciphers should choose the **Galois/Counter Mode (GCM)** operation as it currently provides the most security.  It encrypts each block with a counter, or IV, then XORs the block.  GCM offers all the features of modern cryptography, including integrity and authentication computed via Galios field multiplication.
@@ -136,13 +139,13 @@ To recap, symmetric encryption uses one secret key while asymmetric encryption u
 >We can use OpenSSL on Ubuntu to encrypt messages using asymmetric encryption too!  After creating a public and private key pair using OpenSSL, a message can be encrypted using the public key and then decrypted using the private key.
 >
 >I create a 1024-bit private key into a file named `private.pem` and display the result.  Notice the key's header and footer and that the content is encoded in base 64.
->![[../images/02/asymmetric_activity_private_key.png|Private Key Generation]]
+>![[../images/02/asymmetric_activity_private_key.png|Private Key Generation|550]]
 >Next, I create a public key into a file named `public.pem` that pairs with the private key.  This public key will be used to encrypt messages.
->![[../images/02/asymmetric_activity_public_key.png|Public Key Generation]]
+>![[../images/02/asymmetric_activity_public_key.png|Public Key Generation|600]]
 >With the key pair generated, I create a message in a file called `plain.txt` and encrypt it using the public key, which is available in a new file named `plain.txt.enc`.  The contents of `plain.txt.enc` are not legible!
->![[../images/02/asymmetric_activity_encrypt.png|Asymmetric Message Encryption]]
+>![[../images/02/asymmetric_activity_encrypt.png|Asymmetric Message Encryption|600]]
 >Finally, we can use the `private.pem` key to decrypt the message and display its content "hello world"!
->![[../images/02/asymmetric_activity_decrypt.png|Asymmetric Message Decryption]]
+>![[../images/02/asymmetric_activity_decrypt.png|Asymmetric Message Decryption|600]]
 ## Hash Algorithms
 So called *one-way functions*, a **hash algorithm** takes an input and generates a cryptographic output value.  This fixed character length value will consistently produce the same value given the same input.  Good hash algorithms will create a vastly different hash output, or *digest*, with even the smallest change to the given input.  Speed is also an indication of a good hash algorithm as it makes it more practical to use.  Unlike typical encryption, hash algorithms are irreversible and do not have a mathematical way to turn the hash value back into plaintext value - there is no way to "unscramble the egg."  The diagram below demonstrates the general process of inputting a message into a hash function and yielding a hash value as an output.
 
@@ -156,33 +159,38 @@ There are many cryptographic hash algorithms available for use.  While we will 
 
 >[!activity] Activity 2.5 - Digest Verification
 >Let's demonstrate the use of MD5 hash to prove the integrity of a message.  Using an Ubuntu VM, I open the terminal and echo a message into a file named `message.txt`.
->![[../images/02/activity_01_message.png|Create Message]]
+>![[../images/02/activity_01_message.png|Create Message|600]]
 >We can use the md5sum utility to determine the MD5 hash digest of a message.  The command outputs a 32-character value.  We could re-run this message on any computer and get the exact same result.
->![[../images/02/activity_01_hash.png|MD5 Hash of Message.txt]]
+>![[../images/02/activity_01_hash.png|MD5 Hash of Message.txt|600]]
 >Now, I replace the `message.txt` file with a slightly different message and recalculate the digest.  Notice the value is materially different from the original!
->![[../images/02/activity_01_rehash.png|Change Message and Rehash]]
+>![[../images/02/activity_01_rehash.png|Change Message and Rehash|600]]
 ## Encryption Authentication
 Encryption can be used to authenticate a sender or receiver of data, even data that is in plaintext!  Such cryptographic authentication methods also have the added benefit of ensuring the integrity of the data.  In the following section, we will explore how a receiver of a message can authenticate the sender through *message authentication code (MAC)* symmetric keys.  Similarly, this same task can be accomplished using asymmetric keys via a *digital signature*.  Both methods leave the message in plaintext, so it does not provide confidentiality or privacy attributes.
 ### Message Authentication Code
-A bidirectional conversation between two parties can use **Message Authentication Code (MAC)**, sometimes referred to as *authentication tag* or *keyed hash*, to ensure the integrity and authenticity of one another.  MAC provides assurance that the sender and receiver were the creators of the sent messages, as they both share a secret key combined with a message that is hashed to validate authenticity of communications.  If the message is altered in any way, even by one bit, the hash digest will not match, and the respective party will know that the message had been altered.  The MAC is a short piece of information that is constructed from a hash function, such as *hash-based message authentication code (HMAC)* or block ciphers like *Galois/Counter Mode (GCM)*, and sent along with the plaintext message as a file.  To demonstrate this, the following diagram shows a sender creating a MAC with a secret key and sending the message and MAC to a receiver that also has the secret key.  The Receiver uses the secret key to inspect the attached MAC, confirm the message's integrity, and authenticate the sender.
+A bidirectional conversation between two parties can use **Message Authentication Code (MAC)**, sometimes referred to as *authentication tag* or *keyed hash*, to ensure the integrity and authenticity of one another.  MAC provides assurance that the sender and receiver were the creators of the sent messages, as they both share a secret key combined with a message that is hashed to validate authenticity of communications.  If the message is altered in any way, even by one bit, the hash digest will not match, and the respective party will know that the message had been altered.  
 
-![[../images/02/mac_diagram.png|MAC Sending and Receiving|600]]
+The MAC is a short piece of information that is constructed from a hash function, such as *hash-based message authentication code (HMAC)* or block ciphers like *Galois/Counter Mode (GCM)*, and sent along with the plaintext message as a file.  To demonstrate this, the following diagram shows a sender creating a MAC with a secret key and sending the message and MAC to a receiver that also has the secret key.  The Receiver uses the secret key to inspect the attached MAC, confirm the message's integrity, and authenticate the sender.
+
+![[../images/02/mac_diagram.png|MAC Sending and Receiving|700]]
+  <br>
 
 ### Digital Signatures
-A **Digital Signature (DS)** can be used when the need arises to verify a message with parties that do not have a shared private key.  Like MACs, DSs also provide authentication, integrity, and nonrepudiation benefits between the parties.  The DS has the advantage of sending the message along with a public key so that any receiver of the message can use the public key to verify the message and sender.  However, this use case only allows for the validation by a single direction of communication from the sender to the receiver and is limited by the receiver's ability to respond with a DS in kind.  DS can be *attached* or *detached*, meaning they can be embedded as part of the message (attached) or the signature can be its own separate file (detached).  In this diagram, the sender (on the right), creates a digital signature using a private key and sends the DS with a corresponding public key to the receiver (on the left).  The receiver uses the public key attached to the message to verify the signature.
+A **Digital Signature (DS)** can be used when the need arises to verify a message with parties that do not have a shared private key.  Like MACs, DSs also provide authentication, integrity, and nonrepudiation benefits between the parties.  The DS has the advantage of sending the message along with a public key so that any receiver of the message can use the public key to verify the message and sender.  
 
-![[../images/02/ds_diagram.png|Digital Signature Sending and Receiving|600]]
+However, this use case only allows for the validation by a single direction of communication from the sender to the receiver and is limited by the receiver's ability to respond with a DS in kind.  DS can be *attached* or *detached*, meaning they can be embedded as part of the message (attached) or the signature can be its own separate file (detached).  In this diagram, the sender (on the right), creates a digital signature using a private key and sends the DS with a corresponding public key to the receiver (on the left).  The receiver uses the public key attached to the message to verify the signature.
+
+![[../images/02/ds_diagram.png|Digital Signature Sending and Receiving|700]]
 
 
 > [!activity] Activity 2.6 - Detached Digital Signature
 > Let's demonstrate a detached digital signature.  I will use the `gpg` command preinstalled on the Ubuntu VM to generate a key.  Each key stored on the system's key ring requires a name, email address, and password.
-> ![[../images/02/lab_ds_gen_key.png|GPG Key Generation]]
+> ![[../images/02/lab_ds_gen_key.png|GPG Key Generation|450]]
 > Next, I create some content and store it in a file called `message.txt`.  This is the message that I will use to create a digital signature using the key I just created.
-> ![[../images/02/lab_ds_message.png|Create Message to Sign]]
+> ![[../images/02/lab_ds_message.png|Create Message to Sign|600]]
 > Using `gpg` again, I create a detached signature in an output file called `message.txt.sig`.   This signature file would typically be sent along with the message so the recipient can verify the message's authenticity and integrity. 
-> ![[../images/02/lab_ds_signature.png|Detached DS Creation]]
+> ![[../images/02/lab_ds_signature.png|Detached DS Creation|600]]
 > The `gpg` utility with the `--verify` option checks that a signature corresponds with a message as demonstrated in the following command.  If the message were altered in any way, the verify check would fail with a "Bad signature" message.
-> ![[../images/02/lab_ds_verify.png|GPG Verify DS and Message]]
+> ![[../images/02/lab_ds_verify.png|GPG Verify DS and Message|600]]
 ## Steganography
 Many centuries ago, a Greek historian wrote about a technique previously used to inconspicuously send a secret message.  A message was tattooed onto the messenger's shaved head and then their hair was allowed to grow back, concealing the tattooed message.  When the messenger arrived at their destination, their head was shaved and the message read.  The technique of hiding in plain sight to avoid detection is known as **steganography**.  A message can be smuggled in various media, including audio and image files.  
 
@@ -218,22 +226,98 @@ A much more difficult data attack is the **ciphertext-only attack** where the ac
 
 ![[../images/02/attack_ciphertext_only.png|Ciphertext-Only Attack|150]]
 
-An example of a ciphertext-only attack technique that is particularly effective against shifting cryptographic systems is a **differential attack**, or **frequency cryptanalysis**.  In this attack, the actor needs a lot of ciphertext and analyzes the frequency of each character.  For example, they will count how many times the letter "a" appears in the ciphertext.  They then compare these collected character frequencies to a similar analysis of a standard language like English.  Consider that the letter "z" is less commonly used in English than the letter "a".  You would expect to find many more "a"s than "z"s in any given body of regular text.  While the frequency of letters in a shift cipher will not perfectly align with normal English language, it will reduce the number of permutations to determine which ciphertext letter corresponds to which plaintext letter.  Consider the following diagram from https://crypto.interactive-maths.com/frequency-analysis-breaking-the-code.html that depicts two bar charts with this analysis.  The most common ciphertext letter frequency on the right is the letter "s" while plaintext analysis shows that the most frequent letter is "e".  Perhaps every ciphertext letter "s" in this example is the plaintext "e"!
+An example of a ciphertext-only attack technique that is particularly effective against shifting cryptographic systems is **frequency cryptanalysis**.  In this attack, the actor needs a lot of ciphertext and analyzes the frequency of each character.  For example, they will count how many times the letter "a" appears in the ciphertext.  They then compare these collected character frequencies to a similar analysis of a standard language like English.  Consider that the letter "z" is less commonly used in English than the letter "a".  You would expect to find many more "a"s than "z"s in any given body of regular text.  While the frequency of letters in a shift cipher will not perfectly align with normal English language, it will reduce the number of permutations to determine which ciphertext letter corresponds to which plaintext letter.  Consider the following diagram from https://crypto.interactive-maths.com/frequency-analysis-breaking-the-code.html that depicts two bar charts with this analysis.  The most common ciphertext letter frequency on the right is the letter "s" while plaintext analysis shows that the most frequent letter is "e".  Perhaps every ciphertext letter "s" in this example is the plaintext "e"!
 
 ![[../images/02/attack_frequency.png|Frequency Analysis Charts (crypto.interactive-maths.com)|700]]
 
 Systems implementing cryptographic solutions can also be attacked.  For example, an encryption key exchange over a network can be stolen by an actor through a **man in the middle (MiTM)** attack.  In this scenario, the actor has positioned themselves between the sender and receiver of a cryptographic key being sent over a network.  Having access to this traffic, the actor can observe the encryption key in plaintext and can use it to decrypt any ciphertext generated with the key.
 
-![[../images/02/attack_mitm.png|Man in the Middle Attack|400]]
+![[../images/02/attack_mitm.png|Man in the Middle Attack|300]]
 
 Another attack on cryptographic systems can be conducted adjacent to the technology being used in what is referred to as a **side-channel attack**.  This can take many forms, but one recently discovered method derives cryptographic keys by measuring the effects of voltage draw through the level of light emission of an LED displayed on the front of a computer that is performing cryptographic operations! [^4] 
 
 Cryptographic hash algorithms can also be attacked, which if successful, can enable actors to compromise the integrity or authentication of a system.  The classic **brute-force attack** consists of applying every combination of characters through a hashing algorithm and then comparing the results to a known hash.  The original value used to create the target hash digest can be identified through a brute-forced value whose hash digest matches that of the original.  Consider the following diagram that illustrates this attack.  The list on the left represents every lowercase combination of four characters.  Each set is passed through the hash algorithm to produce a hash value.  These combination digest pairs are then used to cross reference a target hash value.  If the target hash matches a hash value on the list, the value used to produce that hash can be identified.
 
-![[../images/02/attack_brute.png|Brute-Force Attack|550]]
+![[../images/02/attack_brute.png|Brute-Force Attack|450]]
 
 Another hash algorithm attack takes advantage of hash collisions, previously discussed in this chapter, and is called a **birthday attack**.  It gets this interesting name from a statistical phenomenon known as the *birthday paradox*.  Unintuitively, a room with 50 people has a nearly 95% chance of two people sharing the same birthday.  Attackers can take advantage of collisions by producing a trusted digest that has been manipulated.  Take the given scenario of an executable download from the internet.  Normally a user can verify the download's validity by calculating the hash value and comparing it to a known good result.  But, as shown in the following diagram, a malicious actor that has access to the source of that file before a user downloaded it, can alter that executable with malicious code, which produces the identical hash value as the original.  The victim of this attack would expect the malicious version was authentic because the hash value matches, even though they have downloaded a malicious file with an identical hash!
-![[../images/02/attack_birthday.png|Birthday Attack|450]]
+![[../images/02/attack_birthday.png|Birthday Attack|400]]
+
+## Summary
+This chapter delved into securing information through cryptography and cryptanalysis.  We defined key terms—plaintext, ciphertext, algorithms, keys, cipher modes—and distinguished between symmetric and asymmetric encryption, highlighting their use cases, strengths, and challenges in key distribution.  We examined hash functions (MD5, SHA-family) for integrity, discussed MACs and digital signatures for authentication and non-repudiation, and introduced steganography that hides data in plain sight.  Finally, we examined common cryptanalytic attacks (known-plaintext, ciphertext-only, frequency analysis, side-channel) to underscore the importance of continuous testing and validation of cryptographic systems.
+
+>[!terms] Key Terms
+>**Algorithm** - The mathematical process or set of instructions used to encrypt or decrypt data.
+>
+>**Asymmetric Encryption** - Uses a paired public and private key derived from a mathematical function to securely exchange data without sharing a single secret.
+>
+>**Authentication** - Proving the identity of a sender or receiver of encrypted data through the use of cryptographic mechanisms.
+>
+>**Birthday Attack** - Exploits the probability of hash collisions by comparing large sets of hash outputs to find two inputs producing the same digest.
+>
+>**Block Ciphers** - Cryptographic algorithms that encrypt data in fixed-size blocks according to a specific mode of operation.
+>
+>**Brute-Force Attack** - The exhaustive trial of all possible key values until the correct key is found to decrypt data.
+>
+>**Chosen-Plaintext Attack** - Deducing encryption keys by encrypting arbitrary plaintexts and analyzing the resulting ciphertexts.
+>
+>**Cipher Block Chaining (CBC)** - A cipher mode where each plaintext block is XOR’d with the previous ciphertext block, or initialization vector (IV), before encrypting.
+>
+>**Cipher Mode** - The method by which a block cipher processes and links fixed-size blocks to produce secure ciphertext.
+>
+>**Ciphertext** - Unreadable output produced by applying an encryption algorithm and key to plaintext.
+>
+>**Ciphertext-Only Attack** - Attempts to recover plaintext or keys using only capture ciphertext samples.
+>
+>**Cryptanalysis**  - The practice of breaking or undermining cryptographic systems to reveal protected information or keys.
+>
+>**Cryptography** - The discipline of designing mathematical algorithms and systems to secure data.
+>
+>**Cryptology**  - The combined study of cryptography and cryptanalysis for both creating and defeating encryption systems.
+>
+>**Decryption** - The process of reversing ciphertext back into its original plaintext using the appropriate key and cryptographic algorithm.
+>
+>**Digital Signature (DS)** - Uses an asymmetric key pair to sign data, enabling anyone with the public key to verify the sender’s identity and message integrity.
+>
+>**Electronic Code Book (ECB)** - A cipher mode that encrypts each block of data independently and with the same key.
+>
+>**Encoding** - The reversible transformation of data into a different format to facilitate storage or transmission.
+>
+>**Encryption** - The process of converting plaintext into ciphertext using a cryptographic algorithm and key.
+>
+>**Frequency Cryptanalysis** - Analysis of character frequency distributions in ciphertext and mapping to expected plaintext frequencies that effectively decrypts protected data.
+>
+>**Galois/Counter Mode (GCM)** - A block cipher mode that combines counter-based encryption with Galois field–based authentication for both confidentiality and integrity.
+>
+>**Hash Algorithm** - A one-way cryptographic function that produces a fixed-length value for a given input.
+>
+>**Integrity** - Ensures that data remains accurate and unaltered except by authorized operations.
+>
+>**Key** - A value, often a secret, used by a cryptographic algorithm to perform encryption or decryption.
+>
+>**Known-Plaintext Attack** - Attempts to recover an encryption key by using pairs of plaintext and ciphertext.
+>
+>**Man in the Middle (MiTM)** - An attacker positioned between two parties to intercept, alter, or relay messages.
+>
+>**MD5 Message-Digest Algorithm** - A 128-bit hash function that is fast but deprecated due to proven collision vulnerabilities.
+>
+>**Message Authentication Code (MAC)** - A short value computed from a message and a shared secret key to verify the integrity and authenticity of a message.
+>
+>**Nonrepudiation** - Ensures that a sender cannot deny the authorship of a transmitted message.
+>
+>**Plaintext** - The original, human-readable data before any encryption is applied.
+>
+>**Privacy** - The assurance that data remains confidential and is not disclosed to unauthorized parties.
+>
+>**Secure Hashing Algorithm (SHA)** - A hash function (SHA-1, SHA-2, SHA-3) designed to produce collision-resistant digests.
+>
+>**Side-Channel Attack** - Exploits indirect information - such as timing, power consumption, or electromagnetic emissions - to recover secret keys.
+>
+>**Steganography** - Concealment of a secret message within another medium (images or audio) so that its existence remains hidden.
+>
+>**Stream Ciphers** - Generation of a continuous keystream that is XOR’d with plaintext to produce ciphertext.
+>
+>**Symmetric Encryption** - Uses a single shared secret key for both encryption and decryption of data.
 
 ## Exercises
 

@@ -2,11 +2,71 @@
 https://help.obsidian.md/Editing+and+formatting/Callouts#:~:text=To%20create%20a%20callout%2C%20add,the%20callout%20looks%20and%20feels.
 */
 
-.callout[data-callout="exercise"] {
-    --callout-color: 140, 140, 140;
-    --callout-icon: lucide-flask-conical;
+:root {
+  --header-color: #E23066;
+  --header-color-bg: #3A4BA326;
 }
 
+
+@page {
+  margin: 0.75in 0.5in 0.75in 0.5in;  /* Top, right, bottom, left */
+  //margin: 0.5in;  /* Top, right, bottom, left */
+
+}
+
+
+/* Scope to callout[terms] only */
+.callout[data-callout="terms"] {
+  --callout-color: 90, 120, 180;
+  --callout-icon: lucide-book;
+  background-color: rgba(58, 75, 163, 0.05);
+  border-left: 4px solid var(--accent-color);
+  padding: 1em;
+  font-size: 0.95em;
+}
+
+/* Add spacing between each term-definition line */
+.callout[data-callout="terms"] p {
+  margin: 0.5em 0;
+}
+
+/* Style the terms (bold part) */
+.callout[data-callout="terms"] strong {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+
+.callout[data-callout="exercise"] {
+  --callout-color: 140, 140, 140; /* base gray fallback */
+  --callout-icon: lucide-flask-conical;
+
+  /* Optional: light pink background to harmonize with header styling 
+  background-color: var(--header-color-bg));
+  border-left: 4px solid #E23066;*/
+}
+
+/* Style the title bar */
+.callout[data-callout="exercise"] .callout-title {
+  //background-color: rgba(226, 48, 102, 0.15);
+  color: var(--header-color);
+  font-weight: bold;
+  font-size: 1.5em;
+  padding: 0.4em 0em;
+  //border-bottom: 2px solid var(--header-color);
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+/* Style the Lucide icon to match the text color */
+/* Force icon color to match text */
+.callout[data-callout="exercise"] .callout-icon svg {
+  stroke: #3A4BA3 !important;
+  color: #3A4BA3 !important;
+}
 
 .callout[data-callout="activity"] {
     --callout-color: 131, 131, 255;
@@ -27,7 +87,8 @@ https://help.obsidian.md/Editing+and+formatting/Callouts#:~:text=To%20create%20a
     margin: 0.2rem 1rem 0.2rem 1rem;
     font-size: 90%;
     line-height: 1.4;
-    color: var(--text-faint);
+    //color: var(--text-faint);
+    color: #666;
     text-align: center;
 
 }
@@ -38,7 +99,8 @@ https://help.obsidian.md/Editing+and+formatting/Callouts#:~:text=To%20create%20a
     margin: 0.2rem 1rem 0.2rem 1rem;
     font-size: 90%;
     line-height: 1.4;
-    color: var(--text-faint);
+    //color: var(--text-faint);
+    color: #666;
     text-align: center;
 }
 
@@ -64,3 +126,312 @@ img {
  .markdown-source-view.mod-cm6 .cm-content > * {
         margin: auto auto !important;
 }
+
+
+/* TOS */
+p.toc-entry {
+  //max-width: 800px;
+  margin: 1px;
+  padding: 1px;
+}
+
+.toc-entry {
+  display: flex;
+  align-items: center;
+}
+
+.toc-title {
+  white-space: nowrap;
+}
+
+.toc-dots {
+  flex: 1;
+  border-bottom: 1px solid #888;
+  margin: 0 0.5em;
+  padding-top: 12px;
+}
+
+.toc-page {
+  white-space: nowrap;
+}
+
+/* Additional indent for sub sections */
+.toc-entry.subsection {
+  padding-left: 20px;  /* Adjust indent as needed */
+}
+
+/* For deeper levels, you can add additional rules */
+.toc-entry.subsection-2 {
+  padding-left: 40px;
+}
+
+/* Style for the Chapter X banner */
+span.chapter-banner {
+  font-size: 2.5em;
+  font-color: var(--header-color);
+  font-weight: bold;
+  background-color: var(--header-color);
+  padding: 8px 100px 8px 40px;
+  border-radius: 4px 4px 90px 4px;
+  //margin-top: 1.5em;
+  margin-bottom: 0.1em;
+  //border-radius: 4px;
+  color: white;
+}
+
+/* === Universal Settings === */
+.markdown-preview-view h1,
+.markdown-preview-view h2,
+.markdown-preview-view h3,
+.markdown-preview-view h4,
+.markdown-reading-view h1,
+.markdown-reading-view h2,
+.markdown-reading-view h3,
+.markdown-reading-view h4 {
+  //padding: 0.3em 0.1em;
+  margin-top: 1.0em;
+  margin-bottom: 0.1em;
+  //border-left: 6px solid #3A4BA3;
+  //background-color: rgba(226, 48, 102, 0.08);
+  //background-color: var(--header-color-bg);
+  border-radius: 4px;
+  color: var(--header-color);
+}
+
+/* === H1 - Chapter Title === */
+.markdown-preview-view h1,
+.markdown-reading-view h1 {
+  font-size: 2.5em;
+  font-color: var(--header-color);
+  font-weight: bold;
+  //background-color: rgba(226, 48, 102, 0.15);
+  //background-color: var(--header-color-bg);
+  //border-left: 8px solid var(--header-color);
+  //border-bottom: 2px solid var(--header-color);
+}
+
+/* === H2 - Section Title === */
+.markdown-preview-view h2,
+.markdown-reading-view h2 {
+  font-size: 1.6em;
+  font-weight: bold;
+  //background-color: var(--header-color-bg);
+  //border-left: 6px solid var(--header-color);
+}
+
+/* === H3 - Subsection Title === */
+.markdown-preview-view h3,
+.markdown-reading-view h3 {
+  font-size: 1.3em;
+  font-style: italic;
+  //background-color: var(--header-color-bg);
+  border-left: 4px var(--header-color);
+}
+
+/* === H4 - Inline Callout or Sub-subsection === */
+.markdown-preview-view h4,
+.markdown-reading-view h4 {
+  font-size: 1.1em;
+  //background-color: var(--header-color-bg);
+  border-left: 3px var(--header-color);
+}
+
+
+
+
+/* Container for the ordered list */
+.markdown-preview-view ol,
+.markdown-reading-view ol {
+  counter-reset: custom-counter;
+  list-style: none;
+  //padding-left: 0.05em;
+}
+
+/* Each list item gets a counter and a custom badge */
+.markdown-preview-view ol > li,
+.markdown-reading-view ol > li {
+  counter-increment: custom-counter;
+  position: relative;
+  padding-left: 2em;
+  margin-bottom: 0.2em;
+}
+
+/* Circle number badge */
+.markdown-preview-view ol > li::before,
+.markdown-reading-view ol > li::before {
+  content: counter(custom-counter);
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  width: 1.5em;
+  height: 1.5em;
+  background-color: var(--header-color);
+  color: white;
+  font-weight: bold;
+  font-size: 0.9em;
+  line-height: 1.5em;
+  text-align: center;
+  border-radius: 50%;
+}
+
+
+/* Container with cropping window */
+.image-crop {
+  width: 100%;       /* desired visible width */
+  height: 625px;      /* desired visible height */
+  overflow: hidden;
+  position: relative;
+  //border: 0px solid #ccc; /* optional border */
+  border-radius: 4px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Force the embedded image to be positionable and scaled */
+.image-crop img {
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  position: absolute;
+  top: -75px;  /* shift image upward to show desired section */
+  //left: -25px;  /* shift image leftward */
+}
+
+
+
+
+
+
+
+
+
+
+/*─────────────────────────────────────────────────────────────────────────────
+  Two-Column Glossary Using <p> Entries
+  • Only affects <div class="glossary-columns"> in Preview.
+  • Each <p> is one “Word — Page” entry.
+  • No bullets, just clean line breaks.
+─────────────────────────────────────────────────────────────────────────────*/
+.glossary-columns {
+  column-count: 3;            /* Split content into 2 vertical columns */
+  column-gap: 2em;            /* Space between the columns */
+  margin-bottom: 1.5em;       /* Space below this block before next heading */
+  font-size: 0.75em;          /* Slightly smaller text (optional) */
+  /* Prevent odd hyphenation if you see words breaking mid-line */
+  -webkit-column-break-inside: avoid; 
+  -moz-column-break-inside: avoid;
+  column-break-inside: avoid;
+}
+
+/* Each <p> is one entry: “Word — Page” */
+.glossary-columns p {
+  margin: 0 0 0.4em 0;        /* Top=0, Right=0, Bottom=0.4em, Left=0 */
+  break-inside: avoid-column; /* Prevent a single <p> from splitting between columns */
+  line-height: 1.3em;         /* A bit of extra line-height for readability */
+  /* ─── Hanging indent: if the text wraps, indent subsequent lines ─── */
+  padding-left: 1.2em;        /* Create a left “buffer” (adjust as needed) */
+  text-indent: -1.2em;        /* Pull the first line back to flush left */
+  break-inside: avoid-column; /* Don’t split one <p> across columns */
+}
+
+/* Make the <strong> inside each <p> stand out */
+.glossary-columns p strong {
+  //color: var(--header-color);  /* Use your theme’s accent color for the word */
+  //font-weight: bold;          /* Ensure it’s bold */
+}
+
+
+
+
+
+
+
+
+/*─────────────────────────────────────────────────────────────────────────────
+  print-table.css (updated)
+  • Applies directly to ALL <table> and <tr> in the preview when printing.
+  • Uses !important to override any conflicting rules.
+  • Ensures a table moves in its entirety to the next page if it doesn’t fit.
+  • Repeats <thead> on each page.
+─────────────────────────────────────────────────────────────────────────────*/
+@media print {
+  html,
+  body,
+  .markdown-preview-view {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /*──────────────────────────────────────────────────────────────────────────
+    2) Add “fake” margins by padding the preview area:
+       • Top/Bottom: 0.75in
+       • Left/Right: 0.5in
+       • box-sizing: border-box ensures the content stays inside those paddings.
+  ──────────────────────────────────────────────────────────────────────────*/
+  .markdown-preview-view {
+    padding-top:    0.75in !important;
+    padding-bottom: 0.75in !important;
+    padding-left:   0.5in  !important;
+    padding-right:  0.5in  !important;
+    box-sizing: border-box !important;
+  }
+
+
+
+
+  /*────────────────────────────────────────────────────────────────────────────
+    1) Let the .glossary-columns container split naturally if it runs out of page.
+       Remove any “avoid” rules so it doesn’t force itself onto the next page.
+  ────────────────────────────────────────────────────────────────────────────*/
+  .glossary-columns {
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    -webkit-column-break-inside: auto !important;
+    /* You can still keep your 3‐column layout in print. */
+    column-count: 3 !important;
+    column-gap: 2em !important;
+  }
+
+  /*────────────────────────────────────────────────────────────────────────────
+    2) Keep each <p> (“Word — Page”) together—don’t split one entry mid‐line,
+       but allow the block to span pages on whole‐entry boundaries.
+  ────────────────────────────────────────────────────────────────────────────*/
+  .glossary-columns p {
+    /* Don’t break one <p> between columns or pages: */
+    page-break-inside: avoid !important;
+    break-inside: avoid-column !important;
+    -webkit-column-break-inside: avoid !important;
+
+    /* (Optional) Preserve your existing spacing/styling for <p> entries: */
+    margin: 0 0 0.4em 0 !important;
+    line-height: 1.3em !important;
+    padding-left: 1.2em !important;   /* if you’re still using hanging‐indent */
+    text-indent: -1.2em !important;   /* (adjust to match your on‐screen CSS) */
+  }
+
+  /*────────────────────────────────────────────────────────────────────────────
+    3) If you still want a border or background on the block, re‐declare it here:
+       (Uncomment and tweak as desired—this is purely optional.)
+  ────────────────────────────────────────────────────────────────────────────*/
+  /*
+  .glossary-columns {
+    padding: 0.5em !important;
+    background-color: var(--background-modifier-hover) !important;
+    border: 1px solid var(--background-modifier-border) !important;
+    border-radius: 4px !important;
+  }
+  */
+
+  /*────────────────────────────────────────────────────────────────────────────
+    4) Reset any extra margins/padding in the Preview area so our rules “take over”
+  ────────────────────────────────────────────────────────────────────────────*/
+/*
+  .markdown-preview-view,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+*/
+}
+

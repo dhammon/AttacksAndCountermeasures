@@ -1,19 +1,22 @@
-# Chapter 4 - Network Services
+<span class="chapter-banner">Chapter 4</span>
+# Network Services
 
-![](../images/04/ethernet_shield.jpg)
-
-There are many types of network technologies consisting of solutions, services, and protocols that are of security interest.  In this chapter, you will understand a handful of these technologies by learning how they work and their security implications.  We will explore how to secure them and the ways in which they can be attacked.  The goal of this chapter, like so many others in this textbook, is to construct a model when approaching technologies by first learning how they work and then how they can be broken.  This chapter will specifically cover address resolution protocol, dynamic host configuration protocol, domain naming system, and the transmission control protocol.  Each topic is mutually exclusive but follows the same layout of explaining the basics, attack vectors, and how to protect them.
+<div class="image-crop">
+  <img src="../images/04/ethernet_shield.jpg">
+</div>
 
 **Objectives**
 1. Understand common network protocols and technologies.
 2. Explain basic defense for network technologies.
 3. Conduct attacks against DNS, DHCP, ARP, and TCP.
+
+There are many types of network technologies consisting of solutions, services, and protocols that are of security interest.  In this chapter, you will understand a handful of these technologies by learning how they work and their security implications.  We will explore how to secure them and the ways in which they can be attacked.  The goal of this chapter, like so many others in this textbook, is to construct a model when approaching technologies by first learning how they work and then how they can be broken.  This chapter will specifically cover address resolution protocol, dynamic host configuration protocol, domain naming system, and the transmission control protocol.  Each topic is mutually exclusive but follows the same layout of explaining the basics, attack vectors, and how to protect them.
 ## Address Resolution Protocol
 The last chapter introduced IP and MAC addresses while describing how they are used in networks through layers 2 and 3 of the OSI model.  These addresses are critical for computer communications across networks using network equipment like NICs, switches, and routers.  As previously described, each NIC is given a MAC address burned in at the factory.  Good behaving networked devices keep their MAC address static, meaning they never change.  But these addresses do not scale well across the internet as they lack the organization the IP address system provides.  Therefore, the internet relies on IP addresses to route traffic to and from sources and destinations.  A solution is needed that can resolve or map IP addresses to MAC addresses and ensure packets traverse networks effectively.  This solution is called **address resolution protocol (ARP)** and enables computers and switches to send packets among each other.  Within the network, each device maintains a dynamic inventory of MAC addresses for IP address ranges.
 ### ARP Protocol
 A group of computers connected to a LAN managed by a switch may communicate with each other over the network.  For example, a computer may need to send spooled print files to a networked printer to print documents.  In this example, the computer will have the IP address of the printer, but the switch requires the MAC address to forward requests to the printer.  The computer will send an **ARP request**, or *REQ*, packet through the switch to all devices on the network that includes their MAC address.  The REQ packet *broadcasts*, or asks all devices connected to the network, "Who has the IP address `xxx.xxx.xxx.xxx`?"  Each device on the network receives the request and the device with the corresponding IP address will prepare and transmit an **ARP response**, or *RES*.  This response declares "I have that IP address, my MAC address is `xx.xx.xx.xx.xx.xx`" and sends the message using the original requestor's MAC address.  If no device responds, the request will be dropped, and the address will not resolve.
 
-![[../images/04/arp_protocol.png|ARP Requests and Responses|300]]
+![[../images/04/arp_protocol.png|ARP Requests and Responses|400]]
 
 The diagram above demonstrates a functioning LAN with 3 devices requesting and responding through a network switch.  The request and response packets are common on a network and can be observed in packet captures, such as those from the last chapter's Wireshark exercise.
 
@@ -86,14 +89,14 @@ The figure above captures the poisoning of devices on a network by a malicious a
 >```bash
 >ip a
 >```
-> ![[../images/04/activity_arp_ubuntu_ip.png|Ubuntu VM IP Address|600]]
+> ![[../images/04/activity_arp_ubuntu_ip.png|Ubuntu VM IP Address|500]]
 > Still on the Ubuntu machine, I run the `route` command to identify the default gateway 10.0.2.1 in the destination placeholder address 0.0.0.0.  Before running the command, I need to install `net-tools` if not already on the machine.  The following screenshot shows the result of this command in a table that is word wrapped, so I have highlighted the table entry.  This entry identifies the virtual switch at 10.0.2.1.  The `-n` option leaves the IP addresses shown instead of resolved domain names.
 > ```bash
 > sudo apt update -y
 > sudo apt install net-tools
 > route -n
 > ```
-> ![[../images/04/activity_arp_route.png|Ubuntu Default Gateway Route|600]]
+> ![[../images/04/activity_arp_route.png|Ubuntu Default Gateway Route|500]]
 > I start setting up the attack from the Kali box by opening a terminal and switching to the root user.  Many of the commands needed for this attack require elevated privileges within Kali so it will be easiest to perform all actions as the root user.  Then I install `dsniff` which includes several utilities, including `arpspoof`, that I use to launch the ARP poisoning attack.  As a reminder, it is always good practice to update the system prior to installing new software as it may require dependencies to be up to date.
 > ```bash
 > sudo su -
@@ -121,7 +124,7 @@ The figure above captures the poisoning of devices on a network by a malicious a
 > sudo su -
 > arpspoof -i eth0 -t 10.0.2.1 10.0.2.7
 > ```
-> ![[../images/04/activity_arp_poison_gateway.png|Kali ARP Poisoning Gateway|600]]
+> ![[../images/04/activity_arp_poison_gateway.png|Kali ARP Poisoning Gateway|500]]
 > Kali now has two open terminals each running `arpspoof` trying to poison the ARP tables of the gateway and the victim.  Once they are both adequately poisoned, they will send traffic to the Kali machine and Kali will forward the packets to the intended destination.  At this point, I can observe the intercepted traffic using a `tcpdump` packet capture.  I configure `tcpdump` to use the default snapshot length by using the `-s 0` option and filter the traffic to include http traffic only.  I also use the `-vvv` for "very very verbose" output.  `Tcpdump` will be ran within a fresh terminal, the third terminal instance, in the Kali machine as root.
 > ```bash
 > sudo su -
@@ -153,7 +156,6 @@ DNS services use UDP port 53 for domain name resolutions and TCP port 53 for zon
 
 The image above demonstrates the flow of a DNS resolution.  Each server will store, or *cache*, the result of DNS records in its records for faster response times.  The propagation of these records can take some time and may also depend on the record's expiration, known as the *time to live (TTL)*.
 ### DNS Records
-A DNS authoritative server holds various entries or **DNS records**, that map the relationships between IP addresses and domain names.  The following table outlines some of the most common DNS records.
 
 | Record Name | Description                                                           |
 | ----------- | --------------------------------------------------------------------- |
@@ -166,6 +168,7 @@ A DNS authoritative server holds various entries or **DNS records**, that map th
 | SOA         | Start of authority containing admin information                       |
 | SRV         | Details host, port, priority, and weight for services                 |
 | PTR         | Pointer record providing reverse lookups of domains for an IP address |
+A DNS authoritative server holds various entries or **DNS records**, that map the relationships between IP addresses and domain names.  The table above outlines some of the most common DNS records.
 
 Network administrators create these records depending on the needs of the network.  It is common to see the "A" record as it provides the IP address for the given domain name.  Sometimes other domains can point to the same IP address causing the need for an alias or CNAME record.  This record can also be used when a domain has one or more subdomains that point to other IP addresses.  A common subdomain is "www" but a domain may have any compliant value as a subdomain, or even nested subdomains underneath an existing subdomain.
 ### Zone Transfer
@@ -174,14 +177,13 @@ While DNS servers face the internet and serve anonymous queries, DNS records are
 Relying on a single authoritative server could impose availability risks with a domain.  For instance, when the server needs to go offline for maintenance, it will result in downtime for a domain or website.  Therefore, most administrators will ensure that they have at least one other authoritative server to maximize the availability of their domain in the DNS system.  Keeping both servers synchronized with the same records then becomes a chore as the administrators must update both servers every time there is an update to the DNS record set.  If the administrators managed a fleet of DNS servers, there is a greater chance of missing an update on a server and could cause clients to intermittently fail DNS resolutions.  Therefore, many administrators will establish some form of automation by leveraging **zone transfers**.  These zone transfers enable the synchronization, or copying, of domain zones along with all DNS records between authoritative server clusters.  However, as mentioned earlier in this section, an administrator would want to avoid exposing the zone transfer service to unauthorized users by ensuring that access to TCP port 53 DNS service is restricted.
 
 >[!activity] Activity 4.3 - Zone File
+>![[../images/04/dnsdumpster.png|DNS Dumpster Google Domain Results Overview|500]]
 >Let's demonstrate some of what we have learned so far on DNS records and zone transfers.  I use "dnsdumpster.com" to investigate Google's domain and see which records have been publicly collected.  Then I attempt a zone transfer of Google's domain before demonstrating a live zone transfer on a vulnerable by design domain.
 >
->Using the Ubuntu VM with `NAT` network mode set to ensure access to the internet, I open the default browser Firefox and navigate to "dnsdumpster.com".  Once at the site, I enter `google.com` into the domain and review the results.
->![[../images/04/dnsdumpster.png|DNS Dumpster Google Domain Results Overview|600]]
->The site displays geographic pins where the Google servers are located.  Scrolling down the page shows NS, MX, and TXT records that have been cataloged.
->![[../images/04/dnsdumpster_records.png|DNS Dumpster Google Records]]
+>Using the Ubuntu VM with `NAT` network mode set to ensure access to the internet, I open the default browser Firefox and navigate to "dnsdumpster.com".  Once at the site, I enter `google.com` into the domain and review the results.  The site displays geographic pins where the Google servers are located.  Scrolling down the page shows NS, MX, and TXT records that have been cataloged.
+>![[../images/04/dnsdumpster_records.png|DNS Dumpster Google Records|650]]
 >Several subdomain records are itemized on the page.  Other "A" records can sometimes be found by pressing the grid icon under the domain record on the list.
->![[../images/04/dnsdumpster_host.png|DNS Dumpster Google Host Records]]
+>![[../images/04/dnsdumpster_host.png|DNS Dumpster Google Host Records|650]]
 >This passive review of a domain is useful, however incomplete. Only discovered records are listed and some of them might no longer be valid.  To collect the entire record set of a zone, I can use the `dig` utility.  I open a terminal on the Ubuntu VM and look up the nameservers of google.com.  With the nameservers identified, I use the `dig` command with the `axfr` settings to request a zone transfer for "google.com" from one of its nameservers.
 >```bash
 >dig +short NS google.com
@@ -204,17 +206,17 @@ Yet another risk to DNS is through attacks on the protocol itself in which a mal
 
 A **local cache poisoning** attack, in which the attacker poisons or spoofs DNS responses.  **Local hosts file poisoning** can cause victims to receive malicious DNS responses hijacking their flow of traffic.  In this scenario, the victim requests a domain and receives an IP address that is in the control of the attacker.  The attacker can then more easily trick users with phishing sites that can be used to harvest the victim's credentials.
 
-![[../images/04/local_cache_poisoning.png|Local Hosts File Poisoning|200]]
+![[../images/04/local_cache_poisoning.png|Local Hosts File Poisoning|225]]
 
 This poisoning attack can be illustrated by modifying the DNS Infrastructure diagram shared in the earlier part of this chapter.  The image above demonstrates the local hosts file poisoning attack wherein the attacker sets the domain to an IP binding in the hosts file which directs the victim to an attacker-controlled server.  The DNS resolver could also be compromised in a **remote cache poisoning** attack.  Here, the attacker has the same objective of replacing domain to IP bindings with malicious IPs.   
 
 Borrowing again from the DNS Infrastructure diagram, the image below illustrates an attacker compromising the DNS resolver and polluting the DNS response.
 
-![[../images/04/remote_cache_poisoning.png|Remote Cache Poisoning|375]]
+![[../images/04/remote_cache_poisoning.png|Remote Cache Poisoning|425]]
 
 A **malicious DNS server** is yet another attack in which the threat actor seeks to hijack the DNS response with a malicious one.  In this attack, the adversary sets up their own DNS resolver on the network and influences hosts to use it over the real resolver.  This has the same impact as the remote cache poisoning attack but avoids the need of compromising the real resolver.  The diagram below shows the malicious DNS server sitting on a network and responding to client requests.  
 
-![[../images/04/malicious_dns_server.png|Malicious DNS Server|375]]
+![[../images/04/malicious_dns_server.png|Malicious DNS Server|425]]
 
 An attacker may also attack DNS servers directly through a **DNS flood attack** to cause the server to fail its responses to client requests.  This is a type of denial-of-service (DoS) attack which disrupts the normal operation of DNS services.  Under resourced servers or servers that have a vulnerability that exposes the DNS service can be susceptible to DoS attacks.  The attacker could also use several devices or a *bot army* to send the many requests at once and overwhelm a targeted DNS server.  The diagram below demonstrates this attack blocking the client from using the resolver.
 
@@ -232,48 +234,47 @@ To accomplish **DNS tunneling exfiltration**, an attacker segments a file into s
 >sudo apt update -y
 >sudo apt install dsniff -y
 >```
->![[../images/04/dns_spoof_ubuntu_dsniff.png|Ubuntu Installing Dsniff|600]]
+>![[../images/04/dns_spoof_ubuntu_dsniff_2.png|Ubuntu Installing Dsniff|525]]
 >My DNS server will be set up to only resolve www.google.com, but I first need to know Google's IP address.  I use `nslookup` to find Google's IP address and then create a domain to IP binding in a `dns.txt` file.
 >```bash
 >nslookup www.google.com
 >echo "142.250.189.164 www.google.com" > dns.txt
 >```
->![[../images/04/dns_spoof_dnstxt.png|Setting Up DNS Record|600]]
+>![[../images/04/dns_spoof_dnstxt.png|Setting Up DNS Record|525]]
 >Using the `ip` command, I identify the interface that the DNS server will run on.  Then, I start `dnsspoof` to serve the `dns.txt` records on that interface.  `Dnsspoof` is not a reliable DNS server application and is only being used here as it is easier than setting up a real DNS server.
 >```bash
 >ip a
 >sudo dnsspoof -i enp0s3 -f dns.txt
 >```
->![[../images/04/dns_spoof_dns_server.png|DNS Server Running on Ubuntu|600]]
+>![[../images/04/dns_spoof_dns_server.png|DNS Server Running on Ubuntu|525]]
 >With the DNS server running and ready to resolve web.google.com, I switch to the Windows VM and configure the DNS resolver setting with the Ubuntu IP address.  I search for "View network connections" in the search bar and open the Control panel.
->
->![[../images/04/activity_dnsspoof_control.png|Opening Network Connections|600]]
+>![[../images/04/activity_dnsspoof_control.png|Opening Network Connections|400]]
 >The "Network Connections" window is opened and displays the network interfaces.  I right-click the Ethernet entry and select "Properties" from the context menu options.
->![[../images/04/dns_spoof_ethernet_properties.png|Ethernet Properties|350]]
+>![[../images/04/dns_spoof_ethernet_properties.png|Ethernet Properties|275]]
 >Within the Ethernet Properties window, I select the "Internet Protocol Version 4" option and press the "Properties" button.
->![[../images/04/dns_spoof_ip_settings.png|IPv4 Properties|350]]
+>![[../images/04/dns_spoof_ip_settings.png|IPv4 Properties|275]]
 >Finally, I select the "Use the following DNS server addresses" radio button and enter the IP address of my Ubuntu VM.  You might recall that the Ubuntu IP address was observed earlier in this activity.
->![[../images/04/dns_spoof_win_dns_ip.png|Windows DNS Configuration to Ubuntu|350]]
+>![[../images/04/dns_spoof_win_dns_ip.png|Windows DNS Configuration to Ubuntu|300]]
 >With the Ubuntu DNS server configured on the Windows VM, I open the browser and navigate to www.google.com and observe that the page loads.  
->![[../images/04/dns_spoof_google_loads.png|Windows Google Load Success|300]]
+>![[../images/04/dns_spoof_google_loads.png|Windows Google Load Success|350]]
 >I then open a command prompt and run an `nslookup` to www.google.com to confirm that the IP address resolves to the address set in the dns.txt file on the Ubuntu DNS server.
 >```bash
 >nslookup www.google.com
 >```
->![[../images/04/dns_spoof_win_google_nslookup.png|Windows Google Nslookup Resolution|600]]
+>![[../images/04/dns_spoof_win_google_nslookup.png|Windows Google Nslookup Resolution|550]]
 >
 >I also need to allowlist Google to be loaded within Edge without TLS.  Returning to Edge in the Windows VM, I navigate to `edge://settings/content/insecureContent` and then add `www.google.com` to the allow section.  This will simplify the attack for demonstration purposes, but know that an attacker could set up a HTTPS server with a certificate by doing a few extra steps.
 >
->![[../images/04/activity_dnsspoof_edge_settings.png|Allow Insecure Google|600]]
+>![[../images/04/activity_dnsspoof_edge_settings.png|Allow Insecure Google|500]]
 >
 >Next, I check the Ubuntu `dnsspoof` logs and see several entries in which the server is responding to the Window VM requests!
->![[../images/04/dns_spoof_ubuntu_valid_logs.png|Ubuntu DNS Spoof Valid Logs|600]]
+>![[../images/04/dns_spoof_ubuntu_valid_logs.png|Ubuntu DNS Spoof Valid Logs|450]]
 >With the Windows and Ubuntu systems running in a healthy state and able to resolve the www.google.com domain correctly, I can prepare the attack.  I start by installing `dsniff` on the Kali machine after running an update.  My system was already up to date and `dsniff` was previously installed.
 >```bash
 >sudo apt update -y
 >sudo apt install dsniff -y
 >```
->![[../images/04/dns_spoof_kali_dsniff_install.png|Kali Install Dsniff|600]]
+>![[../images/04/dns_spoof_kali_dsniff_install.png|Kali Install Dsniff|500]]
 >Next, I set up a web file and serve it using a Python simple HTTP server.  This will serve as my malicious site that will target the victim.
 >```bash
 >mkdir /tmp/www
@@ -281,45 +282,45 @@ To accomplish **DNS tunneling exfiltration**, an attacker segments a file into s
 >echo "Not Google :)" > index.html
 >sudo python3 -m http.server 80
 >```
->![[../images/04/dns_spoof_kali_http.png|Kali HTTP Server|600]]
+>![[../images/04/dns_spoof_kali_http.png|Kali HTTP Server|500]]
 >In another terminal, I switch to the root user, set the ip_forward flag to "1" to allow my Kali machine to forward packets, and then set up `arpspoof` to target the Windows IP address and the Ubuntu DNS server.
 >```bash
 >sudo su -
 >echo 1 > /proc/sys/net/ipv4/ip_forward
 >arpspoof -i eth0 -t 192.168.4.168 192.168.4.169
 >```
->![[../images/04/dns_spoof_arp_spoof_1.png|Kali ARP Spoof Windows|600]]
+>![[../images/04/dns_spoof_arp_spoof_1.png|Kali ARP Spoof Windows|500]]
 >With Kali now poisoning the Windows VM, I open another window and poison the target Ubuntu DNS server and Windows IP.
 >```bash
 >sudo arpspoof -i eth0 -t 192.168.4.169 192.168.4.168
 >```
->![[../images/04/dns_spoof_arp_spoof_2.png|Kali ARP Spoof Ubuntu|600]]
+>![[../images/04/dns_spoof_arp_spoof_2.png|Kali ARP Spoof Ubuntu|500]]
 >Now that Kali is poisoning both the Ubuntu and Windows VMs, convincing each that Kali is the other, and a malicious web server is running, I can finally set up the malicious DNS server on Kali.  First, in a new terminal, I create a `dns.txt` file with an entry that has the Kali eth0 IP address binded to www.google.com.  Then, I run the `dnsspoof` command on the interface eth0 referencing the `dns.txt` file.
 >```bash
 >echo "192.168.4.167 www.google.com" > dns.txt
 >sudo dnsspoof -i eth0 -f dns.txt
 >```
->![[../images/04/dns_spoof_kali_dnsspoof.png|Kali DNS Spoof Running|600]]
+>![[../images/04/dns_spoof_kali_dnsspoof.png|Kali DNS Spoof Running|550]]
 >I now have 4 terminals running: 2 with `arpspoof`, 1 with an HTTP server, and 1 with `dnsspoof`.  Now that the attack is fully staged, the last thing to do is to entice the victim to navigate to www.google.com.  The victim will send a DNS query that will be highjacked because of the ARP poisoning.  Our malicious DNS server will resolve the requested address with our attacker IP address that the victim will use to request the web page.  Finally, our Kali machine will serve the malicious page in replace of the actual Google site.  From the Windows VM, I open a private browser window, to avoid any caching, and navigate to http://www.google.com.
->![[../images/04/dns_spoof_trigger.png|Windows Victim Served Malicious Google Page|400]]
+>![[../images/04/dns_spoof_trigger.png|Windows Victim Served Malicious Google Page|550]]
 >The victim is served the malicious page!  Going back to Kali we can see the DNS spoof logs are resolving the request made by the victim.
->![[../images/04/dns_spoof_kali_spoof_logs.png|Kali DNS Spoof Logs|600]]
+>![[../images/04/dns_spoof_kali_spoof_logs.png|Kali DNS Spoof Logs|550]]
 >While on the Kali VM we can see the HTTP logs serving the victim the malicious web site.
 >![[../images/04/dns_spoof_http_logs.png|Kali HTTP Logs|600]]
 >To enhance this attack further, I can clone the Google page and serve the site over HTTPS with a valid certificate.
 ## Dynamic Host Configuration Protocol (DHCP)
 As previously discussed, NICs have their MAC addresses burned in during the manufacturing process.  However, IP address assignment works differently and is assigned by **dynamic host configuration protocol (DHCP)** servers.  These systems are often found within routers or as standalone servers.  DHCP is responsible for assigning IP addresses to LAN hosts and can be configured to provide IPs from a set or range.  They can also statically configure IPs to specific MAC addresses.  The DHCP server maintains a table that consists of each networked device's MAC, leased IP address, and an expiration of the lease.  When an IP address lease expires, a new lease will be reassigned that could be the same IP address previously assigned.  The client device receiving the IP address then checks for duplicate IP addresses by broadcasting to all other devices over ARP in a process called *ARP probe*.  This process is designed to avoid collisions in the IP use and assignment.
 
-![[../images/04/dhcp_basic.png|DHCP Lease|250]]
+![[../images/04/dhcp_basic.png|DHCP Lease|300]]
 
 ### DORA
 When a device joins the network, it will not have an IP address until one is negotiated with the DHCP server.  In a process called *discover*, one of the first actions a new device performs is broadcast a message (or packet).  This broadcast message inquires who the DHCP server is to all other devices on the network.  The DHCP server will respond to the discover request with an *offer* message that includes an IP address for the new device to use.  The new device considers this offer, and if appropriate, sends a *request* message to the DHCP server asking to use the offered IP.  The DHCP server gets this request and adds an entry in the DHCP IP assignment table with the device's MAC, IP and expiration.  Afterwards, the DHCP server sends the final *acknowledge* message to the new device so it can register the IP address in its network stack.  The entire process of discover, offer, request, and acknowledge is referred to as **DORA**. 
 
-![[../images/04/dhcp_dora.png|DHCP DORA Traffic|400]]
+![[../images/04/dhcp_dora.png|DHCP DORA Traffic|350]]
 
 The figure above demonstrates the order and directionality of the DORA communications between a server and client.  Healthy network devices that receive discover requests simply ignore them.  But any network device could respond by claiming they are the DHCP server.
 ### DCHP Release
-Another interesting request from a client to a DHCP server is the **release** packet.  The subject device will notify the server if it no longer needs the currently assigned IP address.  This is helpful in circumstances where the client prefers a different IP address.  To affect this change, the client sends the DHCP server a release packet and the server removes the existing MAC to IP binding in the IP table.  Misbehaving devices could spoof these requests causing the disassociation of IP addresses for target victims on a network.
+Another interesting request from a client to a DHCP server is the **release packet**.  The subject device will notify the server if it no longer needs the currently assigned IP address.  This is helpful in circumstances where the client prefers a different IP address.  To affect this change, the client sends the DHCP server a release packet and the server removes the existing MAC to IP binding in the IP table.  Misbehaving devices could spoof these requests causing the disassociation of IP addresses for target victims on a network.
 ### DHCP Risks
 DHCP, like many other network protocols, inherently trusts devices connected on the network.  This is an acceptable risk if one can assume that physically connected devices were placed onto the network with permission.  However, it is imaginable that an attacker could physically install a device on a network, connect via Wi-Fi, or compromise an existing networked device.  Once an attacker connects to a network, they can inflict further damage as will be explored in the following paragraphs.   
 
@@ -335,6 +336,9 @@ Another interesting DHCP attack is a **DHCP spoofing** attack that has the goal 
 
 ![[../images/04/dhcp_spoofing.png|DHCP Spoofing Attack|300]]
 
+  <br>
+  
+
 >[!activity] Activity 4.5 - DHCP Spoofing Attack
 >I'll demonstrate a DHCP spoofing attack using Ettercap, which provides a nice GUI to perform and to manage several networking attacks.  The Windows VM will act as my victim and I'll launch the attack from the Kali VM, both using the `Bridge Adapter` network modes.
 >
@@ -342,23 +346,23 @@ Another interesting DHCP attack is a **DHCP spoofing** attack that has the goal 
 > ```bash
 > ipconfig
 > ```
-> ![[../images/04/dhcp_activity_win_net.png|Windows VM Network Settings|600]]
+> ![[../images/04/dhcp_activity_win_net.png|Windows VM Network Settings|500]]
 > Switching to the Kali machine, I run similar commands and confirm that it is on the same network as the Windows VM (192.168.4.0/24).
 > ```bash
 > ip a
 > ```
-> ![[../images/04/dhcp_activity_kali_net.png|Kali VM Network Settings|600]]
+> ![[../images/04/dhcp_activity_kali_net.png|Kali VM Network Settings|500]]
 > While still on the Kali machine, I launch Ettercap as root using `sudo` and with the `-G` option to use the GUI.
 > ```bash
 > sudo ettercap -G
 > ```
-> ![[../images/04/dhcp_activity_ettercap.png|Ettercap GUI Homescreen]]
+> ![[../images/04/dhcp_activity_ettercap.png|Ettercap GUI Homescreen|600]]
 > The first step is to start Ettercap's sniffing utility on the interface from the network our victim is on, which is eth0.  Sniffing is started by pressing the checkmark button in the upper right corner of the application next to the ellipsis button.
-> ![[../images/04/dhcp_activity_sniffing.png|Ettercap Sniffing Mode]]
+> ![[../images/04/dhcp_activity_sniffing.png|Ettercap Sniffing Mode|650]]
 > Once sniffing is initiated, the log pane appears at the bottom of the screen detailing the configuration and confirmation that Ettercap has started sniffing traffic.  Soon we will start seeing logs of packets being captured!  A few new buttons appear at the top of the Ettercap application including a menu represented by a globe next to where the sniffing/checkmark button was.  I can stop the network sniffing by pressing the stop button in the upper left corner.  However, I leave sniffing enabled during this attack.  To configure the attack, I press the globe icon and then DHCP Spoofing.
-> ![[../images/04/dhcp_activity_globe.png|Ettercap Attack Menu Options|350]]
+> ![[../images/04/dhcp_activity_globe.png|Ettercap Attack Menu Options|400]]
 > After pressing the DHCP spoofing option of the menu, a dialog box pops up needing information for the attack.  I enter the victim Windows IP address in the "IP range", the network's subnet mask, and I put the IP address of Kali in the DNS server field.  These settings will instruct Ettercap to target the Windows machine and poison its network settings to think the Kali machine is the DNS server.
-> ![[../images/04/dhcp_activity_config.png|DHCP Spoof Configuration|300]]
+> ![[../images/04/dhcp_activity_config.png|DHCP Spoof Configuration|325]]
 > Once the settings are entered into the fields, I press Ok to start the attack.  Eventually, the Windows VM will change its network gateway to the Kali machine.  To speed this along, I renew the Windows IP address forcefully to imitate an IP lease that expires.
 > ```bash
 > ipconfig /release
@@ -379,7 +383,7 @@ The other type of attack we covered is the DHCP spoofing attack using a rouge DH
 ![[../images/04/dhcp_snooping.png|DHCP Snooping|450]]
 
 ## Transmission Control Protocol (TCP)
-We have already covered the basics of TCP in the previous chapter.  You may recall the introduction of the three-way handshake in which a client sends a SYN packet to the server, the server responds with a SYN+ACK, and the client sends an ACK packet before starting the transmission of data.  TCP is heavily used in networking with most popular protocols relying on it as a resilient means to communicate.  There is another packet sent by the client to the server (or by the server to the client) that we did not cover in the last chapter, and it is called the **reset (RST)** packet.  This RST packet terminates a connection stream between the client and the server and is useful to keep networks tidy.  You can see this packet ending a transmission in the figure below.
+We have already covered the basics of TCP in the previous chapter.  You may recall the introduction of the three-way handshake in which a client sends a SYN packet to the server, the server responds with a SYN+ACK, and the client sends an ACK packet before starting the transmission of data.  TCP is heavily used in networking with most popular protocols relying on it as a resilient means to communicate.  There is another packet sent by the client to the server (or by the server to the client) that we did not cover in the last chapter, and it is called the **reset (RST) packet**.  This RST packet terminates a connection stream between the client and the server and is useful to keep networks tidy.  You can see this packet ending a transmission in the figure below.
 
 ![[../images/04/tcp_rst.png|TCP Reset Packet|250]]
 
@@ -387,7 +391,7 @@ The RST packet is used to notify the server that the client intends to reset the
 ### TCP Threats
 TCP, which resides in layer 4 of the OSI model, is subject to attacks with effects similar to other networking protocols.  Its placement in the middle of the network stack, encapsulating so many other protocols, makes it a prime target.  Disrupting TCP can cause higher order protocols, such as HTTP, to inherently fail since they depend on TCP.  Therefore, keeping a server's ability to maintain TCP connections is crucial for the availability of the service.  This makes TCP a candidate for *denial of service (DoS)* attacks in which the attacker attempts to disrupt the flow of TCP wrapped packets.  
 
-Every TCP connection starts with a client SYN packet and then a server SYN+ACK response.  A misbehaving client can send repeated SYN packets causing the server to tie up resources resources waiting for 3-way handshakes to complete.  These open connections eventually expire, but if a client or group of misbehaving clients sends many requests at once, they can quickly fill the TCP connection capacity of the server and block legitimate clients from establishing connections.  This coordinated DoS is referred to as a **TCP SYN flood** attack and is illustrated below.
+Every TCP connection starts with a client SYN packet and then a server SYN+ACK response.  A misbehaving client can send repeated SYN packets causing the server to tie up resources resources waiting for 3-way handshakes to complete.  These open connections eventually expire, but if a client or group of misbehaving clients sends many requests at once, they can quickly fill the TCP connection capacity of the server and block legitimate clients from establishing connections.  This coordinated DoS is referred to as a **TCP SYN flood attack** and is illustrated below.
 
 ![[../images/04/tcp_flood_attack.png|TCP Flood Attack|500]]
 
@@ -428,25 +432,29 @@ TCP does not use encryption, leaving all its wrapper information exposed as plai
 
 ![[../images/04/tcp_reset_attack.png|TCP Reset Attack|300]]
 
+  <br>
+
+
+
 >[!activity] Activity 4.7 - TCP Reset Attack
 >To demonstrate a TCP reset attack, I'll use the Kali VM on `Bridge Adapter` network mode.  The Kali machine will serve as both the client and the server using Netcat.  With Wireshark capturing packets, I'll establish a connection between the client and server and obtain details about the connection.  This information will be used with the Netwox tool that will send a RST packet and break the client-server connection.
 >
 >First, I start Wireshark through the applications menu and select the Loopback interface.  Double clicking this interface starts a packet capture.
->![[../images/04/activity_rst_wireshark_start.png|Kali Starting Wireshark on Loopback Interface]]
+>![[../images/04/activity_rst_wireshark_start.png|Kali Starting Wireshark on Loopback Interface|575]]
 >With the packet capture running, I next need to set up the client and the server.  Starting with the server, I launch a terminal and use Netcat to listen on port 8000 for incoming connections with verbose output and keeping the connection alive.
 >```bash
 >nc -nvlp 8000
 >```
->![[../images/04/activity_rst_server.png|Netcat Server Port 8000|600]]
+>![[../images/04/activity_rst_server.png|Netcat Server Port 8000|575]]
 >Launching another terminal (2nd), I use Netcat to establish a connection to the server listening on port 8000.  I use the home address 127.0.0.1 to make a connection on the loopback interface and then send a message `hello!` by typing into the terminal.  The connection remains open ready to take additional data and does not return us to the bash terminal.
 >```bash
 >nc 127.0.0.1 8000
 >```
->![[../images/04/activity_rst_hello.png|Client Connection to Netcat Server 8000|600]]
+>![[../images/04/activity_rst_hello.png|Client Connection to Netcat Server 8000|575]]
 >Immediately, I can observe that the server accepts the connection and displays the client's incoming message.  The output also shows the client port 34502 from which the connection originated.
->![[../images/04/activity_rst_connection.png|Incomming Connection from Client|600]]
+>![[../images/04/activity_rst_connection.png|Incomming Connection from Client|575]]
 >The client and server terminal Netcat connection simulates a typical TCP communication channel.  This connection will be the target of my attack.  As the attacker, I have a Wireshark packet capture running on the loopback interface which collected the client server connection.  Within Wireshark, I select the last TCP ACK packet and expand the TCP header to identify the `Sequence Number (raw)` value 2032347291 which I will use to send a RST and disrupt the client - server connection.
->![[../images/04/activity_rst_sequence_number.png|Sequence Number (raw) Identified in Wireshark]]
+>![[../images/04/activity_rst_sequence_number.png|Sequence Number (raw) Identified in Wireshark|500]]
 >I will use the tool Netwox to run this attack in a new terminal.  Netwox is not preinstalled in Kali, so I install it using the following command.
 >```bash
 >sudo apt update -y
@@ -468,6 +476,61 @@ There are several security measures that can be used to mitigate the threats to 
 The risk of SYN flood attacks can be mitigated through cookies, sometime referred to as canaries.  In this context, a cookie is used as a special indication of a client and server connection allowing the server to authenticate the incoming TCP packet with the trusted client.  The **SYN cookie** is a server-side control that encodes the client information into a string value, called a cookie.  Each connection's cookie is stored in a backlog and used as a reference for incoming connection requests.  Any request that does not authenticate or match with the cookie is dropped and the connection slot released for other client's use. 
 
 Another less common cookie method, the **RST cookie**, mitigates attacks by validating clients beforehand.  In this strategy the server sends an invalid SYN+ACK packet to the client after receiving the initial connection and logs the transaction.  The server will not open any new TCP connections from the client until the client sends an RST packet in response to the server's invalid SYN+ACK request.  Once the client does send the RST packet, the server assumes the client acting responsibly and adds it to a server-side allow foregoing any additional RST cookie procedures for that client.
+## Summary
+This chapter examined some common protocols used in network communications.  It covered ARP’s role in resolving IP to MAC addresses on a LAN and the risks of ARP spoofing and poisoning including mitigation strategies like static entries, Dynamic ARP Inspection, and higher-layer encryption.  The chapter then covered DNS, detailing how resolvers, TLD servers, and how authoritative servers collaborate over UDP/TCP port 53 to map domain names to IPs.  The mechanics of zone transfers, and the threats of cache poisoning, malicious DNS servers, and DoS attacks were reviewed in addition to how each are countered by DNSSEC, restricted transfers, and upstream filtering.  Next, DHCP’s DORA process and lease mechanics were explained, along with ARP-based address collision checks.  DHCP attacks, such as starvation, spoofing, and hijacking, as well as countermeasures, like switch-level port security and DHCP snooping, were described and demonstrated within the chapter.  Finally, the chapter reviewed TCP’s three-way handshake and reset packet use by outlining how SYN flood and reset-spoofing attacks can compromise communications.  Defenses against these attacks, like tuning backlog settings and deploying SYN cookies that ensure reliable, secure transport-layer connectivity were explored.
+
+>[!terms] Key Terms
+>**Address Resolution Protocol (ARP)** - A network protocol that resolves an IP address to its corresponding MAC address on a local network segment.
+>
+>**ARP Request** - A broadcast packet sent on a network by a device asking “Who has this IP address?” to discover the MAC address for a given IP.
+>
+>**ARP Response** - A unicast packet that provides the device's MAC address, in response to an ARP request.
+>
+>**ARP Table or ARP Cache** - A local storage of IP-to-MAC address mappings that devices consult before creating network requests and prior to sending ARP requests.
+>
+>**DHCP Snooping** - A switch security feature that restricts DHCP messages to predefined trusted ports to prevent rogue DHCP servers.
+>
+>**DHCP Spoofing** - An attack in which a malicious device impersonates the DHCP server to assign clients a gateway or DNS settings of the attacker’s choosing.
+>
+>**DHCP Starvation** - A denial of service attack that exhausts all available IP leases by repeatedly requesting addresses from the DHCP server.
+>
+>**Discover, Offer, Request, Acknowledge (DORA)** - The four-step DHCP handshake that results in IP address issuance where a client discovers the server, the server offers an address, the client requests it, and the server acknowledges.
+>
+>**DNS Flood Attack** - A volumetric denial of service attack that overwhelms a DNS server with excessive queries to disrupt name resolution services.
+>
+>**DNS Records** - Structured database entries, such as A, AAAA, MX, and CNAME, on authoritative servers that map domain names to configuration data like IP addresses or mail exchanges.
+>
+>**DNS Tunneling Exfiltration** - A covert technique that encodes data into DNS query subdomains to transfer information out of a network via DNS traffic.
+>
+>**Domain Name System (DNS)** - The hierarchical naming system that translates human-readable domain names into IP addresses across the internet.
+>
+>**Dynamic Host Configuration Protocol (DHCP)** - A protocol that automatically assigns IP addresses and other network configuration parameters to hosts on a LAN.
+>
+>**Local Cache Poisoning** - The manipulation of a DNS resolver’s cache to return malicious IP mappings for domain queries.
+>
+>**Local Hosts File Poisoning** - The unauthorized modification of a device’s local hosts file to override DNS and redirect domain names to attacker-controlled IPs.
+>
+>**Malicious DNS Server** - A rogue resolver placed on a network that responds to DNS queries with attacker-controlled records to hijack traffic.
+>
+>**Man in the Middle (MitM)** - An attack where an adversary intercepts and potentially alters communications between two parties who believe they are directly connected.
+>
+>**Port Security** - A switch feature that limits the number of MAC addresses on a port and can shut down the port if unauthorized devices appear.
+>
+>**Release Packet** - A DHCP message sent by a client to inform the server that it no longer needs its assigned IP address, freeing the lease.
+>
+>**Remote Cache Poisoning** - An attack targeting a DNS resolver’s cache from an external network to inject false domain-to-IP mappings.
+>
+>**Reset (RST) Packet** - A TCP packet used to immediately terminate an existing connection without the graceful FIN handshake.
+>
+>**RST Cookie** - A non-standard mitigation (not widely adopted) that attempts to validate legitimate clients by challenging them to respond with an RST before accepting connections.
+>
+>**SYN Cookie** - A stateless TCP defense that encodes connection state into the SYN-ACK sequence number to mitigate SYN flood attacks.
+>
+>**TCP Reset Attack** - An attack that forges a TCP RST packet with correct sequence numbers to forcibly terminate an active connection.
+>
+>**TCP SYN Flood Attack** - A denial-of-service attack where an attacker sends numerous SYN packets without completing the handshake, exhausting server resources.
+>
+>**Zone Transfers** - The mechanism by which DNS servers synchronize entire DNS zone data sets by transferring records over TCP port 53.
 ## Exercises
 
 > [!exercise] Exercise 4.1 - ARP Spoof Attack
@@ -569,7 +632,7 @@ Another less common cookie method, the **RST cookie**, mitigates attacks by vali
 > ```
 > #### Step 2 - Configure Windows DNS Setting
 > In this step, you will modify the Windows interface DNS settings to use the Ubuntu VM.  From the Windows VM, open the Control Panel's Network Connections panel. Right-click “Ethernet” and select “Properties” to launch the interface property window. With the interface properties window opened, select “Internet Protocol Version 4 (TCP/IPv4)” and press the “Properties” button. Select the “Use the following DNS server addresses:” radio button and enter the IP address of the Ubuntu VM.  Press “Ok” and close out the windows that were opened for the network settings. 
-> ![[../images/04/dns_win_settings.png|Windows DNS Configuration]]
+> ![[../images/04/dns_win_settings.png|Windows DNS Configuration|500]]
 > You should see log activity in the Ubuntu `dnsspoof` terminal when running the following command from a Windows command prompt. 
 > ```bash
 > nslookup google.com
@@ -664,12 +727,14 @@ Another less common cookie method, the **RST cookie**, mitigates attacks by vali
 > sudo su -
 > nc -nvlp 8000
 > ```
-> Launch another terminal and establish a connection to the server just created.  Once connected, type your name and observe the server's standard output in the server terminal.
+> Launch another terminal and establish a connection to the server just created.  Once connected, type your name and observe the server's standard output in the server terminal.  
 > ```bash
 > nc 127.0.0.1 8000
 > YOUR_NAME
 > ```
-> Observe the open TCP connection port in the server window.  This port number will be needed in the next steps.
+>   Observe the open TCP connection port in the server window.  This port number will be needed in the next steps.
+>     <br>
+>     
 > #### Step 4 - Observe the Sequence Number
 > Return to Wireshark and select the last ACK packet.  Find the packet’s raw Sequence Number (should be about 10 digits).  Find your sequence number as it will be needed in the following steps.
 > #### Step 5 - Launch the Reset Attack

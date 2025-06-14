@@ -1,4 +1,5 @@
-# Appendix 1 - Continued Learning
+<span class="chapter-banner">Appendix 1</span>
+# Continued Learning
 In this appendix, I share some of the resources where interested readers can continue their exploration and learning within the cybersecurity field.  The security community has its arms wide open to anyone that has an interest in learning new things.  I have direct experience with most of the items on this list or have reasonable confidence in their quality.  The information provided is not comprehensive, and there are numerous valuable resources that are worthy of further learning.
 ## Local Groups
 Building community and meeting new cybersecurity professionals will expose you to new ideas and opportunities.  I have found and helped others find job opportunities from local security groups.  I have also learned so much from presentations and discussions while attending meetings.  They usually have in-person monthly meetings and might have a small annual membership fee.  Often, vendors will sponsor the meeting offering swag, food, or activities while also demonstrating their product.  The following national level groups will likely have a chapter near you.
@@ -13,11 +14,15 @@ Building community and meeting new cybersecurity professionals will expose you t
 ## Learning Sites
 If you enjoyed the practical labs throughout the textbook, you may find the following free online resources of particular interest.  Each has online labs and community support for practicing technical security concepts in a fun and interactive manner.  These free resources will dramatically improve your technical skills and expose you to tools and techniques used in trade craft.
 
-**Hack the Box (HTB)** - Provides trainings, games, and capture-the-flag style boot-to-root boxes to for learning and practice.  https://www.hackthebox.com
+**Hack the Box (HTB)** - Provides trainings, games, and capture-the-flag style boot-to-root boxes for learning and practice.  https://www.hackthebox.com
 
 **Try Hack Me (THM)** - Similar to HTB, but a more beginner friendly approach.  They cover many security topics and have a nice library of challenges and boxes from which to learn.  https://tryhackme.com
 
 **PortSwigger Academy** - The free online academy focuses on web application vulnerabilities and attacks through the use of the Burp Suite proxy tool.  Fun and awesome!  https://portswigger.net
+
+  <br>
+
+
 ## YouTube
 YouTube is a great resource of write-ups, tutorials, and demonstrations presented by a long list of talented people.  The following is a list of some of the highest quality and interesting channels to which I subscribe.
 
@@ -41,6 +46,10 @@ YouTube is a great resource of write-ups, tutorials, and demonstrations presente
 
 >[!tip] Tip - 2x speed
 >Watching videos at 2x the speed enables you to consume twice as much content.  It takes a little getting used to, but worth it.
+
+  <br>
+
+
 ## Podcasts
 I try to maximize my time and listen to podcasts on commutes, walks, or doing other light-focused activities.  Here are the security related podcasts I listen to on a regular basis.
 

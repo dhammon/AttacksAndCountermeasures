@@ -1,8 +1,7 @@
-# Chapter 1 - Information Security
+<span class="chapter-banner">Chapter 1</span>
+# Information Security
 
 ![](../images/01/lock.png)
-
-Organizations typically handle sensitive information that would cause harm if accessed or manipulated by an unauthorized third party.  The operations, services, and products of these organizations often depend on computerized systems.  If such systems were degraded or unavailable the organization would be materially harmed.  These risks drive the field of information security (infosec) as organizations need the ability to operate without data or system compromise.  Infosec should not be confused with cybersecurity, which one could argue supersedes infosec, where digital systems are protected regardless of the information they process.  In this chapter, we explore how organizations approach managing information security at an administrative level.  The reader will be introduced to models, frameworks, and definitions that provide a sound foundation when discussing security with other professionals.  
 
 **Objectives**
 1. Explain the CIA triad and how it is used;
@@ -13,6 +12,8 @@ Organizations typically handle sensitive information that would cause harm if ac
 6. Explore business continuity and disaster recovery processes;
 7. Understand identity access management processes and control models; and
 8. Prepare a virtual environment to be used in future labs.
+
+Organizations typically handle sensitive information that would cause harm if accessed or manipulated by an unauthorized third party.  The operations, services, and products of these organizations often depend on computerized systems.  If such systems were degraded or unavailable the organization would be materially harmed.  These risks drive the field of information security (infosec) as organizations need the ability to operate without data or system compromise.  Infosec should not be confused with cybersecurity, which one could argue supersedes infosec, where digital systems are protected regardless of the information they process.  In this chapter, we explore how organizations approach managing information security at an administrative level.  The reader will be introduced to models, frameworks, and definitions that provide a sound foundation when discussing security with other professionals.  
 ## Introduction
 You probably have some instinctive ideas about information security.  Perhaps you have had a social media account compromised by using a weak password, or maybe you have participated in mandatory security awareness training at work.  Regardless, you might imagine scenarios where an attacker could gain access to data.  Take a moment and consider the following scenario:
 
@@ -27,7 +28,7 @@ Information security is meant to protect data wherever it is located.  But what 
 - **Integrity** ensures that information is accurate and unaltered; and
 - **Availability** expects that the information is available when it is needed.
 
-![[../images/01/cia_triad.png|The CIA Triad|250]]
+![[../images/01/cia_triad.png|The CIA Triad|200]]
 
 Security professionals use the CIA triad to explain how to protect information by applying controls on one or more sides of the triangle.  These categories allow us to discuss types of risks and controls in a scenario.
 
@@ -48,7 +49,11 @@ There is a common nomenclature used in the industry and throughout this book.  L
 
 This example is analogous to the types of scenarios faced everyday by infosec professionals where there is a risk to information (think CIA Triad) by some unauthorized party.  We spend our days assessing and implementing security controls to mitigate the inherent risk of the information.  A security incident occurs when a threat is successful, such as when the risk is realized by exploitation of a vulnerability using a payload.  Let's explore the types of threats organizations face in the next section.
 ## Threat Actors
-People that hack into computer systems are commonly referred to as **threat actors**.  Defining who and what their motivations are can aid infosec professionals when designing security systems.  Centralizing a database of adversaries and their attack methods enables professionals to deduce or attribute which attacker conducted a breach.  The observed behaviors, attack patterns, tools used, and impacts caused leave a sort of fingerprint that could be traced back to a known and documented attacker.  The non-exhaustive table below describes some of the common threat actor cohorts that organizations are up against.
+People that hack into computer systems are commonly referred to as **threat actors**.  Defining who and what their motivations are can aid infosec professionals when designing security systems.  Centralizing a database of adversaries and their attack methods enables professionals to deduce or attribute which attacker conducted a breach.  The observed behaviors, attack patterns, tools used, and impacts caused leave a sort of fingerprint that could be traced back to a known and documented attacker.  
+
+Prominent groups like Lazarus (nation-state) and Evil Corp (cybercriminal) are tracked by the MITRE organization's ATT&CK knowledge base and can be found at [https://attack.mitre.org/groups/](https://attack.mitre.org/groups/).  This collection of threat actors is used by security professionals when performing analysis, such as during an incident response, to identify which group potentially attacked them.
+
+The non-exhaustive table below describes some of the common threat actor cohorts that organizations are up against.
 
 | Threat Actor  | Description                                                                                                                                                                                                                      | Motivation                            |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
@@ -58,7 +63,6 @@ People that hack into computer systems are commonly referred to as **threat acto
 | Script Kiddie | AKA "skids" are individuals experimenting with attacks on opportunistic targets typically leveraging existing techniques and out-of-the-box tools.                                                                               | Curiosity, learning, bragging rights. |
 | Cybercriminal | Federation of criminal groups, each specializing in phases of an attack, that extort victims using ransomware and denial of service.                                                                                             | Monetary                              |
 
-Prominent groups like Lazarus (nation-state) and Evil Corp (cybercriminal) are tracked by the MITRE organization's ATT&CK knowledge base and can be found at [https://attack.mitre.org/groups/](https://attack.mitre.org/groups/).  This collection of threat actors is used by security professionals when performing analysis, such as during an incident response, to identify which group potentially attacked them.
 ## MITRE ATT&CK
 Besides tracking threat actor groups, the MITRE organization also tracks, monitors, and catalogs threat actor tools, techniques, and procedures (TTPs), which can be found at [https://attack.mitre.org/](https://attack.mitre.org/).  The ATT&CK framework reads left to right progressing through a logical and mostly linear attack lifecycle.  Not every attack uses each of these lifecycle phases (columns) or techniques listed, but most attack techniques can be mapped back to an ATT&CK item.
 
@@ -116,7 +120,7 @@ Having a strong security culture goes a long way in keeping the organization saf
 
 Assume we want to keep an organization's information or data secure using the defense in depth concept.  The start of that effort is to identify all the layers between a threat and the data we are trying to protect.
 
-![[../images/01/defense_depth.png|Defense in Depth|500]]
+![[../images/01/defense_depth.png|Defense in Depth|400]]
 
 The Defense in Depth figure provides a map of security boundaries.  For example, the data layer could be protected by encrypting the data at rest (where it resides), users could be secured by configuring multifactor authentication, the application layer could be secured using signed binaries, the endpoint layer could have security updates regularly applied, the network layer could apply a network segmentation strategy, and finally the perimeter layer could consist of a firewall that blocks unwanted traffic.  There are many more security controls each layer could potentially have to mitigate risks to the data even further.
 ## Risk
@@ -126,7 +130,7 @@ Security is usually considered a risk management function for an organization. 
 > *"The risk to organizational operations (including mission, functions, image, reputation), organizational assets, individuals, other organizations, and the Nation due to the potential for unauthorized access, use, disclosure, disruption, modification, or destruction of information and/or a system."* - NIST SP 800-12 Rev.1
 ### Qualitative Risk Management
 Most security departments attempt to measure security risk using qualitative and ordinal ratings such as high, medium, and low.  Even if the team uses numbers instead of high-low ratings, they still could be considered qualitative.  We will explore quantitative measures in the next section.  Those tasked with measuring security risk qualitatively will determine ratings using a risk matrix comprised of measures for *likelihood* (Y axis) and *impact* (X axis) as shown in the following matrix graphic.
-![[../images/01/qual_matrix.png|Risk Matrix|400]]
+![[../images/01/qual_matrix.png|Risk Matrix|300]]
 
 The risk analyst would first determine the rating for likelihood as high, medium, or low.  Next, she will assess the level of impact using the same rating scheme.  Finally, she would cross reference these two measures on the risk matrix to evaluate the risk level.  For example, a "high" impact and "low" likelihood assessment yields a "medium" risk level.
 
@@ -185,7 +189,7 @@ There are several laws and regulations in the United States and elsewhere in the
 
 Other countries also have laws that govern information security practices of organizations.  A popular law, **General Data Protection Regulation (GDPR)** in the European Union, establishes that organizations must adhere to privacy standards covering EU citizens' data and its security.  A US company conducting business in the EU, that meets the size threshold and collects EU citizen data, must follow this law or otherwise be fined significant amounts of money.  At the time of this writing, the current record for the largest fine by the GDPR is held by Meta in 2022 for $1.3 billion.
 
-States also pass laws that affect security requirements of entities doing business within their borders.  The **California Consumer Privacy Act (CCPA**) and the **New York State Department of Financial Services (NYDFS) Cybersecurity Regulation (23 NYCRR 500)** are well known state laws that set privacy standards and cybersecurity requirements for organizations operating in their jurisdiction that reach eligibility criteria.
+States also pass laws that affect security requirements of entities doing business within their borders.  The **California Consumer Privacy Act (CCPA)** and the **New York State Department of Financial Services (NYDFS) Cybersecurity Regulation (23 NYCRR 500)** are well known state laws that set privacy standards and cybersecurity requirements for organizations operating in their jurisdiction that reach eligibility criteria.
 
 The USC establishes high level requirements and outlines who and how they are enforced.  The law will declare what regulatory body of the executive branch enforces it and grants the regulator additional powers such as defining regulations that enforce the law.  Formal regulations are written as part of the Code of Federal Regulations (CFR) developed outside of the legislature by federal agencies.  Therefore, each law described above has a regulator that establishes additional rules for organizations to follow.
 
@@ -265,12 +269,12 @@ After an entity is authenticated, it will perform actions against a system.  Au
 
 There are two principles that should be followed when assigning or assessing entity permissions.  The **need to know principle** evaluates if the entity has a reasonable and confirmed use case for the system or its data.  An individual should not have access to a system if they do not have a justifiable reason, regardless of that individual's standing in the organization.  This often arises when granting access to an executive at a company.  Just because an executive is responsible for the organization does not mean they should have root access on a server.  If they are granted access when they do not need it, an undue exposure to system breach could be manifested should that executive's account every be compromised.  After determining if an entity should have access to the system, the administrator must apply permissions to the account, determining the level of access the entity will have.  Maintaining just enough access for the entity's use case is known as the **least privileged principle**.  Continuing with our executive example, perhaps that executive needs access to the server to download a specific report.  Providing root access to that server gives excessive permissions which violates the least privileged principle.  Perhaps the executive only needs "read" access to a specific folder or files on the server.  Granting only that narrow access will achieve the least privileged goal.
 ### Access Control
-There are several architectures to map entities with permissions and control access within information systems.  Engineers that design systems must consider the logic of how they authenticate and authorize access.  A common design to assign who can access what in a system is the **access control list (ACL)**.  The ACL lists each entity and the permission they have for an object in that system.  The image below is a screenshot taken from Microsoft Azure demonstrating an ACL for the "/myDirectory" object.  The object lists each principal's permissions on that object.
+![[../images/01/acl.png|Azure ACL|400]]
+There are several architectures to map entities with permissions and control access within information systems.  Engineers that design systems must consider the logic of how they authenticate and authorize access.  A common design to assign who can access what in a system is the **access control list (ACL)**.  The ACL lists each entity and the permission they have for an object in that system.  The image above is a screenshot taken from Microsoft Azure demonstrating an ACL for the "/myDirectory" object.  The object lists each principal's permissions on that object.
 
-![[../images/01/acl.png|Azure ACL|500]]
 The ACL is managed by the object's owner, who can assign which service principals can perform actions on the object.  This type of ACL where the owner of the object administers control is known as a **discretionary access control list (DACL)**.  There are other variants of access control to consider, such as **mandatory access control (MAC)** in which another system maintains what users can access data and systems under different data classifications.  Each entity is assigned a *clearance level* and information systems are labeled with a *data classification*.  When an entity requests data from the system, the clearance level and the classification label are checked against a control list to allow or block the request.
 
-![[../images/01/mac.png|Mandatory Access Control|600]]
+![[../images/01/mac.png|Mandatory Access Control|550]]
 
 An information system with thousands of service principals and millions of objects would become unmanageable.  Easing the burden of administering access promotes a more secure environment as it can streamline access decisions making a system less complicated.  One strategy to organize access is through **role-based access control (RBAC)** in which system administrators can create roles of permission sets.  Once the role is created and permissions assigned, the administrator adds users to the role who inherit the permissions.  This simplifies reviews of permissions much easier, as similar user groups will have consistent permissions assigned.
 ### Managing IAM
@@ -278,16 +282,129 @@ Organizations must establish processes to ensure effective access management on 
 
 It is common for a service principal's use case to change overtime.  This usually results in a user having more access than what is needed and is commonly referred to as *access drift*.  Identifying and correcting these issues requires frequent reviews and use case validations.  It can sometimes be contentious when removing permissions of a long-standing user, as they have grown accustomed to the higher level of access.  This resistance sometimes deters change, and it is important for a security professional to insist, when appropriate.  Another common issue is when the deprovisioning process fails to notify a system administrator to remove access.  If an employee is terminated, someone must notify the admin to remove that terminated employee's access, otherwise it will persist past employment.  Failing to revoke access timely exposes the organization to unauthorized access by a potentially disgruntled former employee.  In 2021, a New York Credit Union lost high volumes of financial data several days after terminating an employee.  The disgruntled ex-employee discovered they still had access to sensitive information systems and as an act of revenge, deleted important data. [^2]
 
+<br>
+
  >[!info] Info - Advanced IAM
  >We covered the basics of IAM in this chapter, but there is much more to learn.  Interested readers are encouraged to research more about advanced IAM topics such as OAuth and SAML protocols, OpenID Connect (OIDC), Single Sign-On (SSO), and systems for cross-domain identity management (SCIM).
+
+## Summary
+This chapter introduced foundational elements of an information security program.  It included how organizations identify, assess, and manage risks to their data and systems. The CIA triad (confidentiality, integrity, availability) was introduced as the guiding model for controls.  We also walked through compliance requirements from laws and regulations to frameworks and standards like SOC 2 and ISO 27001, and examined how governance, risk, and compliance (GRC) professionals map legal requirements to security controls.  The chapter described the roles and responsibilities of key positions within a security department and how policies and procedures build security culture within an organization.  Topics covering identity and access management to control access to systems and networks was highlighted alongside the importance of managing availability risk through business continuity and disaster recovery practices.
+
+>[!terms] Key Terms
+>**Access Control List (ACL)** -  A data structure that explicitly maps entities to their allowed permissions on a specific object.  
+>
+>**Actions on Objectives** - The final attack steps in which the adversary achieves their goals, such as data exfiltration or system disruption.  
+>
+>**Authentication, Authorization, and Accounting (AAA)** - The framework for confirming identity, granting permissions, and logging user activity.  
+>
+> **Availability** - A goal that information and systems are accessible when needed. 
+> 
+> **Business Continuity Planning (BCP)** - Developed procedures to ensure critical business functions can continue functioning during and after a disruption.  
+> 
+> **Business Impact Assessment (BIA)** - The exercise of quantifying the operational and financial effects of business process interruptions.  
+> 
+> **California Consumer Privacy Act (CCPA)** - A state law granting California residents rights over their personal information and mandating vendor data protection practices.  
+> 
+> **Center for Internet Security (CIS)** - A nonprofit organization that publishes consensus-based best-practice benchmarks and controls for securing IT systems.  
+> 
+> **CIA Triad** - A foundational information security model that is defined by three core objectives of protecting information: confidentiality, integrity, and availability.  
+> 
+> **Cloud Security Alliance (CSA)** - A nonprofit that develops best practices and frameworks for securing cloud computing environments.  
+> 
+> **Command & Control** - The channel through which an attacker remotely issues instructions and receives data from compromised systems.  
+> 
+> **Confidentiality** - Ensures that information is accessible only to authorized parties and remains secure from unauthorized access.  
+> 
+> **Control** - A safeguard or countermeasure implemented to mitigate risk by preventing, detecting, or correcting security incidents.  
+> 
+> **Data Classification** - The process of categorizing information based on its sensitivity and assigning appropriate protection controls.  
+> 
+> **Defense in Depth** - A security strategy that layers multiple controls across people, processes, and technologies to protect information assets and systems.  
+> 
+> **Delivery** - The phase in which the attacker transmits the weaponized payload to the target through channels such as email, web, or USB.  
+> 
+> **Disaster Recovery (DR)** - The practice of restoring IT systems and operations following a significant disruption or outage.  
+> 
+> **Discretionary Access Control List (DACL)** - An ACL managed by the object owner who decides which entities may access the object.  
+> 
+> **Exploit or Exploitation** - The method or technique used to leverage a vulnerability in order to deliver a payload or achieve unauthorized access.  
+> 
+> **Factor** - The type of credential (something you know, have, or are) presented during authentication.
+> 
+> **Family Educational Rights and Privacy Act (FERPA)** - A U.S. federal law that mandates the protection and privacy of student education records.  
+> 
+> **Federal Financial Institutions Examination Council (FFIEC)** - A consortium of U.S. financial regulators that issues guidance and examination procedures for IT security in banking.  
+> 
+> **Federal Information Security Management Act (FISMA)** - U.S. legislation that enforces security standards for federal information systems and their contractors.  
+> 
+> **Federal Risk and Authorization Management Program (FedRAMP)** - A U.S. government program that standardizes security assessment and authorization processes for cloud services.  
+> 
+> **General Data Protection Regulation (GDPR)** - An EU regulation that imposes stringent data protection and privacy requirements for processing the personal data of EU citizens.  
+> 
+> **Gramm-Leach-Bliley Act (GLBA)** - A U.S. law requiring financial institutions to implement safeguards for customer nonpublic personal information.  
+> 
+> **Health Insurance Portability and Accountability Act (HIPAA)** - A U.S. law that sets national standards for protecting electronic patient health information.  
+> 
+> **Identity and Access Management (IAM)** - The discipline of defining and enforcing digital identities and access rights across systems.  
+> 
+> **Identity** - The unique identifier (such as a username) used to represent an entity within a system.
+> 
+> **Installation** - The stage where malware or backdoors are planted on the compromised system to maintain persistence.
+> 
+> **Integrity** - Guarantees that information remains accurate and unaltered except by authorized actions.
+> 
+> **International Organization for Standardization (ISO) 27001** - The global standard specifying requirements for establishing and maintaining an Information Security Management System (ISMS).
+> 
+> **Least Privileged Principle** - The practice of granting entities the minimum permissions required in a system to accomplish their tasks.
+> 
+> **Mandatory Access Control (MAC)** - A policy model where access is enforced by the system based on labels and clearances rather than owner discretion.
+> 
+> **Maximum Tolerable Downtime (MTD)** - The longest duration a system or process can remain unavailable before causing unacceptable business harm.  
+> 
+> **National Institute of Standards and Technology (NIST) 800-53** - A NIST special publication that catalogs security and privacy controls for federal information systems.  
+> 
+> **Need to Know Principle** - The tenet that an entity should only access information or systems when there is a requirement to do so and as part of their legitimate duties.  
+> 
+> **New York State Department of Financial Services (NYDFS) Cybersecurity Regulation (23 NYCRR 500)** - A set of rules requiring financial services firms in New York to establish cybersecurity programs and controls.  
+> 
+> **Payload** - The component of an attack that includes the harmful action or malicious code that will exploit a vulnerability.
+> 
+> **Payment Card Industry Data Security Standards (PCI/DSS)** - Industry-mandated requirements designed to protect cardholder data in payment processing environments.
+> 
+> **Permissions** - The actions an authenticated entity is allowed to perform on a system resource.
+> 
+> **Reconnaissance** - The initial phase of an attack lifecycle where the adversary gathers information about the target’s systems and defenses.
+> 
+> **Recovery Point Objective (RPO)** - The maximum tolerable period in which data might be lost after an outage, expressed as a point-in-time.
+> 
+> **Recovery Time Objective (RTO)** - The target time within which systems or processes must be restored following an outage.
+> 
+> **Risk Assessments** - Systematic evaluations of threats, vulnerabilities, and potential impacts to determine security risk levels.
+> 
+> **Risk** - The potential for loss or damage when a threat exploits a vulnerability in an information asset.
+> 
+> **Role-Based Access Control (RBAC)** - A model where permissions are assigned to roles and entities inherit those permissions by being members of roles.
+> 
+> **Sarbanes-Oxley Act (SOX)** - A U.S. statute that enforces financial reporting integrity and internal control requirements for publicly traded companies.
+> 
+> **Service Organization Control Type 2 (SOC 2)** - An audit report by a licensed CPA assessing the operational effectiveness of an organization’s controls against Trust Services Criteria over time.
+>  
+> **Threat Actors** - Individuals or groups—such as insiders, cybercriminals, hacktivists, or nation-states—who carry out attacks against information systems.
+> 
+> **Threat** - Any circumstance or event with the potential to adversely impact information systems through unauthorized access, disruption, or destruction.
+> 
+> **Vulnerability** - A weakness in a system, process, or design that can be exploited by a threat actor.
+> 
+> **Weaponization** - The process of coupling exploit code with a payload to create a deliverable malicious artifact.
+
 ## Exercises
 Each chapter of this book will include lab exercises on the covered topics.  Readers are encouraged to complete the labs to gain practical experience and to demonstrate a deeper understanding of the material covered.  Many individuals in the security community contribute to the body of security knowledge through blog posts, how-to videos, and capture the flag challenges.  Becoming proficient in security requires the ability to set up scenarios in a lab environment and experiment with systems.  The labs in this book will use the infrastructure established in the following exercises.
 
 > [!exercise] Exercise 1.1 - Install VirtualBox
 > In this lab, you will install VirtualBox on your host machine to support three virtual machines (VMs) that will be used as test environments and support future lab coursework.
 >#### Step 1 - Download and Install VirtualBox
+>![[../images/01/lab_01_task_manager.png|Task Manager|400]]
 >1. Ensure your processor supports virtualization that is enabled in the BIOS/UEFI.  In Windows, this can be done using the Task Manager.  You must enable virtualization.  You will not be able to proceed with the course if your CPU does not support virtualization!
->![[../images/01/lab_01_task_manager.png|Task Manager|500]]
 >2. Navigate to [https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html](https://www.oracle.com/virtualization/technologies/vm/downloads/virtualbox-downloads.html) 
 >3. Select Installer (Windows, Mac OS X, Linux):
 > ![[../images/01/lab_02_vbox_download.png|VirtualBox Download page|400]]
@@ -299,102 +416,110 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > After VirtualBox is installed on your host machine, you will install a Kali Linux VM.  Kali is a Debian distribution maintained by Offensive Security.  It comes preinstalled with many security tools, lists, and apt repositories that we will be using throughout the course.  You will download the ISO image from the Kali website and manually install the operating system as a VM.  Once installation is complete, you will install the VirtualBox guest additions and configure the VM to share resources with your host computer.
 > 
 > #### Step 1 - Download and Setup Kali VM
-> 1. Navigate to [https://www.kali.org/get-kali/#kali-installer-images](https://www.kali.org/get-kali/#kali-installer-images)
-> 2. Select the download button for the 64-bit Installer image:
-> ![[../images/01/lab_04_kali_dowload.png|Kali Linux Download Page|400]]
-> 3. With the ISO for Kali fully downloaded (~10-20 minutes depending on internet speeds), navigate to the running VirtualBox application and select the “New” button:
+> 5. Navigate to [https://www.kali.org/get-kali/#kali-installer-images](https://www.kali.org/get-kali/#kali-installer-images)
+> 6. Select the download button for the 64-bit Installer image:
+> ![[../images/01/lab_04_kali_dowload.png|Kali Linux Download Page|200]]
+> 7. With the ISO for Kali fully downloaded (~10-20 minutes depending on internet speeds), navigate to the running VirtualBox application and select the “New” button:
 > ![[../images/01/lab_03_vbox_installed.png|VirtualBox Startup Windows|300]]
-> 4. The VirtualBox "Create Virtual Machine" wizard should appear.  Within the wizard, name the VM “kali” and select the Kali ISO location downloaded in the previous steps.  Then press the Next button.
-> 5. Within the "Hardware" wizard page, supply the VM with 4GBs memory and 2 processors (note, these settings can be increased or decreased later if needed) then press Next.
-> 6. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", change the "Disk Size" to 30GB and press the Next button.
-> 7. Within the "Summary" wizard page, review the settings and press Finish.
-> 8. With the “kali” VM selected, press the “Start” button to launch the VM in a new window:
+> 8. The VirtualBox "Create Virtual Machine" wizard should appear.  Within the wizard, name the VM “kali” and select the Kali ISO location downloaded in the previous steps.  Then press the Next button.
+> 9. Within the "Hardware" wizard page, supply the VM with 4GBs memory and 2 processors (note, these settings can be increased or decreased later if needed) then press Next.
+> 10. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", change the "Disk Size" to 30GB and press the Next button.
+> 11. Within the "Summary" wizard page, review the settings and press Finish.
+> 12. With the “kali” VM selected, press the “Start” button to launch the VM in a new window:
 > ![[../images/01/lab_05_kali_started.png|Kali Started|400]]
 > #### Step 2 - Install Kali Operating System
-> 1. Select “Graphical Install” within the VM window and hit enter to launch the operating system installation wizard.
-> 2. The VM's installation wizard starts on the "Select a language" page.  Select the language "English" and press Continue.
-> 3. While on the "Select your location" page, choose your location.  For example, "United States" and then press Continue.
-> 4. On the "Configure the keyboard page, select keyboard layout American English and press Continue.
-> 5. Allow the Kali installer to run and the wizard will eventually launch the "Configure the network" page.  Enter the hostname “kali” and press Continue.
-> 6. On the second "Configure the network page", leave "Domain name" field empty and Continue.
-> 7. Next, on the "Set up users and passwords" page, enter your name in the "Full name for the new user" field and press Continue.
-> 8. From the second "Set up users and passwords" page, enter your name as the username in the "Username for your account" field and press Continue.
-> 9. In the third "Set up users and passwords" page, enter a password in the "Choose a password for the new user" and the "Re-enter password to verify" fields.  Make sure you remember this password!  Press the Continue button to advance the installation.
-> 10. In the next wizard page "Configure the clock", select your time zone and press Continue.
-> 11. On the "Partition disks" page, allow a moment for the disks to be detected, then select the “Guided - use entire disk” option and press Continue.
-> 12. From the second "Partition disks" page, select default partition and press Continue.
-> 13. Within the third "Partition disks" page, select the “All files in one partition” option and press Continue.
-> 14. In the fourth "Partition disks" page, select the “Finish partitioning and write changes to disk” to commit the partition changes and then press Continue.
-> 15. On the fifth and last "Partition disks" page, select “Yes” to the "Write the changes to disks" question (note default option is no) and press Continue.
-> 16. While in the "Software selection" window, wait for the system to install.  Then use the default software selections and press continue.
-> 17. Once the software is installed, after waiting for ~25 minutes, the "Install the GRUB boot loader" window appears.  Select "Yes" and then press Continue.
-> 18. Still on the "Install the GRUB boot loader" page, select the available device `/dev/sda` (not "Enter device manually") and press Continue to install the boot loader.
-> 19. Wait some time for the installation to finish and the "Finish the installation" page will appear.  Press Continue to complete the installation.
+> 13. Select “Graphical Install” within the VM window and hit enter to launch the operating system installation wizard.
+> 14. The VM's installation wizard starts on the "Select a language" page.  Select the language "English" and press Continue.
+> 15. While on the "Select your location" page, choose your location.  For example, "United States" and then press Continue.
+> 16. On the "Configure the keyboard page, select keyboard layout American English and press Continue.
+> 17. Allow the Kali installer to run and the wizard will eventually launch the "Configure the network" page.  Enter the hostname “kali” and press Continue.
+> 18. On the second "Configure the network page", leave "Domain name" field empty and Continue.
+> 19. Next, on the "Set up users and passwords" page, enter your name in the "Full name for the new user" field and press Continue.
+> 20. From the second "Set up users and passwords" page, enter your name as the username in the "Username for your account" field and press Continue.
+> 21. In the third "Set up users and passwords" page, enter a password in the "Choose a password for the new user" and the "Re-enter password to verify" fields.  Make sure you remember this password!  Press the Continue button to advance the installation.
+> 22. In the next wizard page "Configure the clock", select your time zone and press Continue.
+> 23. On the "Partition disks" page, allow a moment for the disks to be detected, then select the “Guided - use entire disk” option and press Continue.
+> 24. From the second "Partition disks" page, select default partition and press Continue.
+> 25. Within the third "Partition disks" page, select the “All files in one partition” option and press Continue.
+> 26. In the fourth "Partition disks" page, select the “Finish partitioning and write changes to disk” to commit the partition changes and then press Continue.
+> 27. On the fifth and last "Partition disks" page, select “Yes” to the "Write the changes to disks" question (note default option is no) and press Continue.
+> 28. While in the "Software selection" window, wait for the system to install.  Then use the default software selections and press continue.
+> 29. Once the software is installed, after waiting for ~25 minutes, the "Install the GRUB boot loader" window appears.  Select "Yes" and then press Continue.
+> 30. Still on the "Install the GRUB boot loader" page, select the available device `/dev/sda` (not "Enter device manually") and press Continue to install the boot loader.
+> 31. Wait some time for the installation to finish and the "Finish the installation" page will appear.  Press Continue to complete the installation.
 > #### Step 3 - Configure Kali
-> 1. The system will reboot and launch the login menu.  Enter the username and password used during installation.  If the VM boots to a black screen, you may need to increase the "Video Memory" of the VM.  Navigate to VirtualBox, select your VM, press Settings, choose Display from the navigation menu on the left, and then increase the Video Memory.
+> 32. The system will reboot and launch the login menu.  Enter the username and password used during installation.  If the VM boots to a black screen, you may need to increase the "Video Memory" of the VM.  Navigate to VirtualBox, select your VM, press Settings, choose Display from the navigation menu on the left, and then increase the Video Memory.
 > ![[../images/01/lab_06_kali_login.png|Kali Login Screen|500]]
-> 2. The system will log in and present the Kali desktop.  Right click in the desktop and select “Open Terminal Here” from the context dropdown menu.
-> 3. With the terminal open, run the apt update command and then enter your password to update the system.
+> 33. The system will log in and present the Kali desktop.  Right click in the desktop and select “Open Terminal Here” from the context dropdown menu.
+> 34. With the terminal open, run the apt update command and then enter your password to update the system.
 > `sudo apt update -y`
-> 4. After updates have been installed, install the VirtualBox guest software using the following command. 
+> 35. After updates have been installed, install the VirtualBox guest software using the following command. 
 > ```
 > sudo apt install -y --reinstall virtualbox-guest-x11
 > ```
-> ![[../images/01/lab_07_kali_update.png|Kali Terminal Update and Install]]
-> 5. After the guest software is installed, select the Devices menu, Drag and Drop, and then the Bidirectional option.
-> ![[../images/01/lab_08_kali_drag_drop.png|VM Drag and Drop Setting]]
-> 6. Similarly, select the Devices menu, Shared Clipboard, and select the Bidirectional setting to enable copying clipboard values between the host and VM.
-> 7. Return to the Kali terminal and reboot the VM using the following command.
+> ![[../images/01/lab_07_kali_update.png|Kali Terminal Update and Install|500]]
+> After the guest software is installed, select the Devices menu, Drag and Drop, and then the Bidirectional option.
+> ![[../images/01/lab_08_kali_drag_drop.png|VM Drag and Drop Setting|400]]
+> Similarly, select the Devices menu, Shared Clipboard, and select the Bidirectional setting to enable copying clipboard values between the host and VM.
+> 
+> Return to the Kali terminal and reboot the VM using the following command.
 > ```
 > reboot
 > ```
 > Congratulations, you have successfully set up Kali in VirtualBox!  If you have adequate disk space (2x the recommended minimum) then you may consider taking a snapshot of the fresh installation in case you ever want/need to start with a clean install.
 
+
 >[!exercise] Exercise 1.3 - Install Ubuntu Virtual Machine
 > 
 > We will use an Ubuntu VM throughout the course as a victim, server, or to illustrate secure configurations.  Ubuntu is another Debian distribution maintained by Conical and is one of the most popular Linux operating systems.  You will download an ISO image and install the system using the unattended installation feature.  Once completed, we will configure the VM to share resources with the host.
-> #### Step 1 - Download and Setup Ubuntu VM
-> 1. Navigate to https://releases.ubuntu.com/22.04/ and download the Ubuntu version 22.0.4 image.
-> ![[../images/01/ubuntu22_download.png|Ubuntu Download Page]]
-> 2. With the ISO for Ubuntu fully downloaded (~10-20 minutes depending on internet speeds), navigate to the running VirtualBox application and select the “New” button.
-> 3. The VirtualBox "Create Virtual Machine" wizard will launch.  On the "Virtual machine Name and Operating System" page, enter "ubuntu" in the name field and select the Ubuntu ISO image you downloaded in the previous step.  Leave the "Skip Unattended Installation" checkbox UNCHECKED and press Next.
-> 4. Within the "Unattended Guest OS Install Setup" page, change the username to your name, enter a password, and change the domain name to "lan".  Ensure the "Guest Additions" option is checked and press Next.
-> 5. In the "Hardware" page, select a "Base Memory" of 4096MB and set "Processors" to 2 CPUs (these settings can be adjusted later if more/less resources are needed).
-> 6. On the "Virtual Hard disk" page, choose the option "Disk Size" and set it to 35 GBs then press Next.
-> 7. Review your settings on the "Summary" page and press "Finish" to complete the setup.
+> #### Step 1 - Download and Set Up Ubuntu VM
+> 37. Navigate to https://releases.ubuntu.com/22.04/ and download the Ubuntu version 22.0.4 image.
+> 38. With the ISO for Ubuntu fully downloaded (~10-20 minutes depending on internet speeds), navigate to the running VirtualBox application and select the “New” button.
+> 39. The VirtualBox "Create Virtual Machine" wizard will launch.  On the "Virtual machine Name and Operating System" page, enter "ubuntu" in the name field and select the Ubuntu ISO image you downloaded in the previous step.  Leave the "Skip Unattended Installation" checkbox UNCHECKED and press Next.
+> 40. Within the "Unattended Guest OS Install Setup" page, change the username to your name, enter a password, and change the domain name to "lan".  Ensure the "Guest Additions" option is checked and press Next.
+> 41. In the "Hardware" page, select a "Base Memory" of 4096MB and set "Processors" to 2 CPUs (these settings can be adjusted later if more/less resources are needed).
+> 42. On the "Virtual Hard disk" page, choose the option "Disk Size" and set it to 35 GBs then press Next.
+> 43. Review your settings on the "Summary" page and press "Finish" to complete the setup.
 > #### Step 2 - Install Ubuntu OS
-> 1. Observe the ubuntu VM has been configured and is running in the VirtualBox application.  Select the ubuntu entry and then the Show button to watch the installation progress.  The installation should take 20-30 minutes.
-> ![[../images/01/lab_10_ubuntu_install.png|Ubuntu OS Auto Installation]]
-> 2. Once installation is complete the VM will reboot to the login screen.  Login with the user account you setup in step 4.
-> #### Step 3 - Setup Ubuntu OS
-> 1. Like Kali, set up the shared clipboard and drag and drop VM settings.  Select Devices, Shared Clipboard, and choose Bidirectional.  Then select Devices, Drag and Drop, and choose Bidirectional.
+> 44. Observe the ubuntu VM has been configured and is running in the VirtualBox application.  Select the ubuntu entry and then the Show button to watch the installation progress.  The installation should take 20-30 minutes.
+> ![[../images/01/lab_10_ubuntu_install.png|Ubuntu OS Auto Installation|650]]
+> 45. Once installation is complete the VM will reboot to the login screen.  Login with the user account you setup in step 4.
+> #### Step 3 - Set Up Ubuntu OS
+> Like Kali, set up the shared clipboard and drag and drop VM settings.  Select Devices, Shared Clipboard, and choose Bidirectional.  Then select Devices, Drag and Drop, and choose Bidirectional.
+> 
 > Congratulations, you have successfully installed the Ubuntu VM on VirtualBox! If you have adequate disk space (2x the recommended minimum) then you may consider taking a snapshot of the fresh installation in case you ever want/need to start with a clean installation.
 
 
 > [!exercise] Exercise 1.4 - Install Windows Virtual Machine
 > The last VM we will be using in our lab environment is a Windows 10 machine.  Like Ubuntu, it will act as a victim, server, or be used to demonstrate secure configurations.  You will install an evaluation version so there is no need to purchase a license.  To obtain the ISO, you will download the Windows installation media tool to your host machine, configure the desired ISO, and download it.  You will then create a VM using this ISO and use the unattended installation feature.  After installation we will set up the ability to share resources between the host and the VM.
 > #### Step 1 - Download the Windows ISO
-> 1. Navigate to https://www.microsoft.com/en-us/software-download/windows10 and press the "Download Now" button under the "Create Windows 10 installation media" section.
-> ![[../images/01/lab_11_win_download.png|Download Media Creation Tool|500]]
-> 2. Open the Downloads folder and run the Media Creation Tool executable which will launch the "Windows 10 Setup" wizard in a new window.
-> 3. Within the "Windows 10 Setup" window, accept the licensing and choose “Create installation media (USB flash drive, DVD, or ISO file) for another PC” option.
-> 4. On the "Choose which media to use" page of the wizard, use the recommended options and select ISO file.
+> 46. Navigate to https://www.microsoft.com/en-us/software-download/windows10 and press the "Download Now" button under the "Create Windows 10 installation media" section.
+> ![[../images/01/lab_11_win_download.png|Download Media Creation Tool|450]]
+> 47. Open the Downloads folder and run the Media Creation Tool executable which will launch the "Windows 10 Setup" wizard in a new window.
+> 48. Within the "Windows 10 Setup" window, accept the licensing and choose “Create installation media (USB flash drive, DVD, or ISO file) for another PC” option.
+> 49. On the "Choose which media to use" page of the wizard, use the recommended options and select ISO file.
 > ![[../images/01/lab_12_win_iso.png|Media Creation Tool ISO Selection|400]]
-> 5. Select the location to save the ISO and the download will begin.  Select Finish once complete (no need to burn to DVD) and the download process should begin.  The download may take 10 to 20 minutes depending on your internet connection.
-> #### Step 2 - Setup the Windows VM
-> 1. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
-> 2. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
-> 3. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Doman Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key; press the Next button.
-> 4. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
-> 5. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
-> 6. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
-> ![[../images/01/lab_13_win_summary.png|Windows VM Summary|500]]
+> 50. Select the location to save the ISO and the download will begin.  Select Finish once complete (no need to burn to DVD) and the download process should begin.  The download may take 10 to 20 minutes depending on your internet connection.
+> #### Step 2 - Set Up the Windows VM
+> 51. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
+> 52. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
+> 53. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Domain Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key; press the Next button.
+> 54. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
+> 55. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
+> 56. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
+> 57. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
+> 58. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
+> 59. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Domain Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key; press the Next button.
+> 60. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
+> 61. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
+> 62. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
+> ![[../images/01/lab_13_win_summary.png|Windows VM Summary|350]]
 > #### Step 3 - Install Windows OS
-> 1. Windows should take 20-30 minutes to install and can be monitored by selecting Show in VirtualBox on the running windows VM.
-> ![[../images/01/lab_14_win_install.png|Windows VM Installation]]
-> #### Step 4 - Setup Windows OS
-> 1. After the installation is complete, you will be automatically logged into the VM to the Windows desktop.  You may have to adjust the VirtualBox View settings and/or the Windows display settings for the best experience.  If your window does not show the file menu, try using VirtualBox shortcut keys to display (in Windows right CTRL + Home button). 
-> 2. Like Kali and Ubuntu VMs, set up the shared clipboard and drag and drop VM settings. Select Devices, Shared Clipboard, and choose Bidirectional. Then select Devices, Drag and Drop, and choose Bidirectional.
+> 63. Windows should take 20-30 minutes to install and can be monitored by selecting Show in VirtualBox on the running windows VM.
+> ![[../images/01/lab_14_win_install.png|Windows VM Installation|500]]
+> #### Step 4 - Set Up Windows OS
+> 64. After the installation is complete, you will be automatically logged into the VM to the Windows desktop.  You may have to adjust the VirtualBox View settings and/or the Windows display settings for the best experience.  If your window does not show the file menu, try using VirtualBox shortcut keys to display (in Windows right CTRL + Home button). 
+> 65. Like Kali and Ubuntu VMs, set up the shared clipboard and drag and drop VM settings. Select Devices, Shared Clipboard, and choose Bidirectional. Then select Devices, Drag and Drop, and choose Bidirectional.
 > 
 > Congratulations, you have successfully installed Windows in VirtualBox!  If you have adequate disk space (2x the recommended minimum) then you may consider taking a snapshot of the fresh installation in case you ever want/need to start from a clean installation.
 

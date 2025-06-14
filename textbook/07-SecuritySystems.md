@@ -1,13 +1,15 @@
-# Chapter 7 - Security Systems
-![](../images/07/security_patch.jpg)
-
-There are preventative and detective controls that security professionals can implement to protect the security of computer systems and networks.  Tooling often accompanies a control, where some technology or software is used to achieve a secure outcome.  The aim of some security solutions is to prevent the compromise of systems whereas other solutions attempt to detect when a compromise occurs.  This chapter starts with an overview of statistics by leading cybersecurity research groups that analyze industry trends on how organizations get compromised.  We will cover tooling and processes that focus on software vulnerabilities as well as the susceptibility of end users as these are the common system compromise vectors.  We will also cover insiders that purposefully or inadvertently breach the security of data and systems.  In addition, this chapter will explore a couple of common technologies that are used to detect network intrusions.  While we will not cover all the security systems available to professionals, readers will gain a firm understanding of the capabilities and goals this class of tooling offers.
+<span class="chapter-banner">Chapter 7</span>
+# Security Systems
+<div class="image-crop">
+  <img src="../images/07/security_patch.jpg">
+</div>
 
 **Objectives**
 1. Explain how the vulnerability ecosystem works from discovery to remediation.
 2. Understand the role of security training to prevent initial access by threat actors.
 3. Demonstrate the use of threat detection systems commonly used in organizations.
 
+There are preventative and detective controls that security professionals can implement to protect the security of computer systems and networks.  Tooling often accompanies a control, where some technology or software is used to achieve a secure outcome.  The aim of some security solutions is to prevent the compromise of systems whereas other solutions attempt to detect when a compromise occurs.  This chapter starts with an overview of statistics by leading cybersecurity research groups that analyze industry trends on how organizations get compromised.  We will cover tooling and processes that focus on software vulnerabilities as well as the susceptibility of end users as these are the common system compromise vectors.  We will also cover insiders that purposefully or inadvertently breach the security of data and systems.  In addition, this chapter will explore a couple of common technologies that are used to detect network intrusions.  While we will not cover all the security systems available to professionals, readers will gain a firm understanding of the capabilities and goals this class of tooling offers.
 ## Industry Statistics
 The impact to an organization that experiences a data breach can be highly destructive.  Depending on the threat actor and their level of success in the compromise, the organization could lose its ability to conduct business, lose its intellectual property and data, and damage its reputation, among many other risks.  Mature organizations will ensure to focus on security in order to prevent or minimize the realization of these risks.
 
@@ -15,9 +17,9 @@ In the Information Security chapter, we explored the attacker lifecycle, which u
 
 There are a handful of large organizations that have a vantage point on the security of the internet.  For example, Verizon is a large internet service provider as it provides millions of devices internet access through their cellular networks.  This company takes security very seriously and has invested in the creation of security research that analyzes the types of breaches and malicious traffic patterns across their services.  From these experiences and data, they draw insights and statistics and publish their findings within an annual breach report.  But Verizon is not the only such company to provide this kind of research and reporting.  Many large cybersecurity companies, such as those that conduct incident investigations, leverage their cases and data to create similar reports that compare attacker methodologies that are used over time.  CrowdStrike is a highly reputable and offers high quality products and services that detect and respond to security threats in real time.
 
-Studying these reports provides the industry with valuable insights on where an organization could focus their security efforts and investments.  The 2023 Verizon Data Breach Investigations Report (DBIR) includes many insightful statistics of the modern threat landscape.  For instance, they found that 83% of data breaches involved external actors - which implies that 17% were caused by internal actors.  Such a high proportion of external actors makes sense; however, if all an organization's efforts focused only on external threats, they would miss a material vector of security risk.  Further in the report, Verizon produces statistics on the causes of data breaches that include 49% Credentials, 12% Phishing, and 5% Exploits. [^1]  
-
 ![[../images/07/verizon_2023_dbir.png|Verizon 2023 DBIR - Summary of Findings|450]]
+
+Studying these reports provides the industry with valuable insights on where an organization could focus their security efforts and investments.  The 2023 Verizon Data Breach Investigations Report (DBIR) includes many insightful statistics of the modern threat landscape.  For instance, they found that 83% of data breaches involved external actors - which implies that 17% were caused by internal actors.  Such a high proportion of external actors makes sense; however, if all an organization's efforts focused only on external threats, they would miss a material vector of security risk.  Further in the report, Verizon produces statistics on the causes of data breaches that include 49% Credentials, 12% Phishing, and 5% Exploits. [^1]  
 
 The image above from the DBIR illustrates the summary findings from its 2023 report.  It can provide the basis of a roadmap for an organization on how to think about and approach the prevention of data breaches.  Using these statistics, an organization may determine that the need for good password hygiene, strong authentication systems, email protections, and vulnerability management solutions can reduce the probability of common data breaches.  There is a lot of data produced by companies like Verizon and CrowdStrike that will not always reflect where an organization should invest security resources.  Not all concerned organizations have the same threat profile, so it is important to consider the context of a business's operations and other data sources before fully investing in a security vector solution.
 ## Vulnerability Management
@@ -35,7 +37,7 @@ There is a rich community, driven ecosystem surrounding vulnerabilities and how 
 
 This POC code can be run to exploit the vulnerability, demonstrating the security issue.  It can also be used to assist the software maintainer to test patches to the vulnerable software by verifying that the exploit no longer works.  Once the researcher finds a vulnerability, they have a few options on how to proceed:
 
-1. **Responsible Disclosure** - This process leads the security researcher to work with the software maintainer directly on the vulnerability and its remediation.  The resolution and speed of its availability are at the mercy of the software maintainer.  Some maintainers are quick to resolve while others may work very slowly to release a patch - sometimes many months.  In this disclosure, the researcher and maintainer come to terms on when a patch becomes available and the researcher waits a several days, usually 30, before publishing any research on the internet.  This window provides administrators time to update their systems before the researcher publicly announces the details on the security issue.  Without this window of time, many systems would be needlessly exposed to a known security issue that has instructions on how to exploit it on the internet.
+1. **Responsible Disclosure** - This process leads the security researcher to work with the software maintainer directly on the vulnerability and its remediation.  The resolution and speed of its availability are at the mercy of the software maintainer.  Some maintainers are quick to resolve while others may work very slowly to release a patch - sometimes many months.  In this disclosure, the researcher and maintainer come to terms on when a patch becomes available and the researcher waits several days, usually 30, before publishing any research on the internet.  This window provides administrators time to update their systems before the researcher publicly announces the details on the security issue.  Without this window of time, many systems would be needlessly exposed to a known security issue that has instructions on how to exploit it on the internet.
 2. **Public Disclosure** - A vulnerability and/or POC published on the internet for anyone to use without any advance notice to the software or system maintainer.  Such disclosure is not recommended as it leaves software users exposed to attack without having a solution to mitigate the vulnerability.  However, public disclosures occur frequently whether by accident or intentionally.  This can occur inadvertently if a researcher publishes on a public forum thinking that it is private.  But many times, security researchers, perhaps feeling jaded by vendor responses or lack thereof, publish vulnerabilities when there is no patch available.  The motivations may be out of spite or could result from exhausting efforts to disclose responsibly.  Sometimes software vendors do not see fit to resolve the security issue in a timely manner leaving the security researcher with no alternative options.  System administrators may want to know of security issues regardless of if the software maintainer is unresponsive.  The downside of this is that administrators only choice could be to shut down the affected system software if no fix is available.
 3. **Exploit Market** - Another option available to researchers is to sell the vulnerability and its exploit on the black market to parties interested in it as a cyber weapon.  These are usually limited to the highest severity security bugs and can be financially lucrative for the researcher.  Some sales can be up to a million dollars.  *Black market* sales are those in which the researcher illegally, or at least unethically, sells the exploit to a group that plans to use it with malicious intent.  Authorities would likely prosecute the researcher, if ever caught.  However, in *grey market sales*, the researcher works with semi-legitimate exploit brokers who negotiate the sale of the exploit to a somewhat legitimate 3rd party.  For example, the United States' National Security Agency (NSA) has been known to legitimately purchase exploits from such channels. [^2]  But this can still be a risky endeavor for the researcher as they do not necessarily know or control who is buying the exploit since they are working through a broker. 
 
@@ -46,7 +48,7 @@ The disclosure process can be laborious for the researcher, maintainer, and thos
 
 Therefore, streamlining the vulnerability disclosure process and centralizing its data benefits all parties involved while promoting further discovery in the security field.  Over the years, the vulnerability management ecosystem has evolved with strong support from the US federal government and private organizations like MITRE.   Consider the following graphic which illustrates the interaction of several systems that support the vulnerability ecosystem.
 
-![[../images/07/vuln_ecosystem.png|Vulnerability Management Ecosystem|350]]
+![[../images/07/vuln_ecosystem.png|Vulnerability Management Ecosystem|450]]
 
 After a security bug is discovered, the researcher files a **common vulnerabilities and exposures (CVE)** report.  Some large software maintainers like Microsoft, have dedicated classification and reporting requirements and are treated as a *CVE numbering authority (CNA)*.  CNA's require a researcher to file directly with the software maintainer and the maintainer integrates reports with the larger CVE program.  Otherwise, the CNA MITRE can be used for any software maintainer not designated as a CNA.  The MITRE organization is the original creator of the CVE system.  You may recall covering their MITRE ATT&CK Framework in earlier chapters.  They have contributed greatly to the security community as a non-profit organization and have established themselves as a critical resource for valuable security information.  
 
@@ -62,7 +64,7 @@ Vulnerability management scanning tools, such as Nessus, download the NVD databa
 >I decided to load up the vulnerable version of the software in my lab environment and explore the source code where the vulnerability was reported.  I could see that user input from an HTTP host header was only partially validated before being passed to an exec function.  This software bug leads to an unauthenticated user's ability to execute arbitrary commands on the system.  Compounding the issue, the plugin and service runs as root which would give an attacker full administrative control over the firewall.  Looking at the applied patch, I could see that the developer updated the code to escape the user input nested in the exec function call, thus mitigating this particular bug.
 >
 >Surveying the rest of the source code within the PHP file that had the original vulnerability, I found that in just another dozen lines of code or so, there was another exec function using the same input pattern as the original vulnerability.  Surprised, I crafted a payload that exploited the vulnerability and confirmed a second undisclosed RCE vulnerability that was not yet patched!  I reached out to the software maintainer, submitted a report to MITRE and was assigned CVE-2022-40624.  The software maintainer quickly issued another patch, and I published the CVE and GitHub post sometime later (https://github.com/dhammon/pfBlockerNg-CVE-2022-40624).  
->![[../images/07/cve_2022-40624.png|NIST CVE-2022-40624 Record|400]]
+>![[../images/07/cve_2022-40624.png|NIST CVE-2022-40624 Record|500]]
 >I could imagine how the original researcher overlooked this second vulnerability due to having found the original high impact issue which would have been very exciting.  They might have forgone any further research in light of the critical bug discovered due to their excitement or time constraints.  Just goes to show you that the only way you discover vulnerabilities is by being curious and going out of your way to look for them.  Come to think of it, as soon as I discovered my RCE vulnerability, I stopped looking too!
 
 >[!activity] Activity 7.1 - Nessus Vulnerability Scan
@@ -70,11 +72,11 @@ Vulnerability management scanning tools, such as Nessus, download the NVD databa
 >
 >Before starting any VMs, I set each VM's network settings to the previously created "NatNetwork" under the Settings and Network menu.  Once configured, I start each VM whose IP will be in the assigned 10.0.2.0/24 subnet range.
 >
->![[../images/07/vuln_activity_network_setting.png|Assigning NAT Network Settings|600]]
+>![[../images/07/vuln_activity_network_setting.png|Assigning NAT Network Settings|700]]
 >
 >With the VMs started in the NatNetwork, I navigate to the Tenable website (https://www.tenable.com/products/nessus/activation-code) and register for the Nessus Essentials free license.  Tenable requires the use of a business email to register so I provided my college email address.  Once submitted I receive an email from Nessus with an activation code I can use when installing the tool.
 >
->![[../images/07/vuln_activity_nessus_register.png|Nessus Registration Pages|600]]
+>![[../images/07/vuln_activity_nessus_register.png|Nessus Registration Pages|700]]
 >
 >
 > From within the Kali VM, I navigate to the Nessus download page hosted on Tenable's website (https://www.tenable.com/downloads/nessus?loginAttempted=true).  I select the `Linux - Debian - amd64` platform that matches the Kali operating system and download the Nessus version 10.7.0 that is the most up-to-date version at the time of this writing.
@@ -118,11 +120,11 @@ Vulnerability management scanning tools, such as Nessus, download the NVD databa
 > 
 > The initialization of plugin downloads and installation takes a couple of minutes before the system logs in and I am presented with the Nessus home page.  A few temporary messages pop up that inform me the plugin data downloads are in progress and need to be completed before running a scan.  In the upper right corner of the page, I observe a spinning circular arrow icon suggesting that these efforts are in progress.  From previous experience, it will take an hour or two for the process to complete.
 > 
-> ![[../images/07/vuln_activity_splash_page.png|Nessus Logged In Splash Page]]
+> ![[../images/07/vuln_activity_splash_page.png|Nessus Logged In Splash Page|750]]
 > 
 > Once the installation of plugins and databases is complete, I am ready to start scanning.  I press the `New Scan` button on the main page upper right corner and select "Basic Network Scan" within the Scan Templates.
 > 
-> ![[../images/07/vuln_activity_scan_template.png|New Scan Template Selection|500]]
+> ![[../images/07/vuln_activity_scan_template.png|New Scan Template Selection|600]]
 > 
 > This leads me to the scan configuration page starting with the Settings tab, Basic menu section, and General subitem.  I enter the name of the scan as "Initial" and enter the CIDR range 10.0.2.0/24 for the targets.  Then I press the Save button at the bottom of the form.
 > 
@@ -134,16 +136,16 @@ Vulnerability management scanning tools, such as Nessus, download the NVD databa
 > 
 > Eventually, the scan finishes and displays results per host by severity and volume.
 > 
-> ![[../images/07/vuln_activity_host_results.png|Vulnerabilities by Severity and Host]]
+> ![[../images/07/vuln_activity_host_results.png|Vulnerabilities by Severity and Host|675]]
 > 
 > Selecting one of the hosts will list its vulnerabilities that were identified by the scan.  Selecting one of the vulnerabilities will reveal additional information on the issue including remediation guidelines.
 > 
-> ![[../images/07/vuln_activity_finding.png|High Severity Result For 10.0.2.15]]
+> ![[../images/07/vuln_activity_finding.png|High Severity Result For 10.0.2.15|675]]
 
 ## Email Architecture
 As we learned from Verizon's DBIR, phishing emails and human interactions are material factors in relation to system and data breaches at organizations.  It is therefore worth understanding how email works, the risks it imposes, and how to secure it to best mitigate the threats faced by organizations.  Let us first begin with the basics of email system architecture.
 
-![[../images/07/email_arch.png|Basic Email Architecture|400]]
+![[../images/07/email_arch.png|Basic Email Architecture|500]]
 
 Starting with the PC hardware on the bottom left corner, an email is created from the device's email software and then sent to its mail server using the *simple mail transfer protocol (SMTP)* over port 25 or the TLS encrypted port 587.  Mail servers are configured to maintain segregated mailboxes for each of its users' ensuring privacy between accounts.  Over SMTP, an email is relayed to the destination mail server by the receiving mail server.  The first mail server knows where to send the email due to the DNS *mail exchange (MX)* record associated with the domain of the receiver.  Many email system administrators will install an email security gateway device, sometimes on the same device as a *mail transfer agent (MTA)*, to inspect and relay incoming and outgoing email.  The email destined for the client on the bottom right of the diagram sits at their mail server until the client's device checks the mail server's inbox and retrieves any new messages.  Messages can be transferred from the server to the client via the *internet message access protocol (IMAP)* or the *post office protocol (POP)*.  IMAP protocol retrieves messages, over ports 143 or TLS encrypted port 993, but leaves a copy on the server.  This ensures that any other client device connected to the same mailbox can also retrieve messages.  Messages retrieved via POP, over ports 110 or TLS encrypted port 995, remove the email from the mail server storing the only copy on the client PC.
 ### Email System Risks
@@ -190,11 +192,11 @@ Attacker behaviors can be identified by the types of network packets they send, 
 
 These systems deployed on devices are referred to as *host-based IDS (HIDS)* and can monitor network, file, and process activities.  IDS/IPS systems are often found within secured networks installed on firewalls and routers or as stand-alone *security appliances*.  Network based IDS/IPS solution architecture options are *tap* or *inline*.  Under the tap architecture, the appliance is installed and connected to a networking device such as a router or switch.  The network device interfaces are *mirrored*, or traffic is cloned, and forwarded to the IDS appliance.  The appliance then inspects the traffic for IoA/IoCs and alerts appropriately.  This tap architecture only works for IDS since the inspected traffic is only a copy and the original, as demonstrated in the following image.
 
-![[../images/07/tap_arch.png|IDS Tap Architecture|350]]
+![[../images/07/tap_arch.png|IDS Tap Architecture|400]]
 
 However, an inline architecture supports both IDS and IPS as all traffic is first routed through the security appliance before being passed along to the networking equipment.  The appliance can then drop network packets with IoA/IoCs preventing the malicious activity from reaching its destination.
 
-![[../images/07/inline_arch.png|IDS/IPS Inline Architecture|350]]
+![[../images/07/inline_arch.png|IDS/IPS Inline Architecture|400]]
 
 The inline architecture could become a bottleneck for network activity as it must process and inspect all network traffic.  This could result in the unavailability of network resources which may be intolerable.  Under such requirements, using the tap architecture ensures that the network will not become unavailable due to the security appliance.  However, the tap architecture would not prevent malicious activity and often will not inspect all traffic if it reaches capacity.  Systems, network, and security engineers must come to terms for which risks they want to optimize, security or performance.
 
@@ -203,7 +205,7 @@ The quality of a written rule may depend on how well the IoA/IoC detects a given
 
 The syntax and layout of a rule is largely dependent on the security system for which it is being written.  One popular IDS/IPS security solution is the free and open-source tool Snort.  It has been around for many years and has wide community support.  The following image breaks down the anatomy of a demo rule from Snort's documentation on https://docs.snort.org/rules/.  
 
-![[../images/07/snort_rule.png|Demo Snort Rule Anatomy|550]]
+![[../images/07/snort_rule.png|Demo Snort Rule Anatomy|600]]
 
 Each rule must include a header and option section.  The header is the first line of the rule and includes the action, TCP and/or UDP protocol, source address and port, directionality of the network request (ingress or egress), and the destination addresses or ports.  The system allows for macro variables and supports IP and port ranges.  The body of the rule is called options and is a list of key value pairs.  Many options are not required and only a few are listed in this image sample.  However, common options include the `msg` key which is used as the name or description of the alert, the `flow` of data, the `file_data`, the `content` to be found, the `service` to inspect, and the `sid` to uniquely index the rule.
 
@@ -215,15 +217,14 @@ Each rule must include a header and option section.  The header is the first lin
 >sudo apt update -y
 >sudo apt install snort -y
 >```
->
->![[../images/07/snort_activity_install.png|Installing Snort on Ubuntu VM|600]]
+>![[../images/07/snort_activity_install_2.png|Installing Snort on Ubuntu VM|500]]
 >
 >Next, I download the PCAP from the accompanying support files and unzip its contents.  The file is originally from https://malware-traffic-analysis.net/ and has been password protected with the word `infected`.
 >```bash
 >cd ~/Downloads
 >unzip 2016-04-16-traffic-analysis-exercise.pcap.zip
 >```
->![[../images/07/snort_activity_unzip.png|Unzipping PCAP|600]]
+>![[../images/07/snort_activity_unzip.png|Unzipping PCAP|500]]
 >This PCAP includes case information surrounding a phishing site with a spoofed PayPal credentials form.  The indicators of attack include the IP address 91.194.91.203 on port 80 and the page includes the keyword "paypal".  With this information I create a Snort detection rule that can be used to detect network traffic reaching the malicious site.  The following command adds the custom rule to the local rules file in the Snort configuration.
 >```bash
 >sudo su -
@@ -231,14 +232,14 @@ Each rule must include a header and option section.  The header is the first lin
 >exit
 >```
 >
->![[../images/07/snort_activity_custom_rule.png|Creating Custom Snort Rule|600]]
+>![[../images/07/snort_activity_custom_rule.png|Creating Custom Snort Rule|550]]
 >
 >With the rule in place, I scan the PCAP file using Snort.  The following command uses the default configuration file, reads the PCAP file to the console, and has the options `-q` which removes the banner, `-K` enables logging mode, and `-A` that enables alert mode.
 >```bash
 >sudo snort -c /etc/snort/snort.conf -r 2016-04-16-traffic-analysis-exercise.pcap -q -k none -A console
 >```
 >
->![[../images/07/snort_activity_scan.png|Scanning PCAP With Snort|600]]
+>![[../images/07/snort_activity_scan.png|Scanning PCAP With Snort|400]]
 >
 >Snort alerts on several items, but notably it alerts on the PayPal phishing from the rule created earlier!
 
@@ -276,39 +277,85 @@ The image above illustrates an attacker making a network connection to a honeypo
 > ```bash
 > sudo apt install python3-pip -y
 > ```
-> ![[../images/07/honey_activity_pip_install.png|Installing Python3 PIP|600]]
+> ![[../images/07/honey_activity_pip_install.png|Installing Python3 PIP|500]]
 > Once Pip is installed, I install the honeypots Python module with the following command.  Several supporting dependencies are installed alongside the honeypots module.
 > ```bash
 > sudo apt install python3-pip -y
 > pip3 install honeypots
 > ```
 > 
-> ![[../images/07/honey_activity_install.png|Installing Honeypots Module|600]]
+> ![[../images/07/honey_activity_install.png|Installing Honeypots Module|500]]
 > 
 > I also check the IP address of the Ubuntu VM to use later in the attack.  I can see my IP address is 192.168.4.169.
 > ```bash
 > ip a
 > ```
 > 
-> ![[../images/07/honey_activity_ip.png|Ubuntu IP Address Check|600]]
+> ![[../images/07/honey_activity_ip.png|Ubuntu IP Address Check|500]]
 > 
 > The final step to set up the MySQL honeypot is to run Python specifying the honeypots module with the setup option that targets the MySQL service and port, as shown in the following command.  The command's output displays the service settings and suggests that everything looks good.
 > ```bash
 > python3 -m honeypots --setup mysql:3306
 > ```
-> ![[../images/07/honey_activity_honeypot_setup.png|Running the MySQL Honeypot|600]]
+> ![[../images/07/honey_activity_honeypot_setup.png|Running the MySQL Honeypot|500]]
 > With the honeypot setup and running, I start the Kali VM in Bridge Adapter network mode which will serve as the attacker.  After logging in and opening a terminal, I attempt a MySQL connection to the honeypot using the MySQL client already installed on Kali.  I guess a username (admin) and password (Password123) to simulate an attacker probe but receive a valid MySQL error 1045.  This would lead the attacker to believe that the MySQL server is valid, but the guessed credentials were not valid.
 > ```bash
 > mysql -h 192.168.4.169 -u admin -pPassword123
 > ```
 > 
-> ![[../images/07/honey_activity_attack.png|Attacker Connecting to MySQL Honeypot|600]]
+> ![[../images/07/honey_activity_attack.png|Attacker Connecting to MySQL Honeypot|500]]
 > 
 > Jumping over to the Ubuntu VM and observing the honeypot log, I can see the attacker connection attempt!  It includes information such as the timestamp, guessed username, and source IP address from where the attack came.
 > 
-> ![[../images/07/honey_activity_log.png|Honeypot Log of Attack|600]]
+> ![[../images/07/honey_activity_log.png|Honeypot Log of Attack|500]]
 > 
 > In a full setup, this log would be used to trigger an alert to a security operations team that would investigate and determine the severity of the event.
+
+## Summary
+We began the chapter by distinguishing between preventative and detective controls that range from vulnerability management and patching workflows to the role of email security protocols like SPF, DKIM, and DMARC.  These controls reduce exposure to common vectors such as software flaws and phishing attacks.  We explored the full vulnerability lifecycle, from researcher discovery and CVE registration through NIST CVSS scoring and automated scanning by tools like Nessus, emphasizing the importance of clear separation between vulnerability management and patch management roles.  Next, we examined network and host‐based detection systems (IDS/IPS), including tap versus inline architectures, and the critical balance between security and performance when tuning detection rules to minimize errors (false positives and false negatives).  We then discussed human-centric defenses, highlighting security awareness training, simulated phishing campaigns, and the classification of indicators of attack (IoA) and compromise (IoC) within SIEM platforms.  Finally, we introduced deceptive security measures, like canary tokens and honeypots, as proactive methods to lure attackers, generate high‐fidelity alerts, and close the gap between breach detection and response.
+
+>[!terms] Key Terms
+>**Canary Tokens** - Covert markers embedded in files, credentials, or URLs that trigger an alert when an attacker interacts with them, signaling potential unauthorized activity.
+>
+>**Common Vulnerabilities and Exposures (CVE)** - A standardized catalog of publicly known security flaws, each assigned a unique identifier to facilitate consistent reference across tools and advisories.
+>
+>**Common Vulnerability Scoring System (CVSS)** - An industry‐standard framework for quantifying the severity of a security vulnerability on an objective scale from 0.0 to 10.0.
+>
+>**Data Loss Prevention (DLP)** - Systems and processes that detect, alert, and block attempts to exfiltrate sensitive information from an organization’s devices or network.
+>
+>**Deceptive Security** - Deploying decoy resources, such as honeypots and canary tokens, to mislead attackers and generate high‐fidelity alerts when those lures are accessed.
+>
+>**Domain Based Message Authentication Reporting and Conformance (DMARC)** - An email authentication policy framework that specifies how receivers should handle messages failing SPF or DKIM checks, using policies of none, quarantine, or reject.
+>
+>**Domain Keys Identified Mail (DKIM)** - A system where recipients can validate that asymmetrically signed email messages are from an authorized source by using the sender's published public key stored in a DNS record.
+>
+>**Exploit Market** - Commercial and clandestine channels where researchers or brokers sell working attack code that leverages high-severity vulnerabilities for offensive use.
+>
+>**Honeypot** - A decoy server or service deliberately configured to appear vulnerable or designed to attract attackers and generate alerts when it is probed or compromised.
+>
+>**Indicators of Attack (IoA)** - Signatures of suspicious behavior, such as a malformed HTTP request carrying a payload, that signal an ongoing or imminent attack.
+>
+>**Indicators of Compromise (IoC)** - Artifacts, like malware footprints or anomalous log entries, that confirm a security breach has already occurred.
+>
+>**Intrusion Detection System (IDS)** - A monitoring solution that inspects network or host activity in passive mode and generates alerts when configured IoAs or IoCs are matched.
+>
+>**Intrusion Prevention System (IPS)** - An inline security appliance that not only detects but also blocks malicious traffic in real-time based on predefined rules.
+>
+>**National Vulnerability Database (NVD)** - NIST’s public repository of CVE records enriched with CVSS scores and metadata to support automated vulnerability management.
+>
+>**Pretty Good Privacy (PGP)** - A content encryption system that uses asymmetric public key cryptography to secure email and file data end-to-end.
+>
+>**Public Disclosure** - The act of publishing vulnerability details or proof‐of‐concept code without prior coordination with the software maintainer, potentially exposing users to risk before a patch is available.
+>
+>**Responsible Disclosure** - The coordinated practice where a security researcher privately reports a vulnerability to the vendor or software maintainer, allows time for remediation, and only then publicly shares the details.
+>
+>**Security Awareness Training** - Structured education for end users that teaches them to recognize, report, and prevent security threats such as phishing and social engineering.
+>
+>**Sender Policy Framework (SPF)** - A DNS‐based email validation system that specifies which mail servers are authorized to send messages on behalf of a domain.
+>
+>**Simulated Phishing** - A proactive training method where security teams send mock phishing emails to users and track click rates to measure and improve human defenses.
+>
+>**Vulnerability Management** - The ongoing process of identifying, prioritizing, and mitigating software and configuration flaws to reduce an organization’s attack surface.
 
 ## Exercises
 > [!exercise] Exercise 7.1 - Breach Report
@@ -353,6 +400,8 @@ The image above illustrates an attacker making a network connection to a honeypo
 > #### Step 6 - Analyze Results
 > Now that the scan has been completed, explore the Hosts and Vulnerabilities tabs.  The vulnerabilities are listed in order of severity.  Only a few items of concern were identified.  Explore further details on one of the items by clicking on the vulnerability.  Within a paragraph, describe the vulnerability, how to fix it, and why it is a concern.
 
+> [!warning] WARNING! Malware ahead
+> You will download a PCAP from malware-traffic-analysis.net.  Some of these PCAP files will have real malicious traffic capture from real malware including their downloads and stagers.  Handle with care as this PCAP could include malicious binaries that if extracted and run, could compromise your system. 
 
 > [!exercise] Exercise 7.3 - Snort Detection
 > In this task you will use Snort to analyze a packet capture from malware-traffic-analysis.net. 
@@ -370,8 +419,6 @@ The image above illustrates an attacker making a network connection to a honeypo
 > snort --help
 > ```
 > #### Step 2 - Download Malicious PCAP
-> > [!warning] WARNING! Malware ahead
-> > You will download a PCAP from malware-traffic-analysis.net.  Some of these PCAP files will have real malicious traffic capture from real malware including their downloads and stagers.  Handle with care as this PCAP could include malicious binaries that if extracted and run, could compromise your system. 
 > 
 > Within the Ubuntu VM, download the accompanying file "2016-04-16-traffic-analysis-exercise.pcap.zip” which is a zipped PCAP.  In your Ubuntu terminal, change directory to the Downloads folder. 
 > ```bash
@@ -416,7 +463,7 @@ The image above illustrates an attacker making a network connection to a honeypo
 >```
 >Observe that everything is running correctly and the terminal is standing by for connections. If any connections are made, they will be logged in the standard output. 
 >#### Step 3 - Attack the MySQL Port
->From your Kali VM, launch a terminal and make a connection to your Ubutntu VM using the mysql client. Make sure to replace the <UBUNTU_IP> with the IP address of the Ubuntu VM. 
+>From your Kali VM, launch a terminal and make a connection to your Ubuntu VM using the mysql client. Make sure to replace the <UBUNTU_IP> with the IP address of the Ubuntu VM. 
 >```bash
 >mysql -h <UBUNTU_IP> -u test -ptest 
 >```

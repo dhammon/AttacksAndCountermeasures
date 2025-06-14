@@ -1,12 +1,15 @@
+<span class="chapter-banner">Chapter 14</span>
 # Mobile Application Security
-![](../images/14/android_armor.jpg)
-
-Prior to artificial intelligence, web 3.0, and cloud technology trends, mobile applications were all the rage.  For many years it seemed that every organization was rushing to develop and offer a mobile application to their users.  During this surge of enthusiasm, many applications were developed that exposed security risks and new attack vectors against organization systems.  Mobile applications have persisted as a useful mechanism to connect individuals to existing and new organizations.  New organizations leverage the mobile ecosystem to launch businesses solely dependent on smart phone and tablet users.  Today, Apple and Android are the major systems that support mobile application development with the extreme majority of market share.  While both companies approach mobile applications differently, we will focus on the Android system in this chapter due to its relative ease to analyze.  Apple's walled garden architecture makes it more challenging to analyze mobile applications, usually requiring a MacOS with which not everyone may have access.  This chapter will describe the Android system and application basics and then walk the reader through the attacks and counter measures related to Android mobile applications.
+<div class="image-crop">
+  <img src="../images/14/android_armor.jpg">
+</div>
 
 **Objectives**
 1. Describe Android application fundamentals and operating components.
 2. Understand the security features and risks of Android applications.
 3. Conduct basic static and dynamic analysis of Android applications using Qark and Android Studio.
+
+Prior to artificial intelligence, web 3.0, and cloud technology trends, mobile applications were all the rage.  For many years it seemed that every organization was rushing to develop and offer a mobile application to their users.  During this surge of enthusiasm, many applications were developed that exposed security risks and new attack vectors against organization systems.  Mobile applications have persisted as a useful mechanism to connect individuals to existing and new organizations.  New organizations leverage the mobile ecosystem to launch businesses solely dependent on smart phone and tablet users.  Today, Apple and Android are the major systems that support mobile application development with the extreme majority of market share.  While both companies approach mobile applications differently, we will focus on the Android system in this chapter due to its relative ease to analyze.  Apple's walled garden architecture makes it more challenging to analyze mobile applications, usually requiring a MacOS with which not everyone may have access.  This chapter will describe the Android system and application basics and then walk the reader through the attacks and counter measures related to Android mobile applications.
 ## Android Application Basics
 Understanding the development and operation of Android applications is important before discussing their security.  Application developers can choose to develop applications using Java, Kotlin, or C++ languages.  The source code is then compiled using the Android software development kit (SDK) into an Android package file with the extension `.apk`. [^1]  This portable file contains all the data, resources, and compiled code to run an application on an Android operating system.  The applications are signed digitally with a developer-maintained certificate before being uploaded to Google Play using a registered developer account.  Once in the store, they can be downloaded and installed by any internet user.
 
@@ -19,9 +22,9 @@ Applications running on an Android system, such as a smart phone or tablet, are 
 
 Each app running in a sandbox is also granted least privileges by default.  Application developers have the ability to loosen permission controls on their application to allow various sources to interact with its components.  If mishandled, these less restrictive permissions could open up the application to security vulnerabilities.  Applications can also use other operating system APIs to utilize hardware components, such as contact lists or the camera.  Android ensures that these permissions are explicitly granted by the user when installing the app or during runtime for the more dangerous permissions.  You may have seen this as a pop-up message during app installations which gives the user the ability to allow or deny application permissions.
 
-![[../images/14/app_runtime.png|Android Application Runtime Environment|550]]
+The graphic below attempts to illustrate some of the previous points.  There are three applications titled A, B, and C (light blue boxes) running within sandboxes on top of the operating system (bottom grey bar).  The operating system maintains each of the application's permissions describing what the application is allowed to access.  In this table, on the bottom left of the graphic, App C has permissions to the camera, which is also depicted using a camera icon within the app on the right.  The operating system also maintains databases, like SQLite, the file system, application users and manages running processes.  As we will learn in the following section, each application has components that can be invoked using *intents*.  
 
-The graphic above attempts to illustrate some of the previous points.  There are three applications titled A, B, and C (light blue boxes) running within sandboxes on top of the operating system (bottom grey bar).  The operating system maintains each of the application's permissions describing what the application is allowed to access.  In this table, on the bottom left of the graphic, App C has permissions to the camera, which is also depicted using a camera icon within the app on the right.  The operating system also maintains databases, like SQLite, the file system, application users and manages running processes.  As we will learn in the following section, each application has components that can be invoked using *intents*.  
+![[../images/14/app_runtime.png|Android Application Runtime Environment|600]]
 
 Each application's access to these components is established during development.  They restrict an application's ability to interact with other applications as shown between App A and App B's blocked arrow.  In this example, App B attempts to directly interact with App A, but is unable to do so because of sandboxing and missing permissions.  Applications can also allow interactions with other apps, as shown between App B and App C.  Here, App B interacts with the Activities component of App C through the intents system illustrated with green arrows.
 ### Components of Android Applications
@@ -109,9 +112,11 @@ Mobile application security can be challenging, as the attack scenarios may not 
 
 The basic threat model to exploit mobile application vulnerabilities consists of a malicious application installed on the same device as the victim application.  The malicious application will be designed to send malicious payloads to the target application with the intent to steal or modify data or take advantage of the victim's trust of the vulnerable application.  A victim might think they are interacting with their trusted application, but the vulnerable application could be completely compromised.  The following diagram shows the paths of a malicious application's interactions with a vulnerable application and its content providers.
 
-![[../images/14/mal_app.png|Malicious Android Application Interactions|500]]
+![[../images/14/mal_app.png|Malicious Android Application Interactions|600]]
 
-Malicious applications will send payloads to the vulnerable application through the operating system's intents.  This requires that the vulnerable application to have components with generous permissions which chain together with other vulnerabilities to achieve some impact.  These impacts will vary depending on the victim application's context and severity of vulnerability that we will explore in the next section.  Vulnerable components could allow an attacker to start an authenticated user flow without having to know the user's credentials, or access data stored on the device that isn't directly accessible by the application.  In 2017, a popular ride sharing company was alleged to have been spying on driver's use of a competitor's mobile application.  This may have been accomplished through vulnerabilities within the competitor's mobile application.  Allegedly, the popular ride-sharing company used their application to collect data from the vulnerable competitor's application! [^2]
+Malicious applications will send payloads to the vulnerable application through the operating system's intents.  This requires that the vulnerable application to have components with generous permissions which chain together with other vulnerabilities to achieve some impact.  These impacts will vary depending on the victim application's context and severity of vulnerability that we will explore in the next section.  
+
+Vulnerable components could allow an attacker to start an authenticated user flow without having to know the user's credentials, or access data stored on the device that isn't directly accessible by the application.  In 2017, a popular ride sharing company was alleged to have been spying on driver's use of a competitor's mobile application.  This may have been accomplished through vulnerabilities within the competitor's mobile application.  Allegedly, the popular ride-sharing company used their application to collect data from the vulnerable competitor's application! [^2]
 ### Application Vulnerabilities
 There are many types of mobile application vulnerabilities that can be identified through analysis of the application.  Mobile application penetration testers and security researchers define these vulnerabilities into risk types, such as those found in OWASP's Mobile Top 10 (https://owasp.org/www-project-mobile-top-10/).  We've mentioned a few of the risks already throughout the chapter and will highlight more common vulnerabilities in this section.
 
@@ -122,6 +127,10 @@ It is also common to find *information disclosures* within a mobile application'
 Many applications use the built-in SQLite database to store and process data within tables that are protected from access by applications.  However, raw SQL statements, which don't use parameterized requests, could expose all the data within an application's local database to an attacker.  The risks of a *SQL injection* on the local database are higher when that data contains sensitive information, such as personally identifiable information of contacts, or is used to store secrets in other applications like banking information.
 
 The last vulnerability and exploitation worth considering is *tapjacking*, which is similar to web site clickjacking attack.  Tapjacking attacks overlay invisible elements over application functions that will perform some activity when the user presses the element.  Because the malicious invisible element is in the foreground and is placed over the victim's application, anytime the victim user attempts to interact with the vulnerable application, they are actually engaging with a malicious element.  The malicious actor exploiting this attack can use those taps by the user to send requests to other systems.  It could be as benign as tricking the user to "like" something on a social media app, following an advertisement link on which the attacker collects money, or as bad as hijacking authenticated requests connected to sensitive systems.  Tapjacking occurs when an application fails to implement safeguards against malicious user interface overlays, such as by allowing all permissions like `SYSTEM_ALERT_WINDOW`.
+
+  <br>
+
+
 ### Enumerating Applications
 The last section of this chapter explores some tools and techniques that can identify vulnerabilities within Android applications.  Using my Android application Modern Portfolio Theory as the target, I will conduct static and dynamic analysis to find several vulnerabilities throughout the application.  Our efforts will use several open source and free tools enabling us to enumerate and exploit weaknesses in the application.
 
@@ -134,14 +143,18 @@ As we have explored during other sections of this text, static analysis typicall
 
 There are several tools that can assist in the extraction of an application's source code, including the Quick Android Review Kit (QARK).  Qark includes the reverse engineering tool Smali that performs the disassembly and decompiling that reveals the app's source code.  Interested readers should checkout Payatu's great write up on how Smali works at https://payatu.com/blog/an-introduction-to-smali/.  After the source code files are obtained, we can manually review the source for potential vulnerabilities, misconfigurations, and information disclosures.  Qark also performs a vulnerability and misconfiguration scan which can be used as a starting point for finding issues within a targeted Android application.
 
+  <br>
+
+
+
 >[!activity] Activity 14.2 - Static Analysis Using Qark
 >In this activity, I will demonstrate the acquisition of the Modern Portfolio APK and its static analysis using Qark.  After starting the Kali VM in Bridge Adapter network mode, I open a browser and navigate to https://androidappsapk.co/apkdownloader.  I then search for `newtonanalytics.modernportfoliotheory` and follow the link of the Newton Analytics application.  The site's page loads, and I press the download button for the latest version avoiding any ads.
->![[../images/14/static_activity_download.png|Downloading APK|600]]
+>![[../images/14/static_activity_download.png|Downloading APK|550]]
 >Still within the Kali VM, I open a terminal and clone the Qark GitHub repository.
 >```bash
 >git clone https://github.com/linkedin/qark
 >```
->![[../images/14/static_activity_clone.png|Cloning Qark Repository|600]]
+>![[../images/14/static_activity_clone.png|Cloning Qark Repository|550]]
 >Once cloned, I change my working directory to the `qark` folder and set up a python virtual environment.  Qark is fairly old and requires many outdated packages in Python to run, so setting up the application in its own virtual environment protects any dependency conflicts with my Kali host's Python installation.
 >```bash
 >cd qark
@@ -164,9 +177,9 @@ There are several tools that can assist in the extraction of an application's so
 >unzip -d ~/Downloads  ~/Downloads/newtonanalytics.modernportfoliotheory*.zip
 >sudo qark --apk ~/Downloads/newtonanalytics.modernportfoliotheory*.apk
 >```
->![[../images/14/static_activity_qark_run.png|Running Qark on Modern Portfolio|600]]
+>![[../images/14/static_activity_qark_run.png|Running Qark on Modern Portfolio|550]]
 >After a few moments, Qark completes decompiling and analyzing the application and outputs a path to a generated report.  I notice that the `egg_info` module failed, which is expected, because that module errored when it initially installed.
->![[../images/14/static_activity_report_path.png|Qark Scan Completion|600]]
+>![[../images/14/static_activity_report_path.png|Qark Scan Completion|550]]
 >I copy the path of the report and open it in my Kali VM's Firefox browser since it is an HTML report.  The report isn't too fancy but includes many findings from various Java files that were decompiled by Qark.  The issues format includes a header, description, and a link to the file and line number where the problem was found.
 >![[../images/14/static_activity_report.png|Qark Report Results|600]]
 >The third issue, titled `INFO Hardcoded HTTP url found`, displays an HTTP link to the newtonanalytics.com domain.  Seeing HTTP used without TLS is definitely worth calling out since traffic is unencrypted.  But this issue also informs us of remote resources that might also be worth investigating.  A humble request from my readers here, this domain is my domain, and I would appreciate it if you refrained from attacking it.  Thank you in advance!
@@ -188,12 +201,12 @@ There are several tools that can assist in the extraction of an application's so
 >```bash
 >cd ~/qark/build/qark
 >```
->![[../images/14/static_activity_list.png|Listing Application Files|600]]
+>![[../images/14/static_activity_list.png|Listing Application Files|575]]
 >I dump the contents of the manifest file to the terminal's standard output using cat and explore it further.  I find that the output includes a few activities as well as information about the application's version.
 >```bash
 >cat AndroidManifest.xml
 >```
->![[../images/14/static_activity_manifest.png|Dumping AndroidManifest.xml File Contents|600]]
+>![[../images/14/static_activity_manifest.png|Dumping AndroidManifest.xml File Contents|575]]
 >I have only just scratched the surface of my static analysis and have already learned so much about the application.  In a full demonstration, I might run SAST tooling against the source code, enumerate all Qark's findings, and map out the entire application's logic flow.
 
 Once static analysis is performed, the next step is to evaluate the application at runtime through *dynamic analysis*.  It is best to run the application in a development environment with an emulator as other tools can be installed on the host system to monitor the application.  Examples of this include BurpSuite or Wireshark which can capture network requests for analysis of the running application's behavior.  The Android Studio integrated development environment comes with many useful tools for debugging Android applications, such as its built-in emulator and the Android Debugger (ADB).  
@@ -204,79 +217,112 @@ These tools will enable the researcher to load the acquired APK into a virtual e
 >Android Studio offers developers an integrated development environment with device emulators and built-in debugging tools.  In this activity, I will setup Android Studio on my Windows host and dynamically analyze the application using the Android debugger ADB.
 >
 >From my Windows host, I open a browser, navigate to https://developer.android.com/studio, and press the "Download Android Studio" button.  It is about 1GB in size and takes a few minutes to complete.
->![[../images/14/dynamic_activity_download.png|Downloading Android Studio Installer|600]]
+>![[../images/14/dynamic_activity_download.png|Downloading Android Studio Installer|650]]
 >Once the download is completed, I open my Downloads folder and double click on the Android Studio executable to start the installation.  The installer requires administrative permissions causing the UAC prompt to launch.  I accept the UAC and then press Next to begin the installation.
 >![[../images/14/dynamic_activity_setup.png|Starting the Installation of Android Studio|400]]
 >The setup wizard walks me through the installation where I make sure to select the components "Android Studio" and the "Android Virtual Device".  I accept the default installation location and any other default recommendations.  Once finished, Android Studio launches and presents me with the "Welcome to Android Studio" view.
->![[../images/14/dynamic_activity_welcome.png|Complete Installation of Android Studio|600]]
+>![[../images/14/dynamic_activity_welcome.png|Complete Installation of Android Studio|700]]
 >>[!note] Note - Missing SDK
 >>It is important that the Android software development kit (SDK) is installed.  Sometimes Android Studio doesn't install the SDK by default.  If so, you would be presented with the "Missing SDK" window instead of the "Welcome to Android Studio" screen.  Make sure to install Android SDK - Android API 34 if you are following along!
 >
 >I'll be using the virtual device Pixel 3a with API 34 for dynamic analysis.  Options to set up a virtual device are found under the More Actions dropdown menu in the main pane of the Welcome to Android Studio screen under the "Virtual Device Manager" option.
->![[../images/14/dynamic_activity_vdm.png|Selecting Virtual Device Manager|500]]
+>![[../images/14/dynamic_activity_vdm.png|Selecting Virtual Device Manager|550]]
 >The Device Manager window lists all devices that are ready to be emulated.  To add a new device, I press the "Create Device" button in the top left corner of the window.  I choose the Pixel 3a hardware and press Next.
->![[../images/14/dynamic_activity_hardware.png|Selecting Hardware|600]]
+>![[../images/14/dynamic_activity_hardware.png|Selecting Hardware|700]]
 >Then I select the API 34 image that will be installed on the virtual device and press the download icon.  The API is about 1GB in size and takes some time to download and install.  
->![[../images/14/dynamic_activity_image.png|Selecting Image|600]]
+>![[../images/14/dynamic_activity_image.png|Selecting Image|700]]
 >The interaction also requires me to accept the license agreement, but eventually installs the related SDK.
->![[../images/14/dynamic_activity_sdk_install.png|SDK Installation|600]]
+>![[../images/14/dynamic_activity_sdk_install.png|SDK Installation|700]]
 >Once the API and SDK are downloaded and installed, I return back to the Android Virtual Device wizard and name the AVD `Pixel 3a API 34` before finishing the setup of the device.
 >![[../images/14/dynamic_activity_avd_finish.png|Complete AVD Setup|600]]
 >Now that Android Studio and the SDK are installed, along with setting up an AVD, I am ready to launch the emulator.  From my Windows host I open a command prompt and navigate to the SDK's emulator folder.
 >```cmd
 >cd AppData\Local\Android\Sdk\emulator
 >```
->![[../images/14/dynamic_activity_dir.png|Navigating to Emulator Directory|600]]
+>![[../images/14/dynamic_activity_dir.png|Navigating to Emulator Directory|700]]
 >Using the emulator executable, I list the available AVDs which show the Pixel 3a device I set up in the previous step.  These are the devices I have set up to emulate.
 >```cmd
 >emulator.exe -list-avds
 >```
->![[../images/14/dynamic_activity_avds.png|Listing AVDs Using Emulator Executable|600]]
+>![[../images/14/dynamic_activity_avds.png|Listing AVDs Using Emulator Executable|700]]
 >To start the AVD, I use the emulator executable with the `-avd` option and the name of the AVD ID listed in the previous command.
 >```cmd
 >emulator.exe -avd Pixel_3a_API_34
 >```
->![[../images/14/dynamic_activity_start_avd.png|Starting AVD Using Emulator|600]]
+>![[../images/14/dynamic_activity_start_avd.png|Starting AVD Using Emulator|700]]
 >After a few moments, my Pixel 3a emulated device pops up and eventually fully loads!  I can interact with it using my mouse simulating taps and drags, much like a real phone.  The emulator has several settings that can be adjusted in the context menu shown on the right of the emulated device.
->![[../images/14/dynamic_activity_avd_init.png|Emulated Pixel 3A Home Screen|200]]
+>![[../images/14/dynamic_activity_avd_init.png|Emulated Pixel 3A Home Screen|250]]
 >Now that the emulated device is running, I download the APK to my host computer using the same method as the previous activity.  Next, I open a new terminal session on my Windows host, navigate to the SDK's platform tools directory where ADB is located, and install the application from the host. The first install command failed because the debugger daemon was not initially running, but it shows that it was started, so I re-ran the same command and received a Success message suggesting Modern Portfolio was installed on the emulated device.
 >```cmd
 >cd .\AppData\Local\Android\Sdk\platform-tools\
 >.\adb.exe install --bypass-low-target-sdk-block C:\Users\danie\Downloads\newtonanalytics.modernportfoliotheory_1.1_androidappsapk.co.apk
 >```
->![[../images/14/dynamic_activity_install.png|Installing Modern Portfolio On AVD|600]]
+>![[../images/14/dynamic_activity_install.png|Installing Modern Portfolio On AVD|700]]
 >ADB is a powerful tool that can run commands on the device and provide us terminal access to the AVD.  To launch a shell on the emulated device, I run ADB with the shell command that immediately drops me into a new CLI.
 >```cmd
 >.\adb.exe shell
 >```
->![[../images/14/dynamic_activity_adb_shell.png|ADB Shell On Emulated Device|600]]
+>![[../images/14/dynamic_activity_adb_shell.png|ADB Shell On Emulated Device|700]]
 >Let's verify that the Modern Portfolio application is indeed installed while enumerating any other packages by running the debugger's built-in package manager command.
 >```adb
 >pm list packages
 >```
->![[../images/14/dynamic_activity_list_packages.png|Listing AVD Packages Using ADB Shell|600]]
+>![[../images/14/dynamic_activity_list_packages.png|Listing AVD Packages Using ADB Shell|700]]
 >About halfway down the list, I see the installed application!
->![[../images/14/dynamic_activity_confirm_install.png|Confirming App Installation|600]]
+>![[../images/14/dynamic_activity_confirm_install.png|Confirming App Installation|700]]
 >Similarly, jumping onto the emulated device GUI and swiping up lists the applications installed, which now includes Modern Portfolio (grey icon)!
->![[../images/14/dynamic_activity_gui_app_confirm.png|AVD GUI Application Install Confirmation|200]]
+>![[../images/14/dynamic_activity_gui_app_confirm.png|AVD GUI Application Install Confirmation|210]]
 >Let's see if we can start the application using an intent from the operating system.  I'll target the MainActivity component we observed in the manifest file during static analysis.  While within the ADB shell, I run the activity manager command targeting the package and activity name.
 >```adb
 >am start -n newtonanalytics.modernportfoliotheory/.MainActivity
 >```
->![[../images/14/dynamic_activity_intent.png|Starting MainActivity Using Intents|600]]
+>![[../images/14/dynamic_activity_intent.png|Starting MainActivity Using Intents|700]]
 >And, jumping to the emulated device, I see that the app was launched!
->![[../images/14/dynamic_activity_launched.png|Launched Modern Portfolio App|200]]
+>![[../images/14/dynamic_activity_launched.png|Launched Modern Portfolio App|210]]
 >If I try to launch another activity from ADB, such as the DisplayContact activity, I get a permission denied error which suggests that the permissions on this activity mitigate other applications from launching it!
 >```adb
 >am start -n newtonanalytics.modernportfoliotheory/.DisplayContact
 >```
->![[../images/14/dyanamic_activity_denied.png|Intent Permission Denied|600]]
+>![[../images/14/dyanamic_activity_denied.png|Intent Permission Denied|700]]
 >In this activity, we established how we can dynamically test an application while using Android Studio's emulator and debugger.  From here we can start testing payloads against some of the vulnerabilities identified during static analysis.  We could also use additional tools to capture and monitor how the application interacts with the network interface of the emulated device.
 
 Developing exploits and proofs of concepts can be somewhat time consuming.  Therefore, some security professionals have developed exploit kits that streamline common exploits of known vulnerability classes.  These tools are typically compiled Android applications that have been configured to target a vulnerability discovered in a victim application.  Compiling the malicious application, installing it, and then running its exploits, quickly demonstrates to application owners the severity of the vulnerabilities discovered.  
 
 They also serve as a great tool for testing vulnerability mitigations as they can provide measurable assurance that a vulnerability has been remediated.  One of my favorite testing frameworks is Drozer by WithSecureLabs.  You can find its source code and use instructions in https://github.com/WithSecureLabs/drozer.  Another great dynamic testing and exploiting tool is PhoneSploit by prbhtkumr that can be downloaded at https://github.com/prbhtkumr/PhoneSploit.
 
+## Summary
+This chapter began with the rise of mobile applications and then dove into Android’s core architecture, including its sandboxed processes, Linux-based permission model, and four key components (Activities, Services, Broadcast Receivers, and Content Providers) tied together by Intents and declared in the `AndroidManifest.xml`.  We explored how application resources, storage options (internal, external, and content providers), and network communications must be carefully secured by highlighting modern runtime permission requests, scoped storage, and HTTPS enforcement.  We then examined common mobile attack surfaces, such as command injection, information disclosure, path traversal, local SQL injection, tapjacking, and insecure WebView usage.  The importance of hardening exported components and sanitizing all inputs regardless of source were mitigations discussed in the chapter.  Finally, we outlined a methodology for uncovering these vulnerabilities through static analysis (APK unpacking, Smali decompilation, QARK scans) and dynamic analysis (emulator-based testing with ADB, Drozer, and PhoneSploit) to give practitioners the tools they need to identify and demonstrate security flaws effectively.
+
+>[!terms] Key Terms
+>**Activities** - The user-facing screens in an Android application that render the interface, receive inputs, and drive navigation between views.
+>
+>**Application Resources** - The bundled assets that provide the rich content and UI structure for an app, such as images, audio files, and XML layout files.
+>
+>**Broadcast Receivers** - A component that registers to receive and handle asynchronous system or application generated broadcasts (intents) without a direct user interface.
+>
+>**Components** - The four fundamental building blocks of Android apps (Activities, Services, Broadcast Receivers, and Content Providers) that define how apps interact with users, the system, and each other.
+>
+>**Content Provider** - A component that manages and exposes structured data (SQLite databases or files) via a URI-based interface to other apps under controlled permissions.
+>
+>**Credential Security** - The practice of safeguarding authentication secrets by using Android’s `AccountManager` or secure storage instead of plaintext storage.
+>
+>**Data Storage** - The three persistence options available to Android apps (internal storage, external storage, and content providers) with varying isolation and access characteristics.
+>
+>**Input Validation** - The process of verifying that all incoming data meets expected formats and constraints before processing, to prevent injection and other input-based attacks.
+>
+>**Intents** - Asynchronous messages that apps and the system use to request actions or launch components, resolving targets by explicit settings or intent filters.
+>
+>**Manifest File** - The `AndroidManifest.xml` XML document at the root of the APK that declares an app’s components, permissions, SDK requirements, and other metadata.
+>
+>**Native Security** - The built-in Linux kernel-based protections in Android (ASLR, NX, discretionary file permissions, and IPC enforcement) that isolate apps and processes.
+>
+>**Network Security** - The requirement that all network communications use encrypted channels (HTTPS via `HttpsURLConnection` or secure sockets) to protect data-in-transit.
+>
+>**Permissions** - The access controls declared in the manifest, and granted at install or runtime, that enforce the principle of least privilege for app components.
+>
+>**Services** - Background components without a UI that perform long running operations or expose binding interfaces for other apps and system processes.
+>
+>**WebView** - An embeddable browser frame within an activity that renders web content, which must be hardened to avoid web-based attacks.
 ## Exercises
 >[!exercise] Exercise 14.1 - Static Analysis
 >Static analysis of Android applications starts with acquiring the app file APK.  Unzipping the file and then decompiling/disassembling the application allows for review of the app's source code and settings.  The process of preparing and analyzing the app can be automated using the Qark tool.
@@ -297,7 +343,7 @@ They also serve as a great tool for testing vulnerability mitigations as they ca
 >```
 >Install the requirements and run the qark setup.  Note that there may be some errors during the installation, which could be okay.
 >```bash
->sudo pip install -r requirements.txt 
+>pip install -r requirements.txt 
 >sudo python setup.py install
 >```
 >Run qark while targeting the APK downloaded in the previous step.  Qark will decompile and analyze the APK, then produce a report of findings.  Note that the name of the APK might be slightly different or you may need to `unzip` it.  Once the tool finishes, copy down the path of the report on the last output as you'll need it in a later step.
@@ -366,7 +412,7 @@ They also serve as a great tool for testing vulnerability mitigations as they ca
 >```bash
 >emulator.exe -avd NAME_OF_AVD
 >```
->Observe that the emulator starts the device! Wait a moment for the emulated phone to load.  The emulated phone can be used like a physical device but using the mouse and keyboard.
+>Observe that the emulator starts the device! Wait a moment for the emulated phone to load.  
 >#### Step 3 - Download the APK
 >See Exercise 14.1, step 1 if needed.
 >#### Step 4 - Launch Activity Through an Intent
@@ -388,11 +434,7 @@ They also serve as a great tool for testing vulnerability mitigations as they ca
 >```bash
 >pm list packages
 >```
->Open the apps page on your emulator (swipe up) and observe that Modern Portfolio is installed (grey icon)!
->
->Send an intent from the debugger to evidence open Activity using Android debugger.
->
->Observe that the app is launched in the emulator!  You might be prompted with a permissions request because this is the first time the app has been launched.
+>Open the apps page on your emulator (swipe up) and observe that Modern Portfolio is installed (grey icon)!  Send an intent from the debugger to evidence open Activity using Android debugger.  Observe that the app is launched in the emulator! 
 
 [^1]:Application fundamentals | Android Developers; Android; April 22nd, 2024; https://developer.android.com/guide/components/fundamentals
 [^2]:Uber allegedly used secret program to undermine rival Lyft | Uber | The Guardian; April 27, 2024; https://www.theguardian.com/technology/2017/apr/13/uber-allegedly-used-secret-program-to-cripple-rival-lyft

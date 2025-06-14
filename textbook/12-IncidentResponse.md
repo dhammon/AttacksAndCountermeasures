@@ -1,7 +1,8 @@
-# Chapter 12 - Incident Response
-![](soc.jpg)
-
-Information and cyber security can be summarized as the preventing, detecting, and responding to vulnerabilities and threats.  With the exception of the last chapter, much of this textbook has focused on the vulnerability side of infosec, whereas vulnerabilities in their most general form provide the opportunity for threats to succeed.  This chapter will focus on how organizations prepare, identify and react to threats.  It is the second part of the detection and response section that expands on the previous Forensics and Malware Analysis chapter.  Readers will learn about the systems used to aggregate data and how threats are found within networks and systems.  We will also cover administrative efforts of organizations that plan for security incidents.
+<span class="chapter-banner">Chapter 12</span>
+# Incident Response
+<div class="image-crop">
+  <img src="../images/12/soc.jpg">
+</div>
 
 **Objectives**
 1. Understand the role and procedures of a security operations center (SOC).
@@ -9,13 +10,14 @@ Information and cyber security can be summarized as the preventing, detecting, a
 3. Learn the major components and processes of an incident response plan.
 4. Understand the role of Threat Hunting and how it identifies security incidents in a network.
 
+Information and cyber security can be summarized as the preventing, detecting, and responding to vulnerabilities and threats.  With the exception of the last chapter, much of this textbook has focused on the vulnerability side of infosec, whereas vulnerabilities in their most general form provide the opportunity for threats to succeed.  This chapter will focus on how organizations prepare, identify and react to threats.  It is the second part of the detection and response section that expands on the previous Forensics and Malware Analysis chapter.  Readers will learn about the systems used to aggregate data and how threats are found within networks and systems.  We will also cover administrative efforts of organizations that plan for security incidents.
 ## Security Information and Event Manager (SIEM)
 Most medium to large organizations will invest in a system that aggregates logs from systems in their network.  A **security information and event management (SIEM)** solution enable analysts to search and filter system logs to identify events that occurred.  For instance, Windows Desktop logs fed into a SIEM will include logon events where an analyst can quickly and remotely identify who attempted logons on that system.  Using these log events, the SIEM is also capable of using saved advanced queries that can be configured to notify analysts when a pattern of events is detected.  Expanding on the previous example, an alert can be established within the SIEM that notifies analysts when a device has 5 consecutive failed logon attempts within a 1-minute window.  Such an alert could signal a brute force attack against a device or user account.  As you might have gathered, SIEMs are powerful and complex systems that enrich security teams *threat monitoring* within an environment.  
 
 >[!tip] Tip - Pronouncing SIEM
 >Yet another acronym that has great debate surrounding its pronunciation.  Your author is in the camp of pronouncing it as "SIM", while many other professionals, especially outside the United States, pronounce it as "SEEM".  
 ### Security Operations Center (SOC)
-While most organizations have a natural flow of activity centered around a workday, attacks happen at any time.  Some global organizations operated all day which puts added pressure on security teams to always be monitoring the network.  Regardless, attackers and threat actors may become active at any time and security professionals must always be on guard should security events or incidents occur.  Given this need for multiple shifts of security professionals, many medium sized organizations outsource the labor needed to manage a SIEM to companies called *managed security service providers (MSSP)*.  Companies centralize and streamline security monitoring while maintaining a talent pool of security professionals that cover all daily shifts.  With enough customers, MSSPs achieve an economy of scale medium-sized organizations can't acquire on their own.
+While most organizations have a natural flow of activity centered around a workday, attacks happen at any time.  Some global organizations operated all day which puts added pressure on security teams to always be monitoring the network.  Regardless, attackers and threat actors may become active at any time and security professionals must always be on guard should security events or incidents occur.  Given this need for multiple shifts of security professionals, many medium sized organizations outsource the labor needed to manage a SIEM to companies called ***managed security service providers (MSSP)***.  Companies centralize and streamline security monitoring while maintaining a talent pool of security professionals that cover all daily shifts.  With enough customers, MSSPs achieve an economy of scale medium-sized organizations can't acquire on their own.
 
 The entity at an organization responsible for maintaining, managing, and monitoring the SIEM, regardless of using an MSSP or insourcing within the company, is referred to as the **security operations center (SOC)**.  The SOC can be a loosely organized group of 1 or more individuals, or as simple as an email distribution list, who use the SIEM for threat monitoring.  The SOC can also be a formal department with several teams that have multiple offices and share dashboards on projectors, as illustrated with this chapter's cover art (generated by DALLE).
 
@@ -26,7 +28,7 @@ No matter how you go about it, a SOC is expensive to set up and maintain.  It re
 ### Setting Up a SIEM
 The following diagram illustrates the general setup for a SIEM within an organization's network.  It includes device types that feed into a SIEM solution stack that a SOC uses.
 
-![[../images/12/siem_arch.png|SIEM Architecture|600]]
+![[../images/12/siem_arch.png|SIEM Architecture|500]]
 
 The primary interface of a SIEM solution is a web application, sometimes called a console.  Users of the console, such as SOC team members, log into the application through their browsers.  Ideally, this SIEM web application is only available to the devices for users who have a need to access it, and not available on the public internet.  Access to the system requires an account with valid credentials, username and password.  Once logged in, the users can begin querying the logs and conducting investigations.
 
@@ -40,24 +42,24 @@ Log data is sent to an *ingestor* in a *push*, where the node initiates the send
 >[!tip] Tip - Separation of Concerns
 >The SIEM ingestor, database, and web server can all be installed on the same server, but it is a best practice to separate each function onto its own server or cluster of servers.  This provides flexibility with maintenance, disaster recovery, and troubleshooting issues.
 
-Data sent to the database is stored and used by the SIEM's web application.  Most solutions will align the timestamps of logs to coordinated universal time (UTC) and then present the relative time to a user's selected time zone preference within their account.  When a SIEM user queries data through the application, a call is made to the database that retrieves the queried information.  You can imagine that the database will be very busy writing new data in large quantities alongside handling user queries.  Most SIEM solutions will speed up the query process by creating *indexes* of the data at regular intervals, such as daily.  Another design decision must be made reagrding the *retention period* of how long to store the data.  Data retained for too long may be needlessly expensive to support the indexing and storage costs while providing little value as it becomes less likely to be searched the older it gets.  Most organizations tend to use the retention period of one year, but this period could be higher or lower depending on the organization's needs.  
+Data sent to the database is stored and used by the SIEM's web application.  Most solutions will align the timestamps of logs to coordinated universal time (UTC) and then present the relative time to a user's selected time zone preference within their account.  When a SIEM user queries data through the application, a call is made to the database that retrieves the queried information.  You can imagine that the database will be very busy writing new data in large quantities alongside handling user queries.  Most SIEM solutions will speed up the query process by creating *indexes* of the data at regular intervals, such as daily.  Another design decision must be made regarding the *retention period* of how long to store the data.  Data retained for too long may be needlessly expensive to support the indexing and storage costs while providing little value as it becomes less likely to be searched the older it gets.  Most organizations tend to use the retention period of one year, but this period could be higher or lower depending on the organization's needs.  
 
 >[!activity] Activity 12.1 - Splunk Setup
 > Splunk is a very popular SIEM solution that has all the modern features needed for security teams to identify and track threats in an environment.  Splunk offers a free license that has a limit of 500 MB ingestion a day and also excludes features such as alerting, user management, and data forwarding.  In this activity, I will demonstrate the local installation and features of Splunk using the BOTSV3 testing dataset.
-> 
+> ![[../images/12/splunk_activity_register.png|Splunk Registration|500]]
 > After starting the Ubuntu VM in Bridge Adapter network mode, I launch a browser and navigate to the Splunk Enterprise registration page https://www.splunk.com/en_us/download/splunk-enterprise.html.  The form on this page requires the use of a business email - I recommend university students use their `.edu` emails as these are typically accepted by Splunk.
-> ![[../images/12/splunk_activity_register.png|Splunk Registration|600]]
+> 
 > Upon logging in, I reach the download page where I select the Linux tab and download the `.deb` installer.  This immediately takes me to the EULA acceptance page that I agree to and submit to commence the download.
-> ![[../images/12/splunk_activity_download.png|Splunk DEB Download|600]]
+> ![[../images/12/splunk_activity_download.png|Splunk DEB Download|500]]
 > With the download completed, I open a terminal, update my system, install the dependency `curl` using `apt`, then finally install the Splunk `.deb` file using `dpkg`.  The `.deb` file is a Debian repository file that contains instructions and files to install Splunk.
 > ```bash
 > sudo apt update -y
 > sudo apt install curl -y
 > sudo dpkg -i ~/Downloads/splunk*.deb
 > ```
-> ![[../images/12/splunk_activity_curl_install.png|Installing Curl on Ubuntu|600]]
+> ![[../images/12/splunk_activity_curl_install.png|Installing Curl on Ubuntu|500]]
 > The installation takes a minute to complete as there are a lot of files to unpack!
-> ![[../images/12/splunk_activity_splunk_install.png|Installing Splunk Using Dpkg|600]]
+> ![[../images/12/splunk_activity_splunk_install.png|Installing Splunk Using Dpkg|500]]
 > Splunk can be started using the Splunk binary stored in the `/opt/splunk/bin/` directory once the installation is complete.  The initial start requires acceptance of the license agreement using the `spacebar` and the `y` keys.  Additionally, the CLI requires entering the username and password to create a new user for web console access.
 > ```bash
 > sudo /opt/splunk/bin/splunk start
@@ -67,7 +69,7 @@ Data sent to the database is stored and used by the SIEM's web application.  Mos
 > The installation completes in a few seconds and then returns me to the command prompt with a message to access Splunk over http://154-ubuntu:8000, the name of my virtual machine.
 > ![[../images/12/splunk_activity_install_complete.png|Splunk Installation Complete|600]]
 > I then open the browser in my VM and navigate to http://154-ubuntu:8000, although I could also have used http://127.0.0.1:8000.  I'm presented with a login page where I enter my username and password I set during the installation of the software.
-> ![[../images/12/splunk_activity_login.png|Local Splunk Instance Login Page|600]]
+> ![[../images/12/splunk_activity_login.png|Local Splunk Instance Login Page|500]]
 > Splunk isn't very useful without data, so the next step is to populate the system with various data sources.  An organization would configure systems with agents and connections to continuously feed data into Splunk.  Because this is just a demonstration, I will be using a prepared test data set published on Splunk's GitHub page.  I navigate to https://github.com/splunk/botsv3 and download the BOTSV3 Dataset which is a curated set of logs used in Splunk's Boss of the SOC capture the flag challenge.
 > ![[../images/12/splunk_activity_bots_download.png|BOTSV3 Download Page|600]]
 > After the download completes, which takes a few minutes, I move the `.tgz` file from the downloads folder into the `/opt/splunk/etc/apps/` directory.  Then I unzip the download using gunzip and unarchive the unzipped file using `tar`.
@@ -83,10 +85,10 @@ Data sent to the database is stored and used by the SIEM's web application.  Mos
 > ```
 > ![[../images/12/splunk_activity_restart.png|Restarting Splunk|600]]
 > Once restarted, I navigate back to the app (http://154-ubuntu:8000), press the Apps dropdown on the top navigation bar and select "Search & Reporting".
-> ![[../images/12/splunk_activity_search_view.png|Splunk Search View|400]]
+> ![[../images/12/splunk_activity_search_view.png|Splunk Search View|550]]
 > 
 > Afterwards, I enter the query/SPL `index=botsv3` into the search bar and change the time scope to "All Time" since this dataset is on the older side.  Millions of events are eventually loaded after a few minutes!
-> ![[../images/12/splunk_activity_init_search.png|Intial SPL Search Over All Time|600]]
+> ![[../images/12/splunk_activity_init_search.png|Intial SPL Search Over All Time|750]]
 ### SIEM Duties and Roles
 Setting up, maintaining, and using a SIEM creates a large amount of work that grows depending on an organization's size and complexity.  For larger teams or organizations, the SIEM responsibilities may be divided among different individuals or groups.  The following list of roles and responsibilities attempts to outline how some organizations might choose to divide the duties needed for the SIEM.  
 
@@ -102,29 +104,24 @@ Many vendors create and sell commercial grade SIEM solutions.  Depending on the 
 
 There are also open-source and free SIEM solutions available that require on premise installation.  The HELK stack (https://thehelk.com/intro.html) that cobbles together various opensource tools including Elasticsearch, Logstash, and Kibana is a popular solution driven by community developers.  Another more recent and cohesive opensource solution is Wazuh (https://wazuh.com/) which has all the features of a modern SIEM solution.  In addition, Wazuh is compatible with the opensource host-based intrusion detection system (HIDS) software OSSEC.
 ### Capabilities of a SIEM
-Most SIEMs offer a range of capabilities that are fairly consistent regardless of the solution selected.  But you must ensure in advance that the solution has all the features you expect before purchasing it.  Common features include the ability to collect large amounts of data and query it efficiently.  Saving queries, which can then be used as the logic for alerts and notifications increases the benefits of a SIEM.  Ideally, these alerts can be marked with risk priority or severity ratings that will organize analyst workloads by focusing on the most important events first.  Many modern SIEM solutions offer some type of scripting and built-in or custom automations to respond to incidents called *security orchestration, automation, and response (SOAR)*.  Usually SOAR modules are written in Python, or some other scripting language, which performs some task.  For example, a user account compromise incident requires that the user's account be disabled and active sessions terminated - having a button next to the incident that performs these tasks on Active Directory can save crucial time.  
+Most SIEMs offer a range of capabilities that are fairly consistent regardless of the solution selected.  But you must ensure in advance that the solution has all the features you expect before purchasing it.  Common features include the ability to collect large amounts of data and query it efficiently.  Saving queries, which can then be used as the logic for alerts and notifications increases the benefits of a SIEM.  Ideally, these alerts can be marked with risk priority or severity ratings that will organize analyst workloads by focusing on the most important events first.  Many modern SIEM solutions offer some type of scripting and built-in or custom automations to respond to incidents called ***security orchestration, automation, and response (SOAR)***.  Usually SOAR modules are written in Python, or some other scripting language, which performs some task.  For example, a user account compromise incident requires that the user's account be disabled and active sessions terminated - having a button next to the incident that performs these tasks on Active Directory can save crucial time.  
 
 >[!activity] Activity 12.2 - Splunk Investigation
->Once a SIEM is up and running, with data being regularly imported, SOC analysts and incident responders use the tool to identify and investigate system breaches.  In the last activity, I demonstrated the installation and ingestion of the BOTSV3 data set.  In this activity, I will continue where I left off and illustrate a simple investigation and how to use SPL to query datasets.
->
-> With all 2 million events matched in the botsv3 index, I scroll down to the Fields navigation on the left pane just below the timeline.  Splunk will index every record by field and summarize each field's count statistic while providing a quick link to filter just those events.  I select "host" which lists all the hosts on the network and chose the "matar" option to filter only the events related to this host.
-> ![[../images/12/splunk_activity_host_field.png|Host Field Navigation|600]]
+>Once a SIEM is up and running, with data being regularly imported, SOC analysts and incident responders use the tool to identify and investigate system breaches.  In the last activity, I demonstrated the installation and ingestion of the BOTSV3 data set.  In this activity, I will continue where I left off and illustrate a simple investigation and how to use SPL to query datasets. With all 2 million events matched in the botsv3 index, I scroll down to the Fields navigation on the left pane just below the timeline.  Splunk will index every record by field and summarize each field's count statistic while providing a quick link to filter just those events.  I select "host" which lists all the hosts on the network and chose the "matar" option to filter only the events related to this host.
+> ![[../images/12/splunk_activity_host_field.png|Host Field Navigation|750]]
 > Once selected, I observe that the search field has been updated with a new SPL `host=matar`.  SPL is updated using the GUI; however, a much richer experience is to write your own SPL to include operators and logic to filter and derive information from the available data.  I append `| stats count by source` to the SPL and hit enter.  This query pipes all filtered matar results to the SPL command stats where all sources are counted and displayed in the Statistics tab in the results section.
 > ```SPL
 > index=botsv3 host=matar | stats count by source
 > ```
-> ![[../images/12/splunk_activity_stats.png|Using Pipes and Commands in SPL|600]]
+> ![[../images/12/splunk_activity_stats.png|Using Pipes and Commands in SPL|750]]
 > This view helps me understand the types and volume of records related to the host.  Scrolling through the stats summaries, I find events for `stream:smtp`.  SMTP, a protocol used for email, can be interesting so I select the entry and press View events to update the SPL and show all SMTP events on the host.
-> ![[../images/12/splunk_activity_smtp_filter.png|SMTP Search|400]]
+> ![[../images/12/splunk_activity_smtp_filter.png|SMTP Search|500]]
 > The events pane is populated with SMTP events for the matar host.  Looking at the first record, I observe an odd subject line of a sent email "Fw: All your datas belong to us".
-> ![[../images/12/splunk_activity_email_1.png|Email Forward Discovery|600]]
+> ![[../images/12/splunk_activity_email_1.png|Email Forward Discovery|700]]
 > Perhaps this user of the matar host is a victim of ransomware and this is a ransom note being forwarded.  I am curious if any other emails have a similar subject line.  The act of finding data and searching elsewhere for similar artefacts is called *pivoting*.  While still using the botsv3 index, I query `subject:"All your datas*"`.  The star symbol is a wildcard, which means any other characters.  
-> ![[../images/12/splunk_activity_subject_search.png|Subject Line Pivot Search|600]]
+> ![[../images/12/splunk_activity_subject_search.png|Subject Line Pivot Search|700]]
 > Looks like there are two hits for this subject line with the second event being the original email with a src_ip address of 104.47.34.50 - perhaps this is the attacker's IP!
-> ![[../images/12/splunk_activity_srcip.png|Attacker IP Address Identified|500]]
-> 
-> 
-> 
+> ![[../images/12/splunk_activity_srcip.png|Attacker IP Address Identified|700]]
 
 SIEMs usually have reporting and dashboard features powered by the query system.  A dashboard is useful to analysts and their management as it enables them to focus their attention on the types of risks that matter most.  Deriving reports from the SIEM is typically important to SOC managers to identify security and performance trends of the operation.  They can be used to justify the investment in the SIEM by clearly describing the number of malicious events detected, for example.
 
@@ -135,26 +132,26 @@ SIEMs usually have reporting and dashboard features powered by the query system.
 >```SPL
 >index=botsv3 | stats count as cnt by host | sort cnt desc | head 10
 >```
->![[../images/12/splunk_activity_top10.png|Top 10 Hosts SPL|650]]
+>![[../images/12/splunk_activity_top10.png|Top 10 Hosts SPL|750]]
 >I won't want to retype this SPL each time I need the data.  Fortunately, Splunk has a Save feature available above the SPL field bar.  Another feature is the ability to turn a query result into a report also using the Save feature.  Pressing the Save As dropdown reveals the Report option, which I select and Title the report "Top 10 Hosts" with the Time Range Picker set to Yes before hitting Save.
->![[../images/12/splunk_activity_report.png|Creating a Report From SPL|450]]
+>![[../images/12/splunk_activity_report.png|Creating a Report From SPL|550]]
 >After hitting Save, I am presented with an option to View the report.  Pressing View opens the report page with my SPL data.  Anytime I want to get the latest top 10 hosts, I only have to open up this report using the Reports link in the top header.  Premium editions of Splunk can also email reports on a schedule, which will be outside the scope of this activity.
->![[../images/12/splunk_activity_report_view.png|Viewing Splunk Report|650]]
+>![[../images/12/splunk_activity_report_view.png|Viewing Splunk Report|750]]
 >It is fairly common to create and deliver reports to stakeholders using Splunk.  Another common feature is the use of visualization gadgets and dashboards.  From a SOC analyst's point of view, having a quick reference to identify a security problem in the network promptly is highly desirable.  I can craft an SPL that will identify failed login attempts on Windows systems that could be an indicator of a brute force attack.  Windows event 4625 is the standard event for failed logins which will be a key source of data for my query.
 >```SPL
 >index=botsv3 source=* EventCode=4625 | stats count as cnt
 >```
->![[../images/12/splunk_activity_failed_login.png|Failed Login SPL|450]]
+>![[../images/12/splunk_activity_failed_login.png|Failed Login SPL|550]]
 >The SPL yields a count of 5 failed logins presented in the Statistics tab.  The result of a query can be used in a visualization that can display the data in a more meaningful way.  For example, I can create a visualization that will help gauge if the value is low, normal, or concerning.  Clicking the Visualization tab, I select the radial gauge type.
->![[../images/12/splunk_activity_visualization.png|Visualization Radial Gauge Selection|350]]
+>![[../images/12/splunk_activity_visualization.png|Visualization Radial Gauge Selection|500]]
 >With the radial gauge selected, I can format it to distinguish low, moderate, and concerning levels of failed logins.  I choose the Format tab, Color Ranges from the left menu, and then the Manual subtab to enter ranges zero to five as green, five to ten as yellow, and ten to twenty as red.
->![[../images/12/splunk_activity_radial_settings.png|Radial Setting Configuration|400]]
->This gauge would look great in a dashboard that I can visit anytime I want to quickly reference the security standing of logins on the network.  A dashboard is meant to be regularly monitored and could even be used as a constant display in an office like a SOC for everyone to quickly view.  To get this gauge into a dashboard, I choose the Save As dropdown and select New Dashboard.
->![[../images/12/splunk_activity_dashboard_create.png|Saving Gauge Into New Dashboard|600]]
+>![[../images/12/splunk_activity_radial_settings.png|Radial Setting Configuration|600]]
+>This gauge would look great in a dashboard that can quickly reference the security standing of logins on the network.  A dashboard is meant to be regularly monitored and could even be used as a constant display in an office like a SOC for everyone to quickly view.  I choose the Save As dropdown and select New Dashboard.
+>![[../images/12/splunk_activity_dashboard_create.png|Saving Gauge Into New Dashboard|700]]
 >Pressing New Dashboard creates a popup window to configure the new dashboard's initial settings.  I enter "Monitoring" for the Dashboard Title and choose "Classic Dashboard" before pressing Save to Dashboard and then View Dashboard.
->![[../images/12/splunk_activity_config_dash.png|Initial Dashboard Settings|400]]
+>![[../images/12/splunk_activity_config_dash.png|Initial Dashboard Settings|475]]
 >The initial dashboard display is off to a great start, but it needs more context using the title and sub headers.  I press the Edit button in the upper right corner and name the section "Brute Force" and the widget "Failed Windows Logons", then hit Save.  The final dashboard looks much clearer!
->![[../images/12/splunk_activity_final_dash.png|Final Dashboard|650]]
+>![[../images/12/splunk_activity_final_dash.png|Final Dashboard|700]]
 >I can add new visualizations, sections and change the format of the dashboard to meet my security monitoring needs.  Using the Dashboards tab in the top menu will let me navigate back to any of my dashboards at will.
 ## Threat Hunting
 So far, we have explored how a SOC analyst would use a SIEM to alert and investigate potential security incidents based off feeds of system events.  The SOC analyst reacts to detections by responding to alerts in an effort to ensure the security of networks and systems.  However, another approach to security, while leveraging the power of the SIEM, is **threat hunting** that proactively searches for potential cyber threats.  The role of a threat hunter, who typically works in the SOC and uses the SIEM, can be a dedicated individual, team, or a shared role.  Many SOCs rotate personnel between roles to keep team members engaged and challenged.
@@ -174,15 +171,15 @@ Many vendors offer **threat intelligence** services that attempt to build profil
 
 > [!activity] Activity 12.4 - Threat Intelligence Using MITRE ATT&CK Framework
 >  Perhaps the greatest resource to threat hunters developing scenarios using the known IoCs method is MITRE's ATT&CK framework (https://attack.mitre.org/).  We've covered this resource in earlier chapters which emphasized the categorization of attack tools, techniques, and procedures (TTP).
->  ![[../images/12/mitre_attack.png|MITRE ATT&CK Framework Website|600]]
+>  ![[../images/12/mitre_attack.png|MITRE ATT&CK Framework Website|725]]
 >  MITRE's database includes dozens of threat actor groups on the https://attack.mitre.org/groups/  page.  Many of these groups are referred to by different names depending on the organizations that track them.  Navigating to the group page, I find an interesting North Korean state sponsored group, Lazarus.
->  ![[../images/12/threat_activity_groups.png|Lazarus Group Summary on MITRE ATT&CK|600]]
+>  ![[../images/12/threat_activity_groups.png|Lazarus Group Summary on MITRE ATT&CK|650]]
 >  Selecting the group's link reveals much more information on the threat, including the campaigns that have been attributed to them.  In this campaign, a list of techniques is provided that include further details on how to detect them within a network.  Aggregating several of these techniques could build a case worthy of a threat hunt!
->  ![[../images/12/threat_activity_campaign.png|Operation Dream Job Lazarus Campaign Techniques|600]]
+>  ![[../images/12/threat_activity_campaign.png|Operation Dream Job Lazarus Campaign Techniques|650]]
 >  The many-to-many nature of the ATT&CK framework affords us the ability to start developing threat hunts based on specific techniques.  Navigating to https://attack.mitre.org/techniques/enterprise/  reveals hundreds of available techniques associated with threat actors.
->  ![[../images/12/threat_activity_techniques.png|Threat Actor Techniques|600]]
+>  ![[../images/12/threat_activity_techniques.png|Threat Actor Techniques|650]]
 >  Technique "Bypass User Account Control" T1548 catches my eye.  I follow the technique link (https://attack.mitre.org/techniques/T1548/002/) and scroll down to the Detection section of the technique, which shows several methods to detect malicious behavior.  
->  ![[../images/12/threat_activity_detection.png|T1548 Detection Methods|600]]
+>  ![[../images/12/threat_activity_detection.png|T1548 Detection Methods|725]]
 >  With this information, I can begin building a threat hunt and search criteria within the SIEM to detect malicious behavior.  
 ## Incident Response
 The detection of a breach in security should cause an immediate reaction to remediate the threat and recover systems known as **incident response**.  The *incident responder* is another security professional role held by an individual who could be associated with the SOC team.  However, for smaller organizations, this role may not be held by someone in the organization and instead rely on a third party to perform incident response services.  This is usually a good idea as most organizations do not have frequent incidents that would warrant having a full-time incident responder available.  Similarly, as SOC analysts and threat hunters use the SIEM to detect security breaches, the incident responder uses the system to perform their investigations.  They use the data within the SIEM to forensically identify where the initial breach occurred, the activity performed by the threat actor, and all the systems affected by the incident.
@@ -204,7 +201,7 @@ The lifecycle of incident response efforts has two circular flows that progress 
 
 A long cyclical arch between *preparation* and *post-incident recovery* phases strengthens an organization's incident response posture.  Such a preparation reinforces the cyclical relationship between *detection and analysis* and the *containment and eradication* phases.  These phases require an iterative approach to ensure the complete mitigation of an existing threat.  Upon completion of this circular flow, the incident response effort moves to the *post-incident recovery* phase.
 
-![[../images/12/incident_phases.png|The Phases of Incident Response|600]]
+![[../images/12/incident_phases.png|The Phases of Incident Response|750]]
 
 Each phase in the lifecycle contains many processes and requires the coordination of several parties in an organization.  It can be very chaotic for an organization during an active security incident as stress levels will be high and information will be unavailable to make informed decisions.  The **preparation** phase, which is continuous, includes many activities that are conducted prior to an incident that will attempt to position the organization to handle the incident.  The more effort that is spent in this phase, the more ready an organization will be when responding to an incident.  During this phase, an *incident response plan* is developed which defines or classifies security incidents, describes roles and responsibilities, as well as communication plans.  It is important that a communication strategy on the handling of security incidents be agreed upon during the preparation phase so that members of the organization know who they can turn to for incident status updates.  Other ideas developed during the preparation phase include how incidents will be tracked, as well as the types of reports needed to communicate information about the incident.  This phase will also designate who the members of the IRT are, as well as their responsibilities.  It is beneficial for the organization to train and test their incident capabilities and then feed lessons learned back into the incident response plan. 
 
@@ -216,9 +213,9 @@ Earlier in this chapter, the development of the SIEM and its detections were int
 >In a previous activity within this chapter, I demonstrated establishing a detection manually centered on a brute force attack on Windows.  We also explored the hundreds of tools, techniques, and procedures (TTPs) outlined within MITRE ATT&CK framework and found even more resources from which to build detections.  Manually creating SPLs, alerts, and dashboards to monitor all these threats would require a lot of resources that every organization caring for security would have to repeat the same level of effort, which is entirely inefficient.  Therefore, Splunk has developed configured solutions that kickstart an organization's detections with prewritten SPLs, alerts, and dashboards based on the most common threats called Splunk Enterprise Security.
 >
 >Enterprise Security offered by Splunk is a premium solution designed for defense, prevention, and breach response.  Splunk users can install a trial version of the plugin package to experiment with before buying.  More information about the product can be found at https://www.splunk.com/en_us/products/enterprise-security.html.
->![[../images/12/enterprise_activity_homepage.png|Splunk Enterprise Security Homepage|600]]
+>![[../images/12/enterprise_activity_homepage.png|Splunk Enterprise Security Homepage|700]]
 >Because Splunk is the most widely adopted SIEM, and Enterprise Security is a very popular plugin to quickly enable organizations to get threat detection up and running, readers are strongly encouraged to take advantage of Splunk's free course "Introduction to Enterprise Security" (https://www.splunk.com/en_us/training/course-catalog.html?filters=filterGroup1FreeCourses&search=enterprise).
->![[../images/12/enterprise_activity_course.png|Splunk Course Catalog|600]]
+>![[../images/12/enterprise_activity_course.png|Splunk Course Catalog|700]]
 >Registration to the course is free and walks the learner through the use case, workflow, and interface of the tool.  The content is delivered in video format and concludes with an 11-question multiple choice quiz that can be taken unlimited times but requires a 75% to pass.  Upon passing, you are awarded a certificate of completion that would look great on a resume!
 >
 
@@ -232,10 +229,10 @@ Once the organization is confident in the eradication of the threat, they must r
 ### The Incident Response Plan
 Organizations memorialize their program for preparing and handling security incidents within a formal document called an **incident response plan**.  This document is usually comprised of a requirements section that outlines each system important to the organization.  Each system may be required to have a system level plan that includes the names and contact information of administrators, diagrams and locations of the systems, and procedures for collecting logs, administering access, and handling general incidents.  
 
-The plan document must describe the types of security risks that would invoke the use of the plan while describing the recommendations that outline the phases of the incident response lifecycle.  This document defines what an incident is and suggests communication and escalation strategies, usually as a *call tree* or a hierarchical responsibility matrix, that specifies who is responsible for informing others in the organization.  Risk severities alongside the timeliness of expected outcomes could be included in the plan as a way to express how quickly responses should be prioritized.
-
 >[!tip] Tip - Incident Response Planning Guideline
 >University of California Berkeley's Information Security Office has a wonderful Incident Response Planning Guideline (https://security.berkeley.edu/incident-response-planning-guideline) that prescribes requirements for all systems administrators to adhere to in support of incident response.
+
+The plan document must describe the types of security risks that would invoke the use of the plan while describing the recommendations that outline the phases of the incident response lifecycle.  This document defines what an incident is and suggests communication and escalation strategies, usually as a *call tree* or a hierarchical responsibility matrix, that specifies who is responsible for informing others in the organization.  Risk severities alongside the timeliness of expected outcomes could be included in the plan as a way to express how quickly responses should be prioritized.
 
 Most security departments are responsible for the development and maintenance of the incident response plan.  It is common for regulators and customers to express an interest or requirement that a plan be in place before they are willing to engage in business.  The plan is a central document that is usually reviewed during information security audits, such as the SOC2 or ISO 27001/2.
 
@@ -246,12 +243,52 @@ A misconception with cyber liability insurance is that its purpose is to make an
 >Almost every jurisdiction has different security incidents or data breach reporting requirements.  Some are as soon as 48 hours, whereas others may be 60 days and are often bounded by conditions of volumes or types of data affected.  Such requirements are expected by states, governments, regulatory bodies, and even customers.  Most organizations' general counsel and legal teams do not have expertise with the legal requirements for security incident response.  It is therefore highly recommended to retain legal counsel that has expertise with incident response prior to having an incident to avoid violations of law.
 
 This is where the value of a cyber liability insurer comes into play as they maintain a list of pre-approved and vetted vendors that have expertise with incident response ranging from legal, technical, and communication services.  These vendors can be invoked quickly through the insurance claims process that typically has a 24-hour hotline and response time to assist organizations during security incidents.  Perhaps the most important line within an organization's Incident Response Plan might be to reach out to the cyber liability insurer if an incident occurs.
+
+## Summary
+In this chapter, we shifted our focus from vulnerabilities to the detection and response lifecycle, beginning with how Security Operations Centers (SOCs) leverage Security Information and Event Management (SIEM) platforms to aggregate, normalize, and alert on log data from endpoints, servers, and network devices.  We examined the roles and responsibilities, from System Administrators and SIEM Engineers to SOC Analysts, Threat Hunters, and Incident Responders, and how each uses the SIEM console to monitor, investigate, and remediate threats.  Threat hunting was highlighted as a proactive practice driven by hypotheses, known indicators of compromise and attack, and advanced analytics, often informed by resources like MITRE ATT&CK and threat intelligence feeds.  We then dove into the incident response lifecycle (preparation, detection and analysis, containment and eradication, and post-incident recovery) emphasizing the importance of well-developed playbooks, communication plans, and cyber liability insurance partnerships.  We learned that by understanding each phase and integrating lessons learned back into preparation, organizations can strengthen their readiness and resilience against ever-evolving cyber threats.
+
+  <br>
+
+
+
+>[!terms] Key Terms
+>**Containment and Eradication** - The phase of incident response where actions are taken to stop an active threat from spreading and remove malicious artifacts and persistence mechanisms from affected systems.
+>
+>**Detection and Analysis** - The phase in which security events are collected, correlated, and examined to determine whether they constitute a confirmed security incident.
+>
+>**Incident Response** - The structured process by which an organization remediates identified security incidents, recovers affected systems, and prevents reoccurrence.
+>
+>**Incident Response Plan** - A formal document outlining the roles, responsibilities, procedures, and communication strategies an organization follows when handling security incidents.
+>
+>**Managed Security Service Providers (MSSP)** - Third-party companies that outsource the continuous monitoring, management, and analysis of security events, often via a SIEM, for client organizations.
+>
+>**Post Incident** - The final phase of the incident response lifecycle focused on system recovery, root cause analysis, lessons learned, and updating policies and playbooks.
+>
+>**Preparation** - The ongoing phase in which an organization develops policies, playbooks, training, and technical controls to ensure readiness for potential security incidents.
+>
+>**Security Event** - Any logged occurrence or activity of interest within a system that may signal normal operation or potential malicious behavior.
+>
+>**Security Incident** - One or more security events that, when combined, indicate a control failure or unauthorized access requiring a formal response.
+>
+>**Security Information and Event Management (SIEM)** - A platform that aggregates, normalizes, enriches, and analyzes log and event data across an environment to detect and alert on threats.
+>
+>**Security Operations Center (SOC)** - An internal or outsourced team responsible for monitoring security alerts, triaging events, and coordinating response efforts for an organization.
+>
+>**Security Orchestration, Automation, and Response (SOAR)** - A set of tools and workflows that automate and orchestrate incident response tasks, such as enrichment, containment actions, and notifications, to accelerate remediation.
+>
+>**Threat Hunting** - The proactive, hypothesis-driven process of searching for undetected adversary behavior within an environment using indicators of compromise and advanced analytics.
+>
+>**Threat Intelligence** - Curated information about threat actors, their tactics, techniques, and procedures (TTPs), and indicators of compromise used to inform detection and response.
+
+  <br>
+
+
 ## Exercises
 
 >[!exercise] Exercise 12.1 - SIEM Setup
 >In this task, you will install Splunk on your Ubuntu VM, import event data, and build queries, reports, and dashboards to analyze events.
 >#### Step 1 - Install Splunk Enterprise
->Using your Ubuntu VM in Bridge Adapter network mode, launch a browser and navigate to [https://www.splunk.com/en_us/download/splunk-enterprise.html](https://www.splunk.com/en_us/download/splunk-enterprise.html) and fill out the Create Account form with you CSUS email address.
+>Using your Ubuntu VM in Bridge Adapter network mode, launch a browser and navigate to [https://www.splunk.com/en_us/download/splunk-enterprise.html](https://www.splunk.com/en_us/download/splunk-enterprise.html) and fill out the Create Account form with your (.edu) email address.
 >
 >Upon login, you should reach the download page [https://www.splunk.com/en_us/download/splunk-enterprise.html?locale=en_us](https://www.splunk.com/en_us/download/splunk-enterprise.html?locale=en_us) .  Select Linux and download the ".deb" installer.
 >
