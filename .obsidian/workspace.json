@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/index.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "index"
+              "title": "README"
             }
           }
         ],
@@ -180,15 +180,17 @@
   },
   "active": "88fb94bf175f40d1",
   "lastOpenFiles": [
+    "textbook/copyright.md",
+    "README.md",
+    "textbook/index.md",
+    "textbook/00-Introduction.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "index/words.txt.bak",
     "index/build_index.py",
     "index",
     "textbook/05-OperatingSystemSecurity.md",
     "textbook/01-InformationSecurity.md",
-    "textbook/index.md",
     "textbook/toc.md",
-    "textbook/copyright.md",
     "textbook/15-AppendixLearningResources.md",
     "textbook/14-MobileSecurity.md",
     "textbook/13-CloudSecurity.md",
@@ -203,7 +205,6 @@
     "textbook/07-SecuritySystems.md",
     "images/07/snort_activity_install_2.png",
     "images/07/snort_activity_install.png",
-    "textbook/00-Introduction.md",
     "textbook/02-Cryptology.md",
     "textbook/03-NetworkSecurity.md",
     "textbook/04-NetworkServices.md",
@@ -211,7 +212,6 @@
     "images/04/dns_spoof_ubuntu_dsniff.png",
     "textbook/acknowledgments.md",
     "textbook/cover.md",
-    "README.md",
     "images/05/win_activity_bypass_tested2.png",
     "images/05/win_activity_bypass_test3.png",
     "images/05/win_activity_bypass_test2.png",

@@ -356,6 +356,30 @@ span.chapter-banner {
   • Repeats <thead> on each page.
 ─────────────────────────────────────────────────────────────────────────────*/
 @media print {
+  html,
+  body,
+  .markdown-preview-view {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /*──────────────────────────────────────────────────────────────────────────
+    2) Add “fake” margins by padding the preview area:
+       • Top/Bottom: 0.75in
+       • Left/Right: 0.5in
+       • box-sizing: border-box ensures the content stays inside those paddings.
+  ──────────────────────────────────────────────────────────────────────────*/
+  .markdown-preview-view {
+    padding-top:    0.75in !important;
+    padding-bottom: 0.75in !important;
+    padding-left:   0.5in  !important;
+    padding-right:  0.5in  !important;
+    box-sizing: border-box !important;
+  }
+
+
+
+
   /*────────────────────────────────────────────────────────────────────────────
     1) Let the .glossary-columns container split naturally if it runs out of page.
        Remove any “avoid” rules so it doesn’t force itself onto the next page.
@@ -402,10 +426,12 @@ span.chapter-banner {
   /*────────────────────────────────────────────────────────────────────────────
     4) Reset any extra margins/padding in the Preview area so our rules “take over”
   ────────────────────────────────────────────────────────────────────────────*/
+/*
   .markdown-preview-view,
   body {
     margin: 0 !important;
     padding: 0 !important;
   }
+*/
 }
 
