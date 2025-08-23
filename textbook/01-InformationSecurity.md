@@ -421,39 +421,38 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > ![[../images/01/lab_04_kali_dowload.png|Kali Linux Download Page|200]]
 > 7. With the ISO for Kali fully downloaded (~10-20 minutes depending on internet speeds), navigate to the running VirtualBox application and select the “New” button:
 > ![[../images/01/lab_03_vbox_installed.png|VirtualBox Startup Windows|300]]
-> 8. The VirtualBox "Create Virtual Machine" wizard should appear.  Within the wizard, name the VM “kali” and select the Kali ISO location downloaded in the previous steps.  Then press the Next button.
-> 9. Within the "Hardware" wizard page, supply the VM with 4GBs memory and 2 processors (note, these settings can be increased or decreased later if needed) then press Next.
-> 10. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", change the "Disk Size" to 30GB and press the Next button.
-> 11. Within the "Summary" wizard page, review the settings and press Finish.
-> 12. With the “kali” VM selected, press the “Start” button to launch the VM in a new window:
+> 8. The VirtualBox "Create Virtual Machine" wizard should appear.  Within the wizard, name the VM “kali” and select the Kali ISO location downloaded in the previous steps.  Choose the Subtype as Debian, then navigate to the Hardware section.
+> 9. Within the "Hardware" wizard page, supply the VM with 4GBs memory and 2 processors (note, these settings can be increased or decreased later if needed) then navigate to the Hard Disk section.
+> 10. On the "Hard Disk" page, select "Create a Virtual Hard Disk Now", change the "Disk Size" to 35GB and press the Finish button.
+> 11. With the “kali” VM selected, press the “Start” button to launch the VM in a new window:
 > ![[../images/01/lab_05_kali_started.png|Kali Started|400]]
 > #### Step 2 - Install Kali Operating System
-> 13. Select “Graphical Install” within the VM window and hit enter to launch the operating system installation wizard.
-> 14. The VM's installation wizard starts on the "Select a language" page.  Select the language "English" and press Continue.
-> 15. While on the "Select your location" page, choose your location.  For example, "United States" and then press Continue.
-> 16. On the "Configure the keyboard page, select keyboard layout American English and press Continue.
-> 17. Allow the Kali installer to run and the wizard will eventually launch the "Configure the network" page.  Enter the hostname “kali” and press Continue.
-> 18. On the second "Configure the network page", leave "Domain name" field empty and Continue.
-> 19. Next, on the "Set up users and passwords" page, enter your name in the "Full name for the new user" field and press Continue.
-> 20. From the second "Set up users and passwords" page, enter your name as the username in the "Username for your account" field and press Continue.
-> 21. In the third "Set up users and passwords" page, enter a password in the "Choose a password for the new user" and the "Re-enter password to verify" fields.  Make sure you remember this password!  Press the Continue button to advance the installation.
-> 22. In the next wizard page "Configure the clock", select your time zone and press Continue.
-> 23. On the "Partition disks" page, allow a moment for the disks to be detected, then select the “Guided - use entire disk” option and press Continue.
-> 24. From the second "Partition disks" page, select default partition and press Continue.
-> 25. Within the third "Partition disks" page, select the “All files in one partition” option and press Continue.
-> 26. In the fourth "Partition disks" page, select the “Finish partitioning and write changes to disk” to commit the partition changes and then press Continue.
-> 27. On the fifth and last "Partition disks" page, select “Yes” to the "Write the changes to disks" question (note default option is no) and press Continue.
-> 28. While in the "Software selection" window, wait for the system to install.  Then use the default software selections and press continue.
-> 29. Once the software is installed, after waiting for ~25 minutes, the "Install the GRUB boot loader" window appears.  Select "Yes" and then press Continue.
-> 30. Still on the "Install the GRUB boot loader" page, select the available device `/dev/sda` (not "Enter device manually") and press Continue to install the boot loader.
-> 31. Wait some time for the installation to finish and the "Finish the installation" page will appear.  Press Continue to complete the installation.
+> 12. Select “Graphical Install” within the VM window and hit enter to launch the operating system installation wizard.
+> 13. The VM's installation wizard starts on the "Select a language" page.  Select the language "English" and press Continue.
+> 14. While on the "Select your location" page, choose your location.  For example, "United States" and then press Continue.
+> 15. On the "Configure the keyboard page, select keyboard layout American English and press Continue.
+> 16. Allow the Kali installer to run and the wizard will eventually launch the "Configure the network" page.  Enter the hostname “kali” and press Continue.
+> 17. On the second "Configure the network page", leave "Domain name" field empty and Continue.
+> 18. Next, on the "Set up users and passwords" page, enter your name in the "Full name for the new user" field and press Continue.
+> 19. From the second "Set up users and passwords" page, enter your name as the username in the "Username for your account" field and press Continue.
+> 20. In the third "Set up users and passwords" page, enter a password in the "Choose a password for the new user" and the "Re-enter password to verify" fields.  Make sure you remember this password!  Press the Continue button to advance the installation.
+> 21. In the next wizard page "Configure the clock", select your time zone and press Continue.
+> 22. On the "Partition disks" page, allow a moment for the disks to be detected, then select the “Guided - use entire disk” option and press Continue.
+> 23. From the second "Partition disks" page, select default partition and press Continue.
+> 24. Within the third "Partition disks" page, select the “All files in one partition” option and press Continue.
+> 25. In the fourth "Partition disks" page, select the “Finish partitioning and write changes to disk” to commit the partition changes and then press Continue.
+> 26. On the fifth and last "Partition disks" page, select “Yes” to the "Write the changes to disks" question (note default option is no) and press Continue.
+> 27. While in the "Software selection" window, wait for the system to install.  Then use the default software selections and press continue.
+> 28. Once the software is installed, after waiting for ~25 minutes, the "Install the GRUB boot loader" window appears.  Select "Yes" and then press Continue.
+> 29. Still on the "Install the GRUB boot loader" page, select the available device `/dev/sda` (not "Enter device manually") and press Continue to install the boot loader.
+> 30. Wait some time for the installation to finish and the "Finish the installation" page will appear.  Press Continue to complete the installation.
 > #### Step 3 - Configure Kali
-> 32. The system will reboot and launch the login menu.  Enter the username and password used during installation.  If the VM boots to a black screen, you may need to increase the "Video Memory" of the VM.  Navigate to VirtualBox, select your VM, press Settings, choose Display from the navigation menu on the left, and then increase the Video Memory.
+> 31. The system will reboot and launch the login menu.  Enter the username and password used during installation.  If the VM boots to a black screen, you may need to increase the "Video Memory" of the VM.  Navigate to VirtualBox, select your VM, press Settings, choose Display from the navigation menu on the left, and then increase the Video Memory.
 > ![[../images/01/lab_06_kali_login.png|Kali Login Screen|500]]
-> 33. The system will log in and present the Kali desktop.  Right click in the desktop and select “Open Terminal Here” from the context dropdown menu.
-> 34. With the terminal open, run the apt update command and then enter your password to update the system.
+> 32. The system will log in and present the Kali desktop.  Right click in the desktop and select “Open Terminal Here” from the context dropdown menu.
+> 33. With the terminal open, run the apt update command and then enter your password to update the system.
 > `sudo apt update -y`
-> 35. After updates have been installed, install the VirtualBox guest software using the following command. 
+> 34. After updates have been installed, install the VirtualBox guest software using the following command. 
 > ```
 > sudo apt install -y --reinstall virtualbox-guest-x11
 > ```
@@ -473,17 +472,17 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > 
 > We will use an Ubuntu VM throughout the course as a victim, server, or to illustrate secure configurations.  Ubuntu is another Debian distribution maintained by Conical and is one of the most popular Linux operating systems.  You will download an ISO image and install the system using the unattended installation feature.  Once completed, we will configure the VM to share resources with the host.
 > #### Step 1 - Download and Set Up Ubuntu VM
-> 37. Navigate to https://releases.ubuntu.com/22.04/ and download the Ubuntu version 22.0.4 image.
-> 38. With the ISO for Ubuntu fully downloaded (~10-20 minutes depending on internet speeds), navigate to the running VirtualBox application and select the “New” button.
-> 39. The VirtualBox "Create Virtual Machine" wizard will launch.  On the "Virtual machine Name and Operating System" page, enter "ubuntu" in the name field and select the Ubuntu ISO image you downloaded in the previous step.  Leave the "Skip Unattended Installation" checkbox UNCHECKED and press Next.
-> 40. Within the "Unattended Guest OS Install Setup" page, change the username to your name, enter a password, and change the domain name to "lan".  Ensure the "Guest Additions" option is checked and press Next.
-> 41. In the "Hardware" page, select a "Base Memory" of 4096MB and set "Processors" to 2 CPUs (these settings can be adjusted later if more/less resources are needed).
-> 42. On the "Virtual Hard disk" page, choose the option "Disk Size" and set it to 35 GBs then press Next.
-> 43. Review your settings on the "Summary" page and press "Finish" to complete the setup.
+> 35. Navigate to https://releases.ubuntu.com/22.04/ and download the Ubuntu version 22.0.4 image.
+> 36. With the ISO for Ubuntu fully downloaded (~10-20 minutes depending on internet speeds), navigate to the running VirtualBox application and select the “New” button.
+> 37. The VirtualBox "Create Virtual Machine" wizard will launch.  On the "Virtual machine Name and Operating System" page, enter "ubuntu" in the name field and select the Ubuntu ISO image you downloaded in the previous step.  Leave the "Skip Unattended Installation" checkbox UNCHECKED.
+> 38. Within the "Unattended Guest OS Install Setup" page, change the username to your name, enter a password, and change the domain name to "lan".  Ensure the "Guest Additions" option is checked.
+> 39. In the "Hardware" page, select a "Base Memory" of 4096 MB and set "Processors" to 2 CPUs (these settings can be adjusted later if more/less resources are needed).
+> 40. On the "Hard Disk" page, choose the option "Disk Size" and set it to 35 GBs.
+> 41. Press "Finish" to complete the set up and launch the VM.
 > #### Step 2 - Install Ubuntu OS
-> 44. Observe the ubuntu VM has been configured and is running in the VirtualBox application.  Select the ubuntu entry and then the Show button to watch the installation progress.  The installation should take 20-30 minutes.
-> ![[../images/01/lab_10_ubuntu_install.png|Ubuntu OS Auto Installation|650]]
-> 45. Once installation is complete the VM will reboot to the login screen.  Login with the user account you setup in step 4.
+> 42. Observe the ubuntu VM has been configured and is running in the VirtualBox application.  Select the ubuntu entry and then the Show button to watch the installation progress.  The installation should take 20-30 minutes.
+> ![[../images/01/lab_10_ubuntu_install.png|Ubuntu OS Auto Installation|600]]
+> 43. Once installation is complete the VM will reboot to the login screen.  Login with the user account you specified earlier.
 > #### Step 3 - Set Up Ubuntu OS
 > Like Kali, set up the shared clipboard and drag and drop VM settings.  Select Devices, Shared Clipboard, and choose Bidirectional.  Then select Devices, Drag and Drop, and choose Bidirectional.
 > 
@@ -493,33 +492,32 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > [!exercise] Exercise 1.4 - Install Windows Virtual Machine
 > The last VM we will be using in our lab environment is a Windows 10 machine.  Like Ubuntu, it will act as a victim, server, or be used to demonstrate secure configurations.  You will install an evaluation version so there is no need to purchase a license.  To obtain the ISO, you will download the Windows installation media tool to your host machine, configure the desired ISO, and download it.  You will then create a VM using this ISO and use the unattended installation feature.  After installation we will set up the ability to share resources between the host and the VM.
 > #### Step 1 - Download the Windows ISO
-> 46. Navigate to https://www.microsoft.com/en-us/software-download/windows10 and press the "Download Now" button under the "Create Windows 10 installation media" section.
+> 44. Navigate to https://www.microsoft.com/en-us/software-download/windows10 and press the "Download Now" button under the "Create Windows 10 installation media" section.
 > ![[../images/01/lab_11_win_download.png|Download Media Creation Tool|450]]
-> 47. Open the Downloads folder and run the Media Creation Tool executable which will launch the "Windows 10 Setup" wizard in a new window.
-> 48. Within the "Windows 10 Setup" window, accept the licensing and choose “Create installation media (USB flash drive, DVD, or ISO file) for another PC” option.
-> 49. On the "Choose which media to use" page of the wizard, use the recommended options and select ISO file.
+> 45. Open the Downloads folder and run the Media Creation Tool executable which will launch the "Windows 10 Setup" wizard in a new window.
+> 46. Within the "Windows 10 Setup" window, accept the licensing and choose “Create installation media (USB flash drive, DVD, or ISO file) for another PC” option.
+> 47. On the "Choose which media to use" page of the wizard, use the recommended options and select ISO file.
 > ![[../images/01/lab_12_win_iso.png|Media Creation Tool ISO Selection|400]]
-> 50. Select the location to save the ISO and the download will begin.  Select Finish once complete (no need to burn to DVD) and the download process should begin.  The download may take 10 to 20 minutes depending on your internet connection.
+> 48. Select the location to save the ISO and the download will begin.  Select Finish once complete (no need to burn to DVD) and the download process should begin.  The download may take 10 to 20 minutes depending on your internet connection.
 > #### Step 2 - Set Up the Windows VM
-> 51. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
-> 52. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
-> 53. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Domain Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key; press the Next button.
-> 54. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
-> 55. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
-> 56. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
-> 57. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
-> 58. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
-> 59. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Domain Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key; press the Next button.
-> 60. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
-> 61. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
-> 62. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
+> 49. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
+> 50. On the "Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field. 
+> 51. From the "Unattended Install" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Domain Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key.
+> 52. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.
+> 53. On the "Hard Disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Finish.
+> 54. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
+> 55. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
+> 56. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Domain Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key; press the Next button.
+> 57. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
+> 58. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
+> 59. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
 > ![[../images/01/lab_13_win_summary.png|Windows VM Summary|350]]
 > #### Step 3 - Install Windows OS
-> 63. Windows should take 20-30 minutes to install and can be monitored by selecting Show in VirtualBox on the running windows VM.
+> 60. Windows should take 20-30 minutes to install and can be monitored by selecting Show in VirtualBox on the running windows VM.  You may have to select "I don't have a product key" if prompted when the installation begins.
 > ![[../images/01/lab_14_win_install.png|Windows VM Installation|500]]
 > #### Step 4 - Set Up Windows OS
-> 64. After the installation is complete, you will be automatically logged into the VM to the Windows desktop.  You may have to adjust the VirtualBox View settings and/or the Windows display settings for the best experience.  If your window does not show the file menu, try using VirtualBox shortcut keys to display (in Windows right CTRL + Home button). 
-> 65. Like Kali and Ubuntu VMs, set up the shared clipboard and drag and drop VM settings. Select Devices, Shared Clipboard, and choose Bidirectional. Then select Devices, Drag and Drop, and choose Bidirectional.
+> 61. After the installation is complete, you will be automatically logged into the VM to the Windows desktop.  You may have to adjust the VirtualBox View settings and/or the Windows display settings for the best experience.  If your window does not show the file menu, try using VirtualBox shortcut keys to display (in Windows right CTRL + Home button). 
+> 62. Like Kali and Ubuntu VMs, set up the shared clipboard and drag and drop VM settings. Select Devices, Shared Clipboard, and choose Bidirectional. Then select Devices, Drag and Drop, and choose Bidirectional.
 > 
 > Congratulations, you have successfully installed Windows in VirtualBox!  If you have adequate disk space (2x the recommended minimum) then you may consider taking a snapshot of the fresh installation in case you ever want/need to start from a clean installation.
 
