@@ -507,19 +507,13 @@ Each chapter of this book will include lab exercises on the covered topics.  Re
 > 54. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
 > 55. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
 > 56. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
-> 57. After the ISO for Windows download completes, navigate to the running VirtualBox application and select the “New” button which launches the VirtualBox "Create Virtual Machine" wizard in a new window.
-> 58. On the "Virtual machine Name and Operating System" wizard page, enter "windows" in the "Name" field then navigate and select the ISO file downloaded from the Media Creation Tool in the "ISO Image" field.  Press the Next button to continue the configuration.
-> 59. From the "Unattended Guest OS Install Setup" page, adjust the unattended install setup with your name as the username and a password of your choosing, set the "Domain Name" to lan, and check the "Guest Additions" option.  We will not be licensing Windows so do not worry about the Product Key; press the Next button.
-> 60. Within the "Hardware" page, set the "Base Memory" to 4096 MB and set 2 processors.  Press the Next button to continue the configuration.
-> 61. On the "Virtual Hard disk" page, select "Create a Virtual Hard Disk Now", enter 45 GB, and press Next.
-> 62. Review the settings on the "Summary" page and press Finish if all looks correct to start the unattended operating system installation.
 > ![[../images/01/lab_13_win_summary.png|Windows VM Summary|350]]
 > #### Step 3 - Install Windows OS
-> 63. Windows should take 20-30 minutes to install and can be monitored by selecting Show in VirtualBox on the running windows VM.
+> 57. Windows should take 20-30 minutes to install and can be monitored by selecting Show in VirtualBox on the running windows VM.
 > ![[../images/01/lab_14_win_install.png|Windows VM Installation|500]]
 > #### Step 4 - Set Up Windows OS
-> 64. After the installation is complete, you will be automatically logged into the VM to the Windows desktop.  You may have to adjust the VirtualBox View settings and/or the Windows display settings for the best experience.  If your window does not show the file menu, try using VirtualBox shortcut keys to display (in Windows right CTRL + Home button). 
-> 65. Like Kali and Ubuntu VMs, set up the shared clipboard and drag and drop VM settings. Select Devices, Shared Clipboard, and choose Bidirectional. Then select Devices, Drag and Drop, and choose Bidirectional.
+> 58. After the installation is complete, you will be automatically logged into the VM to the Windows desktop.  You may have to adjust the VirtualBox View settings and/or the Windows display settings for the best experience.  If your window does not show the file menu, try using VirtualBox shortcut keys to display (in Windows right CTRL + Home button). 
+> 59. Like Kali and Ubuntu VMs, set up the shared clipboard and drag and drop VM settings. Select Devices, Shared Clipboard, and choose Bidirectional. Then select Devices, Drag and Drop, and choose Bidirectional.
 > 
 > Congratulations, you have successfully installed Windows in VirtualBox!  If you have adequate disk space (2x the recommended minimum) then you may consider taking a snapshot of the fresh installation in case you ever want/need to start from a clean installation.
 
