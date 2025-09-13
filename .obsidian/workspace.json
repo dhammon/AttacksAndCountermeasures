@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "textbook/06-PersistenceAndPrivilegeEscalation.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
@@ -27,12 +27,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/01-InformationSecurity.md",
+                "file": "textbook/02-Cryptology.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01-InformationSecurity"
+              "title": "02-Cryptology"
+            }
+          },
+          {
+            "id": "c631ac95ab1f42e4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "textbook/03-NetworkSecurity.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "03-NetworkSecurity"
             }
           }
         ],
@@ -93,8 +107,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 289.5,
-    "collapsed": true
+    "width": 289.5
   },
   "right": {
     "id": "14793b94a2f895be",
@@ -171,6 +184,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:Create new base": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
@@ -181,18 +195,19 @@
   },
   "active": "88fb94bf175f40d1",
   "lastOpenFiles": [
+    "textbook/03-NetworkSecurity.md",
+    "textbook/02-Cryptology.md",
+    "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "textbook/01-InformationSecurity.md",
     "textbook/05-OperatingSystemSecurity.md",
     "textbook/04-NetworkServices.md",
-    "textbook/03-NetworkSecurity.md",
     "README.md",
     "textbook/copyright.md",
     "textbook/index.md",
     "textbook/00-Introduction.md",
-    "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "index/words.txt.bak",
     "index/build_index.py",
     "index",
-    "textbook/01-InformationSecurity.md",
     "textbook/toc.md",
     "textbook/15-AppendixLearningResources.md",
     "textbook/14-MobileSecurity.md",
@@ -208,7 +223,6 @@
     "textbook/07-SecuritySystems.md",
     "images/07/snort_activity_install_2.png",
     "images/07/snort_activity_install.png",
-    "textbook/02-Cryptology.md",
     "images/04/dns_spoof_ubuntu_dsniff_2.png",
     "images/04/dns_spoof_ubuntu_dsniff.png",
     "textbook/acknowledgments.md",

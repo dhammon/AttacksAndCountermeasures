@@ -323,36 +323,40 @@ This chapter delved into securing information through cryptography and cryptanal
 
 >[!exercise] Exercise 2.1 - Encoding and Decoding
 >Encoding and decoding values is very common when analyzing data and having the skillset benefits many security roles.
->#### Step 1
+>#### Step 1 - Determine Encoding
 >Using the encoding patterns learned in this chapter, identify each strings' encoding:
 >- `WW91IGhhY2tlciB5b3UhIQ==`
 >- `69 110 99 111 100 105 110 103 32 105 115 32 110 111 116 32 101 110 99 114 121 112 116 105 111 110 32 58 41`
 >- `77 30 30 74 20 77 30 30 74`
 >- `48 65 78 20 69 73 20 63 6f 6d 6d 6f 6e 6c 79 20 75 73 65 64 20 77 69 74 68 20 61 73 73 65 6d 62 6c 79`
 >- `01101111 01101110 01100101 00100111 01110011 00100000 01100001 01101110 01100100 00100000 01111010 01100101 01110010 01101111 00100111 01110011`
->#### Step 2
+>#### Step 2 - Decode the Strings
 >Decode each string from step 1 using CyberChef https://gchq.github.io/CyberChef/.
->#### Step 3
+>#### Step 3 - Encode a String
 >Using CyberChef, encode the following string into a base 32 format.
 >`Cyber Chef is an awesome tool!`
 
 
 > [!exercise] Exercise 2.2 - Key Space
-> OpenSSL is a command line tool available in Linux systems that can perform almost any cryptographic activity you can imagine.  It comes preinstalled on Ubuntu and can be used to generate random encryption keys of a desired length.  Start your Ubuntu VM and open a terminal.  Create a random 32, 128, and 256 key using the following commands.
+> OpenSSL is a command line tool available in Linux systems that can perform almost any cryptographic activity you can imagine.  It comes preinstalled on Ubuntu and can be used to generate random encryption keys of a desired length.  
+> #### Step 1 - Create Key Examples
+> Start your Ubuntu VM and open a terminal.  Create a random 32, 128, and 256 key using the following commands.
 > ```bash
 > openssl rand -base64 32
 > openssl rand -base64 128
 > openssl rand -base64 256
 > ```
+> #### Step 2 - Describe Key Impact
+> Describe how the length of an encryption key can impact its security.
 
 
 > [!exercise] Exercise 2.3 - Symmetric Encryption
 > We'll continue the use of OpenSSL on your Ubuntu VM to complete this exercise in which you will encrypt and decrypt a message using symmetric encryption.
-> #### Step 1
+> #### Step 1 - Create Plaintext File
 > Open a terminal and create a plaintext file with a secret message.  
 > 
 > `echo "some secret message" > plain.txt`
-> #### Step 2
+> #### Step 2 - Encrypt the File
 > With the plaintext file created, encrypt the message using AES 256 encryption code block cipher mode.  
 > `openssl enc -aes-256-cbc -p -in plain.txt -out plain.txt.enc`
 > 
@@ -360,7 +364,7 @@ This chapter delved into securing information through cryptography and cryptanal
 > 
 > `cat plain.txt.enc`
 > 
-> #### Step 3
+> #### Step 3 - Decrypt the File
 > Next, decrypt the encrypted message using the key you set in step 1.
 > 
 > `openssl enc -aes-256-cbc -d -A -in plain.txt.enc`
@@ -371,44 +375,47 @@ This chapter delved into securing information through cryptography and cryptanal
 
 > [!exercise] Exercise 2.4 - Hash Generation
 > In this task you will create hash digests using Ubuntu's native md5sum and sha256sum tools.
-> #### Step 1
+> #### Step 1 - Create a Message
 > Create a message in a new file to be used with hashing utilities.  Open your terminal on your Ubuntu machine and enter the following command.
 > ```bash
 > echo "Tamperproof Message: crypto is the coolest!" > message.txt
 > ```
-> #### Step 2
+> #### Step 2 - Hash the File
 > For this step you will take the MD5 and SHA-256 values of the created file from the previous step.  Enter the following commands in the directory where `message.txt` resides.
 > ```bash
 > md5sum message.txt
 > sha256sum message.txt
 > ```
 > Notice the difference in the digest length between MD5 and SHA-256.
+> #### Step 3 - Analyze File Changes
+> Modify the `message.txt` file by one character and rerun one of the hashing commands.  Explain how the results between each hash run differ and what this means with respect to security.
+
 
 
 > [!exercise] Exercise 2.5 - Detached Digital Signature
 > Debian based Linux systems usually come pre-installed with GNU Privacy Guard (GPG) that offers the ability to create digital signatures (DS).  You will use your Ubuntu VM in this exercise to create a detached DS and to verify it.
-> #### Step 1
+> #### Step 1 - Generate GPG Key
 > Acting as the sender of the message, we will create a key-pair using `gpg` via the following command.  Once the command is run, you are prompted to enter a name and email address.  You will also be asked to enter and verify a password for your key ring that is created.  Upon successful execution, a public key is created along with an entry in the system's key ring.
 > ```bash
 > gpg --gen-key
 > ```
-> #### Step 2
+> #### Step 2 - Create a Message
 > Create a message to sign using the following command.
 > ```bash
 > echo "Message integrity and authentication are very cool" > message.txt
 > ```
-> #### Step 3
+> #### Step 3 - Create Digital Signature
 > With the key-pair and message created, you are ready to digitally sign it using GPG.  The following command will output a `message.txt.sig` as a detached separate file from the original `message.txt`.  Upon entering the first command, you will be prompted to enter your password to access the key ring.  The second command displays the contents of the signature - note it is a public key!
 > ```bash
 > gpg --output message.txt.sig --armor --detach-sig message.txt
 > cat message.txt.sig
 > ```
-> #### Step 4
+> #### Step 4 - Verify the Message
 > The message and the signature are now ready to be sent.  You can pretend to send both files to another party.  When the receiver gets your message and detached signature, they will need to verify that the message has not been altered and that it was really you that sent it.  The receiver will use GPG with the verify option to confirm the message in the following command.  GPG will output a "Good signature" message upon successful validation.  Run the following command to verify the message.
 > ```bash
 > gpg --verify message.txt.sig message.txt
 > ```
-> #### Step 5
+> #### Step 5 - Manipulate the Message
 > Alter the `message.txt` content slightly and then re-run the GPG verify command and then answer the following questions:
 > - What is the output of the validation?  
 > - Are you notified that the signature is bad?  
@@ -418,7 +425,7 @@ This chapter delved into securing information through cryptography and cryptanal
 
 > [!exercise] Exercise 2.6 - Steghide
 > Let's use steganography to hide a secret message within a JPEG file using a tool called Steghide.  You will install the software, create a message and conceal it within an image file.  Afterwards, you will extract the secret from the image.  Start and login to your Kali VM to complete this exercise.
-> #### Step 1
+> #### Step 1 - Install Steghide
 > From your Kali VM, open a terminal and update your system using the following command.
 > ```bash
 > sudo apt update -y
@@ -432,13 +439,13 @@ This chapter delved into securing information through cryptography and cryptanal
 > ```bash
 > sudo apt install steghide -y
 > ```
-> #### Step 2
+> #### Step 2 - Create Secret
 > With Steghide installed on your system, you will need a secret message and a JPEG image.  First, create a message using the following command.
 > ```bash
 > echo "Launch Code: 31337" > secret.txt
 > ```
 > Next, open your VM's browser and navigate to [https://www.google.com/imghp?hl=en](https://www.google.com/imghp?hl=en) and search for an image.  Right-click the image and save it as a JPEG.  If the image cannot be saved as a JPEG, then you will need to select another image or try to convert it.  You might consider moving the downloaded image to the same folder where the secret.txt file was created.
-> #### Step 3
+> #### Step 3 - Hide the Secret
 > Now that the software is installed, a message was created, and you have downloaded a JPEG, you are ready to hide the message into the image.  With Steghide, you will use the embed command and options `-ef` (embed file) and `-cf` (cover file) to insert the secret message into the image.  The original image will be modified yet will look the exact same.  Make sure to replace the `IMAGE.JPG` with the image name and path of what you downloaded.  You will be prompted to supply a password after running the command - make sure you remember it!
 > ```bash
 > steghide embed -ef secret.txt -cf IMAGE.JPG
@@ -448,7 +455,7 @@ This chapter delved into securing information through cryptography and cryptanal
 > eog IMAGE.JPG
 > ```
 > Consider moving the steg file (image) to another folder or removing the original message as you will next demonstrate extracting the message.
-> #### Step 4
+> #### Step 4 - Extract the Secret
 > Pretend this stego-image was sent to another party that knew of the hidden message and has password.  They can use Steghide to extract the message and reveal its contents.  Run the following command that uses the `extract` command and `-sf` (steg file) option to extract the message.  Unless you have moved the steg file image or deleted the original message, when you extract the message, you will overwrite the original message that is in the folder.  Make sure to replace `STEG_IMAGE.JPG` with the name and path if not in the same folder as the current working directory.
 > ```bash
 > steghide extract -sf STEG_IMAGE.JPG
