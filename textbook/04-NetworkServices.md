@@ -227,48 +227,44 @@ Firewalls can limit outbound port or application connections to the internet for
 To accomplish **DNS tunneling exfiltration**, an attacker segments a file into small clips and then encodes them into an DNS compliant character set (a-z0-9-.).  Each segment is then used as the subdomain of an attacker control domain and resolver.  The victim's resolver will not recognize the subdomain and will initiate a request to the attacker's authoritative server.  The attacker controlled authoritative server logs are then compiled and reassemble the decoded subdomains back into the original file!  This technique is useful to attackers that have compromised a network and want to exfiltrate data discreetly.
 
 >[!activity] Activity 4.4 - DNS Spoofing
->I will demonstrate a DNS spoofing attack using the three VMs, Kali, Ubuntu, and Windows on `Bridge Adapter` network settings.  The Kali VM will serve as the attacker, the Ubuntu machine will be set up as a DNS resolver using `dnsspoof`, and the Windows VM will be our victim.
+>I will demonstrate a DNS spoofing attack using the three VMs, Kali, Ubuntu, and Windows on `Bridge Adapter` network settings.  The Kali VM will serve as the attacker, the Ubuntu machine will be set up as a DNS resolver using `bind9`, and the Windows VM will be our victim.
 >
->Starting with the Ubuntu machine, I install `dsniff` after I update the system.
+>Starting with the Ubuntu machine, I install `bind9` after I update the system.  Bind9 is a common DNS resolver and its default settings will facilitate DNS requests.  It can also be configured as an authoritative server with hosted zones, but that is outside the scope of this activity.
 >```bash
 >sudo apt update -y
->sudo apt install dsniff -y
+>sudo apt install bind9 bind9utils bind9-doc -y
 >```
->![[../images/04/dns_spoof_ubuntu_dsniff_2.png|Ubuntu Installing Dsniff|525]]
->My DNS server will be set up to only resolve www.google.com, but I first need to know Google's IP address.  I use `nslookup` to find Google's IP address and then create a domain to IP binding in a `dns.txt` file.
+>![[../images/04/bind9_install.png|Bind9 (DNS Server) Installation|525]]
+>I can verify that the DNS server is up and running in a good state using the `systemctl` command.
 >```bash
->nslookup www.google.com
->echo "142.250.189.164 www.google.com" > dns.txt
+>systemctl status bind9
 >```
->![[../images/04/dns_spoof_dnstxt.png|Setting Up DNS Record|525]]
->Using the `ip` command, I identify the interface that the DNS server will run on.  Then, I start `dnsspoof` to serve the `dns.txt` records on that interface.  `Dnsspoof` is not a reliable DNS server application and is only being used here as it is easier than setting up a real DNS server.
+>![[../images/04/bind9_status.png|Confirming DNS Server Running|525]]
+>I can also see that the Ubuntu machine now has UDP port 53 open on all interfaces, ready to serve DNS requests.
+>```bash
+>ss -aun | grep 53
+>```
+>![[../images/04/port_53_confirmation.png|Confirming UDP Port 53 Listening|525]]
+>Lastly, I'll need the Ubuntu machine's IPv4 address to configure the Windows machine.  I see that the IP address is "192.168.4.181".
 >```bash
 >ip a
->sudo dnsspoof -i enp0s3 -f dns.txt
 >```
->![[../images/04/dns_spoof_dns_server.png|DNS Server Running on Ubuntu|525]]
->With the DNS server running and ready to resolve web.google.com, I switch to the Windows VM and configure the DNS resolver setting with the Ubuntu IP address.  I search for "View network connections" in the search bar and open the Control panel.
+>![[../images/04/dnsspoof_ubuntu_ip.png|Observing Ubuntu's IP Address|525]]
+>With the DNS server running and ready to resolve google.com, I switch to the Windows VM and configure the DNS resolver setting with the Ubuntu IP address.  I search for "View network connections" in the search bar and open the Control panel.
 >![[../images/04/activity_dnsspoof_control.png|Opening Network Connections|400]]
 >The "Network Connections" window is opened and displays the network interfaces.  I right-click the Ethernet entry and select "Properties" from the context menu options.
 >![[../images/04/dns_spoof_ethernet_properties.png|Ethernet Properties|275]]
 >Within the Ethernet Properties window, I select the "Internet Protocol Version 4" option and press the "Properties" button.
 >![[../images/04/dns_spoof_ip_settings.png|IPv4 Properties|275]]
 >Finally, I select the "Use the following DNS server addresses" radio button and enter the IP address of my Ubuntu VM.  You might recall that the Ubuntu IP address was observed earlier in this activity.
->![[../images/04/dns_spoof_win_dns_ip.png|Windows DNS Configuration to Ubuntu|300]]
+>![[../images/04/dnsspoof_win_dns_set.png|Windows DNS Configuration to Ubuntu|300]]
 >With the Ubuntu DNS server configured on the Windows VM, I open the browser and navigate to www.google.com and observe that the page loads.  
 >![[../images/04/dns_spoof_google_loads.png|Windows Google Load Success|350]]
 >I then open a command prompt and run an `nslookup` to www.google.com to confirm that the IP address resolves to the address set in the dns.txt file on the Ubuntu DNS server.
 >```bash
 >nslookup www.google.com
 >```
->![[../images/04/dns_spoof_win_google_nslookup.png|Windows Google Nslookup Resolution|550]]
->
->I also need to allowlist Google to be loaded within Edge without TLS.  Returning to Edge in the Windows VM, I navigate to `edge://settings/content/insecureContent` and then add `www.google.com` to the allow section.  This will simplify the attack for demonstration purposes, but know that an attacker could set up a HTTPS server with a certificate by doing a few extra steps.
->
->![[../images/04/activity_dnsspoof_edge_settings.png|Allow Insecure Google|500]]
->
->Next, I check the Ubuntu `dnsspoof` logs and see several entries in which the server is responding to the Window VM requests!
->![[../images/04/dns_spoof_ubuntu_valid_logs.png|Ubuntu DNS Spoof Valid Logs|450]]
+>![[../images/04/dnsspoof_dns_validation.png|Windows Google Nslookup Resolution|400]]
 >With the Windows and Ubuntu systems running in a healthy state and able to resolve the www.google.com domain correctly, I can prepare the attack.  I start by installing `dsniff` on the Kali machine after running an update.  My system was already up to date and `dsniff` was previously installed.
 >```bash
 >sudo apt update -y
@@ -283,30 +279,28 @@ To accomplish **DNS tunneling exfiltration**, an attacker segments a file into s
 >sudo python3 -m http.server 80
 >```
 >![[../images/04/dns_spoof_kali_http.png|Kali HTTP Server|500]]
->In another terminal, I switch to the root user, set the ip_forward flag to "1" to allow my Kali machine to forward packets, and then set up `arpspoof` to target the Windows IP address and the Ubuntu DNS server.
+>In another terminal, I set up `arpspoof` to target the Windows IP address and the Ubuntu DNS server.
 >```bash
->sudo su -
->echo 1 > /proc/sys/net/ipv4/ip_forward
->arpspoof -i eth0 -t 192.168.4.168 192.168.4.169
+>sudo arpspoof -i eth0 -t 192.168.4.180 192.168.4.181
 >```
->![[../images/04/dns_spoof_arp_spoof_1.png|Kali ARP Spoof Windows|500]]
->With Kali now poisoning the Windows VM, I open another window and poison the target Ubuntu DNS server and Windows IP.
+>![[../images/04/dnsspoof_arpspoof_win.png|Kali ARP Spoof Windows|525]]
+>Now that Kali is poisoning the Ubuntu VM, convincing it that the Kali VM is the DNS server, and a malicious web server is running, I can finally set up the malicious DNS server on Kali.  First, in a new terminal, I create a `dns.txt` file with an entry that has the Kali eth0 IP address binded to google.com.  Then, I run the `dnsspoof` command on the interface eth0 referencing the `dns.txt` file.
 >```bash
->sudo arpspoof -i eth0 -t 192.168.4.169 192.168.4.168
->```
->![[../images/04/dns_spoof_arp_spoof_2.png|Kali ARP Spoof Ubuntu|500]]
->Now that Kali is poisoning both the Ubuntu and Windows VMs, convincing each that Kali is the other, and a malicious web server is running, I can finally set up the malicious DNS server on Kali.  First, in a new terminal, I create a `dns.txt` file with an entry that has the Kali eth0 IP address binded to www.google.com.  Then, I run the `dnsspoof` command on the interface eth0 referencing the `dns.txt` file.
->```bash
->echo "192.168.4.167 www.google.com" > dns.txt
+>echo "192.168.4.179 google.com" > dns.txt
 >sudo dnsspoof -i eth0 -f dns.txt
 >```
->![[../images/04/dns_spoof_kali_dnsspoof.png|Kali DNS Spoof Running|550]]
->I now have 4 terminals running: 2 with `arpspoof`, 1 with an HTTP server, and 1 with `dnsspoof`.  Now that the attack is fully staged, the last thing to do is to entice the victim to navigate to www.google.com.  The victim will send a DNS query that will be highjacked because of the ARP poisoning.  Our malicious DNS server will resolve the requested address with our attacker IP address that the victim will use to request the web page.  Finally, our Kali machine will serve the malicious page in replace of the actual Google site.  From the Windows VM, I open a private browser window, to avoid any caching, and navigate to http://www.google.com.
->![[../images/04/dns_spoof_trigger.png|Windows Victim Served Malicious Google Page|550]]
+>![[../images/04/dnsspoof_kali_spoof.png|Kali DNS Spoof Running|525]]
+>I now have 3 terminals running: 1 with `arpspoof`, 1 with an HTTP server, and 1 with `dnsspoof`.  Now that the attack is fully staged, the last thing to do is to entice the victim to navigate to google.com.  The victim will send a DNS query that will be highjacked because of the ARP poisoning.  Our malicious DNS server will resolve the requested address with our attacker IP address that the victim will use to request the web page.  Back on the Windows victim, I run an `nslookup` search on google.com and observer the Ubuntu VM is configured as the DNS server, but that google.com resolves to the Kali IP address!
+>```bash
+>nslookup google.com
+>```
+>![[../images/04/dnsspoof_google_spoofed.png|Google Spoofed on Victim|525]]
+>Finally, our Kali machine will serve the malicious page in replace of the actual Google site.  From the Windows VM, I open a browser window and navigate to http://google.com.
+>![[../images/04/dnsspoof_browser_spoof.png|Windows Victim Served Malicious Page|300]]
 >The victim is served the malicious page!  Going back to Kali we can see the DNS spoof logs are resolving the request made by the victim.
->![[../images/04/dns_spoof_kali_spoof_logs.png|Kali DNS Spoof Logs|550]]
+>![[../images/04/dnsspoof_kali_dns_log.png|Kali DNS Spoof Logs|525]]
 >While on the Kali VM we can see the HTTP logs serving the victim the malicious web site.
->![[../images/04/dns_spoof_http_logs.png|Kali HTTP Logs|600]]
+>![[../images/04/dnsspoof_www_logs.png|Kali HTTP Logs|525]]
 >To enhance this attack further, I can clone the Google page and serve the site over HTTPS with a valid certificate.
 ## Dynamic Host Configuration Protocol (DHCP)
 As previously discussed, NICs have their MAC addresses burned in during the manufacturing process.  However, IP address assignment works differently and is assigned by **dynamic host configuration protocol (DHCP)** servers.  These systems are often found within routers or as standalone servers.  DHCP is responsible for assigning IP addresses to LAN hosts and can be configured to provide IPs from a set or range.  They can also statically configure IPs to specific MAC addresses.  The DHCP server maintains a table that consists of each networked device's MAC, leased IP address, and an expiration of the lease.  When an IP address lease expires, a new lease will be reassigned that could be the same IP address previously assigned.  The client device receiving the IP address then checks for duplicate IP addresses by broadcasting to all other devices over ARP in a process called *ARP probe*.  This process is designed to avoid collisions in the IP use and assignment.
@@ -608,32 +602,23 @@ This chapter examined some common protocols used in network communications.  It 
 > [!exercise] Exercise 4.3 - DNS Spoofing
 > The DNS Spoofing task will use the Ubuntu VM as a DNS server, the Windows VM as a victim DNS client, and the Kali VM as a malicious DNS server. The goal will be to get the Windows VM to resolve IP addresses from the Kali VM in a static network. Set up each VMs’ (Ubuntu, Windows, Kali) network settings to `Bridged Adapter` mode. 
 > #### Step 1 - Setup DNS Server
-> From the Ubuntu VM, install and configure the DNS server (using dnsspoof).  Within the Ubuntu terminal, modify your primary user account to use sudo. Make sure to replace `USER` with your username on the VM. 
+> From the Ubuntu VM, install and configure the DNS server (using bind9).  Within the Ubuntu terminal, modify your primary user account to use sudo. Make sure to replace `USER` with your username on the VM. 
 > ```bash
 > su -  
 > usermod –aG sudo USER
 > ```
-> Reboot the VM for the sudo settings to take effect. Once rebooted, you will be able to run commands as the root user from your primary user account.  Next, install `dsniff` using the following command.  
+> Reboot the VM for the sudo settings to take effect. Once rebooted, you will be able to run commands as the root user from your primary user account.  Next, install `bind9` using the following command.  
 > ```bash
-> sudo apt install dsniff –y 
+> sudo apt install bind9 bind9utils bind9-doc -y 
 > ```
-> After `dsniff` has been installed, look up the IP address of www.google.com to be used in a `dns.txt` file. Make sure to replace the `IP` with the IP address of www.google.com. 
+> Confirm that the bind9 service is running in a good state.
 > ```bash
-> nslookup www.google.com 
-> echo “IP www.google.com” > dns.txt 
-> ```
-> Identify the network interface of your Ubuntu VM by running the following command. The interface might be something like “enp0s3”. 
-> ```bash
-> ip a 
-> ```
-> With `dsniff` installed, the `dns.txt` file created, and the network interface identified, start the `dnsspoof` server. Make sure to replace `INTERFACE` with the network interface identified in the last command. 
-> ```bash
-> sudo dnsspoof -i INTERFACE -f dns.txt
+> systemctl status bind9
 > ```
 > #### Step 2 - Configure Windows DNS Setting
 > In this step, you will modify the Windows interface DNS settings to use the Ubuntu VM.  From the Windows VM, open the Control Panel's Network Connections panel. Right-click “Ethernet” and select “Properties” to launch the interface property window. With the interface properties window opened, select “Internet Protocol Version 4 (TCP/IPv4)” and press the “Properties” button. Select the “Use the following DNS server addresses:” radio button and enter the IP address of the Ubuntu VM.  Press “Ok” and close out the windows that were opened for the network settings. 
 > ![[../images/04/dns_win_settings.png|Windows DNS Configuration|500]]
-> You should see log activity in the Ubuntu `dnsspoof` terminal when running the following command from a Windows command prompt. 
+> Run a lookup on google.com to confirm that DNS is configured with Ubuntu correctly.
 > ```bash
 > nslookup google.com
 > ```
@@ -645,40 +630,39 @@ This chapter examined some common protocols used in network communications.  It 
 > Identify the IP address of the Kali VM and add it to a `dns.txt` file for www.google.com. Make sure to replace `IP` with the IP address of the Kali VM. 
 > ```bash
 > ip a 
-> echo “IP www.google.com” > dns.txt 
+> echo “KALI_IP_HERE google.com” > dns.txt 
 > ```
-> Configure the Kali VM to forward IP addresses that will be used in the MitM attack. You will switch the user to root, set the process ip_forward flag to 1, and exit the root terminal. 
-> ```bash
-> sudo su - 
-> echo 1 > /proc/sys/net/ipv4/ip_forward 
-> exit
-> ```
-> With the Kali VM set to forward IP addresses, and while in a user terminal (not root), spoof the arp resolution between the Windows to Ubuntu VMs. Make sure to replace the `WIN_IP` with the IP address of the Windows VM and the `UBUNTU_IP` with the IP address of the Ubuntu VM. 
+> Next, spoof the arp resolution between the Windows to Ubuntu VMs. Make sure to replace the `WIN_IP` with the IP address of the Windows VM and the `UBUNTU_IP` with the IP address of the Ubuntu VM. 
 > ```bash
 > sudo arpspoof -t WIN_IP UBUNTU_IP
 > ```
-> With Windows and Ubuntu traffic being spoofed, launch another Kali terminal and spoof the traffic between the Ubuntu and Windows VMs (opposite traffic flow from the last command). Make sure to replace the `WIN_IP` and the `UBUNTU_IP` IP addresses with the respective VM IP addresses. 
-> ```bash
-> sudo arpspoof -t UBUNTU_IP WIN_IP
-> ```
-> You should have two Kali terminals opened and each spoofing traffic between the Ubuntu and Windows VMs. Next, open a third terminal and identify the network interface of the Kali VM (might be eth0). 
+> You should have one Kali terminal opened that is spoofing traffic between the Ubuntu and Windows VMs. Next, open a second terminal and identify the network interface of the Kali VM (might be eth0). 
 > ```bash
 > ip a 
 > ```
-> Within the third terminal opened, launch the `dnsspoof` attack. Make sure to replace the `INTERFACE` in the command with the name of the interface identified in the previous command. 
+> Within the second terminal opened, launch the `dnsspoof` attack. Make sure to replace the `INTERFACE` in the command with the name of the interface identified in the previous command. 
 > ```bash
 > sudo dnsspoof -i INTERFACE -f dns.txt
 > ```
-> #### Step 4 - Trigger Attack
-> With the Kali VM spoofing traffic between the Windows and Ubuntu VMs, you are ready to observe the results of the attack.  If successful, you should see that www.google.com now resolves to the Kali VM's IP address. From the Windows VM terminal, lookup the IP address of www.google.com 
+> Open a third terminal and configure a malicious spoof page to be served to the victim.  Make sure to enter your name in the YOUR_NAME section.
 > ```bash
-> nslookup www.google.com
+> mkdir www
+> cd www
+> echo "YOUR_NAME hacked Google" > index.html
+> python3 -m http.server 80
 > ```
-> You should observe that www.google.com resolves to the Kali VM IP address.  If not, consider the following: 
+> #### Step 4 - Trigger Attack
+> With the Kali VM spoofing traffic between the Windows and Ubuntu VMs, you are ready to observe the results of the attack.  If successful, you should see that google.com now resolves to the Kali VM's IP address. From the Windows VM terminal, lookup the IP address of google.com 
+> ```bash
+> nslookup google.com
+> ```
+> You should observe that google.com resolves to the Kali VM IP address.  If not, consider the following: 
 > - Review your configurations 
 > - Flush local DNS cache in the Windows VM with the following command: `ipconfig /flushdns`
 > - Sometimes Windows will resort to IPv6 for DNS resolution, consider disabling it in the Ethernet properties.
 > - Wait a few minutes and try again 
+>
+>Lastly, open a terminal and navigate to `http://google.com` to confirm your malicious Google page is rendered to the victim.
 > #### Step 5 - Decommission
 > After you have completed the lab, make sure to revert changes made to your Windows VM.  Consider restoring from a previous snapshot or manually turning the Firewall profiles on and removing the manual DNS server IP address on the Ethernet interface. 
 
