@@ -465,6 +465,9 @@ However, the ability to bypass these early anti-malware solutions required only 
 Many anti-malware and *endpoint detection and response (EDR)* solutions indirectly hook into the memory space of processes that are started on the device.  This allows the solution to monitor process activities and report back to the solution for handling.  If the hook reports malicious patterns, the solution kills the running process ending the malware before it has had a chance to cause impact.  However, when a user launches an application, the executable code is put into the *userland* memory space along with the anti-malware hook.  The userland memory space is in the complete control of the user that started the process - allowing them, or the malware, to read and write to that memory space.  With this background, malware can unhook the anti-malware solution from the memory space it is running in which bypasses the security control.  Instead of unhooking, the malware can also return true negative result back to the solution regardless of the process memory space's behavior.
 
 > [!activity] Activity 5.14 - Bypassing Defender
+> > [!warning] Warning - May not work!
+> While the principles demonstrate in the following activity are sound, Microsoft may have developed detections that mitigate this specific attack.  However, the commands used could be altered to potentially bypass the detection.
+> 
 > I will demonstrate how to bypass Windows Defender using the Windows VM in a PowerShell session.  After starting the machine, I search for Virus & Threat Protection to launch the Defender settings.  Scrolling down the Windows Security window I can see that Defender is enabled and running.
 > ![[../images/05/win_activity_av_defender_running.png|Defender Up and Running|300]]
 > To demonstrate a bypass, I need to execute commands in a running process.  I launch a PowerShell session from the search bar not as administrator.  Defender hooks into this newly created process and will monitor the memory space for malicious behavior.  I know that the `Invoke-Mimikatz` will trigger Defender to kill the command as this function is associated with a common hacking technique to extract NTML hashes from a Windows system.  To test that Defender is working, I include this command and observe Defender taking action.
@@ -660,16 +663,16 @@ This chapter begins by exploring Linux’s foundational security mechanisms incl
 > From the Windows VM, start a `cmd` terminal, launch a `powershell` process, and prove that Windows Defender is active by running the following command.  The result of the command should result in an antivirus block.
 > ```powershell
 > powershell
-> Invoke-Mimikatz
+> echo "Invoke-Mimikatz"
 > ```
 > #### Step 2 - Bypass Defender
-> Navigate to Rasta Mouse’s AMSI patch within GitHub.  Copy each line/block into your PowerShell terminal one at a time hitting enter in between a few times.  You can find Rasta’s patch code in the following link. 
-> https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell#patching-amsi-amsiscanbuffer-by-rasta-mouse 
+> Navigate to the Relfection ScanContent Change AMSI bypass section within the following GitHub repository (https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell?tab=readme-ov-file#reflection-scancontent-change).  Copy each line/block into your PowerShell terminal one at a time.  Observe that the 2nd line starting with "$o" is detected and blocked by AMSI.  Modify the concatenated string to bypass this line's detection.  Copy the remainder of the lines in the documented bypass.
+> >Tip - Parts of the concatenation may need to be reverted
 > Once all lines/blocks are copied, retest to confirm that the PowerShell process is no longer hooked into Windows Defender.
 > ```powershell
-> Invoke-Mimikatz
+> echo "Invoke-Mimikatz"
 > ```
-> >Tip - *Start a fresh powershell terminal.  Also, use your imagination on what else you could do to break up the commands yet still bypass AMSI.*
+> 
 > #### Step 3 - Test Other Bypasses
 > Pick another bypass method from the following link and test in a new PowerShell instance.  Can you find another method that works? 
 > https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell
