@@ -158,12 +158,22 @@ Not all hash algorithms have equal security value.  Some hash algorithms have b
 There are many cryptographic hash algorithms available for use.  While we will not cover all of them, we will review a few of the more popular or common ones.  The **MD5 message-digest algorithm** produces a 32 character, 128-bit, hash value.  It is amazingly fast and has been used since the early 90's.   However, in 2010 it was proven to be vulnerable to collisions and therefore should not be used for critical security operations.  Another immensely popular group of hash algorithms is the **secure hashing algorithm (SHA)** family.  The commonly used SHA-1 has 40 characters, 160 bits, and was discovered to be susceptible to collisions in 2017 by Google researchers.  It is common to still find SHA-1 being used within information systems, but its use should be avoided in favor of the SHA-2 version.  This version supports multiple bit length options 224, 256, 384, or 512.  The larger the bit length the more secure but also requires more time to compute the value.  The current recommendation is to use SHA-256 or SHA-512 for secure operations.
 
 >[!activity] Activity 2.5 - Digest Verification
->Let's demonstrate the use of MD5 hash to prove the integrity of a message.  Using an Ubuntu VM, I open the terminal and echo a message into a file named `message.txt`.
+>Let's demonstrate the use of hashes to prove the integrity of a messages using our Ubuntu VM.
+>First, I open the terminal and echo a message into a file named `message.txt`.
 >![[../images/02/activity_01_message.png|Create Message|600]]
 >We can use the md5sum utility to determine the MD5 hash digest of a message.  The command outputs a 32-character value.  We could re-run this message on any computer and get the exact same result.
 >![[../images/02/activity_01_hash.png|MD5 Hash of Message.txt|600]]
 >Now, I replace the `message.txt` file with a slightly different message and recalculate the digest.  Notice the value is materially different from the original!
 >![[../images/02/activity_01_rehash.png|Change Message and Rehash|600]]
+>Now for a more practical example involving the integrity checking of HxD, a free hex editor software for Windows.  I start by opening my browser and navigate to https://mh-nexus.de/en/downloads.php?product=HxD20#.  Next, I select the "SHA-1 and SHA-512" link and see that the SHA-1 hash for the English HxD20 version is `d0d69744f1d01353507bc090ff79fb45db6882c0`.
+>![[../images/02/hash_hxd_site.png|HxD SHA-1 Hash on Website|450]]
+>Next, I download the HxD20 English zip file using `wget` to my Ubuntu machine.
+>```bash
+>wget https://mh-nexus.de/downloads/HxDSetup.zip
+>```
+>![[../images/02/hash_hxd_download.png|Download HxD|525]]
+>With the HxD zip file downloaded, I run `sha1sum` on the file and compare the output to the SHA1 hash posted on the maintainer's website.  Indeed, they match which suggests that the file has not been tampered with while in transit.
+>![[../images/02/hash_hxd_calc.png|Calcualte HxD Hash]]
 ## Encryption Authentication
 Encryption can be used to authenticate a sender or receiver of data, even data that is in plaintext!  Such cryptographic authentication methods also have the added benefit of ensuring the integrity of the data.  In the following section, we will explore how a receiver of a message can authenticate the sender through *message authentication code (MAC)* symmetric keys.  Similarly, this same task can be accomplished using asymmetric keys via a *digital signature*.  Both methods leave the message in plaintext, so it does not provide confidentiality or privacy attributes.
 ### Message Authentication Code
@@ -389,6 +399,12 @@ This chapter delved into securing information through cryptography and cryptanal
 > Notice the difference in the digest length between MD5 and SHA-256.
 > #### Step 3 - Analyze File Changes
 > Modify the `message.txt` file by one character and rerun one of the hashing commands.  Explain how the results between each hash run differ and what this means with respect to security.
+> #### Step 4 - Download VirtualBox for Linux
+> On your Ubuntu VM, navigate to https://www.virtualbox.org/wiki/Downloads and download the latest version of VirtualBox for Linux-Ubuntu 22.04.  This should download a ".deb" file to your Ubuntu's Downloads folder.
+> 
+> While still on the VirtualBox Linux download page, find the SHA256/MD5 checksums and note their values.
+> #### Step 5 - Validate VirtualBox
+> With the VirtualBox Ubuntu deb file downloaded, run an SHA256/MD5 calculation on the local file and compare it to the value listed on the page.  Do they match?  Describe what this indicates.
 
 
 
