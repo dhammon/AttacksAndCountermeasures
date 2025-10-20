@@ -409,7 +409,6 @@ This chapter walked through the lifecycle of web-application security testing, b
 >Change directory to vulnerable-site and run the vulnerable app as a docker container. Allow a few minutes for the image layers to download and the applications to start.
 >```bash
 >docker run -it -d -p "80:80" -v ${PWD}/app:/app --name vulnerable-site mattrayner/lamp:0.8.0-1804-php7
->
 >```
 >The container will run in the background but may need a few minutes to fully boot. After waiting a few minutes for the containers to load, run the db.sh script on the container to populate the application's database. If you receive an " `ERROR 2002 (HY000) `" it means you need to wait another minute for the container to fully boot.  Open your Kali VM Firefox browser to [http://127.0.0.1](http://127.0.0.1/) and observe that the vulnerable-site application is running!
 >```bash
@@ -423,7 +422,7 @@ This chapter walked through the lifecycle of web-application security testing, b
 >#### Step 4 - Directory Busting
 >Start a directory busting attack against the vulnerable-site using `gobuster` and discover the `db.sh` script in the web root directory.
 >```bash
->gobuster dir -u [http://127.0.0.1/](http://127.0.0.1/) -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 10 -x php,sh
+>gobuster dir -u http://127.0.0.1/ -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 10 -x php,sh
 >```
 >After a few seconds, `gobuster` discovers the `db.sh` file! Open the Firefox browser in your Kali VM and navigate to the file [http://127.0.0.1/db.sh](http://127.0.0.1/db.sh). The file downloads from the container.  Open the file by clicking the download shortcut and observe that the file contents include username and passwords in the INSERT commands!  From your Kali VM Firefox browser, navigate to the vulnerable-site's login page [http://127.0.0.1/](http://127.0.0.1/). Enter the administrator username and password found in the `db.sh` file.  Observe that the credentials were valid as the browser directs us to the Welcome Page, pwned!!
 >
@@ -551,17 +550,17 @@ This chapter walked through the lifecycle of web-application security testing, b
 >
 >Open a bash terminal and run `sqlmap` against the URL you just copied.
 >```bash
->sqlmap -u ' [http://127.0.0.1/?username=lol&password=lol&version=beta](http://127.0.0.1/?username=lol&password=lol&version=beta)' --batch
+>sqlmap -u 'http://127.0.0.1/?username=lol&password=lol&version=beta' --batch
 >```
 >Allow a minute for the tool to complete its analysis. Observe that `sqlmap` discovered that the application is vulnerable to time-based blind injection attacks!
 >
 >Enumerate the database names using the `--dbs` flag. Observe `sqlmap` slowly identifies each letter of each database name. After a few minutes, the databases `mysql`, `information_schema`, `performance_schema`, `sys`, and `company` are identified!
 >```bash
->sqlmap -u ' [http://127.0.0.1/?username=lol&password=lol&version=beta](http://127.0.0.1/?username=lol&password=lol&version=beta)' --batch --dbs
+>sqlmap -u 'http://127.0.0.1/?username=lol&password=lol&version=beta' --batch --dbs
 >```
 >The database `company` looks interesting. Run `sqlmap` targeting that database and dump all tables within it. 
 >```bash
->sqlmap -u ' [http://127.0.0.1/?username=lol&password=lol&version=beta](http://127.0.0.1/?username=lol&password=lol&version=beta)' --batch -D company --dump
+>sqlmap -u 'http://127.0.0.1/?username=lol&password=lol&version=beta' --batch -D company --dump
 >```
 
 

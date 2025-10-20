@@ -280,7 +280,6 @@ The image above illustrates an attacker making a network connection to a honeypo
 > ![[../images/07/honey_activity_pip_install.png|Installing Python3 PIP|500]]
 > Once Pip is installed, I install the honeypots Python module with the following command.  Several supporting dependencies are installed alongside the honeypots module.
 > ```bash
-> sudo apt install python3-pip -y
 > pip3 install honeypots
 > ```
 > 
@@ -359,9 +358,9 @@ We began the chapter by distinguishing between preventative and detective contro
 
 ## Exercises
 > [!exercise] Exercise 7.1 - Breach Report
-> In this task, you will read the CrowdStrike 2023 Global Threat Report and briefly summarize its contents. 
+> In this task, you will read the latest CrowdStrike Global Threat Report and briefly summarize its contents. 
 > #### Step 1 - Read and Report
-> Download the CrowdStrike 2023 Global Threat Report and read it while taking notes on any interesting facts you discover.  Write a brief ½ page summary describing where and why a company may want to invest its security resources.  The report should be written in with Executive Management and/or Board of Directors as the target audience.  Avoid too much use of technical jargon. 
+> Download the latest CrowdStrike Global Threat Report and read it while taking notes on any interesting facts you discover.  Write a brief ½ page summary describing where and why a company may want to invest its security resources.  The report should be written in with Executive Management and/or Board of Directors as the target audience.  Avoid too much use of technical jargon. 
 
 
 > [!exercise] Exercise 7.2 - Nessus Vulnerability Scan
