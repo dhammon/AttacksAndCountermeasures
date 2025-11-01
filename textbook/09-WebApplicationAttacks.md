@@ -459,7 +459,7 @@ This chapter walked through the lifecycle of web-application security testing, b
 >```
 >Open a terminal and log into the vulnerable-site using the `curl` command.
 >```bash
->curl -I "http://127.0.0.1/?username=daniel&password=Password123&version=beta"
+>curl -I "http://127.0.0.1/index.php?username=daniel&password=Password123&version=beta"
 >```
 >Observe that there is only one `Set-Cookie` response header for the session.
 
@@ -482,9 +482,9 @@ This chapter walked through the lifecycle of web-application security testing, b
 >http://127.0.0.1/?username=daniel&password=Password123&version=foobar
 >```
 >
->Observe that the GET parameter `version` reflects your input! Replace the "`foobar`" value with the test XSS payload "`<script>alert(1)</script>`" and press enter to reload the page. 
+>Observe that the GET parameter `version` reflects your input! Replace the "`foobar`" value with the test XSS payload "`<script>alert('YOUR_NAME')</script>`" and press enter to reload the page. 
 >```
->http://127.0.0.1/?username=daniel&password=Password123&version=<script>alert(1)</script>
+>http://127.0.0.1/?username=daniel&password=Password123&version=<script>alert('YOUR_NAME')</script>
 >```
 >
 >Observe that a JavaScript alert box executed! Press Ok in the alert box to finish loading the page.
@@ -528,7 +528,7 @@ This chapter walked through the lifecycle of web-application security testing, b
 >```
 >Open Firefox and navigate to [http://127.0.0.1/](http://127.0.0.1/). Enter the username and password (username=daniel and password=Password123) to log into the application.
 >
->Replace the previously vulnerable GET parameter "`version`" value of "`beta`" with our XSS test payload "`<script>alert('xss')</script>`" and press enter. Observe this time that the page loads without the alert popup window and instead displays the payload as raw text!
+>Replace the previously vulnerable GET parameter "`version`" value of "`beta`" with our XSS test payload "`<script>alert('YOUR_NAME')</script>`" and press enter. Observe this time that the page loads without the alert popup window and instead displays the payload as raw text!
 >
 
 
