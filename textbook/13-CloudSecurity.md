@@ -367,12 +367,12 @@ We began this chapter by defining “the cloud” as a third-party managed colle
 > Install Python virtual environment.
 > ```bash
 > sudo apt update -y
-> sudo apt install python3-virtualenv -y 
+> sudo apt install python3.10-venv -y 
 > ```
 > You will create a python virtual environment to run ScoutSuite in that will avoid any Python library conflicts with your host system. Create the virtual environment, install `scout`, and verify its installation. Note that you will have to re-enter the virtual environment to run `scout` in the future.
 > ```bash
-> virtualenv -p python3 venv
-> source venv/bin/activate
+> python3 -m venv env
+> source env/bin/activate
 > pip install scoutsuite 
 > scout --help 
 > ```
