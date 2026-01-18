@@ -179,8 +179,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "c631ac95ab1f42e4",
+  "active": "0222551eff2d37c8",
   "lastOpenFiles": [
+    "images/01/cve_chart.png",
+    "images/01/cve_table.png",
+    "textbook/01-InformationSecurity.md",
+    "images/01/a&c.png",
     "textbook/00-Introduction.md",
     "textbook/04-NetworkServices.md",
     "textbook/15-AppendixLearningResources.md",
@@ -197,7 +201,6 @@
     "textbook/02-Cryptology.md",
     "README.md",
     "textbook/index.md",
-    "textbook/01-InformationSecurity.md",
     "textbook/03-NetworkSecurity.md",
     "images/02/hash_hxd_calc.png",
     "images/02/hash_hxd_download.png",
@@ -207,8 +210,6 @@
     "images/04/dnsspoof_browser_spoof.png",
     "images/04/dnsspoof_google_spoofed.png",
     "images/04/dnsspoof_kali_spoof.png",
-    "images/04/dnsspoof_arpspoof_win.png",
-    "images/04/dnsspoof_dns_validation.png",
     "textbook/copyright.md",
     "index/words.txt.bak",
     "index/build_index.py",
