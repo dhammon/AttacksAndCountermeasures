@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/01-InformationSecurity.md",
+                "file": "textbook/02-Cryptology.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01-InformationSecurity"
+              "title": "02-Cryptology"
             }
           }
         ],
@@ -68,7 +68,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "\"edr\"",
+                "query": "cycode",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -179,11 +179,13 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0222551eff2d37c8",
+  "active": "c631ac95ab1f42e4",
   "lastOpenFiles": [
+    "files/challenge_2.8.zip",
+    "textbook/08-WebApplicationDefense.md",
+    "textbook/01-InformationSecurity.md",
     "images/01/cve_chart.png",
     "images/01/cve_table.png",
-    "textbook/01-InformationSecurity.md",
     "images/01/a&c.png",
     "textbook/00-Introduction.md",
     "textbook/04-NetworkServices.md",
@@ -193,7 +195,6 @@
     "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/10-SecurityTesting.md",
     "textbook/09-WebApplicationAttacks.md",
-    "textbook/08-WebApplicationDefense.md",
     "textbook/07-SecuritySystems.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/05-OperatingSystemSecurity.md",
@@ -209,7 +210,6 @@
     "images/04/dnsspoof_kali_dns_log.png",
     "images/04/dnsspoof_browser_spoof.png",
     "images/04/dnsspoof_google_spoofed.png",
-    "images/04/dnsspoof_kali_spoof.png",
     "textbook/copyright.md",
     "index/words.txt.bak",
     "index/build_index.py",

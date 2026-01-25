@@ -487,6 +487,13 @@ This chapter delved into securing information through cryptography and cryptanal
 > Plaintext: `Break my simple encryption`
 > Ciphertext: `rOe nx zlzfvrcya rlpevcgba`
 
+> [!exercise] Challenge 2.8 - Another Known Plaintext Attack
+> Wade Hickey published a Medium article titled "How I cracked CONTI Ransomware Group's Leaked Source Code ZIP File" in March of 2022 (https://medium.com/@whickey000/how-i-cracked-conti-ransomware-groups-leaked-source-code-zip-file-e15d54663a8).  In the article, the Conti ransomware group published an encrypted zip archive of their source code.  The encryption used was PKZIP/ZipCrypto which is vulnerable to known-plaintext attacks.  If at least a dozen plaintext bytes within the encrypted file are known, the keystream generator can be recovered using a tool like kimci86/bkcrack (https://github.com/kimci86/bkcrack).  
+> 
+> In this challenge, you will crack the provided encrypted "challenge_2.8.zip" file using bkcrack.  This encrypted zip archive includes the /etc/passwd and /etc/shadow files from my Kali virtual machine.  Make sure to read Wade Hickey's blog post as well as bkcrack's README.md file.
+
+
+
 
 
 [^1]: Usage statistics of Default protocol https for websites; January 2024; https://w3techs.com/technologies/details/ce-httpsdefault#:~:text=These%20diagrams%20show%20the%20usage,85.1%25%20of%20all%20the%20websites.
