@@ -596,5 +596,27 @@ Building on networking fundamentals, this chapter describes the principles and p
 > 
 > You should now see all traffic decrypted (ARP packets).
 
+>[!exercise] Challenge 3.5 - VPN Setup
+>In this challenge, you must setup a VPN server on the Ubuntu VM and connect the Windows VM to it.  You will create a VirtualBox NAT Network (192.168.56.0/24) and a private subnet 10.8.0.0/24 network that can only be reached from devices connected to the VPN.  This will demonstrate network segmentation and access control.  Challenge exercises require you to research and troubleshoot.  You must achieve the following steps:
+>#### Step 1 - Create NAT Network
+>Create a VirtualBox NAT Network named "vpn_lab" with the subnet `192.168.56.0/24`.  Assign the Ubuntu VM and the Windows VM to the vpn_lab NAT Network.  Make sure to ping the Ubuntu IP address from the Windows VM to ensure the network is set up correctly.
+>#### Step 2 - Install OpenVPN on Ubuntu
+>Install openvpn and easy-rsa on the Ubuntu machine.  Create a PKI, CA, and keys for the openvpn server.  Configure the openvpn server with the following (but not comprehensive) settings:
+>- `port 1193`
+>- `proto udp`
+>- `dev tun`
+>- `server 10.8.0.0 255.255.255.0`
+>
+>Also, make sure to enable IPv4 port forwarding on the Ubuntu VM.
+>#### Step 3 - Create Client Key and OVPN
+>Using easy-rsa and the CA you created in Step 2, create client keys for the Windows VM.  Once created, move the ca.crt, issued crt, private (client) key, and ta.key to the Windows VM.
+>In addition, create a client.ovpn file with following (not comprehensive) settings:
+>- Include `remote UBUNTU_IP_ADDRESS 1194` replacing with the IP address of Ubuntu VM
+>- ca, cert, and key settings
+>
+>Move the OVPN file to the Windows VM.
+>#### Step 4 - Install and Configure OpenVPN Client
+>On the Windows VM, install OpenVPN and configure it with the OVPN file created in Step 3.  It should use the client keys and certificate authority that were also generated in Step 3.
+>Once connected to the VPN, ping the private subnet gateway (10.8.0.1) and confirm connectivity. 
 
 [^1]:Wi-Fi Generations Table; Wikipedia 2024; https://en.wikipedia.org/wiki/IEEE_802.11
