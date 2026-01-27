@@ -727,3 +727,12 @@ This chapter examined some common protocols used in network communications.  It 
 > sudo netwox 40 -l 127.0.0.1 -m 127.0.0.1 -o 8000 -p CLIENT_PORT -B -q RAW_SEQ_NUM
 > ```
 > Return to the terminal that has the client running and confirm that the connection was disconnected.  You should see a return to the shell and that you can no longer enter text that the server receives.
+
+>[!exercise] Challenge 4.6 - Broadcast Capture with Responder
+>The `responder` tool can capture and respond to several network requests on a network.  With this tool, an attacker can capture hashed credentials to crack or relay them in a pass-the-hash attack.  In this challenge, you will capture the hashed credentials of the Windows VM user from the Kali VM using the `responder` tool.
+>#### Step 1 - Configure Responder
+>On your Kali VM, run responder on the primary interface and listen for default protocols.
+>#### Step 2 - Trigger a Request
+>Within the Windows VM, that is on the same network as the Kali VM, simulate an SMB network request.  This can be accomplished in a number of ways, including using File Explorer to search for a network fileshare.
+>#### Step 3 - Capture the NTLM Hash
+>If successful, you should capture the NTLM hashed password of the Windows VM.
