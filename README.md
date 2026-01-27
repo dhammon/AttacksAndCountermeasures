@@ -1,5 +1,5 @@
 
-Version 1.0.1
+Version 1.0.2
 # Attacks And Countermeasures
 The Attacks and Countermeasures textbook prescribes hands-on learning through practical lab work that can be accomplished on most laptop or desktop computers. Each chapter is designed around these labs based on common cybersecurity subdisciplines. Some of these subdiscipline topics cover multiple chapters and not all cybersecurity disciplines are included in this textbook. The chapters introduce the fundamentals of the cybersecurity subdiscipline, alongside activities and exercises to practice the topic.  
   
