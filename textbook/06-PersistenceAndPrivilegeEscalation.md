@@ -590,6 +590,14 @@ In this chapter, we examined the common techniques threat actors employ after in
 > ```
 > Finally, run the program with the `exploit.txt` file as input and observe the hidden function message “Congrats, you found me!”.
 
+>[!exercise] Challenge 6.6 - Browser Secrets
+>Browser users often use the "save credentials" features native to modern browsers.  Modern browsers may prompt users to save credentials upon entering credentials into an HTTP form.  The next time the user navigates to that login page, the browser will recognize it and auto-apply the saved credentials into the web page's form.  The storage of these credentials is often a target of infostealer malware and by attackers pillaging systems.  In this challenge, you will generate saved credentials and use the `firefox_decrypt` tool to recover them.
+>#### Step 1 - Setup Credentials
+>On your Windows VM, install the Firefox browser and launch a fresh session.  Navigate to `secure.login.gov`, enter some arbitrary credentials, and submit.  Make sure to save the credentials when the Firefox popup prompt offers.
+>#### Step 2 - Exfiltrate Firefox Profile
+>Firefox stores the credentials within a "profile" that is located inside the Users folder.  Find the respective profile directory and zip all of its contents.  Copy the zipped profile onto the Kali VM.
+>#### Step 3 - Extract the Secrets
+>With the profile downloaded on the Kali VM, install `firefox_decrypt` (https://github.com/Unode/firefox_decrypt/) and run the tool against the stolen profile directory.  Confirm that the saved credentials from Step 1 are included in the output.
 
 [^1]:Windows 11 22h2 - Kernel Privilege Elevation; Exploit-DB 02/24/2024; https://www.exploit-db.com/exploits/51544
 [^2]: How to View and Modify Service Permissions in Windows; Winhelponline; May 7, 2021; https://www.winhelponline.com/blog/view-edit-service-permissions-windows/
