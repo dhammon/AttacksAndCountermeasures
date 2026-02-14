@@ -677,5 +677,22 @@ This chapter begins by exploring Linux’s foundational security mechanisms incl
 > Pick another bypass method from the following link and test in a new PowerShell instance.  Can you find another method that works? 
 > https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell
 
+>[!exercise] Challenge 5.5 - Auditd
+>In this challenge, you will learn to set up enhanced logging that captures all system process creations and associated commands using `auditd` on your Ubuntu VM.
+>#### Step 1 - Install Auditd
+>On your Ubuntu VM, install auditd and ensure it is up and running.
+>#### Step 2 - Configure a Custom Rule
+>Using `auditctl`, configure a rule that captures all `execve` process creations.
+>#### Step 3 - Generate Activity
+>Run the following commands within a terminal:
+>```bash
+>ls -la /
+>cat /etc/shadow
+>touch /tmp/$(whoami)
+>rm /tmp/$(whoami)
+>```
+>#### Step 4- Inspect Logs
+>Explore the the `ausearch` and `aureport` commands and identify the processes and commands that were run from Step 3.  Afterwards, consider deleting the custom rule in order to save system resources for future labs.
+
 [^1]: VirusTotal - File; February 2024; https://www.virustotal.com/gui/file/31eb1de7e840a342fd468e558e5ab627bcb4c542a8fe01aec4d5ba01d539a0fc
 [^2]: Amsi-Bypass-Powershell; GitHub S3cur3Th1sSh1t; February 2024; https://github.com/S3cur3Th1sSh1t/Amsi-Bypass-Powershell#patching-amsi-amsiscanbuffer-by-rasta-mouse

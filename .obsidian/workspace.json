@@ -8,31 +8,31 @@
         "type": "tabs",
         "children": [
           {
-            "id": "603a687acc18da25",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "textbook/06-PersistenceAndPrivilegeEscalation.md",
-                "mode": "preview",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "06-PersistenceAndPrivilegeEscalation"
-            }
-          },
-          {
             "id": "c631ac95ab1f42e4",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/04-NetworkServices.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "04-NetworkServices"
+              "title": "README"
+            }
+          },
+          {
+            "id": "94acf71e0c8f66b4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "textbook/05-OperatingSystemSecurity.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "05-OperatingSystemSecurity"
             }
           }
         ],
@@ -179,12 +179,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "c631ac95ab1f42e4",
+  "active": "94acf71e0c8f66b4",
   "lastOpenFiles": [
-    "README.md",
     "textbook/04-NetworkServices.md",
-    "textbook/03-NetworkSecurity.md",
+    "textbook/05-OperatingSystemSecurity.md",
     "textbook/02-Cryptology.md",
+    "textbook/03-NetworkSecurity.md",
+    "textbook/07-SecuritySystems.md",
+    "textbook/06-PersistenceAndPrivilegeEscalation.md",
+    "README.md",
     "files/challenge_2.8.zip",
     "textbook/08-WebApplicationDefense.md",
     "textbook/01-InformationSecurity.md",
@@ -198,9 +201,6 @@
     "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/10-SecurityTesting.md",
     "textbook/09-WebApplicationAttacks.md",
-    "textbook/07-SecuritySystems.md",
-    "textbook/06-PersistenceAndPrivilegeEscalation.md",
-    "textbook/05-OperatingSystemSecurity.md",
     "textbook/13-CloudSecurity.md",
     "textbook/index.md",
     "images/02/hash_hxd_calc.png",

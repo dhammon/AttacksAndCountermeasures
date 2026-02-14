@@ -22,3 +22,36 @@ Copyright © 2025 by Daniel Hammon 
 All rights reserved. 
 
 No portion of this book may be reproduced in any form without written permission from the publisher or author, except as permitted by U.S. copyright law.
+
+# TODO
+1. Challenges
+	1. Cryptology 
+		1. Known Plaintext Attack using bkcrypt
+	2. Network Security
+		1. VPN Configuration
+	3. Network Services
+		1. Responder
+	4. Operating System Security
+		1. Linux AuditD
+	5. Persistence and Privilege Escalation
+		1. bof challenge
+		2. dumping saved browser passwords
+	6. Security Systems
+		1. tripwire on ubuntu
+		2. Snort DLP Rule, pcap with sensitive data
+	7. Web Application Defense
+		1. secrets detection
+		2. container vulns trivy
+	8. Web Application Attacks
+	9. Security Testing
+		1. Pivoting/Proxychains
+	10. Forensics and Malware Analysis
+		1. pyspy and ps hunting
+	11. Incident Response
+		1. Velociraptor
+	12. Cloud Security
+	13. Mobile Security
+	14. Data and AI
+		1. Presidio sensitive data detection and masking (ETL, pipelines)
+		2. Apache Airflow
+		3. 
