@@ -534,7 +534,7 @@ Building on networking fundamentals, this chapter describes the principles and p
 >#### Step 4 - Trace the Routes
 > From the Kali VM, trace the route to Google's webservers using the following command.
 > ```
-> traceroute goolge.com
+> traceroute google.com
 > ```
 >Similarly, trace the route from the Windows VM to Yahoo's web server.  Note the slight difference in the command between Linux and Windows.
 >```

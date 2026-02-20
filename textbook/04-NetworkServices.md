@@ -632,9 +632,9 @@ This chapter examined some common protocols used in network communications.  It 
 > ip a 
 > echo “KALI_IP_HERE google.com” > dns.txt 
 > ```
-> Next, spoof the arp resolution between the Windows to Ubuntu VMs. Make sure to replace the `WIN_IP` with the IP address of the Windows VM and the `UBUNTU_IP` with the IP address of the Ubuntu VM. 
+> Next, spoof the arp resolution between the Windows to Ubuntu VMs. Make sure to replace the `INTERFACE` with the correct interface, the `WIN_IP` with the IP address of the Windows VM, and the `UBUNTU_IP` with the IP address of the Ubuntu VM. 
 > ```bash
-> sudo arpspoof -t WIN_IP UBUNTU_IP
+> sudo arpspoof -i INTERFACE -t WIN_IP UBUNTU_IP
 > ```
 > You should have one Kali terminal opened that is spoofing traffic between the Ubuntu and Windows VMs. Next, open a second terminal and identify the network interface of the Kali VM (might be eth0). 
 > ```bash
