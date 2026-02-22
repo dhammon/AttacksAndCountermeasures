@@ -468,6 +468,19 @@ We began the chapter by distinguishing between preventative and detective contro
 >```
 >Return to the Ubuntu VM and observe attack registered! 
 
+>[!exercise] Challenge 7.5 - Host-Based File Integrity Monitoring
+>In this challenge, you will set up Tripwire which is a free host-based file integrity monitoring solution.  These solutions monitor critical system files for any changes including new files, removal of files, or file modifications.  Initial scan results are stored within a local database and then periodically rechecked for any changes.  If a change is detected, a report and alert is sent to security administrators to investigate further.  Such file integrity monitoring helps to detect when a possible intrusion occurs.
+>#### Step 1 - Install Tripwire
+>On your Ubuntu VM, install Tripwire using default configurations.  Don't worry about setting up email notifications and select a password you will remember.
+>#### Step 2 - Configure Tripwire
+>Replace the default Tripwire policy set with a new one that only checks the file `/etc/passwd`.  Make sure to use `twadmin` to create a new tw.pol file based on your changes.
+>#### Step 3 - Run Check
+>With the policy created, initialize Tripwire and run a check.  Review the standard output report and confirm that only your `/etc/passwd` policy returns with no changes.
+>#### Step 4 - Simulate Persistence
+>Simulate a user add persistence technique by adding a new user `badactor`.  Check the `/etc/passwd` file and confirm that your new user was created.
+>#### Step 5 - Catch Alert
+>Rerun the Tripwire check and confirm that the new report details that the `/etc/passwd` file has been modified.
+
 [^1]:2023 Verizon Data Breach Investigations Report; 2023 Verizon
 [^2]: NSA bought Hacking tools from 'Vupen', a French based zero-day Exploit Seller; September 18 2013; Mohit Kumar, The Hacker News; https://thehackernews.com/2013/09/nsa-bought-hacking-tools-from-vupen.html
 [^3]: There Are Too Many Damn Honeypots; February 2, 2024; Jacob Baines; https://vulncheck.com/blog/too-many-honeypots
