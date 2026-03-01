@@ -42,6 +42,7 @@ No portion of this book may be reproduced in any form without written permission
 	7. Web Application Defense
 		1. secrets detection
 		2. container vulns trivy
+		3. Code signing
 	8. Web Application Attacks
 	9. Security Testing
 		1. Pivoting/Proxychains

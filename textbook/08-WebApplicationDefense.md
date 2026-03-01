@@ -581,6 +581,16 @@ This chapter began with a practical overview of web architecture that examined t
 > cat dastardly-report.xml
 > ```
 
+>[!exercise] Challenge 8.4 - Secret Scanning
+>Hardcoded secrets, such as keys, tokens and credentials, are dangerous because unauthorized parties can discover and use the secret to access the respective systems.  It is always best to store secrets in a secure location, such as an encrypted vault or secrets manager, and dynamically load the secret at runtime.  However, hardcoding a secret is a common mistake engineers make and organizations need to be on the lookout for infractions to avoid the risk.  In this challenge, you will use Trufflehog to find secrets within git repositories.
+>#### Step 1 - Install Trufflehog
+>Using your Kali VM, install Trufflehog from `apt`.
+>#### Step 2 - Example Scan
+>Run Trufflehog against the remote test repository `https://github.com/trufflesecurity/test_keys`.  Describe the types of findings, location, and the significance of their exposure.
+>#### Step 3 - Scan Another Repo
+>Identify and scan a GitHub repository.  You can select any repository of your choosing.
+>#### Step 4 - Remediation Advice
+>Describe what actions repository maintainers must do to remediate the vulnerability of a leaked secret.  Explain why simply removing the hardcoded secret from the repository is not enough to ensure its remediation. 
 
 [^1]:OWASP Top Ten; OWASP Foundation; March 8th 2024; https://owasp.org/www-project-top-ten/
 [^2]: OWASP Application Security Verification Standard; OWASP Foundation; March 8th 2024; https://owasp.org/www-project-application-security-verification-standard/
