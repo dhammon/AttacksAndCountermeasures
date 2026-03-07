@@ -563,6 +563,14 @@ This chapter walked through the lifecycle of web-application security testing, b
 >sqlmap -u 'http://127.0.0.1/?username=lol&password=lol&version=beta' --batch -D company --dump
 >```
 
+>[!exercise] Challenge 9.5 - PortSwigger Academy
+>Web application penetration testing relies heavily on web proxying tooling, such as PortSwigger's BurpSuite.  This class of security test tooling enables testers to collect, inspect, and modify web requests and responses which greatly increases their capabilities when identifying and exploiting web vulnerabilities.  In this challenge, you will create a PortSwigger Academy account and complete a learning topic using BurpSuite.
+>#### Step 1 - Create PortSwigger Academy Account
+>From your Kali VM, where BurpSuite Community is already installed, navigate to https://portswigger.net/web-security and register an account.
+>#### Step 2 - Essential Skills Reading
+>Once your Academy account is created, navigate to the Essential Skills topic (https://portswigger.net/web-security/essential-skills) and read the "Obfuscating attacks using encodings" subsection of the Essential Skills topic.
+>#### Step 3 - Essential Skills Lab
+>Using BurpSuite, complete the lab "SQL injection with filter bypass via XML encoding" nested within the "Obfuscating attacks using encodings" topic.  Use the available Hint and Solution submenus as needed.
 
 [^1]: A03 Injection; OWASP Top 10.2021; March 10th 2024; https://owasp.org/Top10/A03_2021-Injection/
 [^2]: CWE - CWE-77: Improper Neutralization of Special Elements used in a Command ('Command Injection') (4.14); MITRE CWE; March 10th 2024; https://cwe.mitre.org/data/definitions/77.html
