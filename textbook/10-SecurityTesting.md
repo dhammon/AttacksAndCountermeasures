@@ -693,4 +693,41 @@ This chapter provided a comprehensive overview of security testing methodologies
 >[!exercise] Exercise 10.4 - Penetration Test
 >In this task, you will build on your penetration test from the previous task.  You MUST find two additional vulnerabilities on the Metasploitable2 victim and attempt to exploit them.  Regardless of success, you must document the VSFTPD vulnerabilities AND the two vulnerabilities you identify in a penetration report.  You may use any general format for the report, but it MUST include a background, summary, and findings sections.  Each finding in the report MUST include a description, severity/impact, proof of concept/demonstration with screenshots, and remediation recommendations.  Consider referencing a sample from [https://github.com/juliocesarfort/public-pentesting-reports](https://github.com/juliocesarfort/public-pentesting-reports) to guide the format of your professional report.
 
+>[!exercise] Challenge 10.5 - Pivoting with Proxychains
+>Many organizations segment their networks, which separates devices from being able to communicate with each other.  However, devices can have multiple interfaces connecting them to more than one network.  Once an attacker compromises a system with access to other networks, they can pivot their reconnaissance and attacks to new devices that were previously unreachable.  The attacker is able to use a compromised device as a proxy to relay their network requests using various tools.  In this challenge, you will use Proxychains to pivot Nmap scans targeting the Windows VM on a separate and otherwise unreachable network.  This will be accomplished by first compromising the Ubuntu VM which is connected to both networks.
+>#### Step 1 - Set Up Network
+>Setting up the network correctly is critical to demonstrate attacker pivoting.  Within VirtualBox, you will create two NAT Networks and configure the VM's network interfaces to meet the following criteria.  The Kali VM will be in a separate network from the Windows VM, and the Ubuntu VM will have two network interfaces connected to each network.
+>
+>**NAT Network Details**
+>- Name: "public", IPv4 Prefix: "10.10.10.0/24"
+>- Name: "private", IPv4 Prefix: "172.16.1.0/24"
+>
+>**VM Interface Configurations**
+>- Ubuntu
+>	- Adapter 1, Attached to: "NAT Network", Name: "public"
+>	- Adapter 2, Attached to: "NAT Network", Name: "private"
+>- Kali
+>	- Adapter 1, Attached to: "NAT Network", Name: "public"
+>- Windows
+>	- Adapter 2, Attached to: "NAT Network", Name: "private"
+>
+>> **IMPORTANT: Disable Windows Firewall**
+>> In a previous lab, we disabled the Windows host-based firewall and also allowed ICMP traffic.  This challenge expects that these settings are still in place.  If you reverted those changes, make sure to re-apply (disable the Windows firewall) now.
+>
+>Upon creating the NAT networks and configuring the interfaces on each VM, confirm basic connectivity as follows:
+>1. Kali can ping the Ubuntu public interface IP address.
+>2. Kali is unable to successfully ping the Windows private interface IP address.
+>3. Ubuntu can ping the Kali public interface IP address.
+>4. Ubuntu can ping the Windows private interface IP address.
+>#### Step 2 - Create Tunnel
+>In this step, we will assume that the attacker has valid SSH credentials for the Ubuntu VM obtained from a password spraying attack.  The goal of this step is for the Kali VM to use these SSH credentials and establish a dynamic port forward connection allowing the SSH tunnel to act as a SOCKS proxy server.  This will enable the attacker to send network requests through the Ubuntu VM and reach distant networks.
+>
+>- Ensure the SSH server is running on the Ubuntu VM.
+>- Using the Kali SSH client and the Ubuntu credentials, create a dynamic port forward/SOCKS connection over port 1080.
+>- Once the port forward is created, validate that the Kali machine is listening on port 1080 using `ss -autnp | grep 1080`
+>- On the Kali VM, update the Proxychains configuration file to use `socks5 127.0.0.1 1080`
+>#### Step 3 - Scan the Remote Network
+>Once the dynamic port forward is established and Proxychains has been configured with SOCKS5 on port 1080, the Kali VM should be able to reach the Windows VM through the Ubuntu VM.  Note that ICMP will not work over a SOCKS proxy.  From the Kali VM and using `proxychains`, run a successful `nmap` scan that identifies the open ports, services, and versions of the Windows VM.  The results of the command must demonstrate proxychains connectivity and "open" (not "filtered") port results.
+>
+
 [^1]: Missouri gov. calls journalist who found security flaw a “hacker,” threatens to sue - Ars Technica; Oct 14th, 2021; https://arstechnica.com/tech-policy/2021/10/missouri-gov-calls-journalist-who-found-security-flaw-a-hacker-threatens-to-sue/
