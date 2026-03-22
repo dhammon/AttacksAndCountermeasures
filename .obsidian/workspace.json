@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/10-SecurityTesting.md",
+                "file": "textbook/11-ForensicsAndMalwareAnalysis.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "10-SecurityTesting"
+              "title": "11-ForensicsAndMalwareAnalysis"
             }
           },
           {
@@ -180,8 +180,9 @@
   },
   "active": "c631ac95ab1f42e4",
   "lastOpenFiles": [
-    "textbook/07-SecuritySystems.md",
     "README.md",
+    "textbook/07-SecuritySystems.md",
+    "textbook/10-SecurityTesting.md",
     "textbook/09-WebApplicationAttacks.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/11-ForensicsAndMalwareAnalysis.md",
@@ -199,7 +200,6 @@
     "textbook/15-AppendixLearningResources.md",
     "textbook/14-MobileSecurity.md",
     "textbook/12-IncidentResponse.md",
-    "textbook/10-SecurityTesting.md",
     "textbook/13-CloudSecurity.md",
     "textbook/index.md",
     "images/02/hash_hxd_calc.png",

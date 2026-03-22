@@ -47,7 +47,7 @@ No portion of this book may be reproduced in any form without written permission
 	9. Security Testing
 		1. Pivoting/Proxychains
 	10. Forensics and Malware Analysis
-		1. pyspy and ps hunting
+		1. procmon
 	11. Incident Response
 		1. Velociraptor
 	12. Cloud Security
