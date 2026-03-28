@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/11-ForensicsAndMalwareAnalysis.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "11-ForensicsAndMalwareAnalysis"
+              "title": "README"
             }
           },
           {
@@ -27,15 +27,16 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/04-NetworkServices.md",
+                "file": "textbook/12-IncidentResponse.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "04-NetworkServices"
+              "title": "12-IncidentResponse"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -178,17 +179,17 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "c631ac95ab1f42e4",
+  "active": "94acf71e0c8f66b4",
   "lastOpenFiles": [
+    "textbook/04-NetworkServices.md",
     "README.md",
+    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/07-SecuritySystems.md",
     "textbook/10-SecurityTesting.md",
     "textbook/09-WebApplicationAttacks.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
-    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/05-OperatingSystemSecurity.md",
     "textbook/08-WebApplicationDefense.md",
-    "textbook/04-NetworkServices.md",
     "textbook/03-NetworkSecurity.md",
     "textbook/02-Cryptology.md",
     "files/challenge_2.8.zip",

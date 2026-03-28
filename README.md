@@ -25,34 +25,35 @@ No portion of this book may be reproduced in any form without written permission
 
 # TODO
 1. Challenges
-	1. Cryptology 
+	1. intro
+	2. Cryptology 
 		1. Known Plaintext Attack using bkcrypt
-	2. Network Security
+	3. Network Security
 		1. VPN Configuration
-	3. Network Services
+	4. Network Services
 		1. Responder
-	4. Operating System Security
+	5. Operating System Security
 		1. Linux AuditD
-	5. Persistence and Privilege Escalation
+	6. Persistence and Privilege Escalation
 		1. bof challenge
 		2. dumping saved browser passwords
-	6. Security Systems
+	7. Security Systems
 		1. tripwire on ubuntu
 		2. Snort DLP Rule, pcap with sensitive data
-	7. Web Application Defense
+	8. Web Application Defense
 		1. secrets detection
 		2. container vulns trivy
 		3. Code signing
-	8. Web Application Attacks
-	9. Security Testing
+	9. Web Application Attacks
+	10. Security Testing
 		1. Pivoting/Proxychains
-	10. Forensics and Malware Analysis
+	11. Forensics and Malware Analysis
 		1. procmon
-	11. Incident Response
+	12. Incident Response
 		1. Velociraptor
-	12. Cloud Security
-	13. Mobile Security
-	14. Data and AI
+	13. Cloud Security
+	14. Mobile Security
+	15. Data and AI
 		1. Presidio sensitive data detection and masking (ETL, pipelines)
 		2. Apache Airflow
 		3. 

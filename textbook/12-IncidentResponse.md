@@ -384,4 +384,32 @@ In this chapter, we shifted our focus from vulnerabilities to the detection and 
 >
 >Congrats! Consider adding your completion of this course to your LinkedIn profile and/or your resume!
 
+>[!exercise] Challenge 12.3 - Velociraptor Investigation
+>Remote management incident response tools, like Velociraptor, enable security investigators to remotely access, collect digital artifacts, scan systems, and manage one or many endpoints.  Velociraptor has a central server that Linux, Windows, and Mac systems connect to using client software.  From a central Velociraptor server, incident responders can perform hunts against a fleet of systems.  In this challenge lab, you will set up a Velociraptor server on your Ubuntu VM, install a Velociraptor client on your Windows VM, and perform a remote investigation.
+>#### Step 1 - Environment Setup
+>Configure and start the Ubuntu and Windows VMs on the same NAT Network within VirtualBox.
+>
+>On the Ubuntu VM:
+>1. Install the Velociraptor server using https://github.com/Velocidex/velociraptor/releases/download/v0.75/velociraptor-v0.75.1-linux-amd64
+>2. Make sure to set an admin username and password.
+>3. Create a client configuration with the Ubuntu IP address for the service running on port 8000.
+>
+>On the Windows VM:
+>1. Transfer the client configuration file onto the Windows VM.
+>2. Download the Velociraptor client from https://github.com/Velocidex/velociraptor/releases/download/v0.75/velociraptor-v0.75.1-windows-amd64.exe 
+>3. Install and start the Velociraptor service using the client configuration file.
+>
+>#### Step 2 - Remote Management
+>On the Ubuntu VM, log into the Velociraptor frontend (likely 127.0.0.1:8889).  From the console:
+>1. Verify the Windows VM is enrolled/connected to the Ubuntu Velociraptor server (search clients).
+>2. Quarantine the Windows VM using the Velociraptor client feature, and then open a command prompt on the Windows VM and ping google.com.  Confirm that the Windows VM has lost connectivity to the internet.
+>3. Navigate to "Host Information" in the Velociraptor console and run remote PowerShell commands `whoami` and `ipconfig`.
+>4. Explain why quarantining a device may be beneficial during an investigation.
+>5. Unquarantine the Windows VM from the Velociraptor server console.  Open a command prompt on the Windows VM and and confirm it can now ping google.com successfully.
+>  
+>#### Step 3 - Investigation
+>From the Ubuntu VM Velociraptor console, conduct a remote investigation:
+>1. Navigate to "Collected Artifacts" and then create and run a new collection that selects 3 interesting Windows specific artifacts.  Review the results of the collection and describe what you find.
+>2. Create a new hunt under the "Hunt Manager" page that collects browser history.  Download the results and use `jq` to parse the URLs visited from the Windows VM.
+
 [^1]: Splunk - Market Share, Competitor Insights in Security Information And Event Management (SIEM); 6 Sense; April 7th, 2024; https://6sense.com/tech/security-information-and-event-management-siem/splunk-market-share
