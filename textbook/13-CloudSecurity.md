@@ -393,4 +393,45 @@ We began this chapter by defining “the cloud” as a third-party managed colle
 > - Fix the service, run the scan, and then remove the fix to avoid/minimize the cost, OR 
 > - Incur the cost.
 
+> [!exercise] Challenge 13.3 - Infrastructure as Code
+> Cloud service providers offer the ability to create virtual infrastructure resources through web technologies that include an application programing interface (API).  This architecture made the way to programmatically create infrastructure, through software providers like Hashicorp's Terraform, that comes with many additional benefits including infrastructure as code (IaC).  This is especially helpful because code can be maintained within version control systems (VSC), reviewed and approved, and scanned for misconfigurations prior to deployment.  In this challenge, you will use Checkov security scanner on an IaC file prior to deploying into your AWS account.
+> #### Step 1 - Install Terraform, AWS CLI, and Checkov
+> On your Ubuntu VM, install the Terraform client and AWS CLI.  Within the AWS console, create an IAM Access Key with your administrator user which will be used to create new infrastructure.  Configure your AWS CLI to use the created access key and token.  Install the IaC security scanning tool Checkov.
+> #### Step 2 - Scan IaC
+> Using Checkov on your Ubuntu VM, create a terraform file using the following vulnerable by design code.  Make sure to update the `bucket` name.
+> ```terraform
+> terraform { 
+>  required_version = ">= 1.3.0" 
+>  required_providers { 
+>    aws = { 
+>     source  = "hashicorp/aws" 
+>     version = ">= 5.0" 
+>    } 
+>  } 
+>} 
+>
+>provider "aws" { 
+>   region = "us-west-1" 
+>} 
+>
+>resource "aws_s3_bucket" "insecure_bucket" { 
+ >  bucket = "csc154-<YOUR_NAME>-<SOME_RANDOM_CHARS>"  # CHANGE THIS (unique) 
+>}
+> 
+>resource "aws_s3_bucket_acl" "public_acl" { 
+ >  bucket = aws_s3_bucket.insecure_bucket.id 
+ >  acl    = "public-read" 
+>} 
+> ```
+> Scan the static file with Checkov and review the findings (there should be about 8).  Select two findings and research their implications and how they could be remediated.
+> #### Step 3 - Remediate
+> In this step, you must fix only the following findings due to their severity and to avoid additional AWS costs.  Update the Terraform file code to remediate these Checkov issues:
+> - CKV2_AWS_6: "Ensure that S3 bucket has a Public Access block"
+> - CKV_AWS_20: "S3 Bucket has an ACL defined which allows public READ access."
+> Once updated, rerun the Checkov scan on the updated file and confirm that these two findings were resolved.
+> #### Step 4 - Deploy
+> Using Terraform on your Ubuntu VM, deploy the updated and secured Terraform file that deploys the private S3 bucket.  Confirm successful deployment from the CLI, then log into your AWS account and confirm that the bucket was created privately.
+> #### Step 5 - Destroy
+> Using Terraform on your Ubuntu VM, destroy the created S3 bucket.  You may also consider removing/expiring the AWS access key and token created in step 1.
+
 [^1]: Timeline of Amazon Web Services; Wikipedia; April 19th 2024; https://en.wikipedia.org/wiki/Timeline_of_Amazon_Web_Services
