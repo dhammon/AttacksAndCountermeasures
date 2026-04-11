@@ -436,5 +436,22 @@ This chapter began with the rise of mobile applications and then dove into Andro
 >```
 >Open the apps page on your emulator (swipe up) and observe that Modern Portfolio is installed (grey icon)!  Send an intent from the debugger to evidence open Activity using Android debugger.  Observe that the app is launched in the emulator! 
 
+>[!exercise] Challenge 14.3 - HTTP Inspection
+>Intercepting HTTP traffic from a mobile device extends dynamic testing by identifying the traffic an application initiates.  Capturing HTTP requests through tooling like BurpSuite enables a tester to explore additional attack surfaces and application behavior.  In this challenge, you will configure the emulator to trust the BurpSuite CA and configure it to inspect the Modern Portfolio application web traffic.
+>#### Step 1 - Prerequisites
+>For this task, you will need the emulator with the Modern Portfolio application installed on your host machine.  In addition, you will need to install BurpSuite on your host device.
+>#### Step 2 - Certificate Setup
+>1. Download the CA certificate (`cer` extension, `der` format) from the running instance of BurpSuite on your host device.
+>
+>2. Upload the the certificate into the `/sdcard/Downloads` directory within the emulator.
+>
+>3. Configure the emulator to trust the uploaded certificate in the Setting menu.  Navigate to Trusted Credentials -> Users and verify the certificate was trusted successfully.
+>#### Step 3 - Configure Proxy
+>Within the running emulator, configure WiFi to proxy traffic to BurpSuite (should be `10.0.2.2` on port 8080).  You may also need to disable Mobile data to force the emulator to use the proxy over WiFi.
+>#### Step 4 - Inspect Activity
+>Launch the Modern Portfolio app with a couple tickers (e.g. `aa`, `mmm`) and then press the run/play icon to initiate network requests.
+>
+>Navigate to BurpSuite and review requests to newtonanaltyics.com.  Describe the request headers and parameters sent.
+
 [^1]:Application fundamentals | Android Developers; Android; April 22nd, 2024; https://developer.android.com/guide/components/fundamentals
 [^2]:Uber allegedly used secret program to undermine rival Lyft | Uber | The Guardian; April 27, 2024; https://www.theguardian.com/technology/2017/apr/13/uber-allegedly-used-secret-program-to-cripple-rival-lyft
