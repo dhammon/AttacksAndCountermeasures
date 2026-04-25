@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/14-MobileSecurity.md",
+                "file": "textbook/11-ForensicsAndMalwareAnalysis.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "14-MobileSecurity"
+              "title": "11-ForensicsAndMalwareAnalysis"
             }
           },
           {
@@ -180,10 +180,11 @@
   },
   "active": "c631ac95ab1f42e4",
   "lastOpenFiles": [
+    "textbook/12-IncidentResponse.md",
+    "textbook/14-MobileSecurity.md",
     "textbook/13-CloudSecurity.md",
     "README.md",
     "textbook/08-WebApplicationDefense.md",
-    "textbook/12-IncidentResponse.md",
     "textbook/04-NetworkServices.md",
     "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/07-SecuritySystems.md",
@@ -200,7 +201,6 @@
     "images/01/a&c.png",
     "textbook/00-Introduction.md",
     "textbook/15-AppendixLearningResources.md",
-    "textbook/14-MobileSecurity.md",
     "textbook/index.md",
     "images/02/hash_hxd_calc.png",
     "images/02/hash_hxd_download.png",
