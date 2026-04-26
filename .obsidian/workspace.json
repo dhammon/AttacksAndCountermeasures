@@ -180,17 +180,19 @@
   },
   "active": "0222551eff2d37c8",
   "lastOpenFiles": [
+    "images/15/activity3-bypass.png",
+    "images/15/activity3-unsafe.png",
+    "images/15/activity3-safe.png",
+    "images/15/activity3-serverstart.png",
+    "files/guard_server.py~",
+    "images/15/activity3-libs.png",
+    "images/15/activity3-torch.png",
+    "images/15/activity3-env.png",
+    "images/15/activity3-model.png",
+    "files/guard_server.py",
     "images/15/activity1-db.png",
     "images/15/activity2-redacted.png",
     "images/15/activity2-dagsuccess.png",
-    "images/15/activity2-airflowdag.png",
-    "images/15/activity2-wrap.png",
-    "images/15/activity2-dlpconfig.png",
-    "images/15/activity2-config.png",
-    "images/15/activity2-copyetl.png",
-    "images/15/activity2-spacy.png",
-    "images/15/activity2-presidio.png",
-    "images/15/activity1-pii.png",
     "files/etl.py",
     "files/Untitled.md",
     "textbook/15-AISecurity.md",
@@ -223,8 +225,6 @@
     "textbook/cover.md",
     "textbook/16-AppendixCareerSearch.md",
     "files/newtonanalytics-modernportfoliotheory-2.apk",
-    "files/newtonanalytics-modernportfoliotheory-2-30493285-78aeb6462dbc775a70fdc6ecf4270175.apk",
-    "images/android_armor.jpg.crdownload",
-    "images/14"
+    "files/newtonanalytics-modernportfoliotheory-2-30493285-78aeb6462dbc775a70fdc6ecf4270175.apk"
   ]
 }
