@@ -13,26 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/11-ForensicsAndMalwareAnalysis.md",
+                "file": "textbook/15-AISecurity.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "11-ForensicsAndMalwareAnalysis"
+              "title": "15-AISecurity"
             }
           },
           {
-            "id": "94acf71e0c8f66b4",
+            "id": "5400731d65058d70",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/08-WebApplicationDefense.md",
+                "file": "textbook/14-MobileSecurity.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "08-WebApplicationDefense"
+              "title": "14-MobileSecurity"
             }
           }
         ]
@@ -178,15 +178,30 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "c631ac95ab1f42e4",
+  "active": "0222551eff2d37c8",
   "lastOpenFiles": [
-    "textbook/12-IncidentResponse.md",
+    "images/15/activity1-db.png",
+    "images/15/activity2-redacted.png",
+    "images/15/activity2-dagsuccess.png",
+    "images/15/activity2-airflowdag.png",
+    "images/15/activity2-wrap.png",
+    "images/15/activity2-dlpconfig.png",
+    "images/15/activity2-config.png",
+    "images/15/activity2-copyetl.png",
+    "images/15/activity2-spacy.png",
+    "images/15/activity2-presidio.png",
+    "images/15/activity1-pii.png",
+    "files/etl.py",
+    "files/Untitled.md",
+    "textbook/15-AISecurity.md",
     "textbook/14-MobileSecurity.md",
-    "textbook/13-CloudSecurity.md",
-    "README.md",
     "textbook/08-WebApplicationDefense.md",
-    "textbook/04-NetworkServices.md",
+    "images/15",
+    "README.md",
     "textbook/11-ForensicsAndMalwareAnalysis.md",
+    "textbook/12-IncidentResponse.md",
+    "textbook/13-CloudSecurity.md",
+    "textbook/04-NetworkServices.md",
     "textbook/07-SecuritySystems.md",
     "textbook/10-SecurityTesting.md",
     "textbook/09-WebApplicationAttacks.md",
@@ -196,19 +211,9 @@
     "textbook/02-Cryptology.md",
     "files/challenge_2.8.zip",
     "textbook/01-InformationSecurity.md",
-    "images/01/cve_chart.png",
-    "images/01/cve_table.png",
-    "images/01/a&c.png",
     "textbook/00-Introduction.md",
-    "textbook/15-AppendixLearningResources.md",
+    "textbook/16-AppendixLearningResources.md",
     "textbook/index.md",
-    "images/02/hash_hxd_calc.png",
-    "images/02/hash_hxd_download.png",
-    "images/02/hash_hxd_site.png",
-    "images/04/dnsspoof_www_logs.png",
-    "images/04/dnsspoof_kali_dns_log.png",
-    "images/04/dnsspoof_browser_spoof.png",
-    "images/04/dnsspoof_google_spoofed.png",
     "textbook/copyright.md",
     "index/words.txt.bak",
     "index/build_index.py",
@@ -220,8 +225,6 @@
     "files/newtonanalytics-modernportfoliotheory-2.apk",
     "files/newtonanalytics-modernportfoliotheory-2-30493285-78aeb6462dbc775a70fdc6ecf4270175.apk",
     "images/android_armor.jpg.crdownload",
-    "images/14",
-    "images/New folder",
-    "images/13/cloud_security.jpg.crdownload"
+    "images/14"
   ]
 }

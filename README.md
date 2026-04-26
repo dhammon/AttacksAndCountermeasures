@@ -1,5 +1,5 @@
 
-Version 1.0.2
+Version 1.0.3
 # Attacks And Countermeasures
 The Attacks and Countermeasures textbook prescribes hands-on learning through practical lab work that can be accomplished on most laptop or desktop computers. Each chapter is designed around these labs based on common cybersecurity subdisciplines. Some of these subdiscipline topics cover multiple chapters and not all cybersecurity disciplines are included in this textbook. The chapters introduce the fundamentals of the cybersecurity subdiscipline, alongside activities and exercises to practice the topic.  
   
@@ -22,38 +22,3 @@ Copyright © 2025 by Daniel Hammon 
 All rights reserved. 
 
 No portion of this book may be reproduced in any form without written permission from the publisher or author, except as permitted by U.S. copyright law.
-
-# TODO
-1. Challenges
-	1. intro
-	2. Cryptology 
-		1. Known Plaintext Attack using bkcrypt
-	3. Network Security
-		1. VPN Configuration
-	4. Network Services
-		1. Responder
-	5. Operating System Security
-		1. Linux AuditD
-	6. Persistence and Privilege Escalation
-		1. bof challenge
-		2. dumping saved browser passwords
-	7. Security Systems
-		1. tripwire on ubuntu
-		2. Snort DLP Rule, pcap with sensitive data
-	8. Web Application Defense
-		1. secrets detection
-		2. container vulns trivy
-		3. Code signing
-	9. Web Application Attacks
-	10. Security Testing
-		1. Pivoting/Proxychains
-	11. Forensics and Malware Analysis
-		1. procmon
-	12. Incident Response
-		1. Velociraptor
-	13. Cloud Security
-	14. Mobile Security
-	15. Data and AI
-		1. Presidio sensitive data detection and masking (ETL, pipelines)
-		2. Apache Airflow
-		3. 
