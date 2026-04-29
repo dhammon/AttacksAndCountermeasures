@@ -520,7 +520,7 @@ This chapter walked through the lifecycle of web-application security testing, b
 >#### Step 4 - Mitigate the Vulnerability
 >In a Kali VM bash terminal, open the `footer.php` file in the vulnerable-site/app directory using `nano` text editor.
 >```bash
->nano ~/vulnerable-site/app/home.php
+>nano ~/vulnerable-site/app/footer.php
 >```
 >Observe the last line renders the version from the supplied GET parameter without any input validation or output encoding. Update the last line by wrapping the `$_GET['version']` in the `htmlspecialchars` function. Press CTRL+X, Y for yes, and Enter to save over the exiting file.
 >```php
