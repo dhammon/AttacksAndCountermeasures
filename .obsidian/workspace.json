@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/15-AISecurity.md",
+                "file": "textbook/14-MobileSecurity.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "15-AISecurity"
+              "title": "14-MobileSecurity"
             }
           }
         ],
@@ -181,8 +181,11 @@
   },
   "active": "f3222b661de4ef49",
   "lastOpenFiles": [
+    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/14-MobileSecurity.md",
+    "textbook/13-CloudSecurity.md",
     "textbook/15-AISecurity.md",
+    "textbook/10-SecurityTesting.md",
     "images/15/activity4-skill2.png",
     "images/15/activity4-script1.png",
     "images/15/activity4-skillanalysis.png",
@@ -200,12 +203,9 @@
     "textbook/08-WebApplicationDefense.md",
     "images/15",
     "README.md",
-    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/12-IncidentResponse.md",
-    "textbook/13-CloudSecurity.md",
     "textbook/04-NetworkServices.md",
     "textbook/07-SecuritySystems.md",
-    "textbook/10-SecurityTesting.md",
     "textbook/09-WebApplicationAttacks.md",
     "textbook/06-PersistenceAndPrivilegeEscalation.md",
     "textbook/05-OperatingSystemSecurity.md",
