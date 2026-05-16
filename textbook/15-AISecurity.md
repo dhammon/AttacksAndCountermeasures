@@ -106,10 +106,10 @@ Intro
 > ![[../images/15/activity2-dlpconfig.png|DLP Configuration Added|550]]
 > With the configuration section updated, I add the following task (dlp_redact) between the transform and load tasks.  This code uses Presidio to scan each record based on the detectors defined in FIELDS_TO_SCAN and stores any findings into the FINDINGS_FILE.  The task also redacts any values that match the FIELDS_TO_SCAN and stores the results in the REDACTED_FILE. 
 > ```python
->    #------------------------
+>   #------------------------
  >   # DLP
->    # ------------------------
->    from presidio_analyzer import AnalyzerEngine 
+>   # ------------------------
+>   from presidio_analyzer import AnalyzerEngine 
  >   from presidio_anonymizer import AnonymizerEngine 
  >   @task 
  >   def dlp_redact(records: list[dict]) -> list[dict]: 

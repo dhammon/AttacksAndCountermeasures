@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "textbook/14-MobileSecurity.md",
+                "file": "textbook/15-AISecurity.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "14-MobileSecurity"
+              "title": "15-AISecurity"
             }
           }
         ],
@@ -181,8 +181,8 @@
   },
   "active": "f3222b661de4ef49",
   "lastOpenFiles": [
-    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/14-MobileSecurity.md",
+    "textbook/11-ForensicsAndMalwareAnalysis.md",
     "textbook/13-CloudSecurity.md",
     "textbook/15-AISecurity.md",
     "textbook/10-SecurityTesting.md",
